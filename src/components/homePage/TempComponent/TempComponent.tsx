@@ -1,5 +1,4 @@
 import React from 'react';
-
-export const TempComponent = () => {
+export const TempComponent = ({}) => {
   return <div>TempComponent</div>;
 };
