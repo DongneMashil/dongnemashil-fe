@@ -95,6 +95,63 @@ main ← dev ← feat/#이슈번호
 
 ## 폴더 구조
 
-Atomic 디자인 패턴을 따름
+- src
+  - pages
+    - [페이지명]Page : PascalCase
+      - ❓ contexts : 해당 컨텍스트를 사용하는 최상위 컴포넌트 경로에
+        - user.js : 데이터 성격에 따른 이름 설정
+      - [페이지명]Page.jsx
+      - [페이지명]Page.styles.js
+    - index.js
+  - components : 공통 컴포넌트
+    - homePage : camelCase
+      - 컴포넌트1
+        - 컴포넌트1.jsx
+      - 컴포넌트2
+    - common : 공통 컴포넌트
+      - [Component]
+        - component명.jsx : 실제 컴포넌트 로직 + export
+        - [Component명].styles.js
+      - index.js : 모든 컴포넌트들을 모아서 export
+    - layout : 공통 레이아웃
+      - NavBar
+        - component명.jsx : 실제 컴포넌트 로직 + export
+        - [Component명].styles.js
+        - component명.jsx : 실제 컴포넌트 로직 + export
+        - [Component명].styles.js
+      - index.js : 모든 컴포넌트들을 모아서 export
+  - assets : 정적 리소스 파일들
+    - images : 이미지 리소스
+      - img-[이미지명]. png : 확장자는 달라질 수 있음
+    - icons : 아이콘 리소스
+      - ico-[이미지명].svg : 확장자는 달라질 수 있음
+  - style : 전역 스타일링
+    - GlobalStyle.js : GlobalStyle
+    - theme.js : 공통 컬러셋, mixin, 반응형 기준 등의 string값, theme(모드) 등을 정의
+  - redux : ducks 패턴을 따름
+    - config
+      - configStore.js
+    - modules
+      - [모듈명].js
+  - contexts : context API 관련
+    - context.js :
+  - routes : 라우터 관련 파일
+    - Router.js
+    - ProtectedRoutes.js
+  - queries : 리액트 쿼리 관련
+    - queryClient.js : queryClient 정의
+      <aside>
+      💡 query, mutation 함수는 1차로 각각의 컴포넌트에 작성해 사용하고 → 이후 시간이 남으면 custom hook으로 리팩토링 진행.
+      
+      </aside>
 
-- 예시: atom(button) → molecule(form) → organism(회원가입) → template(layout) → page(최종)
+  - modules : cookie, portal 등 기타 모듈
+  - hooks : 커스텀 훅
+    - [hook명].jsx
+  - api : 서버 통신에 관한 axios 메서드들
+    - api.js : axios 인스턴스 정의
+    - userApi.js : 로그인, 회원가입 등 유저 정보에 관한 api
+    - articleApi.js : 게시글 CRUD
+    - searchApi.js : 검색
+    - mypageApi.js : 좋아요한 글, 내가 쓴 댓글, 내가 쓴 글
+  - App.jsx
