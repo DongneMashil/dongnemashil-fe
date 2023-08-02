@@ -1,15 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-
-const baseUrl = process.env.REACT_APP_SERVER_API_URL;
-
-const axiosInstance = axios.create({
-  baseURL: baseUrl,
-});
-
-const axiosWithToken = axios.create({
-  baseURL: baseUrl,
-  withCredentials: true,
-});
+import { axiosInstance, axiosWithToken } from './apiInstance';
 
 type Comment = {
   comment_id: number;
