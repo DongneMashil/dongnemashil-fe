@@ -1,4 +1,4 @@
-import { axiosInstance } from './axiosInstance';
+import { axiosInstance } from './api';
 import { AxiosResponse } from 'axios';
 
 type SearchQuery = {

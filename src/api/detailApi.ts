@@ -1,5 +1,5 @@
 import { AxiosResponse, AxiosError } from 'axios';
-import { axiosInstance, axiosWithToken } from './axiosInstance';
+import { axiosInstance, axiosWithToken } from './api';
 
 type Comment = {
   comment_id: number;
