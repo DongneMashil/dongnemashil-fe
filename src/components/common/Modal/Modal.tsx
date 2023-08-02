@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
-interface IProps {
+interface Props {
   isOpen: boolean;
   onClose: () => void;
   children?: React.ReactNode;
 }
 
-export const Modal: FC<IProps> = ({ isOpen, onClose, children }) => {
+export const Modal: FC<Props> = ({ isOpen, onClose, children }) => {
   const elRef = useRef<HTMLDivElement | null>(null);
   if (!elRef.current) {
     const div = document.createElement('div');

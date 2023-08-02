@@ -58,9 +58,10 @@ main ← dev ← feat/#이슈번호
 | style    | 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우 |
 | refactor | 코드 리팩토링                                     |
 | test     | 테스트 코드, 리팩토링 테스트 코드 추가            |
-| chore    | 빌드 업무 수정, 패키지 매니저 수정                |
+| chore    | 자질구레한 일들                                   |
 | merge    | pull 받은 후 바로 푸시를 해야될 경우              |
 | design   | css 관련 내용                                     |
+| build    | 빌드 관련 내용                                    |
 
 - 커밋 메시지 예시
   - merge할때 예시 merge : develop → feat/#7 (기본 커밋메세지 사용 안함)
@@ -96,6 +97,7 @@ main ← dev ← feat/#이슈번호
 ## 폴더 구조
 
 - src
+
   - pages
     - [페이지명]Page : PascalCase
       - ❓ contexts : 해당 컨텍스트를 사용하는 최상위 컴포넌트 경로에
@@ -139,10 +141,11 @@ main ← dev ← feat/#이슈번호
     - Router.js
     - ProtectedRoutes.js
   - queries : 리액트 쿼리 관련
+
     - queryClient.js : queryClient 정의
       <aside>
       💡 query, mutation 함수는 1차로 각각의 컴포넌트에 작성해 사용하고 → 이후 시간이 남으면 custom hook으로 리팩토링 진행.
-      
+
       </aside>
 
   - modules : cookie, portal 등 기타 모듈
