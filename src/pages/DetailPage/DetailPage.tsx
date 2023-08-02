@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getReviewDetail, ReviewDetail } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
 
-export const DetailPage = ({}) => {
+export const DetailPage = () => {
   const { reviewId } = useParams<{ reviewId: string }>();
   if (!reviewId) {
     throw new Error('Review ID is missing');

@@ -1,4 +1,4 @@
 import React from 'react';
-export const Modal = ({}) => {
+export const Modal = () => {
   return <div>Modal</div>;
 };
