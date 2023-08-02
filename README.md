@@ -58,9 +58,10 @@ main ← dev ← feat/#이슈번호
 | style    | 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우 |
 | refactor | 코드 리팩토링                                     |
 | test     | 테스트 코드, 리팩토링 테스트 코드 추가            |
-| chore    | 빌드 업무 수정, 패키지 매니저 수정                |
+| chore    | 자질구레한 일들                                   |
 | merge    | pull 받은 후 바로 푸시를 해야될 경우              |
 | design   | css 관련 내용                                     |
+| build    | 빌드 관련 내용                                    |
 
 - 커밋 메시지 예시
   - merge할때 예시 merge : develop → feat/#7 (기본 커밋메세지 사용 안함)
@@ -96,62 +97,64 @@ main ← dev ← feat/#이슈번호
 ## 폴더 구조
 
 - src
+
   - pages
     - [페이지명]Page : PascalCase
       - ❓ contexts : 해당 컨텍스트를 사용하는 최상위 컴포넌트 경로에
-        - user.js : 데이터 성격에 따른 이름 설정
-      - [페이지명]Page.jsx
-      - [페이지명]Page.styles.js
-    - index.js
+        - user.ts : 데이터 성격에 따른 이름 설정
+      - [페이지명]Page.tsx
+      - [페이지명]Page.styles.ts
+    - index.ts
   - components : 공통 컴포넌트
     - homePage : camelCase
       - 컴포넌트1
-        - 컴포넌트1.jsx
+        - 컴포넌트1.tsx
       - 컴포넌트2
     - common : 공통 컴포넌트
       - [Component]
-        - component명.jsx : 실제 컴포넌트 로직 + export
-        - [Component명].styles.js
-      - index.js : 모든 컴포넌트들을 모아서 export
+        - component명.tsx : 실제 컴포넌트 로직 + export
+        - [Component명].styles.ts
+      - index.ts : 모든 컴포넌트들을 모아서 export
     - layout : 공통 레이아웃
       - NavBar
         - component명.jsx : 실제 컴포넌트 로직 + export
-        - [Component명].styles.js
+        - [Component명].styles.ts
         - component명.jsx : 실제 컴포넌트 로직 + export
-        - [Component명].styles.js
-      - index.js : 모든 컴포넌트들을 모아서 export
+        - [Component명].styles.ts
+      - index.ts : 모든 컴포넌트들을 모아서 export
   - assets : 정적 리소스 파일들
     - images : 이미지 리소스
       - img-[이미지명]. png : 확장자는 달라질 수 있음
     - icons : 아이콘 리소스
       - ico-[이미지명].svg : 확장자는 달라질 수 있음
   - style : 전역 스타일링
-    - GlobalStyle.js : GlobalStyle
-    - theme.js : 공통 컬러셋, mixin, 반응형 기준 등의 string값, theme(모드) 등을 정의
-  - redux : ducks 패턴을 따름
-    - config
-      - configStore.js
-    - modules
-      - [모듈명].js
-  - contexts : context API 관련
-    - context.js :
+
+    - GlobalStyle.ts : GlobalStyle
+    - theme.ts : 공통 컬러셋, mixin, 반응형 기준 등의 string값, theme(모드) 등을 정의
+
+  - recoil : recoil 관련 파일
+    - [데이터 이름]폴더
+      - atom.ts : atom 정의
+      - selector.ts : selector 정의
+      - index.ts : 모든 atom, selector를 모아서 export
   - routes : 라우터 관련 파일
-    - Router.js
-    - ProtectedRoutes.js
+    - Router.tsx
+    - ProtectedRoutes.ts
   - queries : 리액트 쿼리 관련
-    - queryClient.js : queryClient 정의
+
+    - queryClient.ts : queryClient 정의
       <aside>
       💡 query, mutation 함수는 1차로 각각의 컴포넌트에 작성해 사용하고 → 이후 시간이 남으면 custom hook으로 리팩토링 진행.
-      
+
       </aside>
 
   - modules : cookie, portal 등 기타 모듈
   - hooks : 커스텀 훅
-    - [hook명].jsx
+    - [hook명].tsx
   - api : 서버 통신에 관한 axios 메서드들
-    - api.js : axios 인스턴스 정의
-    - userApi.js : 로그인, 회원가입 등 유저 정보에 관한 api
-    - articleApi.js : 게시글 CRUD
-    - searchApi.js : 검색
-    - mypageApi.js : 좋아요한 글, 내가 쓴 댓글, 내가 쓴 글
-  - App.jsx
+    - api.ts : axios 인스턴스 정의
+    - userApi.ts : 로그인, 회원가입 등 유저 정보에 관한 api
+    - articleApi.ts : 게시글 CRUD
+    - searchApi.ts : 검색
+    - mypageApi.ts : 좋아요한 글, 내가 쓴 댓글, 내가 쓴 글
+  - App.tsx

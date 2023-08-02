@@ -1,0 +1,11 @@
+const DetailPage = () => { const [isModalOpen, setModalOpen] = useState(false);
+return (
+<div>
+  <button onClick="{()" ="">setModalOpen(true)}>Open Modal</button>
+
+  <Modal isOpen="{isModalOpen}" onClose="{()" ="">
+    setModalOpen(false)} >
+    <div>모달 내용물</div>
+  </Modal>
+</div>
+); };
