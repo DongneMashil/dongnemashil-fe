@@ -18,7 +18,7 @@ type Comment = {
   comment: string;
 };
 
-type HouseDetail = {
+export type ReviewDetail = {
   id: number;
   content: string;
   img_url: string;
@@ -31,11 +31,11 @@ type HouseDetail = {
 };
 
 export const getReviewDetail = async (
-  detailId: number | string
-): Promise<HouseDetail> => {
+  detailId: undefined | string
+): Promise<ReviewDetail> => {
   // 상세페이지 조회
   try {
-    const response: AxiosResponse<HouseDetail> = await axiosInstance.get(
+    const response: AxiosResponse<ReviewDetail> = await axiosInstance.get(
       `/reviews/${detailId}`
     );
     return response.data;
@@ -45,7 +45,7 @@ export const getReviewDetail = async (
 };
 
 export const likeReview = async (
-  reviewId: number | string
+  reviewId: undefined | string
 ): Promise<boolean> => {
   try {
     const response: AxiosResponse<{ liked: boolean }> =
@@ -57,7 +57,7 @@ export const likeReview = async (
 };
 
 export const checkLikeStatus = async (
-  reviewId: number | string
+  reviewId: undefined | string
 ): Promise<boolean> => {
   try {
     const response: AxiosResponse<{ liked: boolean }> =
