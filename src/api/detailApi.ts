@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse, AxiosError } from 'axios';
 import { axiosInstance, axiosWithToken } from './apiInstance';
 
 type Comment = {
@@ -29,8 +29,11 @@ export const getReviewDetail = async (
       `/reviews/${detailId}`
     );
     return response.data;
-  } catch (e: any) {
-    throw new Error(e.response?.data?.errorMessage || 'An error occurred');
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
   }
 };
 
@@ -41,8 +44,11 @@ export const likeReview = async (
     const response: AxiosResponse<{ liked: boolean }> =
       await axiosWithToken.post(`/api/like/${reviewId}`);
     return response.data.liked;
-  } catch (e: any) {
-    throw new Error(e.response?.data?.errorMessage || 'An error occurred');
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
   }
 };
 
@@ -53,7 +59,10 @@ export const checkLikeStatus = async (
     const response: AxiosResponse<{ liked: boolean }> =
       await axiosWithToken.get(`/api/like/${reviewId}`);
     return response.data.liked;
-  } catch (e: any) {
-    throw new Error(e.response?.data?.errorMessage || 'An error occurred');
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
   }
 };
