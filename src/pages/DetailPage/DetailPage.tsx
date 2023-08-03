@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 // import { getReviewDetail, ReviewDetail } from 'api/detailApi';
 // import { useParams } from 'react-router-dom';
 import { MyFavoriteTags } from 'components/common/Modal/MyFavoriteTags/MyFavoriteTags';
+import { Tag } from 'components/common/Tag/Tag';
 
 export const DetailPage = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -23,6 +24,7 @@ export const DetailPage = () => {
       {data && <div>{data.content}</div>} */}
       <MyFavoriteTags isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
       hihi
+      <Tag text="hihi" onClick={() => setModalOpen(true)} />
     </div>
   );
 };
