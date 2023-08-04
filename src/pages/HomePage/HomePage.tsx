@@ -1,6 +1,6 @@
 import React from 'react';
-import NavBar from 'components/layout/NavBar/NavBar';
 import { TempButton } from 'components/common';
+import { NavBar } from 'components/layout';
 
 export const HomePage = () => {
   return (
