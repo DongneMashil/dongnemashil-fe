@@ -1,5 +1,5 @@
 import React from 'react';
-import { StButton } from './Button.style';
+import { StButton } from './Button.styles';
 import { Link } from 'react-router-dom';
 
 export interface ButtonProps {
