@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 export interface ButtonProps {
   children?: React.ReactNode;
   type?: 'icon' | 'normal' | 'circle';
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   url?: string;
 }
 
