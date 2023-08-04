@@ -1,13 +1,31 @@
 import React from 'react';
-import { TempButton } from './Button.styles';
+import { StButton } from './Button.style';
+import { Link } from 'react-router-dom';
 
-interface InputProps {
-  label: string;
-  onClick: (e: React.MouseEvent<HTMLElement>) => void;
+export interface ButtonProps {
+  children?: React.ReactNode;
+  type?: 'icon' | 'normal' | 'circle';
+  onClick?: () => void;
+  url?: string;
 }
 
-export const Button = ({ label, onClick }: InputProps) => {
-  return <TempButton onClick={onClick}>{label}</TempButton>;
+export const Button = ({
+  children,
+  type = 'normal',
+  onClick,
+  url,
+}: ButtonProps) => {
+  const linkBtn = (
+    <StButton className={type}>
+      <Link to={url!}>{children}</Link>
+    </StButton>
+  );
+  const onClickBtn = (
+    <StButton className={type} onClick={onClick}>
+      {children}
+    </StButton>
+  );
+  return url ? linkBtn : onClickBtn;
 };
 
 export default Button;
