@@ -1,3 +1,4 @@
+// import { Button } from 'components/common';
 import React from 'react';
 
 interface NavBarProps {
@@ -5,7 +6,12 @@ interface NavBarProps {
 }
 
 const NavBar = ({ children }: NavBarProps) => {
-  return <div>{children}</div>;
+  return (
+    <div>
+      {/* <Button label="test" {...props} /> */}
+      {children}
+    </div>
+  );
 };
 
 export default NavBar;
