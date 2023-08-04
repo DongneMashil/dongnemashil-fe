@@ -1,6 +1,10 @@
+import { Button } from 'components/common';
 import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 export const DetailCommentPage = () => {
+  const { reviewId } = useParams<{ reviewId: string }>();
+  const navigate = useNavigate();
   const data = {
     id: 1,
     content: '본문본문이요본민잉본문이요본문ㅇ본문',
@@ -66,6 +70,12 @@ export const DetailCommentPage = () => {
               </StDetailPageCommentContent>
             </StDetailPageCommentItem>
           ))}
+          <Button
+            type={'normal'}
+            onClick={() => navigate(`/review/${reviewId}`)}
+          >
+            본문
+          </Button>
         </StDetailPageCommentList>
       </StDetailPageComment>
     </>

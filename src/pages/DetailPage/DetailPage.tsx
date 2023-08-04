@@ -1,16 +1,18 @@
+import { Button } from 'components/common';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 // import {useState} from 'react';
 // import { useQuery } from '@tanstack/react-query';
 // import { getReviewDetail, ReviewDetail } from 'api/detailApi';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 // import { MyFavoriteTags } from 'components/common/Modal/MyFavoriteTags/MyFavoriteTags';
 // import { Tag } from 'components/common/Tag/Tag';
 // import { Input } from 'components/common';
 
 export const DetailPage = () => {
   // const [isModalOpen, setModalOpen] = useState(false);
-  // const { reviewId } = useParams<{ reviewId: string }>();
+  const { reviewId } = useParams<{ reviewId: string }>();
   // if (!reviewId) {
   //   throw new Error('Review ID is missing');
   // }
@@ -19,6 +21,7 @@ export const DetailPage = () => {
   //   queryFn: () => getReviewDetail(reviewId),
   //   enabled: !!reviewId,
   // });
+
   const data = {
     id: 1,
     content: '본문본문이요본민잉본문이요본문ㅇ본문',
@@ -62,7 +65,7 @@ export const DetailPage = () => {
       },
     ],
   };
-
+  const navigate = useNavigate();
   return (
     <>
       {/* {isLoading && <div>Loading...</div>}
@@ -80,6 +83,12 @@ export const DetailPage = () => {
           <StDetailPageImg src={data.img_url} />
           <StDetailPageText>{data.content}</StDetailPageText>
         </StDetailPageContent>
+        <Button
+          type={'normal'}
+          onClick={() => navigate(`/review/comments/${reviewId}`)}
+        >
+          댓글보기
+        </Button>
       </StDetailPageContainer>
     </>
   );
