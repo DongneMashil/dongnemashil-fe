@@ -1,5 +1,11 @@
 import { CommonLayout } from 'components/layout';
-import { DetailPage, HomePage, DetailCommentPage, WriteMapPage } from 'pages';
+import {
+  DetailCommentPage,
+  DetailPage,
+  HomePage,
+  WriteMapPage,
+  DetailCommentPage,
+} from 'pages';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -14,7 +20,7 @@ const Router = () => {
             path="/review/comments/:reviewId"
             element={<DetailCommentPage />}
           />
-
+          <Route path="/postmap" element={<PostMapPage />} />
           <Route path="/writemap" element={<WriteMapPage />} />
         </Routes>
       </BrowserRouter>
