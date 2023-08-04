@@ -1,4 +1,4 @@
 export * from './HomePage/HomePage';
 export * from './DetailPage/DetailPage';
 export * from './DetailCommentPage/DetailCommentPage';
-export * from './PostMapPage/PostMapPage';
+export * from './WriteMapPage/WriteMapPage';
