@@ -191,7 +191,7 @@ export const StDetailPageComment = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 100px);
+  min-height: calc(850px);
 `;
 
 export const StDetailPageCommentTitle = styled.div`
