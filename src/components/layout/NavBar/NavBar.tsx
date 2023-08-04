@@ -4,7 +4,7 @@ import { StNavBar } from './NavBar.styles';
 import { useNavigate } from 'react-router-dom';
 
 export interface NavBarProps {
-  children?: React.ReactNode;
+  children: React.ReactNode;
   btnLeft?: 'logo' | 'back';
   btnRight?: 'close' | 'myPage' | 'submit';
 }
