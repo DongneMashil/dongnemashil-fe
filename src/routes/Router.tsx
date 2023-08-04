@@ -4,6 +4,7 @@ import {
   RegisterPage,
   DetailPage,
   KakaoCallbackPage,
+  WriteMapPage,
 } from 'pages';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -17,6 +18,7 @@ const Router = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login/kakao" element={<KakaoCallbackPage />} />
         <Route path="/review/:reviewId" element={<DetailPage />} />
+        <Route path="/writemap" element={<WriteMapPage />} />
       </Routes>
     </BrowserRouter>
   );
