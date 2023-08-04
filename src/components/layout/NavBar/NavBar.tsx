@@ -1,16 +1,49 @@
-// import { Button } from 'components/common';
+import { Button } from 'components/common';
 import React from 'react';
+import { StNavBar } from './NavBar.styles';
+import { useNavigate } from 'react-router-dom';
 
-interface NavBarProps {
+export interface NavBarProps {
   children?: React.ReactNode;
+  btnLeft?: string;
+  btnRight?: string;
 }
 
-const NavBar = ({ children }: NavBarProps) => {
+const NavBar = ({ btnLeft, btnRight, children }: NavBarProps) => {
+  const navigate = useNavigate();
+
+  const goBack = () => {
+    navigate(-1);
+  };
+
+  const onClickSubmit = () => {};
+
   return (
-    <div>
-      {/* <Button label="test" {...props} /> */}
-      {children}
-    </div>
+    <StNavBar>
+      {btnLeft === 'logo' ? (
+        <Button type={'icon'} url={'/'}>
+          <img src={'/logo.jpg'} />
+        </Button>
+      ) : (
+        <Button type={'icon'} onClick={goBack}>
+          <img src={'/backArrow.jpg'} />
+        </Button>
+      )}
+      <div>{children}</div>
+      {btnRight === 'close' ? (
+        <Button type={'icon'} url={'/'}>
+          <img src={'/close.jpg'} />
+        </Button>
+      ) : btnRight === 'myPage' ? (
+        <Button type={'normal'} url={'/myPage'}>
+          My
+        </Button>
+      ) : (
+        <Button type={'normal'} onClick={onClickSubmit}>
+          Submit
+        </Button>
+      )}
+    </StNavBar>
   );
 };
 
