@@ -4,7 +4,9 @@ import React from 'react';
 export const HomePage = () => {
   return (
     <div>
-      <NavBar />
+      <NavBar btnLeft={'logo'} btnRight={'myPage'}>
+        동네마실
+      </NavBar>
       HomePage
     </div>
   );
