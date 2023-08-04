@@ -7,6 +7,7 @@ import {
   KakaoCallbackPage,
   WriteMapPage,
   DetailCommentPage,
+  WritePage,
 } from 'pages';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -25,6 +26,7 @@ const Router = () => {
             path="/review/comments/:reviewId"
             element={<DetailCommentPage />}
           />
+          <Route path="/Write" element={<WritePage />} />
           <Route path="/writemap" element={<WriteMapPage />} />
         </Routes>
       </BrowserRouter>
