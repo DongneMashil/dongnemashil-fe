@@ -1,7 +1,11 @@
 import React from 'react';
 
-const NavBar = () => {
-  return <div>NavBar</div>;
+interface NavBarProps {
+  children?: React.ReactNode;
+}
+
+const NavBar = ({ children }: NavBarProps) => {
+  return <div>{children}</div>;
 };
 
 export default NavBar;
