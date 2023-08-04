@@ -1,5 +1,5 @@
 import React from 'react';
-import { StTagContainer } from './Tag.style';
+import { StTagContainer } from './Tag.styles';
 import { useNavigate } from 'react-router-dom';
 
 interface TagProps {

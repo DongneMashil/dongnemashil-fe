@@ -1,5 +1,5 @@
 import React from 'react';
-import { StLayoutInner, StLayoutOuter } from './CommonLayout.style';
+import { StLayoutInner, StLayoutOuter } from './CommonLayout.styles';
 
 interface CommonLayoutProps {
   children: React.ReactNode;
