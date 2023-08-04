@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 export interface NavBarProps {
   children?: React.ReactNode;
-  btnLeft?: string;
-  btnRight?: string;
+  btnLeft?: 'logo' | 'back';
+  btnRight?: 'close' | 'myPage' | 'submit';
 }
 
 const NavBar = ({ btnLeft, btnRight, children }: NavBarProps) => {
