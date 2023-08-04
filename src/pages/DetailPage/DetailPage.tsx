@@ -5,7 +5,7 @@ import { CommonLayout } from 'components/layout';
 export const DetailPage = () => {
   return (
     <CommonLayout>
-      <div>DetailPage</div>
+      <div>detailpage</div>
     </CommonLayout>
   );
 };
