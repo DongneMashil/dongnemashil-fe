@@ -7,7 +7,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export const Modal: FC<Props> = ({ isOpen, onClose, children }) => {
+export const ModalPotal: FC<Props> = ({ isOpen, onClose, children }) => {
   const elRef = useRef<HTMLDivElement | null>(null);
   if (!elRef.current) {
     const div = document.createElement('div');
