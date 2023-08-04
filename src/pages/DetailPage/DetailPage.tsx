@@ -4,11 +4,12 @@ import React, { useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import { MyFavoriteTags } from 'components/common/Modal/MyFavoriteTags/MyFavoriteTags';
 import { Tag } from 'components/common/Tag/Tag';
+import { Input } from 'components/common';
 
 export const DetailPage = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   // const { reviewId } = useParams<{ reviewId: string }>();
-  // if (!reviewId) {
+  // if (!reviewId) {wd
   //   throw new Error('Review ID is missing');
   // }
   // const { data, isLoading, isError, error } = useQuery<ReviewDetail, Error>({
@@ -25,6 +26,7 @@ export const DetailPage = () => {
       <MyFavoriteTags isModalOpen={isModalOpen} setModalOpen={setModalOpen} />
       hihi
       <Tag text="hihi" onClick={() => setModalOpen(true)} />
+      <Input name="hihi" label="hihi" placeholder="hihi" />
     </div>
   );
 };
