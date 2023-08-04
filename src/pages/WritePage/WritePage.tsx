@@ -22,14 +22,17 @@ export const WritePage = () => {
   return (
     <>
       <div>header</div>
+      <Input
+        type="text"
+        name="title"
+        value={formValues.title}
+        onChange={onInputChange}
+      />
       <div>
-        <Input
-          type="text"
-          name="title"
-          value={formValues.title}
-          onChange={onInputChange}
-        />
+        <div>이미지</div>
+        <input type="file" />
       </div>
+      <textarea />
     </>
   );
 };
