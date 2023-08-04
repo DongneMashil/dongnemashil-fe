@@ -69,7 +69,7 @@ export const RegisterPage = () => {
         onChange={onChangeHandler}
       />
       <p>{loginValue.passwordVerify}</p>
-      <Button onClick={onSubmitHandler} label="회원가입" />
+      <Button onClick={onSubmitHandler}>회원가입</Button>
     </div>
   );
 };

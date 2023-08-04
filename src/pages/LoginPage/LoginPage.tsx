@@ -27,9 +27,9 @@ export const LoginPage = () => {
       }}
     >
       <p>바로 시작 가능!</p>
-      <Button label="카카오로 로그인" onClick={onKakaoHandler} />
-      <Button label="회원 아이디로 로그인" onClick={onLoginHandler} />
-      <Button label="회원가입" onClick={onRegisterHandler} />
+      <Button onClick={onKakaoHandler}>카카오로 로그인</Button>
+      <Button onClick={onLoginHandler}>회원 아이디로 로그인</Button>
+      <Button onClick={onRegisterHandler}>회원가입</Button>
     </div>
   );
 };
