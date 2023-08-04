@@ -10,7 +10,7 @@ export const StLayoutOuter = styled.div`
   justify-content: center;
 `;
 export const StLayoutInner = styled.div`
-  // position: relative;
+  position: relative;
   width: 100vw;
   max-width: 390px;
   height: 100vh;
