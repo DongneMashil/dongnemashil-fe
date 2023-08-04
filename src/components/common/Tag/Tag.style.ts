@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-export const TagLayout = styled.div`
+export const StTagContainer = styled.div`
   background-color: #fff;
   border-radius: 4px;
   border: 1px solid #e1e4e8;
