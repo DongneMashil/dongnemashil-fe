@@ -6,10 +6,10 @@ import { useNavigate } from 'react-router-dom';
 export interface NavBarProps {
   children: React.ReactNode;
   btnLeft?: 'logo' | 'back';
-  btnRight?: 'close' | 'myPage' | 'submit';
+  btnRight?: 'close' | 'myPage' | 'submit' | null;
 }
 
-const NavBar = ({ btnLeft, btnRight, children }: NavBarProps) => {
+export const NavBar = ({ btnLeft, btnRight, children }: NavBarProps) => {
   const navigate = useNavigate();
 
   const goBack = () => {
@@ -38,13 +38,11 @@ const NavBar = ({ btnLeft, btnRight, children }: NavBarProps) => {
         <Button type={'normal'} url={'/myPage'}>
           My
         </Button>
-      ) : (
+      ) : btnRight === 'submit' ? (
         <Button type={'normal'} onClick={onClickSubmit}>
           Submit
         </Button>
-      )}
+      ) : null}
     </StNavBar>
   );
 };
-
-export default NavBar;
