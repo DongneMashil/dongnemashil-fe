@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { MyFavoriteTags } from 'components/common/Modal/MyFavoriteTags/MyFavoriteTags';
 import { Tag } from 'components/common/Tag/Tag';
 import { Input } from 'components/common';
+import { CommonLayout } from 'components/layout';
 
 export const DetailPage = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -18,7 +19,7 @@ export const DetailPage = () => {
   //   enabled: !!reviewId,
   // });
   return (
-    <div>
+    <CommonLayout>
       {/* {isLoading && <div>Loading...</div>}
       {isError && <div>{String(error)}</div>}
 
@@ -27,6 +28,6 @@ export const DetailPage = () => {
       hihi
       <Tag text="hihi" onClick={() => setModalOpen(true)} />
       <Input name="hihi" label="hihi" placeholder="hihi" />
-    </div>
+    </CommonLayout>
   );
 };
