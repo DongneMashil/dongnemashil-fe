@@ -9,7 +9,7 @@ export interface NavBarProps {
   btnRight?: 'close' | 'myPage' | 'submit';
 }
 
-const NavBar = ({ btnLeft, btnRight, children }: NavBarProps) => {
+export const NavBar = ({ btnLeft, btnRight, children }: NavBarProps) => {
   const navigate = useNavigate();
 
   const goBack = () => {

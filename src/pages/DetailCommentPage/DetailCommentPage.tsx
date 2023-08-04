@@ -2,6 +2,7 @@ import { Button } from 'components/common';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { NavBar } from 'components/layout';
 export const DetailCommentPage = () => {
   const { reviewId } = useParams<{ reviewId: string }>();
   const navigate = useNavigate();
@@ -50,6 +51,9 @@ export const DetailCommentPage = () => {
   };
   return (
     <>
+      <NavBar btnLeft={'logo'} btnRight={'myPage'}>
+        동네마실
+      </NavBar>
       <StDetailPageComment>
         <StDetailPageCommentTitle>댓글</StDetailPageCommentTitle>
         <StDetailPageCommentInput>

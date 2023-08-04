@@ -6,6 +6,8 @@ import { styled } from 'styled-components';
 // import { useQuery } from '@tanstack/react-query';
 // import { getReviewDetail, ReviewDetail } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
+import { NavBar } from 'components/layout';
+import { Footer } from 'components/detailPage';
 // import { MyFavoriteTags } from 'components/common/Modal/MyFavoriteTags/MyFavoriteTags';
 // import { Tag } from 'components/common/Tag/Tag';
 // import { Input } from 'components/common';
@@ -70,7 +72,9 @@ export const DetailPage = () => {
     <>
       {/* {isLoading && <div>Loading...</div>}
       {isError && <div>{String(error)}</div>} */}
-
+      <NavBar btnLeft={'logo'} btnRight={'myPage'}>
+        동네마실
+      </NavBar>
       <StDetailPageContainer img={data.img_url}>
         <StDetailPageHeader>
           <StDetailPageTitle>{data.title}</StDetailPageTitle>
@@ -90,6 +94,7 @@ export const DetailPage = () => {
           댓글보기
         </Button>
       </StDetailPageContainer>
+      <Footer />
     </>
   );
 };
