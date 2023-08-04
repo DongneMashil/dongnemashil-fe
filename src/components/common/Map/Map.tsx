@@ -19,7 +19,7 @@ const Map = ({ width, height, initMap }: MapProps) => {
   useEffect(() => {
     const container = document.getElementById('map');
     const options = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667) as kakao.maps.LatLng,
+      center: new kakao.maps.LatLng(37.545043, 127.039245) as kakao.maps.LatLng,
       level: 3,
     };
 
