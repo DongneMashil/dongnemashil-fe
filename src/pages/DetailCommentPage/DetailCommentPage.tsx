@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { NavBar } from 'components/layout';
+import { Footer } from 'components/layout';
 export const DetailCommentPage = () => {
   const { reviewId } = useParams<{ reviewId: string }>();
   const navigate = useNavigate();
@@ -47,12 +48,110 @@ export const DetailCommentPage = () => {
           'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
         comment: '댓글입니다44',
       },
+      {
+        comment_id: 2,
+        username: '닉네22임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입니22다',
+      },
+      {
+        comment_id: 3,
+        username: '닉네33임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입33니다',
+      },
+      {
+        comment_id: 4,
+        username: '닉네44임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입니다44',
+      },
+      {
+        comment_id: 2,
+        username: '닉네22임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입니22다',
+      },
+      {
+        comment_id: 3,
+        username: '닉네33임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입33니다',
+      },
+      {
+        comment_id: 4,
+        username: '닉네44임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입니다44',
+      },
+      {
+        comment_id: 2,
+        username: '닉네22임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입니22다',
+      },
+      {
+        comment_id: 3,
+        username: '닉네33임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입33니다',
+      },
+      {
+        comment_id: 4,
+        username: '닉네44임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입니다44',
+      },
+      {
+        comment_id: 3,
+        username: '닉네33임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입33니다',
+      },
+      {
+        comment_id: 4,
+        username: '닉네44임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입니다44',
+      },
+      {
+        comment_id: 2,
+        username: '닉네22임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입니22다',
+      },
+      {
+        comment_id: 3,
+        username: '닉네33임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입33니다',
+      },
+      {
+        comment_id: 4,
+        username: '닉네44임',
+        profile_img:
+          'https://media.suara.com/suara-partners/semarang/thumbs/336x189/2022/11/22/1-cat-g497210635-1920.jpg',
+        comment: '댓글입니다44',
+      },
     ],
   };
   return (
     <>
       <NavBar btnLeft={'logo'} btnRight={'myPage'}>
-        동네마실
+        글 댓글 11개
       </NavBar>
       <StDetailPageComment>
         <StDetailPageCommentTitle>댓글</StDetailPageCommentTitle>
@@ -82,6 +181,7 @@ export const DetailCommentPage = () => {
           </Button>
         </StDetailPageCommentList>
       </StDetailPageComment>
+      <Footer></Footer>
     </>
   );
 };
@@ -91,6 +191,7 @@ export const StDetailPageComment = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  min-height: calc(100vh - 100px);
 `;
 
 export const StDetailPageCommentTitle = styled.div`
@@ -113,7 +214,7 @@ export const StDetailPageCommentInput = styled.div`
 
 export const StDetailPageCommentList = styled.div`
   width: 100%;
-  height: 100%;
+  height: 4rem;
   display: flex;
   flex-direction: column;
 `;

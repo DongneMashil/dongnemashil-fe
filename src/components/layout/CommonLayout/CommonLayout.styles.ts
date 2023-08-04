@@ -10,12 +10,13 @@ export const StLayoutOuter = styled.div`
   justify-content: center;
 `;
 export const StLayoutInner = styled.div`
+  // position: relative;
   width: 100vw;
   max-width: 390px;
   height: 100vh;
   max-height: 850px;
-  overflow-y: auto;
-  display: flex;
+  overflow-y: scroll;
+  // display: flex;
   background-color: #fff;
   flex-direction: column;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.04);
