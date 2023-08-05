@@ -1,6 +1,7 @@
 import { Input } from 'components/common';
 import React, { ChangeEvent, useRef, useState } from 'react';
-import { StHiddenButton, StPlusButton } from './WritePage.styles';
+import { StHiddenButton } from './WritePage.styles';
+import { FileSlider } from 'components/WritePage/InputFile/FileSlider';
 
 interface FormValues {
   title: string;
@@ -24,7 +25,7 @@ export const WritePage = () => {
     });
   };
 
-  const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const imageFiles = files.filter((file) => file.type.startsWith('image/'));
     const videoFiles = files.filter((file) => file.type.startsWith('video/'));
@@ -65,17 +66,8 @@ export const WritePage = () => {
     });
   };
 
-  const onButtonClick = (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
+  const onButtonClick = () => {
     fileInputRef.current?.click();
-  };
-
-  const onSlideButtonHandeler = (direction: 'left' | 'right') => {
-    if (direction === 'left') {
-      setCurrentPage((prev) => (prev === 0 ? images.length : prev - 1));
-    } else {
-      setCurrentPage((prev) => (prev === images.length ? 0 : prev + 1));
-    }
   };
 
   return (
@@ -87,40 +79,19 @@ export const WritePage = () => {
         value={formValues.title}
         onChange={onInputChange}
       />
-      <div style={{ position: 'relative', minHeight: '200px' }}>
-        <button onClick={() => onSlideButtonHandeler('left')}>Prev</button>
-
-        {/* 현재 페이지가 images.length일 경우 +버튼을 보여줍니다. */}
-        {currentPage === images.length ? (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-            }}
-          >
-            <StPlusButton onClick={onButtonClick}>+</StPlusButton>
-          </div>
-        ) : images[currentPage].startsWith('data:image') ? (
-          <img
-            src={images[currentPage]}
-            alt={`Upload Preview ${currentPage}`}
-          />
-        ) : (
-          <video src={images[currentPage]} controls />
-        )}
-
-        <button onClick={() => onSlideButtonHandeler('right')}>Next</button>
-
-        <StHiddenButton
-          ref={fileInputRef}
-          type="file"
-          accept="image/*, video/*"
-          multiple
-          onChange={onFileChange}
-        />
-      </div>
+      <FileSlider
+        images={images}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        onAddImage={onButtonClick}
+      />
+      <StHiddenButton
+        ref={fileInputRef}
+        type="file"
+        accept="image/*, video/*"
+        multiple
+        onChange={onFileChange}
+      />
       <textarea />
     </>
   );
