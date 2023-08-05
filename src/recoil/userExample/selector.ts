@@ -20,6 +20,14 @@ export const userIsDefinedSelector = selector<boolean>({
   },
 });
 
+export const userIsLoggedInSelector = selector<boolean>({
+  key: 'userIsLoggedInSelector',
+  get: ({ get }) => {
+    const user = get(userState) as UserState;
+    return user.isLoggedIn;
+  },
+});
+
 /** 
  * 위의 selector는 아래와 같이 작성할 수도 있습니다.
  * 위에는 엄격하게 하는 경우이고, 아래는 userState타입을 지정하지 않고 unknown으로 하는 경우입니다. 둘다 동작에는 무방함.
