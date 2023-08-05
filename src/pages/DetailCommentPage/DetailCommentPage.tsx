@@ -22,48 +22,38 @@ export const DetailCommentPage = () => {
   // });
 
   return (
-    <>
-      <CommonLayout
-        footer={
-          <Footer reviewId={reviewId!} />
+    <CommonLayout
+      footer={<Footer reviewId={reviewId!} />}
+      header={
+        <NavBar btnLeft={'back'} btnRight={'myPage'}>
+          글 댓글 11개
+        </NavBar>
+      }
+    >
+      <StDetailPageComment>
+        <StDetailPageCommentTitle>댓글</StDetailPageCommentTitle>
 
-          // <Footer>
-          //   <StDetailPageCommentInput>
-          //     <input placeholder="댓글을 입력해주세요" />
-          //   </StDetailPageCommentInput>
-          // </Footer>
-        }
-        header={
-          <NavBar btnLeft={'back'} btnRight={'myPage'}>
-            글 댓글 11개
-          </NavBar>
-        }
-      >
-        <StDetailPageComment>
-          <StDetailPageCommentTitle>댓글</StDetailPageCommentTitle>
-
-          <StDetailPageCommentList>
-            {/* {data.comments.map((comment: Comment) => (
+        <StDetailPageCommentList>
+          {/* {data.comments.map((comment: Comment) => (
               <StDetailPageCommentItem key={comment.id}>
                 <img src={comment.profileImgUrl} alt="프로필 이미지" />
                 <div className="nickname">{comment.nickname}</div>
                 <div className="content">{comment.comment}</div>
               </StDetailPageCommentItem>
             ))} */}
-            <img src="https://source.unsplash.com/random" />
-            <img src="https://source.unsplash.com/random" />
-            <img src="https://source.unsplash.com/random" />{' '}
-            <img src="https://source.unsplash.com/random" />
-            <img src="https://source.unsplash.com/random" />
-            <img src="https://source.unsplash.com/random" />{' '}
-            <img src="https://source.unsplash.com/random" />
-            <img src="https://source.unsplash.com/random" />
-            <img src="https://source.unsplash.com/random" />
-            <StFooterSpacer />
-          </StDetailPageCommentList>
-        </StDetailPageComment>
-      </CommonLayout>
-    </>
+          <img src="https://source.unsplash.com/random" />
+          <img src="https://source.unsplash.com/random" />
+          <img src="https://source.unsplash.com/random" />{' '}
+          <img src="https://source.unsplash.com/random" />
+          <img src="https://source.unsplash.com/random" />
+          <img src="https://source.unsplash.com/random" />{' '}
+          <img src="https://source.unsplash.com/random" />
+          <img src="https://source.unsplash.com/random" />
+          <img src="https://source.unsplash.com/random" />
+          <StFooterSpacer />
+        </StDetailPageCommentList>
+      </StDetailPageComment>
+    </CommonLayout>
   );
 };
 
