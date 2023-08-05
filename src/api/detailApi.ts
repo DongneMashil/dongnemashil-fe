@@ -1,5 +1,5 @@
 import { AxiosResponse, AxiosError } from 'axios';
-import { axiosInstance, axiosWithToken } from './api';
+import { axiosInstance, axiosUserInstance } from './api';
 
 type Comment = {
   comment_id: number;
@@ -25,7 +25,7 @@ export const getReviewDetail = async (
 ): Promise<ReviewDetail> => {
   // 상세페이지 조회
   try {
-    const response: AxiosResponse<ReviewDetail> = await axiosInstance.get(
+    const response: AxiosResponse<ReviewDetail> = await axiosUserInstance.get(
       `/reviews/${detailId}`
     );
     return response.data;
@@ -42,7 +42,7 @@ export const likeReview = async (
 ): Promise<boolean> => {
   try {
     const response: AxiosResponse<{ liked: boolean }> =
-      await axiosWithToken.post(`/api/like/${reviewId}`);
+      await axiosUserInstance.post(`/api/like/${reviewId}`);
     return response.data.liked;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
@@ -57,7 +57,7 @@ export const checkLikeStatus = async (
 ): Promise<boolean> => {
   try {
     const response: AxiosResponse<{ liked: boolean }> =
-      await axiosWithToken.get(`/api/like/${reviewId}`);
+      await axiosUserInstance.get(`/api/like/${reviewId}`);
     return response.data.liked;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
