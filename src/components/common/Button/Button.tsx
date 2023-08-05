@@ -27,5 +27,3 @@ export const Button = ({
   );
   return url ? linkBtn : onClickBtn;
 };
-
-export default Button;
