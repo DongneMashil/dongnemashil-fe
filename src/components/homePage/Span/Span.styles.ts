@@ -3,7 +3,7 @@ import { SpanProps } from './Span';
 
 export const StSpan = styled.span<SpanProps>`
   display: block;
-  color: ${(props) => props.color || 'white'};
+  color: ${(props) => props.color || 'black'};
 
   &.small {
     font-size: 0.8rem;
