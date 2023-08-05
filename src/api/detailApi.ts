@@ -12,12 +12,15 @@ export type ReviewDetail = {
   id: number;
   content: string;
   img_url: string;
-  video_url: string;
+  title: string;
+  video_url: string | null;
   createdAt: string;
   nickname: string;
-  profileImgUrl: string;
+  profileImg_url: string;
   address: string;
-  comments: Comment[];
+  likeCnt: number;
+  commentCnt: number;
+  comments: Comment[] | null;
 };
 
 export const getReviewDetail = async (
