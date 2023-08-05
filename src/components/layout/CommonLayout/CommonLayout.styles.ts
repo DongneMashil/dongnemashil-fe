@@ -8,17 +8,30 @@ export const StLayoutOuter = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  @media (max-height: 1000px) {
+    justify-content: flex-start;
+  }
 `;
-export const StLayoutInner = styled.div`
+interface StLayoupBodyProps {
+  readonly $gap: number;
+}
+export const StLayoutBody = styled.div<StLayoupBodyProps>`
   position: relative;
   width: 100vw;
   max-width: 390px;
-  height: 100vh;
+  height: calc(100vh - ${(props) => props.$gap}px);
   max-height: 850px;
-  overflow-y: scroll;
+
+  // display: flex;
+
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.04);
+  border-radius: 1rem;
+`;
+export const StLayoutSection = styled.div`
+  width: 100%;
+  height: 100%;
   // display: flex;
   background-color: #fff;
   flex-direction: column;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.04);
-  border-radius: 1rem;
+  overflow-y: scroll;
 `;
