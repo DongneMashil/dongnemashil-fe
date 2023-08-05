@@ -4,14 +4,14 @@ export interface UserState {
   userId: string;
   nickName: string;
   profileImage: string;
-  isLogin: boolean;
+  isLoggedIn: boolean;
 }
 
 const initialState: UserState = {
   userId: '',
   nickName: '',
   profileImage: '',
-  isLogin: false,
+  isLoggedIn: false,
 };
 
 //atom은 recoil의 상태를 정의합니다.
