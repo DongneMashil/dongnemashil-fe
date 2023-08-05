@@ -1,7 +1,7 @@
 import { Input } from 'components/common';
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { StHiddenButton } from './WritePage.styles';
-import { FileSlider } from 'components/WritePage/InputFile/FileSlider';
+import { FileSlider } from 'components/WritePage/FileSlider/FileSlider';
 
 interface FormValues {
   title: string;
