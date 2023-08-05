@@ -2,6 +2,7 @@ import { Input } from 'components/common';
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { StHiddenButton } from './WritePage.styles';
 import { FileSlider } from 'components/WritePage/FileSlider/FileSlider';
+import { CommonLayout, NavBar } from 'components/layout';
 
 interface FormValues {
   title: string;
@@ -72,27 +73,31 @@ export const WritePage = () => {
 
   return (
     <>
-      <div>header</div>
-      <Input
-        type="text"
-        name="title"
-        value={formValues.title}
-        onChange={onInputChange}
-      />
-      <FileSlider
-        images={images}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        onAddImage={onButtonClick}
-      />
-      <StHiddenButton
-        ref={fileInputRef}
-        type="file"
-        accept="image/*, video/*"
-        multiple
-        onChange={onFileChange}
-      />
-      <textarea />
+      <CommonLayout
+        header={<NavBar btnLeft={'back'} btnRight={'submit'}>주소값</NavBar>}
+      >
+        <div>header</div>
+        <Input
+          type="text"
+          name="title"
+          value={formValues.title}
+          onChange={onInputChange}
+        />
+        <FileSlider
+          images={images}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          onAddImage={onButtonClick}
+        />
+        <StHiddenButton
+          ref={fileInputRef}
+          type="file"
+          accept="image/*, video/*"
+          multiple
+          onChange={onFileChange}
+        />
+        <textarea />
+      </CommonLayout>
     </>
   );
 };
