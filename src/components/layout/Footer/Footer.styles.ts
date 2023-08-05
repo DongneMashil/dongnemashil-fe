@@ -1,13 +1,15 @@
 import { styled } from 'styled-components';
 
 export const StFooter = styled.div`
-  position: fixed;
+  position: absolute;
   bottom: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+
   width: 100%;
-  height: 50px;
-  border-top: 1px solid #ccc;
+`;
+export const StFooterFixed = styled.div`
+  position: fixed;
   background-color: #fff;
+  border-top: 1px solid #ccc;
+  width: 390px;
+  height: 50px;
 `;
