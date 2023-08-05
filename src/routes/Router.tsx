@@ -1,5 +1,4 @@
-import ProtectedRoute from './ProtectedRoute';
-import { CommonLayout } from 'components/layout';
+import React from 'react';
 import {
   HomePage,
   LoginPage,
@@ -9,30 +8,28 @@ import {
   WriteMapPage,
   DetailCommentPage,
 } from 'pages';
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ProtectedRoute from './ProtectedRoute';
 
 const Router = () => {
   return (
-    <CommonLayout>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/login/kakao" element={<KakaoCallbackPage />} />
-          <Route path="/review/:reviewId" element={<DetailPage />} />
-          <Route
-            path="/review/comments/:reviewId"
-            element={<DetailCommentPage />}
-          />
-          <Route
-            path="/writemap"
-            element={<ProtectedRoute element={<WriteMapPage />} />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </CommonLayout>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login/kakao" element={<KakaoCallbackPage />} />
+        <Route path="/review/:reviewId" element={<DetailPage />} />
+        <Route
+          path="/review/comments/:reviewId"
+          element={<DetailCommentPage />}
+        />
+        <Route
+          path="/writemap"
+          element={<ProtectedRoute element={<WriteMapPage />} />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
