@@ -25,6 +25,8 @@ export const handlers = [
   rest.get('/reviews', async (req, res, ctx) => {
     console.log('MSW: Intercepted GET request to /reviews');
     // const { searchParams } = req.url;
+    // const size = Number(searchParams.get('size'));
+    // const page = Number(searchParams.get('page'));
     const size = 10;
     const page = 0;
     const totalCount = result.length;
