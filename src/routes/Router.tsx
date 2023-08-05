@@ -1,4 +1,3 @@
-import { CommonLayout } from 'components/layout';
 import {
   HomePage,
   LoginPage,
@@ -6,15 +5,13 @@ import {
   DetailPage,
   KakaoCallbackPage,
   WriteMapPage,
-  DetailCommentPage,
-  WritePage,
+  DetailCommentPage
 } from 'pages';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const Router = () => {
   return (
-    <CommonLayout>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -26,11 +23,9 @@ const Router = () => {
             path="/review/comments/:reviewId"
             element={<DetailCommentPage />}
           />
-          <Route path="/Write" element={<WritePage />} />
           <Route path="/writemap" element={<WriteMapPage />} />
         </Routes>
       </BrowserRouter>
-    </CommonLayout>
   );
 };
 
