@@ -1,5 +1,6 @@
 import React from 'react';
 import { StThumbnail } from './Thumbnail.styles';
+import { Span } from '../Span/Span';
 
 interface ThumbnailProps {
   road_name: string;
@@ -17,11 +18,11 @@ export const Thumbnail = ({
   return (
     <StThumbnail>
       <img src={img_url} />
-      <span>{road_name}</span>
-      <span>하트</span>
-      <span>{likeCnt}</span>
-      <span>날씨가 좋아 생각 정리 겸 산책에 나갔다.</span>
-      <span>{tag}</span>
+      <div>
+        <Span size={'title'}>{road_name}</Span>
+        <Span>하트 {likeCnt}</Span>
+        <Span>{tag}</Span>
+      </div>
     </StThumbnail>
   );
 };
