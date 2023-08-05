@@ -1,13 +1,6 @@
 import { AxiosResponse, AxiosError } from 'axios';
 import { axiosInstance, axiosWithToken } from './api';
 
-type Comment = {
-  comment_id: number;
-  username: string;
-  profile_img: string;
-  comment: string;
-};
-
 export type ReviewDetail = {
   id: number;
   content: string;
@@ -20,7 +13,7 @@ export type ReviewDetail = {
   address: string;
   likeCnt: number;
   commentCnt: number;
-  comments: Comment[] | null;
+  comments: unknown[] | null;
 };
 
 export const getReviewDetail = async (
@@ -30,6 +23,33 @@ export const getReviewDetail = async (
   try {
     const response: AxiosResponse<ReviewDetail> = await axiosInstance.get(
       `/reviews/${detailId}`
+    );
+    return response.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
+  }
+};
+
+export type Comment = {
+  id: number;
+  nickname: string;
+  profileImgUrl: string;
+  comment: string;
+};
+export type ReviewDetailComment = {
+  comments: Comment[] | null;
+};
+
+export const getReviewDetailComment = async (
+  detailId: undefined | string
+): Promise<ReviewDetail> => {
+  // 댓글조회
+  try {
+    const response: AxiosResponse<ReviewDetail> = await axiosInstance.get(
+      `/reviews/${detailId}/comments`
     );
     return response.data;
   } catch (e: unknown) {
