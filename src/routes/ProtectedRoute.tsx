@@ -1,12 +1,10 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
-import { userState } from 'recoil/userExample';
 import { Navigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { userIsLoggedInSelector } from 'recoil/userExample';
 
 const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
-  const [user] = useRecoilState(userState);
-  const isLoggedIn = user.isLogin;
-  console.log('isLoggedIn', isLoggedIn);
+  const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
   return isLoggedIn ? element : <Navigate to="/login" replace />;
 };
 
