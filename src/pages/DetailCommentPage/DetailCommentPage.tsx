@@ -150,10 +150,14 @@ export const DetailCommentPage = () => {
   };
   return (
     <>
-      <CommonLayout footer={<Footer></Footer>}>
-        <NavBar btnLeft={'logo'} btnRight={'myPage'}>
-          글 댓글 11개
-        </NavBar>
+      <CommonLayout
+        footer={<Footer></Footer>}
+        header={
+          <NavBar btnLeft={'logo'} btnRight={'myPage'}>
+            글 댓글 11개
+          </NavBar>
+        }
+      >
         <StDetailPageComment>
           <StDetailPageCommentTitle>댓글</StDetailPageCommentTitle>
           <StDetailPageCommentInput>
