@@ -3,7 +3,7 @@ import { StThumbnail } from './Thumbnail.styles';
 import { Span } from '../Span/Span';
 import { useNavigate } from 'react-router-dom';
 
-interface ThumbnailProps {
+export interface ThumbnailProps {
   id: number;
   road_name: string;
   img_url: string;
