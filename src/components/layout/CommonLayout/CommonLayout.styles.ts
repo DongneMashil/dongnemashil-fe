@@ -12,20 +12,20 @@ export const StLayoutOuter = styled.div`
     justify-content: flex-start;
   }
 `;
-interface StLayoupBodyProps {
-  readonly $gap: number;
-}
-export const StLayoutBody = styled.div<StLayoupBodyProps>`
+
+export const StLayoutBody = styled.div`
   position: relative;
   width: 100vw;
   max-width: 390px;
-  height: calc(100vh - ${(props) => props.$gap}px);
+  height: calc(100vh);
   max-height: 850px;
   // display: flex;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.04);
   border-radius: 1rem;
 `;
-export const StLayoutSection = styled.div<{ $headerHeight: number }>`
+export const StLayoutSection = styled.div<{
+  $headerHeight: number;
+}>`
   padding-top: ${(props) => props.$headerHeight}px;
   width: 100%;
   height: 100%;

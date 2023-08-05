@@ -15,28 +15,25 @@ interface CommonLayoutProps {
   hideHeader?: boolean;
 }
 
+/**
+ * CommonLayout
+ * @param children 본문 컨텐츠는 children에 넣어줄것
+ * @param 선택사항 header, prop으로 JSX 넘겨줄것
+ * @param 선택사항 footer, prop으로 JSX 넘겨줄것, 사용시 footerSpacer를 사용해야함
+ * @param 선택사항 headerHeight px단위. 기본값50
+ * @param 선택사항 hideHeader 스크롤시 헤더 숨김 여부. 기본값 true
+ */
 export const CommonLayout: React.FC<CommonLayoutProps> = ({
   children,
   header,
   footer,
-  headerHeight,
-  footerHeight,
+  headerHeight = 50,
   hideHeader = true,
 }) => {
   const [isShow, setIsShow] = React.useState(true);
   const [prevPosition, setPrevPosition] = React.useState(0);
 
   const scrollRef = React.useRef<HTMLDivElement>(null);
-  let gap = 0;
-  headerHeight = headerHeight ? headerHeight : 50;
-  footerHeight = footerHeight ? footerHeight : 50;
-  if (footer) gap = footerHeight;
-  if (header) {
-    gap = headerHeight;
-  }
-  if (header && footer) {
-    gap = headerHeight + footerHeight;
-  }
 
   useEffect(() => {
     const onScroll = () => {
@@ -63,7 +60,7 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
 
   return (
     <StLayoutOuter>
-      <StLayoutBody $gap={gap}>
+      <StLayoutBody>
         <StSlidingHeader $isShow={isShow}>{header}</StSlidingHeader>
         <StLayoutSection ref={scrollRef} $headerHeight={headerHeight}>
           {children}
