@@ -22,21 +22,24 @@ export const NavBar = ({ btnLeft, btnRight, children }: NavBarProps) => {
     <StNavBar>
       {btnLeft === 'logo' ? (
         <Button type={'icon'} url={'/'}>
-          <img src={'/logo.jpg'} />
+          {/* <img src={'/logo.jpg'} /> */}
+          🏃🏻‍♀️
         </Button>
       ) : (
         <Button type={'icon'} onClick={goBack}>
-          <img src={'/backArrow.jpg'} />
+          {/* <img src={'/backArrow.jpg'} /> */}
+          ⬅️
         </Button>
       )}
       <div>{children}</div>
       {btnRight === 'close' ? (
         <Button type={'icon'} url={'/'}>
-          <img src={'/close.jpg'} />
+          {/* <img src={'/close.jpg'} /> */}
+          ✖️
         </Button>
       ) : btnRight === 'myPage' ? (
         <Button type={'normal'} url={'/myPage'}>
-          My
+          👀
         </Button>
       ) : btnRight === 'submit' ? (
         <Button type={'normal'} onClick={onClickSubmit}>

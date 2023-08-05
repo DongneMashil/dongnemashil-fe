@@ -7,4 +7,6 @@ export const StNavBar = styled.div<NavBarProps>`
   align-items: center;
   width: 100%;
   height: 50px;
+  padding: 0 10px;
+  background: #ffffff;
 `;
