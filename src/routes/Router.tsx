@@ -1,4 +1,7 @@
+import ProtectedRoute from './ProtectedRoute';
 import { CommonLayout } from 'components/layout';
+import { useRecoilState } from 'recoil';
+import { userState } from 'recoil/userExample';
 import {
   HomePage,
   LoginPage,
@@ -12,6 +15,9 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const Router = () => {
+  const [user] = useRecoilState(userState);
+  const isLoggedIn = user.isLogin;
+  console.log('isLoggedIn', isLoggedIn);
   return (
     <CommonLayout>
       <BrowserRouter>
@@ -25,7 +31,10 @@ const Router = () => {
             path="/review/comments/:reviewId"
             element={<DetailCommentPage />}
           />
-          <Route path="/writemap" element={<WriteMapPage />} />
+          <Route
+            path="/writemap"
+            element={<ProtectedRoute element={<WriteMapPage />} />}
+          />
         </Routes>
       </BrowserRouter>
     </CommonLayout>
