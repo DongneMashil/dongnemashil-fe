@@ -2,7 +2,7 @@ import { Button } from 'components/common';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { NavBar } from 'components/layout';
+import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/layout';
 export const DetailCommentPage = () => {
   const { reviewId } = useParams<{ reviewId: string }>();
@@ -150,38 +150,39 @@ export const DetailCommentPage = () => {
   };
   return (
     <>
-      <NavBar btnLeft={'logo'} btnRight={'myPage'}>
-        글 댓글 11개
-      </NavBar>
-      <StDetailPageComment>
-        <StDetailPageCommentTitle>댓글</StDetailPageCommentTitle>
-        <StDetailPageCommentInput>
-          <input placeholder="댓글을 입력해주세요" />
-        </StDetailPageCommentInput>
-        <StDetailPageCommentList>
-          {data.comments.map((comment) => (
-            <StDetailPageCommentItem key={comment.comment_id}>
-              <StDetailPageCommentProfileImg
-                src={comment.profile_img}
-                alt="프로필 이미지"
-              />
-              <StDetailPageCommentNickname>
-                {comment.username}
-              </StDetailPageCommentNickname>
-              <StDetailPageCommentContent>
-                {comment.comment}
-              </StDetailPageCommentContent>
-            </StDetailPageCommentItem>
-          ))}
-          <Button
-            type={'normal'}
-            onClick={() => navigate(`/review/${reviewId}`)}
-          >
-            본문
-          </Button>
-        </StDetailPageCommentList>
-      </StDetailPageComment>
-      <Footer></Footer>
+      <CommonLayout footer={<Footer></Footer>}>
+        <NavBar btnLeft={'logo'} btnRight={'myPage'}>
+          글 댓글 11개
+        </NavBar>
+        <StDetailPageComment>
+          <StDetailPageCommentTitle>댓글</StDetailPageCommentTitle>
+          <StDetailPageCommentInput>
+            <input placeholder="댓글을 입력해주세요" />
+          </StDetailPageCommentInput>
+          <StDetailPageCommentList>
+            {data.comments.map((comment) => (
+              <StDetailPageCommentItem key={comment.comment_id}>
+                <StDetailPageCommentProfileImg
+                  src={comment.profile_img}
+                  alt="프로필 이미지"
+                />
+                <StDetailPageCommentNickname>
+                  {comment.username}
+                </StDetailPageCommentNickname>
+                <StDetailPageCommentContent>
+                  {comment.comment}
+                </StDetailPageCommentContent>
+              </StDetailPageCommentItem>
+            ))}
+            <Button
+              type={'normal'}
+              onClick={() => navigate(`/review/${reviewId}`)}
+            >
+              본문
+            </Button>
+          </StDetailPageCommentList>
+        </StDetailPageComment>
+      </CommonLayout>
     </>
   );
 };
