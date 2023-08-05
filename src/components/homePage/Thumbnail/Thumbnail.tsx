@@ -4,7 +4,7 @@ import { Span } from '../Span/Span';
 import { useNavigate } from 'react-router-dom';
 
 interface ThumbnailProps {
-  key: number;
+  id: number;
   road_name: string;
   img_url: string;
   tag: string[];
@@ -12,7 +12,7 @@ interface ThumbnailProps {
 }
 
 export const Thumbnail = ({
-  key,
+  id,
   road_name,
   img_url,
   tag,
@@ -21,7 +21,7 @@ export const Thumbnail = ({
   const navigate = useNavigate();
 
   const onClickThumbnail = () => {
-    navigate(`/review/${key}`);
+    navigate(`/review/${id}`);
   };
 
   return (

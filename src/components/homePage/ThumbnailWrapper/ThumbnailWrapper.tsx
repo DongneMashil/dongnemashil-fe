@@ -61,6 +61,7 @@ export const ThumbnailWrapper = () => {
       {result.map((post) => (
         <Thumbnail
           key={post.id}
+          id={post.id}
           road_name={post.road_name}
           img_url={post.img_url}
           tag={post.tag}
