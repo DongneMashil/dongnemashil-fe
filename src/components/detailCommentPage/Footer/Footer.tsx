@@ -1,36 +1,23 @@
-import { Button } from 'components/common';
+import { Button, Input } from 'components/common';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 interface FooterProps {
   reviewId: string;
-  likeCnt: number;
-  commentCnt: number;
-  onClick?: () => void;
 }
-export const Footer = ({
-  reviewId,
-  likeCnt = 0,
-  commentCnt = 0,
-  onClick,
-}: FooterProps) => {
-  const navigate = useNavigate();
+export const Footer = ({ reviewId }: FooterProps) => {
   return (
     <StFooterContatiner>
-      <StLike>👍 {likeCnt}</StLike>
-      <StComment onClick={() => navigate(`/review/comments/${reviewId}`)}>
-        💬{commentCnt}
-      </StComment>
-      <Button type={'normal'} onClick={onClick}>
-        본문보기
+      <Input placeholder="댓글을 입력해주세요" />
+      <Button type={'normal'} onClick={() => {}}>
+        본문보기{reviewId}
       </Button>
     </StFooterContatiner>
   );
 };
 
 export const StFooterContatiner = styled.footer`
-  z-index: 100;
   background-color: #fff;
   border-top: 1px solid #ccc;
   height: 50px;
