@@ -1,6 +1,7 @@
 import React from 'react';
 import { Thumbnail } from '../Thumbnail/Thumbnail';
 import { test1, test2, test3 } from 'assets/test';
+import { StThumbnailWrapper } from './ThumbnailWrapper.styles';
 
 export const ThumbnailWrapper = () => {
   const result = [
@@ -56,7 +57,7 @@ export const ThumbnailWrapper = () => {
   ];
 
   return (
-    <div>
+    <StThumbnailWrapper>
       {result.map((post) => (
         <Thumbnail
           key={post.id}
@@ -66,6 +67,6 @@ export const ThumbnailWrapper = () => {
           likeCnt={post.likeCnt}
         />
       ))}
-    </div>
+    </StThumbnailWrapper>
   );
 };
