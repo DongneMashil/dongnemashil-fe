@@ -24,9 +24,9 @@ export const StLayoutBody = styled.div`
   border-radius: 1rem;
 `;
 export const StLayoutSection = styled.div<{
-  $headerHeight: number;
+  $headerHeight: string;
 }>`
-  padding-top: ${(props) => props.$headerHeight}px;
+  padding-top: ${(props) => props.$headerHeight};
   width: 100%;
   height: 100%;
   // display: flex;

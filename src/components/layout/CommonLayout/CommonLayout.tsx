@@ -10,7 +10,7 @@ interface CommonLayoutProps {
   children: React.ReactNode;
   header?: React.ReactNode;
   footer?: React.ReactNode;
-  headerHeight?: number;
+  headerHeight?: string;
   footerHeight?: number;
   hideHeader?: boolean;
 }
@@ -20,14 +20,14 @@ interface CommonLayoutProps {
  * @param children 본문 컨텐츠는 children에 넣어줄것
  * @param 선택사항 header, prop으로 JSX 넘겨줄것
  * @param 선택사항 footer, prop으로 JSX 넘겨줄것, 사용시 footerSpacer를 사용해야함
- * @param 선택사항 headerHeight px단위. 기본값50
+ * @param 선택사항 headerHeight 딘위까지 입력해야함, 기본값 50px
  * @param 선택사항 hideHeader 스크롤시 헤더 숨김 여부. 기본값 true
  */
 export const CommonLayout: React.FC<CommonLayoutProps> = ({
   children,
   header,
   footer,
-  headerHeight = 50,
+  headerHeight = '50px',
   hideHeader = true,
 }) => {
   const [isShow, setIsShow] = React.useState(true);
