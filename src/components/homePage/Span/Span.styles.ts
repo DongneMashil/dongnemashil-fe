@@ -6,15 +6,18 @@ export const StSpan = styled.span<SpanProps>`
   color: ${(props) => props.color || 'white'};
 
   &.small {
-    font-size: 0%.8rem;
+    font-size: 0.8rem;
+    line-height: 1.4rem;
   }
 
   &.normal {
     font-size: 1rem;
+    line-height: 1.6rem;
   }
 
   &.title {
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 3.2rem;
   }
 `;
