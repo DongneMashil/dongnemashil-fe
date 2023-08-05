@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Button } from 'components/common';
+import { register } from 'api/loginApi';
 
 interface LoginValue {
   email: string;
@@ -27,14 +28,14 @@ export const RegisterPage = () => {
   };
   const onSubmitHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    console.log('click!');
+    register(loginValue.email, loginValue.nickname, loginValue.password);
   };
 
   return (
     <div>
       <h3>동네마실 환영합니다!</h3>
 
-      <h4>닉네임</h4>
+      <h4>이메일</h4>
       <Input
         type="email"
         name="email"
@@ -43,7 +44,7 @@ export const RegisterPage = () => {
         onChange={onChangeHandler}
       />
       <p>{loginValue.email}</p>
-      <h4>아이디</h4>
+      <h4>닉네임</h4>
       <Input
         type="text"
         name="nickname"
