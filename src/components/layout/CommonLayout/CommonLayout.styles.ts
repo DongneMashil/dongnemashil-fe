@@ -8,9 +8,6 @@ export const StLayoutOuter = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  @media (max-height: 1000px) {
-    justify-content: flex-start;
-  }
 `;
 
 export const StLayoutBody = styled.div`
