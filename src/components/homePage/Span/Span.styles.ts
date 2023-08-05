@@ -1,9 +1,10 @@
+import { theme } from './../../../style/theme';
 import { styled } from 'styled-components';
 import { SpanProps } from './Span';
 
 export const StSpan = styled.span<SpanProps>`
   display: block;
-  color: ${(props) => props.color || 'black'};
+  color: ${(props) => props.color || theme.blackColor};
 
   &.small {
     font-size: 0.8rem;
