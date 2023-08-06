@@ -1,5 +1,5 @@
 import React from 'react';
-import { TempButton } from 'components/common';
+import { Input, TempButton } from 'components/common';
 import { CommonLayout, NavBar } from 'components/layout';
 import { ThumbnailWrapper } from 'components/homePage';
 
@@ -8,7 +8,7 @@ export const HomePage = () => {
     <CommonLayout
       header={
         <NavBar btnLeft={'logo'} btnRight={'myPage'}>
-          동네마실
+          <Input />
         </NavBar>
       }
     >
