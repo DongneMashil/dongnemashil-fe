@@ -53,7 +53,6 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
         ) : (
           <StyledVideo src={images[currentPage]} controls />
         )}
-
         <ArrowButton
           onClick={() => onSlideButtonHandler('right')}
           disabled={currentPage === images.length}

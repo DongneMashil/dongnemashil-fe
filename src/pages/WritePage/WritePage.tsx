@@ -14,9 +14,10 @@ export const WritePage = () => {
     title: '',
     content: '',
   });
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [mediaFiles, setMediaFiles] = useState<
+    { type: 'image' | 'video'; url: string }[]
+  >([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -29,36 +30,29 @@ export const WritePage = () => {
 
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    const imageFiles = files.filter((file) => file.type.startsWith('image/'));
-    const videoFiles = files.filter((file) => file.type.startsWith('video/'));
 
-    const currentVideoCount = videoUrl ? 1 : 0; // 비디오가 있으면 1, 없으면 0
-    const currentImageCount = imageUrls.length;
-
-    if (
-      currentImageCount +
-        currentVideoCount +
-        imageFiles.length +
-        videoFiles.length >
-      5
-    ) {
+    if (mediaFiles.length + files.length > 5) {
       alert('이미지와 동영상의 합은 최대 5개까지 가능합니다.😱');
       return;
     }
 
-    if (currentVideoCount + videoFiles.length > 1) {
-      alert('비디오는 한개만 가능합니다.😱');
+    if (
+      mediaFiles.filter((file) => file.type === 'video').length +
+        files.filter((file) => file.type.startsWith('video/')).length >
+      1
+    ) {
+      alert('동영상은 한개만 가능합니다.😱');
       return;
     }
 
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = function () {
-        if (file.type.startsWith('image/')) {
-          setImageUrls((prevUrls) => [...prevUrls, reader.result as string]);
-        } else if (file.type.startsWith('video/')) {
-          setVideoUrl(reader.result as string);
-        }
+        const fileType = file.type.startsWith('image/') ? 'image' : 'video';
+        setMediaFiles((prev) => [
+          ...prev,
+          { type: fileType, url: reader.result as string },
+        ]);
       };
       reader.readAsDataURL(file);
     });
@@ -85,7 +79,7 @@ export const WritePage = () => {
           onChange={onInputChange}
         />
         <FileSlider
-          images={[...imageUrls, videoUrl].filter(Boolean) as string[]}
+          images={mediaFiles.map((file) => file.url)}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           onAddImage={onButtonClick}
