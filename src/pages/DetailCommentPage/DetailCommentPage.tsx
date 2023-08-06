@@ -21,6 +21,54 @@ export const DetailCommentPage = () => {
   //   },
   // });
 
+  interface Comment {
+    id: number;
+    profileImgUrl: string;
+    nickname: string;
+    comment: string;
+  }
+
+  const data = {
+    comments: [
+      {
+        id: 1,
+        profileImgUrl: 'https://picsum.photos/200',
+        nickname: '닉네임',
+        comment:
+          '댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.',
+      },
+      {
+        id: 2,
+        profileImgUrl: 'https://picsum.photos/200',
+        nickname: '닉네임',
+        comment: '댓글입니다.',
+      },
+      {
+        id: 3,
+        profileImgUrl: 'https://picsum.photos/200',
+        nickname: '닉네임',
+        comment: '댓글입니다.',
+      },
+      {
+        id: 4,
+        profileImgUrl: 'https://picsum.photos/200',
+        nickname: '닉네임',
+        comment: '댓글입니다.',
+      },
+      {
+        id: 5,
+        profileImgUrl: 'https://picsum.photos/200',
+        nickname: '닉네임',
+        comment: '댓글입니다.',
+      },
+      {
+        id: 6,
+        profileImgUrl: 'https://picsum.photos/200',
+        nickname: '닉네임',
+        comment: '댓글입니다.',
+      },
+    ],
+  };
   return (
     <CommonLayout
       footer={<Footer reviewId={reviewId!} />}
@@ -29,43 +77,27 @@ export const DetailCommentPage = () => {
           글 댓글 11개
         </NavBar>
       }
+      hideHeader={false}
+      backgroundColor="#f0f0f0"
     >
       <StDetailPageComment>
-        <StDetailPageCommentTitle>댓글</StDetailPageCommentTitle>
-
         <StDetailPageCommentList>
-          {/* {data.comments.map((comment: Comment) => (
-              <StDetailPageCommentItem key={comment.id}>
+          {data.comments.map((comment: Comment) => (
+            <StDetailPageCommentItem key={comment.id}>
+              <section>
                 <img src={comment.profileImgUrl} alt="프로필 이미지" />
                 <div className="nickname">{comment.nickname}</div>
-                <div className="content">{comment.comment}</div>
-              </StDetailPageCommentItem>
-            ))} */}
-          <img src="https://source.unsplash.com/random" />
-          <img src="https://source.unsplash.com/random" />
-          <img src="https://source.unsplash.com/random" />{' '}
-          <img src="https://source.unsplash.com/random" />
-          <img src="https://source.unsplash.com/random" />
-          <img src="https://source.unsplash.com/random" />{' '}
-          <img src="https://source.unsplash.com/random" />
-          <img src="https://source.unsplash.com/random" />
-          <img src="https://source.unsplash.com/random" />
+              </section>
+              <div className="content">{comment.comment}</div>
+            </StDetailPageCommentItem>
+          ))}
+
           <StFooterSpacer />
         </StDetailPageCommentList>
       </StDetailPageComment>
     </CommonLayout>
   );
 };
-
-export const StDetailPageCommentTitle = styled.div`
-  width: 100%;
-  height: 50px;
-  font-size: 24px;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 export const StDetailPageCommentInput = styled.div`
   width: 100%;
@@ -77,9 +109,10 @@ export const StDetailPageCommentInput = styled.div`
 
 export const StDetailPageCommentList = styled.div`
   width: 100%;
-  // height: 4rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 10px;
 `;
 export const StDetailPageComment = styled.div`
   width: 100%;
@@ -91,26 +124,35 @@ export const StDetailPageComment = styled.div`
 
 export const StDetailPageCommentItem = styled.div`
   width: 100%;
-  height: 4rem;
   display: flex;
-  align-items: center;
-  border-bottom: 1px solid #000;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding: 1rem;
+  border-radius: 0.875rem;
+  background: #fbfbfb;
+
+  section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
   img {
-    width: 50px;
-    height: 50px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     margin-right: 10px;
   }
 
   .nickname {
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 1rem;
+    font-weight: 600;
     margin-right: 10px;
   }
 
   .content {
-    font-size: 16px;
+    line-height: 1.3;
   }
 `;
 

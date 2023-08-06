@@ -7,20 +7,45 @@ interface FooterProps {
   reviewId: string;
 }
 export const Footer = ({ reviewId }: FooterProps) => {
+  const [comment, setComment] = React.useState('');
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setComment(e.target.value);
+  };
   return (
     <StFooterContatiner>
-      <Input placeholder="댓글을 입력해주세요" />
-      <Button type={'normal'} onClick={() => {}}>
-        본문보기{reviewId}
-      </Button>
+      <StFooterWrapper>
+        {' '}
+        <Input
+          placeholder="댓글을 입력해주세요"
+          onChange={onChangeHandler}
+          value={comment}
+        />
+        <Button
+          type={'normal'}
+          onClick={() => {
+            console.log({ reviewId });
+          }}
+        >
+          등록
+        </Button>
+      </StFooterWrapper>
     </StFooterContatiner>
   );
 };
 
+export const StFooterWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+`;
+
 export const StFooterContatiner = styled.footer`
   background-color: #fff;
-  border-top: 1px solid #ccc;
-  height: 50px;
+  height: 75px;
   display: flex;
   justify-content: space-between;
 `;
