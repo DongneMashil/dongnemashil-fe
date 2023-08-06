@@ -1,24 +1,14 @@
 import { styled } from 'styled-components';
 
-export const SlideContainer = styled.div<{ $width?: number }>`
+export const SlideContainer = styled.div`
   display: flex;
   overflow: hidden;
   position: relative;
   min-height: 200px;
-  width: ${(props) => (props.$width ? `${props.$width}rem` : '18rem')};
+  width: 18.75rem;
   justify-content: center;
+  align-items: center;
   margin: 0 auto;
-`;
-
-export const SlideWrapper = styled.div<{ $translateX: string; $width: string }>`
-  display: flex;
-  transform: translateX(${(props) => props.$translateX});
-  width: ${(props) => props.$width};
-  transition: transform 0.3s ease-out;
-`;
-
-export const SingleSlide = styled.div<{ $width: string }>`
-  width: ${(props) => `${props.$width}rem`};
 `;
 
 export const CenteredBox = styled.div`
@@ -32,6 +22,7 @@ export const CenteredBox = styled.div`
 export const StyledImage = styled.img`
   width: 90%;
   height: 100%;
+  object-fit: cover;
 `;
 
 export const StyledVideo = styled.video`
@@ -59,4 +50,21 @@ export const Indicator = styled.span<{ $isActive: boolean }>`
   background-color: ${({ $isActive }) => ($isActive ? 'blue' : 'gray')};
   margin: 0 4px;
   transition: background-color 0.3s ease;
+`;
+
+export const ArrowButton = styled.button<{ left?: boolean }>`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  ${(props) => (props.left ? 'left: 10px;' : 'right: 10px;')}
+  background-color: rgba(255, 255, 255, 0.2); // 반투명한 흰색 배경
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 2;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+  }
 `;

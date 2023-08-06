@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
+  ArrowButton,
   CenteredBox,
   Indicator,
   PageIndicators,
-  SingleSlide,
   SlideContainer,
-  SlideWrapper,
   StPlusButton,
   StyledImage,
   StyledVideo,
@@ -24,85 +23,43 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   setCurrentPage,
   onAddImage,
 }) => {
-  const [startX, setStartX] = useState<number | null>(null);
-
-  const slideWidth = 18.75;
-
-  useEffect(() => {
-    console.log('currentPage:', currentPage);
-  }, [currentPage]);
-
-  const onMouseDownHandler = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const clientX = e.clientX;
-
-    if (clientX > window.innerWidth / 2 && currentPage < images.length - 1) {
-      setCurrentPage((prev) => prev + 1);
-    } else if (clientX <= window.innerWidth / 2 && currentPage > 0) {
+  const onSlideButtonHandler = (direction: 'left' | 'right') => {
+    if (direction === 'left' && currentPage > 0) {
       setCurrentPage((prev) => prev - 1);
+    } else if (direction === 'right' && currentPage < images.length) {
+      setCurrentPage((prev) => prev + 1);
     }
-  };
-
-  const onMouseMoveHandler = (e: React.MouseEvent) => {
-    if (startX === null) return;
-    const updateState = () => {
-      const currentEndX = e.nativeEvent.clientX;
-      const difference = currentEndX - startX;
-      if (difference > 50 && currentPage > 0) {
-        setCurrentPage((prev) => prev - 1);
-        setStartX(null);
-      }
-      if (difference < -50 && currentPage < images.length - 1) {
-        setCurrentPage((prev) => prev + 1);
-        setStartX(null);
-      }
-    };
-    requestAnimationFrame(updateState);
-  };
-
-  const onMouseUpHandler = () => {
-    setStartX(null);
-  };
-
-  const onMouseLeaveHandler = () => {
-    setStartX(null);
-  };
-
-  const calculateTranslateValue = (): string => {
-    return `-${currentPage * slideWidth}rem`;
-  };
-
-  const calculateWrapperWidth = (): string => {
-    return `${(images.length + 1) * slideWidth}rem`;
   };
 
   return (
     <div>
-      <SlideContainer
-        onMouseDown={onMouseDownHandler}
-        onMouseMove={onMouseMoveHandler}
-        onMouseUp={onMouseUpHandler}
-        onMouseLeave={onMouseLeaveHandler}
-      >
-        <SlideWrapper
-          $translateX={calculateTranslateValue()}
-          $width={calculateWrapperWidth()}
+      <SlideContainer>
+        <ArrowButton
+          onClick={() => onSlideButtonHandler('left')}
+          disabled={currentPage === 0}
+          left
         >
-          {images.map((img, index) => (
-            <SingleSlide key={index} $width={slideWidth.toString()}>
-              {img.startsWith('data:image') ? (
-                <StyledImage src={img} alt={`Upload Preview ${index}`} />
-              ) : (
-                <StyledVideo src={img} controls />
-              )}
-            </SingleSlide>
-          ))}
-          <SingleSlide $width={slideWidth.toString()}>
-            <CenteredBox>
-              <StPlusButton onClick={onAddImage}>+</StPlusButton>
-            </CenteredBox>
-          </SingleSlide>
-        </SlideWrapper>
+          &larr;
+        </ArrowButton>
+        {currentPage === images.length ? (
+          <CenteredBox>
+            <StPlusButton onClick={onAddImage}>+</StPlusButton>
+          </CenteredBox>
+        ) : images[currentPage].startsWith('data:image') ? (
+          <StyledImage
+            src={images[currentPage]}
+            alt={`Upload Preview ${currentPage}`}
+          />
+        ) : (
+          <StyledVideo src={images[currentPage]} controls />
+        )}
+
+        <ArrowButton
+          onClick={() => onSlideButtonHandler('right')}
+          disabled={currentPage === images.length}
+        >
+          &rarr;
+        </ArrowButton>
       </SlideContainer>
       <PageIndicators>
         {Array.from({ length: images.length + 1 }).map((_, index) => (

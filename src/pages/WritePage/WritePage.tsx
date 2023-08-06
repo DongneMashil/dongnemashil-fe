@@ -14,7 +14,8 @@ export const WritePage = () => {
     title: '',
     content: '',
   });
-  const [images, setImages] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -31,10 +32,8 @@ export const WritePage = () => {
     const imageFiles = files.filter((file) => file.type.startsWith('image/'));
     const videoFiles = files.filter((file) => file.type.startsWith('video/'));
 
-    const currentVideoCount = images.filter((img) =>
-      img.startsWith('data:video')
-    ).length;
-    const currentImageCount = images.length - currentVideoCount;
+    const currentVideoCount = videoUrl ? 1 : 0; // 비디오가 있으면 1, 없으면 0
+    const currentImageCount = imageUrls.length;
 
     if (
       currentImageCount +
@@ -52,15 +51,13 @@ export const WritePage = () => {
       return;
     }
 
-    const newItems: string[] = [];
-
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = function () {
-        newItems.push(reader.result as string);
-
-        if (newItems.length === files.length) {
-          setImages((prevImages) => [...prevImages, ...newItems]);
+        if (file.type.startsWith('image/')) {
+          setImageUrls((prevUrls) => [...prevUrls, reader.result as string]);
+        } else if (file.type.startsWith('video/')) {
+          setVideoUrl(reader.result as string);
         }
       };
       reader.readAsDataURL(file);
@@ -74,7 +71,11 @@ export const WritePage = () => {
   return (
     <>
       <CommonLayout
-        header={<NavBar btnLeft={'back'} btnRight={'submit'}>주소값</NavBar>}
+        header={
+          <NavBar btnLeft={'back'} btnRight={'submit'}>
+            주소값
+          </NavBar>
+        }
       >
         <div>header</div>
         <Input
@@ -84,7 +85,7 @@ export const WritePage = () => {
           onChange={onInputChange}
         />
         <FileSlider
-          images={images}
+          images={[...imageUrls, videoUrl].filter(Boolean) as string[]}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           onAddImage={onButtonClick}
