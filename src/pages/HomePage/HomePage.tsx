@@ -1,7 +1,8 @@
 import React from 'react';
-import { TempButton } from 'components/common';
+import { Button } from 'components/common';
 import { NavBar } from 'components/layout';
 import { ThumbnailWrapper } from 'components/homePage';
+import { verifyUser, getNewAccessToken } from 'api/loginApi';
 
 export const HomePage = () => {
   return (
@@ -9,11 +10,9 @@ export const HomePage = () => {
       <NavBar btnLeft={'logo'} btnRight={'myPage'}>
         동네마실
       </NavBar>
+      <Button onClick={verifyUser}>verify user</Button>
+      <Button onClick={getNewAccessToken}>refresh token</Button>
       <ThumbnailWrapper />
-      <div style={{ display: 'flex', gap: '15px', marginTop: '30px' }}>
-        <TempButton colorType="black">까망 버튼 :)</TempButton>
-        <TempButton colorType="blue">파랑 버튼 :)</TempButton>
-      </div>
     </div>
   );
 };
