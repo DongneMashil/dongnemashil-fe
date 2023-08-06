@@ -10,12 +10,12 @@ export const axiosInstance: AxiosInstance = axios.create({
 });
 
 /** 유저 인증 인스턴스 - 로그인 상태의 api 요청시 해당 인스턴스 사용 필요 */
-export const axiosUserInstance: AxiosInstance = axios.create({
-  baseURL: baseUrl,
-  withCredentials: true,
-});
+// export const axiosUserInstance: AxiosInstance = axios.create({
+//   baseURL: baseUrl,
+//   withCredentials: true,
+// });
 /** access token 갱신 interceptor */
-axiosUserInstance.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (res: AxiosResponse): AxiosResponse => {
     // 걍 전달
     return res;
@@ -37,7 +37,7 @@ axiosUserInstance.interceptors.response.use(
 // }
 
 /** access token 인증 실패시 사용 인스턴스 (refresh token 갱신용) */
-export const axiosRefreshToken: AxiosInstance = axios.create({
-  baseURL: baseUrl,
-  withCredentials: true,
-});
+// export const axiosRefreshToken: AxiosInstance = axios.create({
+//   baseURL: baseUrl,
+//   withCredentials: true,
+// });

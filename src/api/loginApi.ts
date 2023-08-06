@@ -1,22 +1,22 @@
-import { axiosInstance, axiosUserInstance, axiosRefreshToken } from './api';
+import { axiosInstance } from './api';
 import { AxiosError, AxiosResponse } from 'axios';
 
 /** 헤더에 토큰 설정 */
-const setHeaders = (res: AxiosResponse): void => {
-  console.log('res', res);
-  console.log("res.headers['Accesstoken']", res.headers['Accesstoken']);
+// const setHeaders = (res: AxiosResponse): void => {
+//   console.log('res', res);
+//   console.log("res.headers['Accesstoken']", res.headers['Accesstoken']);
 
-  //! body로 받은 토큰값을 axios 헤더에 저장하기
-  //! 서버에 body 전송으로 변경할 것을 요청하기
-  const accessToken = res.data.accessToken; //! 이후 체크 필요
-  axiosUserInstance.defaults.headers['AccessToken'] = accessToken;
+//   //! body로 받은 토큰값을 axios 헤더에 저장하기
+//   //! 서버에 body 전송으로 변경할 것을 요청하기
+//   const accessToken = res.data.accessToken; //! 이후 체크 필요
+//   axiosUserInstance.defaults.headers['AccessToken'] = accessToken;
 
-  console.log('Access Token: ', accessToken);
-};
+//   console.log('Access Token: ', accessToken);
+// };
 
 /** 카카오 로그인 */
 export const loginKakao = () => {
-  const loginURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=http://localhost:3000/login/kakao&response_type=code`;
+  const loginURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_CLIENT_API_URL}login/kakao&response_type=code`;
 
   window.location.href = loginURL;
 };
@@ -28,8 +28,8 @@ export const loginKakaoCallback = async (code: string) => {
     .post(`kakao?code=${code}`)
     .then((res) => {
       console.log('카카오 로그인 성공', res.data);
-      setHeaders(res);
-      window.location.href = `/`;
+      //setHeaders(res);
+      //window.location.href = `/`;
     })
     .catch((err) => {
       console.log('kakao 소셜 로그인 에러 : ', err);
@@ -47,7 +47,7 @@ export const login = async (email: string, pw: string) => {
     })
     .then((res) => {
       console.log('login success', res.data);
-      setHeaders(res);
+      //setHeaders(res);
     })
     .catch((err) => {
       // 400 이메일이나  비밀번호가 잘못된 경우
@@ -72,7 +72,7 @@ export const register = async (
     .post(`/register`, data)
     .then((res) => {
       console.log('register success', res.data);
-      setHeaders(res);
+      //setHeaders(res);
     })
     .catch((err) => {
       console.log(err);
@@ -94,7 +94,7 @@ export const register = async (
 
 /** 로그인 유저 정보 */
 export const verifyUser = () => {
-  axiosUserInstance
+  axiosInstance
     .get(`/accesstoken`)
     .then((res: AxiosResponse) => {
       console.log('Verified User:', res.data);
@@ -117,12 +117,12 @@ export const verifyUser = () => {
 
 /** refresh token으로 access token 재발급 */
 export const getNewAccessToken = () => {
-  axiosRefreshToken
+  axiosInstance
     .get(`/refreshtoken`)
     .then((res) => {
       console.log('Got new access token', res.data);
-      const newAccessToken = res.headers['Accesstoken'];
-      axiosUserInstance.defaults.headers['AccessToken'] = newAccessToken;
+      //const newAccessToken = res.headers['Accesstoken'];
+      //axiosUserInstance.defaults.headers['AccessToken'] = newAccessToken;
     })
     .catch((err: AxiosError) => {
       console.log(err.message);
