@@ -4,15 +4,17 @@ export const StThumbnail = styled.div`
   display: flex;
   flex-direction: column;
 
-  overflow: hidden;
-  margin-bottom: 20px;
+  padding: 10px 0 24px;
+  margin-bottom: 8px;
 
   & img {
-    filter: brightness(90%);
+    border-radius: 10px;
   }
 
   & div {
-    padding: 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     bottom: 130px;
   }
 `;

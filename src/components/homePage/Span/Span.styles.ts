@@ -3,7 +3,6 @@ import { styled } from 'styled-components';
 import { SpanProps } from './Span';
 
 export const StSpan = styled.span<SpanProps>`
-  display: block;
   color: ${(props) => props.color || theme.blackColor};
 
   &.small {
@@ -17,8 +16,12 @@ export const StSpan = styled.span<SpanProps>`
   }
 
   &.title {
-    font-size: 2rem;
+    font-size: 1.1rem;
     font-weight: 500;
     line-height: 3.2rem;
+
+    strong {
+      font-weight: 700;
+    }
   }
 `;
