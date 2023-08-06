@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 import { Button } from 'components/common';
-import NavBar from 'components/layout/NavBar/NavBar';
+import { NavBar } from 'components/layout';
 import { loginKakao } from 'api/loginApi';
 
 export const LoginPage = () => {
