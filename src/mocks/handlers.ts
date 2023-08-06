@@ -16,7 +16,6 @@ export const result = Array.from(Array(1000).keys()).map(
     id,
     road_name: '서울숲로',
     img_url: 'https://source.unsplash.com/random',
-    tag: ['반려동물과 함께', '탁 트인 풍경', '자연과 함께'],
     likeCnt: `12${id}`,
   })
 );

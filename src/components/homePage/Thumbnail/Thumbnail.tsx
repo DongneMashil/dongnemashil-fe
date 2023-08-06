@@ -7,7 +7,6 @@ export interface ThumbnailProps {
   id: number;
   road_name: string;
   img_url: string;
-  tag: string[];
   likeCnt: string;
 }
 
@@ -15,7 +14,6 @@ export const Thumbnail = ({
   id,
   road_name,
   img_url,
-  tag,
   likeCnt,
 }: ThumbnailProps) => {
   const navigate = useNavigate();
@@ -26,12 +24,13 @@ export const Thumbnail = ({
 
   return (
     <StThumbnail onClick={onClickThumbnail}>
-      <img src={img_url} />
       <div>
-        <Span size={'title'}>{road_name}</Span>
-        <Span>좋아요 {likeCnt}</Span>
-        <Span>{tag}</Span>
+        <Span size={'title'}>
+          👾 <strong>{road_name}</strong>에서
+        </Span>
+        <Span>❤️ {likeCnt}</Span>
       </div>
+      <img src={img_url} />
     </StThumbnail>
   );
 };

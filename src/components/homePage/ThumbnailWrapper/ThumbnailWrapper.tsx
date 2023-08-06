@@ -21,7 +21,6 @@ export const ThumbnailWrapper = () => {
           id={post.id}
           road_name={post.road_name}
           img_url={post.img_url}
-          tag={post.tag}
           likeCnt={post.likeCnt}
         />
       ))}
