@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+//import { CommonLayout, NavBar } from 'components/layout';
 import { Input, Button } from 'components/common';
 import { register } from 'api/loginApi';
 import { StVerifyMsg } from './Registerpage.styles';
 
 interface LoginFormProps {
+  //! 이름 바꾸기!!!!!
   email: string;
   nickname: string;
   password: string;
