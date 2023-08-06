@@ -7,6 +7,8 @@ import {
   KakaoCallbackPage,
   WriteMapPage,
   DetailCommentPage,
+  CommonLoginPage,
+  MyPage,
 } from 'pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
@@ -18,6 +20,7 @@ const Router = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/login/common" element={<CommonLoginPage />} />
         <Route path="/login/kakao" element={<KakaoCallbackPage />} />
         <Route path="/review/:reviewId" element={<DetailPage />} />
         <Route
@@ -27,6 +30,10 @@ const Router = () => {
         <Route
           path="/writemap"
           element={<ProtectedRoute element={<WriteMapPage />} />}
+        />
+        <Route
+          path="/mypage"
+          element={<ProtectedRoute element={<MyPage />} />}
         />
       </Routes>
     </BrowserRouter>
