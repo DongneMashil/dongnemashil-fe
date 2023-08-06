@@ -35,7 +35,7 @@ export const NavBar = ({ btnLeft, btnRight, children }: NavBarProps) => {
           <img src={'/close.jpg'} />
         </Button>
       ) : btnRight === 'myPage' ? (
-        <Button type={'normal'} url={'/myPage'}>
+        <Button type={'normal'} url={'/mypage'}>
           My
         </Button>
       ) : btnRight === 'submit' ? (
