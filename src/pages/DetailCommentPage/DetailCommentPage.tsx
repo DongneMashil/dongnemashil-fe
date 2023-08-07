@@ -73,7 +73,7 @@ export const DetailCommentPage = () => {
     <CommonLayout
       footer={<Footer reviewId={reviewId!} />}
       header={
-        <NavBar btnLeft={'back'} btnRight={'myPage'}>
+        <NavBar btnLeft={'back'} btnRight={'mypage'}>
           글 댓글 11개
         </NavBar>
       }
