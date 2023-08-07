@@ -38,7 +38,7 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
   const [prevPosition, setPrevPosition] = React.useState(0);
 
   const scrollRef = React.useRef<HTMLDivElement>(null);
-
+  headerHeight = header ? headerHeight : '0px';
   useEffect(() => {
     const onScroll = () => {
       if (scrollRef.current) {
