@@ -3,9 +3,11 @@ import React, { useState } from 'react';
 import { Input, Button } from 'components/common';
 import { register } from 'api/loginApi';
 import { StVerifyMsg } from './Registerpage.styles';
+import { useMutation } from 'react-query';
+import { UserState, userProfileSelector } from 'recoil/userExample';
+import { useSetRecoilState } from 'recoil';
 
-interface LoginFormProps {
-  //! 이름 바꾸기!!!!!
+interface RegitserProps {
   email: string;
   nickname: string;
   password: string;
@@ -32,7 +34,7 @@ interface VerifyMsgProps {
 }
 
 export const RegisterPage = () => {
-  const [LoginFormProps, setLoginFormProps] = useState<LoginFormProps>({
+  const [RegitserProps, setRegitserProps] = useState<RegitserProps>({
     email: '',
     nickname: '',
     password: '',
@@ -60,10 +62,27 @@ export const RegisterPage = () => {
 
   const emailRegex = new RegExp(`[a-z0-9]+@[a-z]+\\.[a-z]{2,3}`);
 
+  const setRegisterState = useSetRecoilState(userProfileSelector);
+  const { mutate } = useMutation(register, {
+    onSuccess: (data) => {
+      console.log('Register successful', data);
+      const newData: UserState = {
+        userId: '성공!',
+        nickName: '',
+        profileImage: '',
+        isLoggedIn: true,
+      };
+      setRegisterState(newData);
+    },
+    onError: (err) => {
+      console.log('Register Error: ', err);
+    },
+  });
+
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.name);
-    const newData: LoginFormProps = {
-      ...LoginFormProps,
+    const newData: RegitserProps = {
+      ...RegitserProps,
       [e.target.name]: e.target.value,
     };
     const newVerifyMsg: VerifyMsgProps = {
@@ -71,7 +90,7 @@ export const RegisterPage = () => {
     };
     console.log('newVerifyMsg', newVerifyMsg);
     console.log(newData);
-    setLoginFormProps(newData);
+    setRegitserProps(newData);
 
     switch (e.target.type) {
       case 'email':
@@ -99,11 +118,11 @@ export const RegisterPage = () => {
 
   const onSubmitHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    register(
-      LoginFormProps.email,
-      LoginFormProps.nickname,
-      LoginFormProps.password
-    );
+    mutate({
+      email: RegitserProps.email,
+      nickname: RegitserProps.nickname,
+      password: RegitserProps.password,
+    });
   };
 
   return (
@@ -114,7 +133,7 @@ export const RegisterPage = () => {
         type="email"
         name="email"
         id="email"
-        value={LoginFormProps.email}
+        value={RegitserProps.email}
         onChange={onChangeHandler}
       />
       <StVerifyMsg $isValid={verifyMsg.email.isValid}>
@@ -125,7 +144,7 @@ export const RegisterPage = () => {
         type="text"
         name="nickname"
         id="nickname"
-        value={LoginFormProps.nickname}
+        value={RegitserProps.nickname}
         onChange={onChangeHandler}
       />
       <p>{verifyMsg.nickname.msg}</p>
@@ -134,7 +153,7 @@ export const RegisterPage = () => {
         type="password"
         name="password"
         id="password"
-        value={LoginFormProps.password}
+        value={RegitserProps.password}
         onChange={onChangeHandler}
       />
       <p>{verifyMsg.password.msg}</p>
@@ -142,7 +161,7 @@ export const RegisterPage = () => {
         type="password"
         name="passwordVerify"
         id="passwordVerify"
-        value={LoginFormProps.passwordVerify}
+        value={RegitserProps.passwordVerify}
         onChange={onChangeHandler}
       />
       <p>{verifyMsg.passwordVerify.msg}</p>

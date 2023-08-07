@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Input, Button } from 'components/common';
 import { login } from 'api/loginApi';
+import { useMutation } from 'react-query';
+import { UserState, userProfileSelector } from 'recoil/userExample';
+import { useSetRecoilState } from 'recoil';
 
 interface CommonLoginProps {
   id: string;
@@ -8,6 +11,22 @@ interface CommonLoginProps {
 }
 
 export const CommonLoginPage = () => {
+  const setLoginState = useSetRecoilState(userProfileSelector);
+  const { mutate } = useMutation(login, {
+    onSuccess: (data) => {
+      console.log('CommonLogin data', data);
+      const newData: UserState = {
+        userId: '성공!',
+        nickName: '',
+        profileImage: '',
+        isLoggedIn: true,
+      }; // 체크 필요
+      setLoginState(newData);
+    },
+    onError: (err) => {
+      console.log('Common Login Error: ', err);
+    },
+  });
   const [loginValues, setLoginValues] = useState<CommonLoginProps>({
     id: '',
     password: '',
@@ -23,7 +42,10 @@ export const CommonLoginPage = () => {
 
   const onSubmitHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    login(loginValues.id, loginValues.password);
+    mutate({
+      email: loginValues.id,
+      password: loginValues.password,
+    });
   };
 
   console.log('loginValues', loginValues);
