@@ -1,4 +1,4 @@
-import { ThumbnailProps } from 'components/homePage';
+import { ReviewsList } from 'api/reviewsApi';
 import { rest } from 'msw';
 
 export interface PaginationResponse<T> {
@@ -12,11 +12,13 @@ export interface PaginationResponse<T> {
 }
 
 export const result = Array.from(Array(1000).keys()).map(
-  (id): ThumbnailProps => ({
+  (id): ReviewsList => ({
     id,
-    road_name: '서울숲로',
+    roadName: '서울숲로',
     img_url: 'https://source.unsplash.com/random',
-    likeCnt: `120${id}`,
+    likeCnt: 1200,
+    tag: '자연과함께',
+    profileImg_url: 'https://source.unsplash.com/random',
   })
 );
 
@@ -33,7 +35,7 @@ export const handlers = [
 
     return res(
       ctx.status(200),
-      ctx.json<PaginationResponse<ThumbnailProps>>({
+      ctx.json<PaginationResponse<ReviewsList>>({
         contents: result.slice(page * size, (page + 1) * size),
         pageNumber: page,
         pageSize: size,

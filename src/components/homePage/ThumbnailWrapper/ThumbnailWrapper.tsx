@@ -1,27 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { Thumbnail, ThumbnailProps } from '../Thumbnail/Thumbnail';
+import React from 'react';
+import { Thumbnail } from '../Thumbnail/Thumbnail';
 import { StThumbnailWrapper } from './ThumbnailWrapper.styles';
+import { useQuery } from '@tanstack/react-query';
+import { getReviews, ReviewsList } from 'api/reviewsApi';
 
 export const ThumbnailWrapper = () => {
-  const [data, setData] = useState<ThumbnailProps[]>([]);
+  const type = 'likes';
+  const page = 1;
+  const { data, isLoading, error } = useQuery<ReviewsList[], Error>(
+    ['reviews', type, page],
+    () => getReviews(type, page)
+  );
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  useEffect(() => {
-    fetch('/reviews')
-      .then((response) => response.json())
-      .then((result) => setData(result.contents))
-      .catch((error) => console.error('Error fetching data:', error));
-  }, []);
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   console.log(data);
 
   return (
     <StThumbnailWrapper>
-      {data.map((post) => (
+      {data.map((review) => (
         <Thumbnail
-          key={post.id}
-          id={post.id}
-          road_name={post.road_name}
-          img_url={post.img_url}
-          likeCnt={post.likeCnt}
+          key={review.id}
+          id={review.id}
+          roadName={review.roadName}
+          img_url={review.img_url}
+          likeCnt={review.likeCnt}
+          tag={review.tag}
+          profileImg_url={review.profileImg_url}
         />
       ))}
     </StThumbnailWrapper>
