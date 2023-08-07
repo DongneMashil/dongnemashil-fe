@@ -19,11 +19,11 @@ const Map = ({ width, height, initMap }: MapProps) => {
   useEffect(() => {
     const container = document.getElementById('map');
     const options = {
-      center: new kakao.maps.LatLng(37.545043, 127.039245) as kakao.maps.LatLng,
+      center: new kakao.maps.LatLng(37.545043, 127.039245),
       level: 3,
     };
 
-    const map = new kakao.maps.Map(container, options) as kakao.maps.Map;
+    const map = new kakao.maps.Map(container, options);
     if (initMap) {
       initMap(map);
     }
