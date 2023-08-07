@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 export interface ButtonProps {
   children?: React.ReactNode;
-  type?: 'icon' | 'normal' | 'circle';
+  type?: 'icon' | 'normal' | 'circle' | 'onlytext';
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   url?: string;
 }
