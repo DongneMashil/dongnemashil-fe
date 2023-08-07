@@ -1,8 +1,14 @@
-import { Input } from 'components/common';
 import React, { ChangeEvent, useRef, useState } from 'react';
-import { StHiddenButton } from './WritePage.styles';
-import { FileSlider } from 'components/WritePage/FileSlider/FileSlider';
+import {
+  StContentBox,
+  StContentContainer,
+  StHiddenButton,
+  StTitle,
+} from './WritePage.styles';
 import { CommonLayout, NavBar } from 'components/layout';
+import { FileSlider } from 'components/WritePage';
+import { useMutation } from '@tanstack/react-query';
+import { submitReview } from 'api/reviews';
 
 interface FormValues {
   title: string;
@@ -58,40 +64,73 @@ export const WritePage = () => {
     });
   };
 
+  const mutation = useMutation(submitReview);
+
   const onButtonClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const onSubmithandler = () => {
+    const combinedUrls = mediaFiles.map((file) => file.url).join(',');
+    const data = {
+      title: formValues.title,
+      content: formValues.content,
+      img_url: combinedUrls,
+      address: '서울시 영등포구 여의동로 330',
+      tag: '태그입력값',
+    };
+    mutation.mutate(data, {
+      onSuccess: (response) => {
+        console.log('등록성공', response);
+      },
+      onError: (error: unknown) => {
+        if (typeof error === 'string') {
+          console.log('실패', error);
+        } else if (error instanceof Error) {
+          console.log('실패', error.message);
+        } else {
+          console.log('실패', error);
+        }
+      },
+    });
   };
 
   return (
     <>
       <CommonLayout
         header={
-          <NavBar btnLeft={'back'} btnRight={'submit'}>
+          <NavBar
+            btnLeft={'back'}
+            btnRight={'submit'}
+            onClickSubmit={onSubmithandler}
+          >
             주소값
           </NavBar>
         }
       >
-        <div>header</div>
-        <Input
-          type="text"
-          name="title"
-          value={formValues.title}
-          onChange={onInputChange}
-        />
-        <FileSlider
-          images={mediaFiles.map((file) => file.url)}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          onAddImage={onButtonClick}
-        />
-        <StHiddenButton
-          ref={fileInputRef}
-          type="file"
-          accept="image/*, video/*"
-          multiple
-          onChange={onFileChange}
-        />
-        <textarea />
+        <StContentContainer>
+          <StTitle
+            type="text"
+            name="title"
+            value={formValues.title}
+            onChange={onInputChange}
+            placeholder="제목 입력"
+          />
+          <FileSlider
+            images={mediaFiles.map((file) => file.url)}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            onAddImage={onButtonClick}
+          />
+          <StHiddenButton
+            ref={fileInputRef}
+            type="file"
+            accept="image/*, video/*"
+            multiple
+            onChange={onFileChange}
+          />
+          <StContentBox />
+        </StContentContainer>
       </CommonLayout>
     </>
   );
