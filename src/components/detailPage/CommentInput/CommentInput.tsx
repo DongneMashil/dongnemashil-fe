@@ -5,14 +5,18 @@ import { styled } from 'styled-components';
 
 interface FooterProps {
   reviewId: string;
+  $isCommentShow?: boolean;
 }
-export const CommentInput = ({ reviewId }: FooterProps) => {
+export const CommentInput = ({
+  reviewId,
+  $isCommentShow = false,
+}: FooterProps) => {
   const [comment, setComment] = React.useState('');
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
   };
   return (
-    <StFooterContatiner>
+    <StFooterContatiner $isCommentShow={$isCommentShow}>
       <StFooterWrapper>
         {' '}
         <Input
@@ -43,11 +47,14 @@ export const StFooterWrapper = styled.div`
   height: 100%;
 `;
 
-export const StFooterContatiner = styled.footer`
+export const StFooterContatiner = styled.footer<{ $isCommentShow: boolean }>`
+  opacity: ${({ $isCommentShow }) => ($isCommentShow ? 1 : 0)};
+  transition: all 0.1s ease-in-out;
   background-color: #fff;
   height: 75px;
   display: flex;
   justify-content: space-between;
+  width: 100%;
 `;
 
 export const StLike = styled.div`

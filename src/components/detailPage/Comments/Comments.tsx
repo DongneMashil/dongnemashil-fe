@@ -8,8 +8,12 @@ import { styled } from 'styled-components';
 // import { useQuery } from '@tanstack/react-query';
 interface CommentsProps {
   reviewId: string;
+  $isCommentShow?: boolean;
 }
-export const Comments = ({ reviewId = '1' }: CommentsProps) => {
+export const Comments = ({
+  reviewId = '1',
+  $isCommentShow = false,
+}: CommentsProps) => {
   if (!reviewId) {
     throw new Error('Review ID is missing');
   }
@@ -71,7 +75,7 @@ export const Comments = ({ reviewId = '1' }: CommentsProps) => {
     ],
   };
   return (
-    <StDetailPageComment>
+    <StDetailPageComment $isCommentShow={$isCommentShow}>
       <StDetailPageCommentList>
         {data.comments.map((comment: Comment) => (
           <StDetailPageCommentItem key={comment.id}>
@@ -88,7 +92,9 @@ export const Comments = ({ reviewId = '1' }: CommentsProps) => {
     </StDetailPageComment>
   );
 };
-export const StDetailPageComment = styled.div`
+export const StDetailPageComment = styled.div<{ $isCommentShow: boolean }>`
+  opacity: ${({ $isCommentShow }) => ($isCommentShow ? 1 : 0)};
+  transition: all 0.1s ease-in-out;
   width: 100%;
   height: 100%;
   display: flex;

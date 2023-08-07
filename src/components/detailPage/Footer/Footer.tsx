@@ -1,5 +1,5 @@
 import { Button } from 'components/common';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
@@ -23,6 +23,16 @@ export const Footer = ({
   isLiked = false, // isCommentOpen = false,
 }: FooterProps) => {
   const [isCommentOpen, setIsCommentOpen] = React.useState(false);
+  const [isCommentShow, setIsCommentShow] = React.useState(false);
+  useEffect(() => {
+    if (isCommentOpen) {
+      setTimeout(() => {
+        setIsCommentShow(true);
+      }, 150);
+    } else {
+      setIsCommentShow(false);
+    }
+  }, [isCommentOpen]);
   return (
     <StFooterContatiner $isCommentOpen={isCommentOpen}>
       <StFooterButtonWrapper>
@@ -33,7 +43,11 @@ export const Footer = ({
         <StComment onClick={() => setIsCommentOpen(!isCommentOpen)}>
           <CommentIcon /> {commentCnt}
         </StComment>
-        {isCommentOpen || (
+        {isCommentOpen ? (
+          <Button type={'onlytext'} onClick={() => setIsCommentOpen(false)}>
+            <ContentIcon /> 댓글 닫기
+          </Button>
+        ) : (
           <Button type={'onlytext'} onClick={onClick}>
             <ContentIcon /> 본문 보기
           </Button>
@@ -43,9 +57,9 @@ export const Footer = ({
       {isCommentOpen && (
         <>
           <StFooterCommentSection>
-            <Comments reviewId={reviewId} />
+            <Comments reviewId={reviewId} $isCommentShow={isCommentShow} />
           </StFooterCommentSection>
-          <CommentInput reviewId="1" />
+          <CommentInput reviewId="1" $isCommentShow={isCommentShow} />
         </>
       )}
     </StFooterContatiner>
@@ -63,7 +77,7 @@ export const StFooterContatiner = styled.footer<{ $isCommentOpen: boolean }>`
   flex-direction: column;
   align-items: center;
   padding: 0 10px;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.4s;
   @media (max-height: 850px) {
     height: ${(props) => (props.$isCommentOpen ? '75vh' : '50px')};
   }
