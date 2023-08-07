@@ -16,7 +16,7 @@ export const result = Array.from(Array(1000).keys()).map(
     id,
     road_name: '서울숲로',
     img_url: 'https://source.unsplash.com/random',
-    likeCnt: `12${id}`,
+    likeCnt: `120${id}`,
   })
 );
 
