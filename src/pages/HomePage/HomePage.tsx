@@ -7,7 +7,7 @@ export const HomePage = () => {
   return (
     <CommonLayout
       header={
-        <NavBar btnLeft={'logo'} btnRight={'myPage'}>
+        <NavBar btnLeft={'logo'} btnRight={'mypage'}>
           <Input />
         </NavBar>
       }

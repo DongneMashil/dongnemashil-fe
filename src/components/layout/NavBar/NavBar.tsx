@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 export interface NavBarProps {
   children: React.ReactNode;
   btnLeft?: 'logo' | 'back';
-  btnRight?: 'close' | 'myPage' | 'submit' | null;
+  btnRight?: 'close' | 'mypage' | 'submit' | null;
 }
 
 export const NavBar = ({ btnLeft, btnRight, children }: NavBarProps) => {
@@ -37,8 +37,8 @@ export const NavBar = ({ btnLeft, btnRight, children }: NavBarProps) => {
           {/* <img src={'/close.jpg'} /> */}
           ✖️
         </Button>
-      ) : btnRight === 'myPage' ? (
-        <Button type={'normal'} url={'/myPage'}>
+      ) : btnRight === 'mypage' ? (
+        <Button type={'normal'} url={'/mypage'}>
           👀
         </Button>
       ) : btnRight === 'submit' ? (
