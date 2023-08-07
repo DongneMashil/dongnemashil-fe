@@ -6,7 +6,7 @@ import { styled } from 'styled-components';
 interface FooterProps {
   reviewId: string;
 }
-export const Footer = ({ reviewId }: FooterProps) => {
+export const CommentInput = ({ reviewId }: FooterProps) => {
   const [comment, setComment] = React.useState('');
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);

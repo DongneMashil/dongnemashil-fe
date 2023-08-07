@@ -2,13 +2,14 @@
 import React from 'react';
 // import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { CommonLayout, NavBar } from 'components/layout';
-import { Footer } from 'components/detailCommentPage';
-import { useParams } from 'react-router-dom';
+
+// import { useParams } from 'react-router-dom';
 // import { ReviewDetailComment, getReviewDetailComment } from 'api/detailApi';
 // import { useQuery } from '@tanstack/react-query';
-export const DetailCommentPage = () => {
-  const { reviewId } = useParams<{ reviewId: string | undefined }>();
+interface CommentsProps {
+  reviewId: string;
+}
+export const Comments = ({ reviewId = '1' }: CommentsProps) => {
   if (!reviewId) {
     throw new Error('Review ID is missing');
   }
@@ -70,43 +71,30 @@ export const DetailCommentPage = () => {
     ],
   };
   return (
-    <CommonLayout
-      footer={<Footer reviewId={reviewId!} />}
-      header={
-        <NavBar btnLeft={'back'} btnRight={'mypage'}>
-          글 댓글 11개
-        </NavBar>
-      }
-      hideHeader={false}
-      backgroundColor="#f0f0f0"
-    >
-      <StDetailPageComment>
-        <StDetailPageCommentList>
-          {data.comments.map((comment: Comment) => (
-            <StDetailPageCommentItem key={comment.id}>
-              <section>
-                <img src={comment.profileImgUrl} alt="프로필 이미지" />
-                <div className="nickname">{comment.nickname}</div>
-              </section>
-              <div className="content">{comment.comment}</div>
-            </StDetailPageCommentItem>
-          ))}
+    <StDetailPageComment>
+      <StDetailPageCommentList>
+        {data.comments.map((comment: Comment) => (
+          <StDetailPageCommentItem key={comment.id}>
+            <section>
+              <img src={comment.profileImgUrl} alt="프로필 이미지" />
+              <div className="nickname">{comment.nickname}</div>
+            </section>
+            <div className="content">{comment.comment}</div>
+          </StDetailPageCommentItem>
+        ))}
 
-          <StFooterSpacer />
-        </StDetailPageCommentList>
-      </StDetailPageComment>
-    </CommonLayout>
+        <StFooterSpacer />
+      </StDetailPageCommentList>
+    </StDetailPageComment>
   );
 };
-
-export const StDetailPageCommentInput = styled.div`
+export const StDetailPageComment = styled.div`
   width: 100%;
-  height: 50px;
+  height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  min-height: calc(850px);
 `;
-
 export const StDetailPageCommentList = styled.div`
   width: 100%;
   height: 100%;
@@ -114,12 +102,13 @@ export const StDetailPageCommentList = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
-export const StDetailPageComment = styled.div`
+
+export const StDetailPageCommentInput = styled.div`
   width: 100%;
-  height: 100%;
+  height: 50px;
   display: flex;
-  flex-direction: column;
-  min-height: calc(850px);
+  justify-content: center;
+  align-items: center;
 `;
 
 export const StDetailPageCommentItem = styled.div`
