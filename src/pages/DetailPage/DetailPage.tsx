@@ -6,6 +6,8 @@ import { getReviewDetail, ReviewDetail } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
+import { Tag } from 'components/common';
+import { AroundMapButton } from 'components/common/SpecialButtons/AroundMapButton';
 
 export const DetailPage = () => {
   const contentRef = React.useRef<HTMLDivElement>(null);
@@ -37,7 +39,7 @@ export const DetailPage = () => {
       {data && (
         <CommonLayout
           header={
-            <NavBar btnLeft={'logo'} btnRight={'myPage'}>
+            <NavBar btnLeft={'logo'} btnRight={'mypage'}>
               동네마실
             </NavBar>
           }
@@ -58,8 +60,12 @@ export const DetailPage = () => {
                 <h6>{data.createdAt}</h6>
               </StDetailPageInfo>
             </StDetailPageHeader>
+
             <StDetailPageContent>
               <img src="https://source.unsplash.com/random" />
+              <Tag text="동물친구들" />
+              <Tag text="연인이랑" isSelected={true} />
+              <AroundMapButton></AroundMapButton>
               <img src="https://source.unsplash.com/random" />
               <img src="https://source.unsplash.com/random" />
               <img src={data.img_url} />
