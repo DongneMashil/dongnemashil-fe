@@ -37,7 +37,7 @@ export const DetailPage = () => {
       {data && (
         <CommonLayout
           header={
-            <NavBar btnLeft={'logo'} btnRight={'myPage'}>
+            <NavBar btnLeft={'logo'} btnRight={'mypage'}>
               동네마실
             </NavBar>
           }

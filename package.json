@@ -14,6 +14,7 @@
     "@types/react-dom": "^18.2.7",
     "axios": "^1.4.0",
     "install": "^0.13.0",
+    "msw": "^1.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
@@ -55,5 +56,8 @@
     "eslint-config-prettier": "^8.9.0",
     "eslint-plugin-react": "^7.33.1",
     "prettier": "^3.0.0"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
