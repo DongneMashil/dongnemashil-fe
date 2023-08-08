@@ -5,6 +5,6 @@ export * from './RegisterPage/RegisterPage';
 export * from './KakaoCallbackPage/KakaoCallbackPage';
 export * from './WriteMapPage/WriteMapPage';
 export * from './WriteMapPage/WriteMapPage';
-export * from './DetailCommentPage/DetailCommentPage';
+//export * from './DetailCommentPage/DetailCommentPage';
 export * from './CommonLoginPage/CommonLoginPage';
 export * from './MyPage/MyPage';
