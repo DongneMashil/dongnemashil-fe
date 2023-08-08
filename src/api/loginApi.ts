@@ -4,7 +4,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 
 /** 카카오 로그인 */
 export const loginKakao = () => {
-  const loginURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_CLIENT_API_URL}login/kakao&response_type=code`;
+  const loginURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_CLIENT_API_URL}/login/kakao&response_type=code`;
 
   window.location.href = loginURL;
 };
@@ -13,7 +13,7 @@ export const loginKakao = () => {
 export const loginKakaoCallback = async (code: string) => {
   console.log(code);
   await axiosInstance
-    .post(`kakao?code=${code}`)
+    .post(`/kakao?code=${code}`)
     .then((res) => {
       console.log('카카오 로그인 성공', res.data);
     })
