@@ -9,13 +9,13 @@ import { RecoilRoot } from 'recoil';
 function App() {
   return (
     <>
-      <RecoilRoot>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <RecoilRoot>
           <GlobalStyle />
           <Router />
           <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </RecoilRoot>
+        </RecoilRoot>
+      </QueryClientProvider>
     </>
   );
 }
