@@ -16,7 +16,7 @@ export type ReviewDetail = {
   comments: unknown[] | null;
 };
 
-export const getMy = async (
+export const getMypage = async (
   detailId: undefined | string
 ): Promise<ReviewDetail> => {
   // 상세페이지 조회
@@ -25,6 +25,32 @@ export const getMy = async (
       `/reviews/${detailId}`
     );
     return response.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
+  }
+};
+
+export type MyPageDetail = {
+  detailsId: number;
+  userId: number;
+  content: string;
+  imgUrl: string;
+  videoUrl: string | null;
+  createdAt: string;
+  nickname: string;
+  profileImgUrl: string;
+};
+
+export const getMyPageDetails = async (
+  qValue: 'likes' | 'comments' | 'review'
+): Promise<MyPageDetail[]> => {
+  try {
+    const response: AxiosResponse<{ selectList: MyPageDetail[] }> =
+      await axiosWithToken.get(`/mypage/list?q=${qValue}`);
+    return response.data.selectList;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data?.errorMessage || e.message);
