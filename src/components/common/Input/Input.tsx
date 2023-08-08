@@ -1,4 +1,5 @@
 import React from 'react';
+import { StInput } from './Input.styles';
 
 interface InputProps {
   type?: string;
@@ -18,7 +19,7 @@ export const Input = ({
   placeholder = '',
 }: InputProps) => {
   return (
-    <input
+    <StInput
       type={type}
       id={id}
       name={name}

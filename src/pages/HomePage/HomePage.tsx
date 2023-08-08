@@ -1,3 +1,4 @@
+import MapWrapper from 'components/common/Map/MapWrapper';
 import React from 'react';
 import { Input, TempButton } from 'components/common';
 import { CommonLayout, NavBar } from 'components/layout';
@@ -17,6 +18,7 @@ export const HomePage = () => {
         <TempButton colorType="black">까망 버튼 :)</TempButton>
         <TempButton colorType="blue">파랑 버튼 :)</TempButton>
       </div>
+      <MapWrapper />
     </CommonLayout>
   );
 };
