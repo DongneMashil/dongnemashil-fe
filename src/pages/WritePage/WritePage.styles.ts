@@ -26,3 +26,21 @@ export const StTitle = styled.input`
   height: 1.8rem;
   padding-left: 0.3rem;
 `;
+
+export const StTagWwrapper = styled.div`
+  width: 22rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+export const StTagBox = styled.span<{ $isSelected: boolean }>`
+  border: 1px solid #b5a6ca;
+  height: 1.5rem;
+  line-height: 1.6rem;
+  border-radius: 1rem;
+  font-size: 14px;
+  padding: 0 0.79rem
+  background-color:${({ $isSelected }) =>
+    $isSelected ? '#b5a6ca' : 'transparent'};
+`;

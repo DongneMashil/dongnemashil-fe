@@ -6,7 +6,7 @@ interface ReviewData {
   content: string;
   img_url: string;
   address: string;
-  tag: string;
+  tag: string[];
 }
 
 export const submitReview = async (data: ReviewData) => {

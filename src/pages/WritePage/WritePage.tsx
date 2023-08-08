@@ -3,6 +3,8 @@ import {
   StContentBox,
   StContentContainer,
   StHiddenButton,
+  StTagBox,
+  StTagWwrapper,
   StTitle,
 } from './WritePage.styles';
 import { CommonLayout, NavBar } from 'components/layout';
@@ -16,6 +18,8 @@ interface FormValues {
 }
 
 export const WritePage = () => {
+  const tags = ['태그1', '태그2', '태그3', '태그4'];
+
   const [formValues, setFormValues] = useState<FormValues>({
     title: '',
     content: '',
@@ -24,6 +28,7 @@ export const WritePage = () => {
   const [mediaFiles, setMediaFiles] = useState<
     { type: 'image' | 'video'; url: string }[]
   >([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -63,6 +68,15 @@ export const WritePage = () => {
       reader.readAsDataURL(file);
     });
   };
+  const toggleTag = (tag: string) => {
+    setSelectedTags((prev) => {
+      if (prev.includes(tag)) {
+        return prev.filter((t) => t !== tag);
+      } else {
+        return [...prev, tag];
+      }
+    });
+  };
 
   const mutation = useMutation(submitReview);
 
@@ -77,7 +91,7 @@ export const WritePage = () => {
       content: formValues.content,
       img_url: combinedUrls,
       address: '서울시 영등포구 여의동로 330',
-      tag: '태그입력값',
+      tag: selectedTags,
     };
     mutation.mutate(data, {
       onSuccess: (response) => {
@@ -130,6 +144,17 @@ export const WritePage = () => {
             onChange={onFileChange}
           />
           <StContentBox />
+          <StTagWwrapper>
+            {tags.map((tag) => (
+              <StTagBox
+                key={tag}
+                onClick={() => toggleTag(tag)}
+                $isSelected={selectedTags.includes(tag)}
+              >
+                {tag}
+              </StTagBox>
+            ))}
+          </StTagWwrapper>
         </StContentContainer>
       </CommonLayout>
     </>
