@@ -40,7 +40,7 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
     const onScroll = () => {
       if (scrollRef.current) {
         const { scrollTop } = scrollRef.current;
-        console.log(scrollTop + '❤️‍🩹');
+        // console.log(scrollTop + '❤️‍🩹');
         if (scrollTop > prevPosition) {
           setIsShow(false);
         } else {
