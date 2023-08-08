@@ -1,3 +1,4 @@
+import { tempUserState } from 'hooks';
 import { axiosInstance } from './api';
 import { AxiosError, AxiosResponse } from 'axios';
 
@@ -56,16 +57,20 @@ export const register = async (data: {
 };
 
 /** 로그인 유저 정보 */
-export const verifyUser = () => {
-  axiosInstance
-    .get(`/accesstoken`)
-    .then((res: AxiosResponse) => {
-      console.log('Verified User:', res.data);
-      return res.data;
-    })
-    .catch((err: AxiosError) => {
-      console.log(err);
-    });
+//! 이후 tempUserState => UserState로 변경 필요합니다
+export const verifyUser = async (): Promise<tempUserState> => {
+  try {
+    const res: AxiosResponse<tempUserState> = await axiosInstance.get(
+      `/accesstoken`
+    );
+    console.log('Verified User:', res.data);
+    return res.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
+  }
 };
 
 /** refresh token으로 access token 재발급 */

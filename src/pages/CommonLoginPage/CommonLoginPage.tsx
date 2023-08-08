@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Button } from 'components/common';
-import { login } from 'api/loginApi';
+import { login, verifyUser } from 'api/loginApi';
 import { useMutation } from 'react-query';
 import { UserState, userProfileSelector } from 'recoil/userExample';
 import { useSetRecoilState } from 'recoil';
@@ -13,8 +13,9 @@ interface CommonLoginProps {
 export const CommonLoginPage = () => {
   const setLoginState = useSetRecoilState(userProfileSelector);
   const { mutate } = useMutation(login, {
-    onSuccess: (data) => {
-      console.log('CommonLogin data', data);
+    onSuccess: () => {
+      const data = verifyUser();
+      console.log('CommonLogin ', data);
       const newData: UserState = {
         userId: '성공!',
         nickName: '',

@@ -12,7 +12,7 @@ export const LoginPage = () => {
     loginKakao();
   };
   const onLoginHandler = () => {
-    console.log('onLoginHandler');
+    navigate('/login/common');
   };
   const onRegisterHandler = () => {
     navigate('/register');

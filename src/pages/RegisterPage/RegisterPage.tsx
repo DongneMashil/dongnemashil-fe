@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 //import { CommonLayout, NavBar } from 'components/layout';
 import { Input, Button } from 'components/common';
-import { register } from 'api/loginApi';
+import { register, verifyUser } from 'api/loginApi';
 import { StVerifyMsg } from './Registerpage.styles';
 import { useMutation } from 'react-query';
 import { UserState, userProfileSelector } from 'recoil/userExample';
@@ -64,11 +64,12 @@ export const RegisterPage = () => {
 
   const setRegisterState = useSetRecoilState(userProfileSelector);
   const { mutate } = useMutation(register, {
-    onSuccess: (data) => {
+    onSuccess: () => {
+      const data = verifyUser();
       console.log('Register successful', data);
       const newData: UserState = {
-        userId: '성공!',
-        nickName: '',
+        userId: 'data.email',
+        nickName: 'data.nickname',
         profileImage: '',
         isLoggedIn: true,
       };
