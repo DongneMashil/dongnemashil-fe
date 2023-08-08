@@ -16,12 +16,11 @@ export const loginKakaoCallback = async (code: string) => {
     .post(`kakao?code=${code}`)
     .then((res) => {
       console.log('카카오 로그인 성공', res.data);
-      //window.location.href = '/';
     })
     .catch((err) => {
       console.log('kakao 소셜 로그인 에러 : ', err);
       window.alert('소셜 로그인에 실패하였습니다.');
-      //window.location.href = `/login`;
+      window.location.href = `/login`;
     });
 };
 
@@ -31,7 +30,6 @@ export const login = async (data: { email: string; password: string }) => {
     .post(`/login`, data)
     .then((res) => {
       console.log('login success', res.data);
-      //window.location.href = '/';
     })
     .catch((err) => {
       throw err;
