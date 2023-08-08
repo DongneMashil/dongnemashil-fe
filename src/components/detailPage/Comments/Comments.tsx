@@ -1,5 +1,7 @@
 // import { Button } from 'components/common';
-import React from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import React, { useEffect, useRef } from 'react';
 // import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 
@@ -17,15 +19,7 @@ export const Comments = ({
   if (!reviewId) {
     throw new Error('Review ID is missing');
   }
-  // const { data } = useQuery<ReviewDetailComment, Error>({
-  //   queryKey: ['reviewDetailComment', reviewId],
-  //   queryFn: () => getReviewDetailComment(reviewId),
-  //   enabled: !!reviewId,
-  //   onSuccess: (data) => {
-  //     console.log(data);
-  //   },
-  // });
-
+  const loader = useRef(null);
   interface Comment {
     id: number;
     profileImgUrl: string;
@@ -33,62 +27,85 @@ export const Comments = ({
     comment: string;
   }
 
-  const data = {
-    comments: [
-      {
-        id: 1,
-        profileImgUrl: 'https://picsum.photos/200',
-        nickname: '닉네임',
-        comment:
-          '댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.댓글입니다.',
+  const useBlacklistQuery = () => {
+    // useInfiniteQuery에서 쓸 함수
+    const fetchBlacklist = async ({ pageParam = 1 }) => {
+      const response = await axios.get(
+        `/api/reviews/1/comments?page=${pageParam}`
+      );
+      const result = response.data;
+      // axios로 받아온 데이터를 다음과 같이 변경!
+      console.log('👀' + JSON.stringify(result));
+      return {
+        result: result.content,
+        nextPage: pageParam + 1,
+        isLast: result.last,
+      };
+    };
+
+    const query = useInfiniteQuery(['blacklist'], fetchBlacklist, {
+      getNextPageParam: (lastPage) => {
+        if (!lastPage.isLast) return lastPage.nextPage;
+        return undefined;
       },
-      {
-        id: 2,
-        profileImgUrl: 'https://picsum.photos/200',
-        nickname: '닉네임',
-        comment: '댓글입니다.',
-      },
-      {
-        id: 3,
-        profileImgUrl: 'https://picsum.photos/200',
-        nickname: '닉네임',
-        comment: '댓글입니다.',
-      },
-      {
-        id: 4,
-        profileImgUrl: 'https://picsum.photos/200',
-        nickname: '닉네임',
-        comment: '댓글입니다.',
-      },
-      {
-        id: 5,
-        profileImgUrl: 'https://picsum.photos/200',
-        nickname: '닉네임',
-        comment: '댓글입니다.',
-      },
-      {
-        id: 6,
-        profileImgUrl: 'https://picsum.photos/200',
-        nickname: '닉네임',
-        comment: '댓글입니다.',
-      },
-    ],
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+      retry: 1,
+    });
+
+    return query;
   };
+  const { data, fetchNextPage, hasNextPage, isLoading } = useBlacklistQuery();
+
+  const handleLoadMore = (info: IntersectionObserverEntry[]) => {
+    console.log(info); //이벤트 정보 출력
+    const target = info[0];
+    if (target.isIntersecting && !isLoading) {
+      fetchNextPage();
+    }
+  };
+  useEffect(() => {
+    // Intersection Observer를 설정
+    const options = {
+      root: null, // viewport를 기준으로 함
+      rootMargin: '0px', //나영님꺼 보고 수정함.
+      threshold: 0.1, // target이 viewport의 100% 경계선을 넘어가면 콜백 실행
+    };
+
+    const observer = new IntersectionObserver(handleLoadMore, options);
+    if (loader.current) {
+      observer.observe(loader.current);
+    }
+    return () => {
+      if (loader.current) {
+        observer.unobserve(loader.current);
+      }
+    };
+  }, [isLoading, hasNextPage]);
+
   return (
     <StDetailPageComment $isCommentShow={$isCommentShow}>
-      <StDetailPageCommentList>
-        {data.comments.map((comment: Comment) => (
-          <StDetailPageCommentItem key={comment.id}>
-            <section>
-              <img src={comment.profileImgUrl} alt="프로필 이미지" />
-              <div className="nickname">{comment.nickname}</div>
-            </section>
-            <div className="content">{comment.comment}</div>
-          </StDetailPageCommentItem>
-        ))}
+      {data && (
+        <StDetailPageCommentList>
+          {data.pages
+            .flatMap((page) => page.result)
+            .map((comment: Comment) => (
+              <StDetailPageCommentItem key={comment.id}>
+                <section>
+                  <img src={comment.profileImgUrl} alt="프로필 이미지" />
+                  <div className="nickname">{comment.nickname}</div>
+                </section>
+                <div className="content">{comment.comment}</div>
+              </StDetailPageCommentItem>
+            ))}
+          {isLoading && <div>로딩중...</div>}
 
-        <StFooterSpacer />
-      </StDetailPageCommentList>
+          {!hasNextPage && <div>마지막 페이지입니다.</div>}
+          <button ref={loader}>reef</button>
+          <StFooterSpacer />
+        </StDetailPageCommentList>
+      )}
     </StDetailPageComment>
   );
 };
