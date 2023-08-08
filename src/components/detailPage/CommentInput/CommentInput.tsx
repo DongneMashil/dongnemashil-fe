@@ -1,3 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
+import { postComment } from 'api/detailApi';
 import { Button, Input } from 'components/common';
 import React from 'react';
 // import { useNavigate } from 'react-router-dom';
@@ -12,9 +14,34 @@ export const CommentInput = ({
   $isCommentShow = false,
 }: FooterProps) => {
   const [comment, setComment] = React.useState('');
+  const [isCommentPost, setIsCommentPost] = React.useState(false);
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
   };
+  useQuery(
+    ['comment', reviewId, comment],
+    () => postComment(reviewId, comment),
+    {
+      enabled: isCommentPost,
+      onSuccess: (data) => {
+        console.log(data);
+        setComment('');
+        setIsCommentPost(false);
+        alert('댓글 등록에 성공했습니다.');
+      },
+      onError: (err) => {
+        console.log(err);
+        setComment('');
+        setIsCommentPost(false);
+        alert('댓글 등록에 실패했습니다.');
+      },
+    }
+  );
+  const onSubmitHandler = () => {
+    console.log(comment);
+    setIsCommentPost(true);
+  };
+
   return (
     <StFooterContatiner $isCommentShow={$isCommentShow}>
       <StFooterWrapper>
@@ -24,12 +51,7 @@ export const CommentInput = ({
           onChange={onChangeHandler}
           value={comment}
         />
-        <Button
-          type={'normal'}
-          onClick={() => {
-            console.log({ reviewId });
-          }}
-        >
+        <Button type={'normal'} onClick={onSubmitHandler}>
           등록
         </Button>
       </StFooterWrapper>
