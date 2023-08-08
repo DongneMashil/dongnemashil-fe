@@ -1,19 +1,26 @@
+import MapWrapper from 'components/common/Map/MapWrapper';
 import React from 'react';
-import { Button } from 'components/common';
-import { NavBar } from 'components/layout';
+import { Input, TempButton } from 'components/common';
+import { CommonLayout, NavBar } from 'components/layout';
 import { ThumbnailWrapper } from 'components/homePage';
-import { getNewAccessToken } from 'api/loginApi';
+//import { getNewAccessToken } from 'api/loginApi';
 //import { useVerifyUser } from 'hooks';
 
 export const HomePage = () => {
   return (
-    <div>
-      <NavBar btnLeft={'logo'} btnRight={'myPage'}>
-        동네마실
-      </NavBar>
-      <Button onClick={}>verify user</Button>
-      <Button onClick={getNewAccessToken}>refresh token</Button>
+    <CommonLayout
+      header={
+        <NavBar btnLeft={'logo'} btnRight={'mypage'}>
+          <Input />
+        </NavBar>
+      }
+    >
       <ThumbnailWrapper />
-    </div>
+      <div style={{ display: 'flex', gap: '15px', marginTop: '30px' }}>
+        <TempButton colorType="black">까망 버튼 :)</TempButton>
+        <TempButton colorType="blue">파랑 버튼 :)</TempButton>
+      </div>
+      <MapWrapper />
+    </CommonLayout>
   );
 };

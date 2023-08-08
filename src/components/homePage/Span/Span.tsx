@@ -4,12 +4,12 @@ import { StSpan } from './Span.styles';
 export interface SpanProps {
   children?: React.ReactNode;
   size?: 'small' | 'normal' | 'title';
-  color?: string;
+  $color?: string;
 }
 
-const Span = React.memo(({ children, size = 'normal', color }: SpanProps) => {
+const Span = React.memo(({ children, size = 'normal', $color }: SpanProps) => {
   return (
-    <StSpan className={size} color={color}>
+    <StSpan className={size} $color={$color}>
       {children}
     </StSpan>
   );

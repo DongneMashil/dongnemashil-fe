@@ -14,6 +14,7 @@ interface CommonLayoutProps {
   headerHeight?: string;
   footerHeight?: number;
   hideHeader?: boolean;
+  backgroundColor?: string;
 }
 
 /**
@@ -23,6 +24,7 @@ interface CommonLayoutProps {
  * @param 선택사항 footer, prop으로 JSX 넘겨줄것, 사용시 footerSpacer를 사용해야함
  * @param 선택사항 headerHeight 딘위까지 입력해야함, 기본값 50px
  * @param 선택사항 hideHeader 스크롤시 헤더 숨김 여부. 기본값 true
+ * @param 선택사항 backgroundColor 배경색 지정. 기본값 #fff
  */
 export const CommonLayout: React.FC<CommonLayoutProps> = ({
   children,
@@ -30,12 +32,13 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
   footer,
   headerHeight = '50px',
   hideHeader = true,
+  backgroundColor = '#fff',
 }) => {
   const [isShow, setIsShow] = React.useState(true);
   const [prevPosition, setPrevPosition] = React.useState(0);
 
   const scrollRef = React.useRef<HTMLDivElement>(null);
-
+  headerHeight = header ? headerHeight : '0px';
   useEffect(() => {
     const onScroll = () => {
       if (scrollRef.current) {
@@ -63,7 +66,11 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
     <StLayoutOuter>
       <StLayoutBody>
         {header && <StSlidingHeader $isShow={isShow}>{header}</StSlidingHeader>}
-        <StLayoutSection ref={scrollRef} $headerHeight={headerHeight}>
+        <StLayoutSection
+          ref={scrollRef}
+          $headerHeight={headerHeight}
+          $backgroundColor={backgroundColor}
+        >
           {children}
         </StLayoutSection>
         {footer && <FloatingFooter>{footer}</FloatingFooter>}
