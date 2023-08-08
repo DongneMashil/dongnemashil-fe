@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Button } from 'components/common';
-import { login, verifyUser } from 'api/loginApi';
-import { useMutation } from 'react-query';
-import { UserState, userProfileSelector } from 'recoil/userExample';
-import { useSetRecoilState } from 'recoil';
+import { login } from 'api/loginApi';
+import { useMutation } from '@tanstack/react-query';
+import { useVerifyUser } from 'hooks';
 
 interface CommonLoginProps {
   id: string;
@@ -11,23 +10,17 @@ interface CommonLoginProps {
 }
 
 export const CommonLoginPage = () => {
-  const setLoginState = useSetRecoilState(userProfileSelector);
+  const [shouldVerify, setShouldVerify] = useState(false);
+  const { data } = useVerifyUser(shouldVerify);
   const { mutate } = useMutation(login, {
     onSuccess: () => {
-      const data = verifyUser();
-      console.log('CommonLogin ', data);
-      const newData: UserState = {
-        userId: '성공!',
-        nickName: '',
-        profileImage: '',
-        isLoggedIn: true,
-      }; // 체크 필요
-      setLoginState(newData);
+      setShouldVerify(true);
     },
     onError: (err) => {
       console.log('Common Login Error: ', err);
     },
   });
+
   const [loginValues, setLoginValues] = useState<CommonLoginProps>({
     id: '',
     password: '',
@@ -48,6 +41,13 @@ export const CommonLoginPage = () => {
       password: loginValues.password,
     });
   };
+
+  useEffect(() => {
+    if (data) {
+      console.log('Common Login Success ', data);
+      window.location.href = '/';
+    }
+  }, []);
 
   console.log('loginValues', loginValues);
   return (

@@ -1,21 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { loginKakaoCallback } from 'api/loginApi';
-import { useMutation } from 'react-query';
-import { UserState, userProfileSelector } from 'recoil/userExample';
-import { useSetRecoilState } from 'recoil';
+import { useMutation } from '@tanstack/react-query';
+import { useVerifyUser } from 'hooks';
 
 export const KakaoCallbackPage = () => {
-  const setLoginState = useSetRecoilState(userProfileSelector);
+  const [shouldVerify, setShouldVerify] = useState(false);
+  const { data } = useVerifyUser(shouldVerify);
   const { mutate } = useMutation(loginKakaoCallback, {
-    onSuccess: (data) => {
-      console.log('Kakao login success! ', data);
-      const newData: UserState = {
-        userId: '성공!',
-        nickName: '',
-        profileImage: '',
-        isLoggedIn: true,
-      }; // 체크 필요
-      setLoginState(newData);
+    onSuccess: () => {
+      setShouldVerify(true);
+      window.location.href = '/';
     },
     onError: (err) => {
       console.log('Kakao login Error: ', err);
@@ -25,6 +19,10 @@ export const KakaoCallbackPage = () => {
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get('code'); // 카카오 인가 코드
     code && mutate(code);
+
+    if (data) {
+      console.log('Common Login Success ', data);
+    }
   }, []);
 
   return <div>카카오 인증중 ...</div>;

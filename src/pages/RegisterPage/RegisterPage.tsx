@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 //import { CommonLayout, NavBar } from 'components/layout';
 import { Input, Button } from 'components/common';
-import { register, verifyUser } from 'api/loginApi';
+import { register } from 'api/loginApi';
 import { StVerifyMsg } from './Registerpage.styles';
-import { useMutation } from 'react-query';
-import { UserState, userProfileSelector } from 'recoil/userExample';
-import { useSetRecoilState } from 'recoil';
+import { useMutation } from '@tanstack/react-query';
+import { useVerifyUser } from 'hooks';
 
 interface RegitserProps {
   email: string;
@@ -34,6 +33,9 @@ interface VerifyMsgProps {
 }
 
 export const RegisterPage = () => {
+  const [shouldVerify, setShouldVerify] = useState(false);
+  const { data } = useVerifyUser(shouldVerify);
+
   const [RegitserProps, setRegitserProps] = useState<RegitserProps>({
     email: '',
     nickname: '',
@@ -62,18 +64,9 @@ export const RegisterPage = () => {
 
   const emailRegex = new RegExp(`[a-z0-9]+@[a-z]+\\.[a-z]{2,3}`);
 
-  const setRegisterState = useSetRecoilState(userProfileSelector);
   const { mutate } = useMutation(register, {
     onSuccess: () => {
-      const data = verifyUser();
-      console.log('Register successful', data);
-      const newData: UserState = {
-        userId: 'data.email',
-        nickName: 'data.nickname',
-        profileImage: '',
-        isLoggedIn: true,
-      };
-      setRegisterState(newData);
+      setShouldVerify(true);
     },
     onError: (err) => {
       console.log('Register Error: ', err);
@@ -125,6 +118,13 @@ export const RegisterPage = () => {
       password: RegitserProps.password,
     });
   };
+
+  useEffect(() => {
+    if (data) {
+      console.log('Register Success ', data);
+      window.location.href = '/';
+    }
+  }, []);
 
   return (
     <div>
