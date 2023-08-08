@@ -66,7 +66,7 @@ export const postComment = async (
 ): Promise<Comment> => {
   // 댓글작성
   try {
-    const response: AxiosResponse<Comment> = await axiosWithToken.post(
+    const response: AxiosResponse<Comment> = await axiosInstance.post(
       `/api/reviews/${reviewId}/comments`,
       { comment }
     );

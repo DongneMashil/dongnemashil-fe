@@ -8,7 +8,6 @@ export const LoginPage = () => {
   const navigate = useNavigate();
 
   const onKakaoHandler = () => {
-    console.log('onKakaoHandler');
     loginKakao();
   };
   const onLoginHandler = () => {
@@ -20,7 +19,7 @@ export const LoginPage = () => {
 
   return (
     <div>
-      <NavBar btnLeft={'logo'} btnRight={'myPage'}>
+      <NavBar btnLeft={'logo'} btnRight={'mypage'}>
         동네마실
       </NavBar>
 

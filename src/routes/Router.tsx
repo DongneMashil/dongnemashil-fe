@@ -6,6 +6,8 @@ import {
   DetailPage,
   KakaoCallbackPage,
   WriteMapPage,
+  CommonLoginPage,
+  MyPage,
 } from 'pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
