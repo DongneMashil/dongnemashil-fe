@@ -72,11 +72,22 @@ export const WritePage = () => {
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = function () {
-        const fileType = file.type.startsWith('image/') ? 'image' : 'video';
-        setMediaFiles((prev) => [
-          ...prev,
-          { type: fileType, url: reader.result as string, isCover: false },
-        ]);
+        const fileType: 'image' | 'video' = file.type.startsWith('image/')
+          ? 'image'
+          : 'video';
+        setMediaFiles((prev) => {
+          const updatedFiles = [
+            ...prev,
+            { type: fileType, url: reader.result as string, isCover: false },
+          ];
+
+          if (fileType === 'image' && !prev.some((p) => p.isCover)) {
+            const index = updatedFiles.length - 1;
+            updatedFiles[index].isCover = true;
+          }
+
+          return updatedFiles;
+        });
       };
       reader.readAsDataURL(file);
     });
@@ -110,7 +121,11 @@ export const WritePage = () => {
 
   const onSubmithandler = () => {
     if (mediaFiles.length === 0) {
-      alert('이미지나 동영상을 무조건 하나 선택해야 합니다.');
+      alert('이미지는 무조건 한개를 선택해야 합니다.');
+      return;
+    }
+    if (!mediaFiles.some((file) => file.type === 'image')) {
+      alert('최소 하나의 이미지를 추가해야 합니다.');
       return;
     }
     const formData = new FormData();
@@ -184,6 +199,7 @@ export const WritePage = () => {
             onChange={onInputChange}
             placeholder="제목 입력"
           />
+          <StTagWwrapper>{renderTags()}</StTagWwrapper>
           <FileSlider
             images={mediaFiles.map((file) => file.url)}
             currentPage={currentPage}
@@ -200,7 +216,7 @@ export const WritePage = () => {
             multiple
             onChange={onFileChange}
           />
-          <StTagWwrapper>{renderTags()}</StTagWwrapper>
+
           <StContentBox
             name="content"
             value={formValues.content}
