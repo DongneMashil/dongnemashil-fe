@@ -149,7 +149,7 @@ export const postComment = async (
 //     throw e;
 //   }
 // };
-export const postLikeWithOptimisticUpdate = async (
+export const postLikeOptimistic = async (
   reviewId: undefined | string,
   currentState: boolean // 현재 좋아요 상태를 받아옵니다.
 ): Promise<boolean> => {
@@ -162,10 +162,12 @@ export const postLikeWithOptimisticUpdate = async (
       await tempInstance.post(`/reviews/${reviewId}/likes`);
 
     if (
-      (updatedState && response.data.message !== '좋아요 완료') ||
-      (!updatedState && response.data.message !== '좋아요 취소 완료')
+      //예상과 반대의 값이 올때
+      (updatedState === true && response.data.message === '좋아요 취소 완료') ||
+      (updatedState === false && response.data.message === '좋아요 완료')
     ) {
-      throw new Error('Unexpected response message from API');
+      console.log('좋아요 낙관적 업데이트 알림 : 예상과 반대의 값이 왔습니다.');
+      return !updatedState; // 서버에서 온 값(updatedState의 반대)을 보냅니다.
     }
 
     return updatedState;

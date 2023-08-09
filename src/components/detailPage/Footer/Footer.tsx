@@ -7,7 +7,7 @@ import { ReactComponent as CommentIcon } from 'assets/icons/Comment.svg';
 import { ReactComponent as ContentIcon } from 'assets/icons/Content.svg';
 import { Comments } from '../Comments/Comments';
 import { CommentInput } from '../CommentInput/CommentInput';
-import { postLikeWithOptimisticUpdate } from 'api/detailApi';
+import { postLikeOptimistic } from 'api/detailApi';
 
 interface FooterProps {
   reviewId: string;
@@ -46,14 +46,12 @@ export const Footer = ({
     setLikeCnt(optimisticLikeCnt); // 낙관적 업데이트 실행
 
     try {
-      const result = await postLikeWithOptimisticUpdate(
-        reviewId,
-        previousIsLiked
-      );
+      const result = await postLikeOptimistic(reviewId, previousIsLiked);
       if (result !== !previousIsLiked) {
         // API 응답과 낙관적 업데이트의 결과가 다르면 api기준으로 업데이트
-        setIsLiked(result);
-        setLikeCnt(result ? optimisticLikeCnt : likeCnt);
+        setIsLiked(result); // API 응답으로 결과만 업데이트
+        setLikeCnt(likeCnt); // 원래의 좋아요 수로 되돌립니다.
+        //(이 페이지 진입 후, 별도의 페이지에서 이용자가 수정을 했다고 가정하고, 기존 숫자가 맞는걸로 가정함)
       }
     } catch (error) {
       setTimeout(() => {
