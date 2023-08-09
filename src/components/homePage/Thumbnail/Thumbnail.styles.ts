@@ -6,7 +6,6 @@ export const StThumbnail = styled.div`
 
   padding: 10px 0 24px;
   margin-bottom: 8px;
-  height: 100px;
 
   & img {
     border-radius: 10px;
