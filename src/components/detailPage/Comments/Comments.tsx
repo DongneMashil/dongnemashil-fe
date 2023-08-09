@@ -1,5 +1,6 @@
 // import { Button } from 'components/common';
 import { useInfiniteQuery } from '@tanstack/react-query';
+// import { axiosInstance } from 'api/api';
 import axios from 'axios';
 import React, { useEffect, useRef } from 'react';
 // import { useNavigate, useParams } from 'react-router-dom';
@@ -13,9 +14,10 @@ interface CommentsProps {
   $isCommentShow?: boolean;
 }
 export const Comments = ({
-  reviewId = '1',
+  reviewId,
   $isCommentShow = false,
 }: CommentsProps) => {
+  // const { reviewId } = useParams<{ reviewId: string }>();
   if (!reviewId) {
     throw new Error('Review ID is missing');
   }
@@ -27,11 +29,11 @@ export const Comments = ({
     comment: string;
   }
 
-  const useBlacklistQuery = () => {
+  const useInfinityScroll = () => {
     // useInfiniteQuery에서 쓸 함수
-    const fetchBlacklist = async ({ pageParam = 1 }) => {
+    const fetchComment = async ({ pageParam = 0 }) => {
       const response = await axios.get(
-        `/api/reviews/1/comments?page=${pageParam}`
+        `${process.env.REACT_APP_SERVER_API_URL}/reviews/${reviewId}/comments?page=${pageParam}`
       );
       const result = response.data;
       // axios로 받아온 데이터를 다음과 같이 변경!
@@ -43,7 +45,7 @@ export const Comments = ({
       };
     };
 
-    const query = useInfiniteQuery(['blacklist'], fetchBlacklist, {
+    const query = useInfiniteQuery(['comment', reviewId], fetchComment, {
       getNextPageParam: (lastPage) => {
         if (!lastPage.isLast) return lastPage.nextPage;
         return undefined;
@@ -56,7 +58,7 @@ export const Comments = ({
 
     return query;
   };
-  const { data, fetchNextPage, hasNextPage, isLoading } = useBlacklistQuery();
+  const { data, fetchNextPage, hasNextPage, isLoading } = useInfinityScroll();
 
   const handleLoadMore = (info: IntersectionObserverEntry[]) => {
     console.log(info); //이벤트 정보 출력
@@ -69,9 +71,10 @@ export const Comments = ({
     // Intersection Observer를 설정
     const options = {
       root: null, // viewport를 기준으로 함
-      rootMargin: '0px', //나영님꺼 보고 수정함.
+      rootMargin: '0px', //감지위치
       threshold: 0.1, // target이 viewport의 100% 경계선을 넘어가면 콜백 실행
     };
+    console.log('data.pages👁️' + JSON.stringify(data?.pages));
 
     const observer = new IntersectionObserver(handleLoadMore, options);
     if (loader.current) {

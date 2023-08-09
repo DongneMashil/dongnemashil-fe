@@ -16,7 +16,7 @@ interface FooterProps {
   // isCommentOpen?: boolean;
 }
 export const Footer = ({
-  reviewId = '1',
+  reviewId,
   likeCnt = 0,
   commentCnt = 0,
   onClick,
@@ -26,6 +26,7 @@ export const Footer = ({
   const [isCommentShow, setIsCommentShow] = React.useState(false);
   useEffect(() => {
     if (isCommentOpen) {
+      console.log('reviewIdonFooter', reviewId); //완료후 제거
       setTimeout(() => {
         setIsCommentShow(true);
       }, 150);
@@ -59,7 +60,7 @@ export const Footer = ({
           <StFooterCommentSection>
             <Comments reviewId={reviewId} $isCommentShow={isCommentShow} />
           </StFooterCommentSection>
-          <CommentInput reviewId="1" $isCommentShow={isCommentShow} />
+          <CommentInput reviewId={reviewId} $isCommentShow={isCommentShow} />
         </>
       )}
     </StFooterContatiner>

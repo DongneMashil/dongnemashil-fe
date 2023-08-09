@@ -43,7 +43,7 @@ export type ReviewDetailComment = {
   comments: Comment[] | null;
 };
 
-export const getReviewDetailComment = async (
+export const getComment = async (
   detailId: undefined | string
 ): Promise<ReviewDetail> => {
   // 댓글조회
@@ -67,7 +67,7 @@ export const postComment = async (
   // 댓글작성
   try {
     const response: AxiosResponse<Comment> = await axiosInstance.post(
-      `/api/reviews/${reviewId}/comments`,
+      `/reviews/${reviewId}/comments`,
       { comment }
     );
     return response.data;
@@ -84,7 +84,7 @@ export const postLike = async (
 ): Promise<boolean> => {
   try {
     const response: AxiosResponse<{ liked: boolean }> =
-      await axiosInstance.post(`/api/reviews/${reviewId}/likes`);
+      await axiosInstance.post(`/reviews/${reviewId}/likes`);
     return response.data.liked;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
