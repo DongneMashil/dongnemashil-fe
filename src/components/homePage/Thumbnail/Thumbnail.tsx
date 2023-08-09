@@ -28,7 +28,7 @@ export const Thumbnail = ({
           <strong>{roadName}</strong>에서
         </Span>
         <Span>
-          {likebool}❤️ {likeCnt}
+          {likebool ? '❤️' : '🤍'} {likeCnt}
         </Span>
       </div>
       {mainImgUrl ? (
