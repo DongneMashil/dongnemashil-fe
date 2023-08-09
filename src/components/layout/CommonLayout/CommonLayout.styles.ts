@@ -15,7 +15,7 @@ export const StLayoutBody = styled.div`
   position: relative;
   width: 100vw;
   max-width: 390px; // 최대 너비 -> 추후 반응형 적용
-  /* height: 100vh; */
+  height: 100vh;
   max-height: 850px; // 최대 높이 -> 추후 반응형 적용
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 `;
