@@ -6,3 +6,4 @@ export * from './KakaoCallbackPage/KakaoCallbackPage';
 export * from './WriteMapPage/WriteMapPage';
 export * from './CommonLoginPage/CommonLoginPage';
 export * from './MyPage/MyPage';
+export * from './MyPageProfile/MyPageProfile';

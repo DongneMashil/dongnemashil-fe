@@ -8,6 +8,7 @@ import {
   WriteMapPage,
   CommonLoginPage,
   MyPage,
+  MyPageProfile,
 } from 'pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
@@ -30,7 +31,12 @@ const Router = () => {
           path="/mypage"
           element={<ProtectedRoute element={<MyPage />} />}
         />
+        <Route
+          path="/mypage/profile"
+          element={<ProtectedRoute element={<MyPageProfile />} />}
+        />
         <Route path="/temp/mypage" element={<MyPage />} />
+        <Route path="/temp/mypage/profile" element={<MyPageProfile />} />
       </Routes>
     </BrowserRouter>
   );
