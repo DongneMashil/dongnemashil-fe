@@ -197,8 +197,8 @@ export const WritePage = () => {
             multiple
             onChange={onFileChange}
           />
-          <StContentBox />
           <StTagWwrapper>{renderTags()}</StTagWwrapper>
+          <StContentBox />
         </StContentContainer>
       </CommonLayout>
     </>

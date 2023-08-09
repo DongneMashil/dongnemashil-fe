@@ -33,6 +33,9 @@ export const StTagWwrapper = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+  margin-top: 1rem;
 `;
 export const StTagBox = styled.span<{ $isSelected: boolean }>`
   border: 1px solid #b5a6ca;
@@ -40,7 +43,7 @@ export const StTagBox = styled.span<{ $isSelected: boolean }>`
   line-height: 1.6rem;
   border-radius: 1rem;
   font-size: 14px;
-  padding: 0 0.79rem
-  /* background-color:${($isSelected) =>
-    $isSelected ? '#b5a6ca' : 'transparent'}; */
+  padding: 0 0.8rem;
+  background-color: ${(props) =>
+    props.$isSelected ? '#b5a6ca' : 'transparent'};
 `;
