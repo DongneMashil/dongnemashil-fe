@@ -40,12 +40,10 @@ export const Footer = ({
   }, [isCommentOpen]);
 
   const onLikeClickHandler = async () => {
-    const previousIsLiked = isLiked;
-    const optimisticLikeCnt = isLiked ? likeCnt - 1 : likeCnt + 1;
-
-    // 낙관적 업데이트 적용: 먼저 UI를 업데이트
-    setIsLiked(!isLiked);
-    setLikeCnt(optimisticLikeCnt);
+    const previousIsLiked = isLiked; // 이전 좋아요 상태
+    const optimisticLikeCnt = isLiked ? likeCnt - 1 : likeCnt + 1; // 낙관적 업데이트 값
+    setIsLiked(!isLiked); // 낙관적 업데이트 실행
+    setLikeCnt(optimisticLikeCnt); // 낙관적 업데이트 실행
 
     try {
       const result = await postLikeWithOptimisticUpdate(
@@ -53,16 +51,16 @@ export const Footer = ({
         previousIsLiked
       );
       if (result !== !previousIsLiked) {
-        // API 응답과 낙관적 업데이트의 결과가 다르면 롤백
-        setIsLiked(previousIsLiked);
-        setLikeCnt(likeCnt); // 원래의 좋아요 수로 되돌립니다.
+        // API 응답과 낙관적 업데이트의 결과가 다르면 api기준으로 업데이트
+        setIsLiked(result);
+        setLikeCnt(result ? optimisticLikeCnt : likeCnt);
       }
     } catch (error) {
       setTimeout(() => {
         console.log('좋아요 처리 중 오류가 발생했습니다.'); // 오류 처리
         setIsLiked(previousIsLiked);
         setLikeCnt(likeCnt); // 원래의 좋아요 수로 되돌립니다.
-      }, 1000); // 1초 후에 실행
+      }, 1000); // 1초 후에 실행 (테스트시 너무 안보여서)
     }
   };
 
