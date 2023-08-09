@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   StContentBox,
   StContentContainer,
@@ -11,6 +11,10 @@ import { CommonLayout, NavBar } from 'components/layout';
 import { FileSlider } from 'components/WritePage';
 import { useMutation } from '@tanstack/react-query';
 import { submitReview } from 'api/reviews';
+import { useNavigate } from 'react-router-dom';
+import { useVerifyUser } from 'hooks';
+import { useRecoilValue } from 'recoil';
+import { userIsLoggedInSelector } from 'recoil/userExample';
 
 interface FormValues {
   title: string;
@@ -32,7 +36,7 @@ export const WritePage = () => {
     '자연',
     '벤치',
   ];
-
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState<FormValues>({
     title: '',
     content: '',
@@ -44,6 +48,17 @@ export const WritePage = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [shouldVerify, setShouldVerify] = useState(false);
+  const { data } = useVerifyUser(shouldVerify);
+  const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
+
+  useEffect(() => {
+    setShouldVerify(true);
+    if (!isLoggedIn) {
+      alert('로그인이 만료되었습니다. 다시 로그인해주세요');
+      navigate('/login');
+    }
+  }, [data, navigate]);
 
   const onInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -149,6 +164,7 @@ export const WritePage = () => {
     mutation.mutate(formData, {
       onSuccess: (response) => {
         console.log('등록성공', response);
+        navigate(`/review/${response.id}`);
       },
       onError: (error: unknown) => {
         if (typeof error === 'string') {
