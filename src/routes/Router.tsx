@@ -30,6 +30,7 @@ const Router = () => {
           path="/mypage"
           element={<ProtectedRoute element={<MyPage />} />}
         />
+        <Route path="/temp/mypage" element={<MyPage />} />
       </Routes>
     </BrowserRouter>
   );
