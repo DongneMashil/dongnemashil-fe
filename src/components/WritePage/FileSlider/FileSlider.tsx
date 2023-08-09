@@ -3,22 +3,22 @@ import {
   ArrowButton,
   CenteredBox,
   CoverImageButton,
-  Indicator,
-  PageIndicators,
   SlideContainer,
   StPlusButton,
   StyledImage,
   StyledVideo,
 } from './FileSlider.styles';
+import { ReactComponent as FileUpload } from 'assets/icons/FileUpload.svg';
 
 interface ImageSliderProps {
-  images: string[];
+  images: File[];
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   onAddImage: () => void;
-  onSelectedCoverImage?: (url: string) => void;
-  isCoverImage: (url: string) => boolean;
-  setCoverImage: (url: string) => void;
+  onSelectedCoverImage?: (file: File) => void;
+  isCoverImage: (file: File) => boolean;
+  setCoverImage: (file: File) => void;
+  files: { type: 'image' | 'video'; file: File }[];
 }
 
 export const FileSlider: React.FC<ImageSliderProps> = ({
@@ -29,6 +29,7 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   onSelectedCoverImage,
   isCoverImage,
   setCoverImage,
+  files,
 }) => {
   const onSlideButtonHandler = (direction: 'left' | 'right') => {
     if (direction === 'left' && currentPage > 0) {
@@ -50,12 +51,15 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
         </ArrowButton>
         {currentPage === images.length ? (
           <CenteredBox>
-            <StPlusButton onClick={onAddImage}>+</StPlusButton>
+            <StPlusButton onClick={onAddImage}>
+              <FileUpload />
+              <p>{`${images.length} / 5`}</p>
+            </StPlusButton>
           </CenteredBox>
-        ) : images[currentPage].startsWith('data:image') ? (
+        ) : files[currentPage].type === 'image' ? (
           <>
             <StyledImage
-              src={images[currentPage]}
+              src={URL.createObjectURL(images[currentPage])}
               alt={`Upload Preview ${currentPage}`}
               onClick={() =>
                 onSelectedCoverImage &&
@@ -70,8 +74,12 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
             </CoverImageButton>
           </>
         ) : (
-          <StyledVideo src={images[currentPage]} controls />
+          <StyledVideo
+            src={URL.createObjectURL(images[currentPage])}
+            controls
+          />
         )}
+        ..
         <ArrowButton
           onClick={() => onSlideButtonHandler('right')}
           disabled={currentPage === images.length}
@@ -79,11 +87,6 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
           &rarr;
         </ArrowButton>
       </SlideContainer>
-      <PageIndicators>
-        {Array.from({ length: images.length + 1 }).map((_, index) => (
-          <Indicator key={index} $isActive={index === currentPage} />
-        ))}
-      </PageIndicators>
     </div>
   );
 };

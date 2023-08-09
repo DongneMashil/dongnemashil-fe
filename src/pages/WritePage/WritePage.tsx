@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import {
   StContentBox,
   StContentContainer,
@@ -12,9 +12,9 @@ import { FileSlider } from 'components/WritePage';
 import { useMutation } from '@tanstack/react-query';
 import { submitReview } from 'api/reviews';
 import { useNavigate } from 'react-router-dom';
-import { useVerifyUser } from 'hooks';
-import { useRecoilValue } from 'recoil';
-import { userIsLoggedInSelector } from 'recoil/userExample';
+// import { useVerifyUser } from 'hooks';
+// import { useRecoilValue } from 'recoil';
+// import { userIsLoggedInSelector } from 'recoil/userExample';
 
 interface FormValues {
   title: string;
@@ -43,22 +43,22 @@ export const WritePage = () => {
   });
   const [currentPage, setCurrentPage] = useState(0);
   const [mediaFiles, setMediaFiles] = useState<
-    { type: 'image' | 'video'; url: string; isCover: boolean }[]
+    { type: 'image' | 'video'; file: File; isCover: boolean }[]
   >([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [shouldVerify, setShouldVerify] = useState(false);
-  const { data } = useVerifyUser(shouldVerify);
-  const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
+  // const [shouldVerify, setShouldVerify] = useState(false);
+  // const { data } = useVerifyUser(shouldVerify);
+  // const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
 
-  useEffect(() => {
-    setShouldVerify(true);
-    if (!isLoggedIn) {
-      alert('로그인이 만료되었습니다. 다시 로그인해주세요');
-      navigate('/login');
-    }
-  }, [data, navigate]);
+  // useEffect(() => {
+  //   setShouldVerify(true);
+  //   if (!isLoggedIn) {
+  //     alert('로그인이 만료되었습니다. 다시 로그인해주세요');
+  //     navigate('/login');
+  //   }
+  // }, [data, navigate]);
 
   const onInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -72,46 +72,53 @@ export const WritePage = () => {
 
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    if (mediaFiles.length + files.length > 5) {
+
+    const validFiles = files.filter((file) => {
+      if (file.size > 100 * 1024 * 1024) {
+        alert(`${file.name} 파일은 100MB를 초과하므로 업로드할 수 없습니다.😱`);
+        return false;
+      }
+      return true;
+    });
+
+    if (mediaFiles.length + validFiles.length > 5) {
       alert('이미지와 동영상의 합은 최대 5개까지 가능합니다.😱');
       return;
     }
+
     if (
       mediaFiles.filter((file) => file.type === 'video').length +
-        files.filter((file) => file.type.startsWith('video/')).length >
+        validFiles.filter((file) => file.type.startsWith('video/')).length >
       1
     ) {
       alert('동영상은 한개만 가능합니다.😱');
       return;
     }
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = function () {
-        const fileType: 'image' | 'video' = file.type.startsWith('image/')
-          ? 'image'
-          : 'video';
-        setMediaFiles((prev) => {
-          const updatedFiles = [
-            ...prev,
-            { type: fileType, url: reader.result as string, isCover: false },
-          ];
 
-          if (fileType === 'image' && !prev.some((p) => p.isCover)) {
-            const index = updatedFiles.length - 1;
-            updatedFiles[index].isCover = true;
-          }
+    validFiles.forEach((file) => {
+      const fileType: 'image' | 'video' = file.type.startsWith('image/')
+        ? 'image'
+        : 'video';
+      setMediaFiles((prev) => {
+        const updatedFiles = [
+          ...prev,
+          { type: fileType, file, isCover: false },
+        ];
 
-          return updatedFiles;
-        });
-      };
-      reader.readAsDataURL(file);
+        if (fileType === 'image' && !prev.some((p) => p.isCover)) {
+          const index = updatedFiles.length - 1;
+          updatedFiles[index].isCover = true;
+        }
+
+        return updatedFiles;
+      });
     });
   };
 
-  const setCoverImage = (url: string) => {
+  const setCoverImage = (targetFile: File) => {
     setMediaFiles((prev) =>
       prev.map((file) =>
-        file.url === url
+        file.file === targetFile
           ? { ...file, isCover: true }
           : { ...file, isCover: false }
       )
@@ -136,31 +143,38 @@ export const WritePage = () => {
 
   const onSubmithandler = () => {
     if (mediaFiles.length === 0) {
-      alert('이미지는 무조건 한개를 선택해야 합니다.');
+      alert('최소 하나의 이미지를 선택해야 합니다.');
       return;
     }
     if (!mediaFiles.some((file) => file.type === 'image')) {
       alert('최소 하나의 이미지를 추가해야 합니다.');
       return;
     }
+
     const formData = new FormData();
-    formData.append('title', formValues.title);
-    formData.append('content', formValues.content);
-    formData.append('address', '서울시 영등포구 여의동로 330');
-    formData.append('tag', selectedTags.join(','));
+    const jsonData = {
+      title: formValues.title,
+      content: formValues.content,
+      address: '서울시 영등포구 여의동로 330',
+      tag: selectedTags,
+    };
+    formData.append('data', JSON.stringify(jsonData));
+
     const coverImage = mediaFiles.find(
       (file) => file.isCover && file.type === 'image'
     );
     if (coverImage) {
-      formData.append('mainImgUrl', coverImage.url);
+      formData.append('mainImgUrl', coverImage.file); // File 객체 사용
     }
+
     mediaFiles.forEach((file) => {
       if (file.type === 'image' && !file.isCover) {
-        formData.append('subImgUrl', file.url);
+        formData.append('subImgUrl', file.file); // File 객체 사용
       } else if (file.type === 'video') {
-        formData.append('videoUrl', file.url);
+        formData.append('videoUrl', file.file); // File 객체 사용
       }
     });
+
     mutation.mutate(formData, {
       onSuccess: (response) => {
         console.log('등록성공', response);
@@ -178,8 +192,8 @@ export const WritePage = () => {
     });
   };
 
-  const determineIsCoverImage = (url: string) => {
-    const file = mediaFiles.find((file) => file.url === url);
+  const determineIsCoverImage = (targetFile: File) => {
+    const file = mediaFiles.find((file) => file.file === targetFile);
     return file ? file.isCover : false;
   };
 
@@ -217,7 +231,8 @@ export const WritePage = () => {
           />
           <StTagWwrapper>{renderTags()}</StTagWwrapper>
           <FileSlider
-            images={mediaFiles.map((file) => file.url)}
+            files={mediaFiles}
+            images={mediaFiles.map((file) => file.file)}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             onAddImage={onButtonClick}

@@ -37,6 +37,7 @@ export const StTagWwrapper = styled.div`
   gap: 0.42rem;
   margin: 1rem;
 `;
+
 export const StTagBox = styled.span<{ $isSelected: boolean }>`
   border: 1px solid #b5a6ca;
   height: 1.5rem;

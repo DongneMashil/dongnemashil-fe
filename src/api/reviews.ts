@@ -1,17 +1,11 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { axiosInstance } from './api';
 
-
 export const submitReview = async (data: globalThis.FormData) => {
   try {
     const response: AxiosResponse<{ id: number }> = await axiosInstance.post(
-      '/api/reviews',
-      data,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
+      '/reviews',
+      data
     );
     return response.data;
   } catch (e: unknown) {

@@ -19,6 +19,11 @@ export const CenteredBox = styled.div`
   height: 100%;
 `;
 
+export const StPlusButton = styled.div`
+  width: 3.34rem;
+  height: 3.34rem;
+`;
+
 export const StyledImage = styled.img`
   width: 90%;
   height: 100%;
@@ -30,27 +35,6 @@ export const StyledVideo = styled.video`
   height: 100%;
 `;
 
-export const StPlusButton = styled.button`
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  position: relative;
-`;
-
-export const PageIndicators = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-`;
-
-export const Indicator = styled.span<{ $isActive: boolean }>`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: ${({ $isActive }) => ($isActive ? 'blue' : 'gray')};
-  margin: 0 4px;
-  transition: background-color 0.3s ease;
-`;
 
 export const ArrowButton = styled.button<{ left?: boolean }>`
   position: absolute;
@@ -73,7 +57,7 @@ export const CoverImageButton = styled.button<{ isActive: boolean }>`
   position: absolute;
   top: 10px;
   right: 10px;
-  background: ${props => (props.isActive ? 'green' : 'grey')};
+  background: ${(props) => (props.isActive ? 'green' : 'grey')};
   color: white;
   border: none;
   border-radius: 4px;
