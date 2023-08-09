@@ -20,10 +20,11 @@ export interface ResponseData {
 export interface ReviewsList {
   id: number;
   roadName: string;
-  img_url: string;
-  profileImg_url: string;
+  mainImgUrl: string;
+  videoUrl: string | null;
+  profileImgUrl: string | null;
   likeCnt: number;
-  tag: string;
+  likebool: boolean;
 }
 
 export interface Pageable {
@@ -39,36 +40,36 @@ export interface Pageable {
   unpaged: boolean;
 }
 
-export const getReviews = async (
-  type: string,
-  page: number
-): Promise<ReviewsList[]> => {
-  try {
-    const res: AxiosResponse<ResponseData> = await axiosInstance.get(
-      `/reviews?type=${type}&page=${page}`
-    );
-    return res.data.content;
-  } catch (e: unknown) {
-    if (e instanceof AxiosError) {
-      throw new Error(e.response?.data?.errorMessage || e.message);
-    }
-    throw e;
-  }
-};
+// export const getReviews = async (
+//   type: string,
+//   page: number
+// ): Promise<ReviewsList[]> => {
+//   try {
+//     const res: AxiosResponse<ResponseData> = await axiosInstance.get(
+//       `/reviews?type=${type}&page=${page}`
+//     );
+//     return res.data.content;
+//   } catch (e: unknown) {
+//     if (e instanceof AxiosError) {
+//       throw new Error(e.response?.data?.errorMessage || e.message);
+//     }
+//     throw e;
+//   }
+// };
 
-export const getMoreDatas = async (
-  type: string,
-  page: number
-): Promise<ResponseData> => {
-  try {
-    const res: AxiosResponse<ResponseData> = await axiosInstance.get(
-      `/reviews?type=${type}&page=${page}`
-    );
-    return res.data;
-  } catch (e: unknown) {
-    if (e instanceof AxiosError) {
-      throw new Error(e.response?.data?.errorMessage || e.message);
-    }
-    throw e;
-  }
-};
+// export const getMoreDatas = async (
+//   type: string,
+//   page: number
+// ): Promise<ResponseData> => {
+//   try {
+//     const res: AxiosResponse<ResponseData> = await axiosInstance.get(
+//       `/reviews?type=${type}&page=${page}`
+//     );
+//     return res.data;
+//   } catch (e: unknown) {
+//     if (e instanceof AxiosError) {
+//       throw new Error(e.response?.data?.errorMessage || e.message);
+//     }
+//     throw e;
+//   }
+// };
