@@ -141,7 +141,7 @@ export const WritePage = () => {
     fileInputRef.current?.click();
   };
 
-  const onSubmithandler = () => {
+  const onSubmithandler = async () => {
     if (mediaFiles.length === 0) {
       alert('최소 하나의 이미지를 선택해야 합니다.');
       return;
@@ -158,7 +158,10 @@ export const WritePage = () => {
       address: '서울시 영등포구 여의동로 330',
       tag: selectedTags,
     };
-    formData.append('data', JSON.stringify(jsonData));
+    const blob = new Blob([JSON.stringify(jsonData)], {
+      type: 'application/json',
+    });
+    formData.append('data', blob);
 
     const coverImage = mediaFiles.find(
       (file) => file.isCover && file.type === 'image'
@@ -190,6 +193,19 @@ export const WritePage = () => {
         }
       },
     });
+    // try {
+    //   const response = await submitReview(formData);
+    //   console.log('등록성공', response);
+    //   navigate(`/review/${response.id}`);
+    // } catch (error) {
+    //   if (typeof error === 'string') {
+    //     console.log('실패', error);
+    //   } else if (error instanceof Error) {
+    //     console.log('실패', error.message);
+    //   } else {
+    //     console.log('실패', error);
+    //   }
+    // }
   };
 
   const determineIsCoverImage = (targetFile: File) => {
