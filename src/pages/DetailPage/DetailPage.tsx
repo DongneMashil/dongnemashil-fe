@@ -14,6 +14,8 @@ import {
   StNavTitle,
   StTagWrapper,
 } from './DetailPage.styles';
+import noImage from 'assets/noImage/noimage.png';
+import noUser from 'assets/noImage/nouser.gif';
 
 export const DetailPage = () => {
   const contentRef = React.useRef<HTMLDivElement>(null);
@@ -56,33 +58,33 @@ export const DetailPage = () => {
               likeCnt={data.likeCnt}
               commentCnt={data.commentCnt}
               onClick={handleGotoContent}
+              isLiked={data.likebool}
             ></Footer>
           }
         >
-          <StDetailPageContainer img={data.img_url}>
+          <StDetailPageContainer>
             <StDetailPageHeader>
-              {/* <img src={data.profileImg_url} /> */}
-              <img src="https://source.unsplash.com/random" />
-
+              <img src={data.profileImgUrl || noUser} />
               <h4>서초구 잠원로 155</h4>
               <p>지도보기</p>
             </StDetailPageHeader>
             <StTagWrapper>
-              {' '}
+              {data.tag.map((tag) => (
+                <Tag key={tag.id} text={tag.name} />
+              ))}
+
               <Tag text="동물친구들" />
               <Tag text="연인이랑" isSelected={true} />
               <AroundMapButton></AroundMapButton>
             </StTagWrapper>
             <StDetailPageInfo>
-              <h3>{data.nickname}</h3>
               <h6>{data.createdAt}</h6>
             </StDetailPageInfo>
             <StDetailPageContent>
-              <img src="https://source.unsplash.com/random" />
-
-              <img src="https://source.unsplash.com/random" />
-              <img src="https://source.unsplash.com/random" />
-              <img src={data.img_url} />
+              <img src={data.mainImgUrl || noImage} />
+              {data.subImgUrl.map((img, index) => (
+                <img key={index} src={img} />
+              ))}
 
               <p ref={contentRef}>
                 {data.content}본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의

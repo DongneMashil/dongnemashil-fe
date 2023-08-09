@@ -1,14 +1,9 @@
 // import { Button } from 'components/common';
 import { useInfiniteQuery } from '@tanstack/react-query';
-// import { axiosInstance } from 'api/api';
-import axios from 'axios';
+import { getComment } from 'api/detailApi';
 import React, { useEffect, useRef } from 'react';
-// import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-// import { useParams } from 'react-router-dom';
-// import { ReviewDetailComment, getReviewDetailComment } from 'api/detailApi';
-// import { useQuery } from '@tanstack/react-query';
 interface CommentsProps {
   reviewId: string;
   $isCommentShow?: boolean;
@@ -17,31 +12,22 @@ export const Comments = ({
   reviewId,
   $isCommentShow = false,
 }: CommentsProps) => {
-  // const { reviewId } = useParams<{ reviewId: string }>();
   if (!reviewId) {
     throw new Error('Review ID is missing');
   }
   const loader = useRef(null);
-  interface Comment {
-    id: number;
-    profileImgUrl: string;
-    nickname: string;
-    comment: string;
-  }
 
   const useInfinityScroll = () => {
     // useInfiniteQuery에서 쓸 함수
     const fetchComment = async ({ pageParam = 0 }) => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_SERVER_API_URL}/reviews/${reviewId}/comments?page=${pageParam}`
-      );
-      const result = response.data;
-      // axios로 받아온 데이터를 다음과 같이 변경!
-      console.log('👀' + JSON.stringify(result));
+      const response = await getComment(reviewId, pageParam);
+
+      console.log('👀' + JSON.stringify(response));
+
       return {
-        result: result.content,
+        result: response.comments,
         nextPage: pageParam + 1,
-        isLast: result.last,
+        isLast: response.last,
       };
     };
 
@@ -93,15 +79,25 @@ export const Comments = ({
         <StDetailPageCommentList>
           {data.pages
             .flatMap((page) => page.result)
-            .map((comment: Comment) => (
-              <StDetailPageCommentItem key={comment.id}>
-                <section>
-                  <img src={comment.profileImgUrl} alt="프로필 이미지" />
-                  <div className="nickname">{comment.nickname}</div>
-                </section>
-                <div className="content">{comment.comment}</div>
-              </StDetailPageCommentItem>
-            ))}
+            .map((comment, index) => {
+              if (!comment) return null; // 만약 comment가 null이라면, null을 반환합니다.
+              return (
+                <StDetailPageCommentItem key={comment.id}>
+                  <section>
+                    <img
+                      src={comment.profileImgUrl || ''}
+                      alt="프로필 이미지"
+                    />
+                    <div className="nickname">
+                      {comment.nickname}
+                      {index}
+                    </div>
+                  </section>
+                  <div className="content">{comment.comment}</div>
+                </StDetailPageCommentItem>
+              );
+            })}
+
           {isLoading && <div>로딩중...</div>}
 
           {!hasNextPage && <div>마지막 페이지입니다.</div>}
