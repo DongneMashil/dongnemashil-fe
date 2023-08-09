@@ -1,5 +1,6 @@
 import { ThumbnailProps } from 'components/homePage';
 import { rest } from 'msw';
+// import { reviewDetaiCommentHandler, reviewDetailHandler } from './reviewDetail';
 
 export interface PaginationResponse<T> {
   contents: T[];
@@ -10,15 +11,6 @@ export interface PaginationResponse<T> {
   isLastPage: boolean;
   isFirstPage: boolean;
 }
-
-export const commentsMock = Array.from({ length: 1000 }).map((_, id) => ({
-  reviewId: Math.floor(id / 30) + 1, // 예를 들어, 20개의 댓글마다 reviewId가 증가하게 설정
-  id: id + 1,
-  comment: `댓글 내용 ${id + 1}`,
-  nickname: `user${(id % 10) + 1}`, // 10명의 유저가 댓글을 작성
-  profileImgUrl: 'https://source.unsplash.com/random',
-  createdAt: new Date().toISOString(),
-}));
 
 export const result = Array.from(Array(1000).keys()).map(
   (id): ThumbnailProps => ({
@@ -54,55 +46,6 @@ export const handlers = [
       ctx.delay(500)
     );
   }),
-  rest.get('/api/reviews/:reviewId/comments', (req, res, ctx) => {
-    console.log(
-      'MSW: Intercepted GET request to /api/reviews/:reviewId/comments'
-    );
-
-    const { reviewId } = req.params;
-    const relevantComments = commentsMock.filter(
-      (comment) => comment.reviewId === Number(reviewId)
-    );
-    const { searchParams } = req.url;
-    const page = Number(searchParams.get('page') || 0);
-    const size = 8; // 하드코딩되어 있던 size 값을 조정했습니다.
-
-    const paginatedComments = relevantComments.slice(
-      page * size,
-      (page + 1) * size
-    );
-
-    const totalPages = Math.ceil(relevantComments.length / size);
-
-    return res(
-      ctx.status(200),
-      ctx.json({
-        content: paginatedComments,
-        pageable: {
-          sort: {
-            empty: true,
-            unsorted: true,
-            sorted: false,
-          },
-          offset: page * size,
-          pageNumber: page,
-          pageSize: size,
-          unpaged: totalPages === 0,
-          paged: totalPages > 0,
-        },
-        size: size,
-        number: page,
-        sort: {
-          empty: true,
-          unsorted: true,
-          sorted: false,
-        },
-        numberOfElements: paginatedComments.length,
-        first: page === 0,
-        last: totalPages <= page,
-        empty: paginatedComments.length === 0,
-      }),
-      ctx.delay(500)
-    );
-  }),
+  // reviewDetaiCommentHandler, //태현 test용
+  // reviewDetailHandler, //태현 test용
 ];
