@@ -17,19 +17,18 @@ export const StTabButtonContainer = styled.button<{ $selected: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50%;
-  height: 3rem;
-  border: none;
-  border-radius: 1.2rem 1.1rem 0 0;
+  padding: 0.3rem 1rem;
+  // width: 50%;
+  // height: 3rem;
+  border: ${({ $selected }) => ($selected ? '1px solid #d5d5d5' : 'none')};
+  border-radius: 1rem;
   background-color: ${({ $selected }) => ($selected ? '#fff' : '#f5f5f5')};
-  box-shadow: ${({ $selected }) =>
-    $selected ? '-2px -5px 20px 2px rgba(0, 0, 0, 0.1)' : 'none'};
+
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.82rem;
   font-style: normal;
-  font-weight: 700;
-  &:hover {
-    color: #8f6c8f;
-  }
+  font-weight: ${({ $selected }) => ($selected ? '600' : '300')};
+
   z-index: 1;
+  margin: 0.5rem 0;
 `;

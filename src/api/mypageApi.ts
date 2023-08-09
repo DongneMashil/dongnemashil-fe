@@ -1,5 +1,5 @@
 import { AxiosResponse, AxiosError } from 'axios';
-import { axiosWithToken } from './api';
+import { axiosInstance } from './api';
 
 export type ReviewDetail = {
   id: number;
@@ -21,7 +21,7 @@ export const getMypage = async (
 ): Promise<ReviewDetail> => {
   // 상세페이지 조회
   try {
-    const response: AxiosResponse<ReviewDetail> = await axiosWithToken.get(
+    const response: AxiosResponse<ReviewDetail> = await axiosInstance.get(
       `/reviews/${detailId}`
     );
     return response.data;
@@ -49,7 +49,7 @@ export const getMyPageDetails = async (
 ): Promise<MyPageDetail[]> => {
   try {
     const response: AxiosResponse<{ selectList: MyPageDetail[] }> =
-      await axiosWithToken.get(`/mypage/list?q=${qValue}`);
+      await axiosInstance.get(`/mypage/list?q=${qValue}`);
     return response.data.selectList;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {

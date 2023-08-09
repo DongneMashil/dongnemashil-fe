@@ -1,4 +1,4 @@
-import { Footer, TabMenu } from 'components/common/myPage';
+import { Footer, TabMenu, UserInfo } from 'components/common/myPage';
 import { CommonLayout, NavBar } from 'components/layout';
 import React from 'react';
 import { styled } from 'styled-components';
@@ -12,9 +12,10 @@ export const MyPage = () => {
       }
       footer={<Footer />}
       hideHeader={false}
+      backgroundColor="#f5f5f5"
     >
       <StMyPageContainer>
-        <h1>유저정보</h1>
+        <UserInfo />
         <TabMenu />
       </StMyPageContainer>
     </CommonLayout>
