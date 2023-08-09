@@ -45,10 +45,13 @@ export const WritePage = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const name = e.target.name as keyof FormValues;
     setFormValues({
       ...formValues,
-      [e.target.name]: e.target.value,
+      [name]: e.target.value,
     });
   };
 
@@ -198,7 +201,12 @@ export const WritePage = () => {
             onChange={onFileChange}
           />
           <StTagWwrapper>{renderTags()}</StTagWwrapper>
-          <StContentBox />
+          <StContentBox
+            name="content"
+            value={formValues.content}
+            onChange={onInputChange}
+            placeholder="산책은 어땠나요?"
+          />
         </StContentContainer>
       </CommonLayout>
     </>
