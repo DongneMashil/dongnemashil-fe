@@ -1,5 +1,5 @@
 import { AxiosResponse, AxiosError } from 'axios';
-import { axiosInstance, axiosWithToken } from './api';
+import { axiosInstance } from './api';
 
 export type ReviewDetail = {
   id: number;
@@ -60,13 +60,17 @@ export const getReviewDetailComment = async (
   }
 };
 
-export const likeReview = async (
-  reviewId: undefined | string
-): Promise<boolean> => {
+export const postComment = async (
+  reviewId: undefined | string,
+  comment: string
+): Promise<Comment> => {
+  // 댓글작성
   try {
-    const response: AxiosResponse<{ liked: boolean }> =
-      await axiosWithToken.post(`/api/like/${reviewId}`);
-    return response.data.liked;
+    const response: AxiosResponse<Comment> = await axiosInstance.post(
+      `/api/reviews/${reviewId}/comments`,
+      { comment }
+    );
+    return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data?.errorMessage || e.message);
@@ -75,12 +79,12 @@ export const likeReview = async (
   }
 };
 
-export const checkLikeStatus = async (
+export const postLike = async (
   reviewId: undefined | string
 ): Promise<boolean> => {
   try {
     const response: AxiosResponse<{ liked: boolean }> =
-      await axiosWithToken.get(`/api/like/${reviewId}`);
+      await axiosInstance.post(`/api/reviews/${reviewId}/likes`);
     return response.data.liked;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {

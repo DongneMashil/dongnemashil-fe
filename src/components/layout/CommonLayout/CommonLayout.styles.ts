@@ -21,11 +21,13 @@ export const StLayoutBody = styled.div`
 `;
 export const StLayoutSection = styled.div<{
   $headerHeight: string;
+  $backgroundColor: string;
 }>`
   padding-top: ${(props) => props.$headerHeight}; // 헤더 높이만큼 상단 패딩
   width: 100%;
   height: 100%;
-  background-color: #fff; // 기본 배경 색상 -> 추후 테마 적용
+  background-color: ${(props) =>
+    props.$backgroundColor}; // 기본 배경 색상 -> 추후 테마 적용
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;

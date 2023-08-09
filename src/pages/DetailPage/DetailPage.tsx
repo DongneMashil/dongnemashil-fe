@@ -1,11 +1,19 @@
 import React from 'react';
-// import { useNavigate } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { useQuery } from '@tanstack/react-query';
 import { getReviewDetail, ReviewDetail } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
+import { FooterSpacer, Tag } from 'components/common';
+import { AroundMapButton } from 'components/common/SpecialButtons/AroundMapButton';
+import {
+  StDetailPageContainer,
+  StDetailPageContent,
+  StDetailPageHeader,
+  StDetailPageInfo,
+  StNavTitle,
+  StTagWrapper,
+} from './DetailPage.styles';
 
 export const DetailPage = () => {
   const contentRef = React.useRef<HTMLDivElement>(null);
@@ -30,6 +38,7 @@ export const DetailPage = () => {
       });
     }
   };
+  console.log(data);
   return (
     <>
       {isLoading && <div>Loading...</div>}
@@ -38,7 +47,7 @@ export const DetailPage = () => {
         <CommonLayout
           header={
             <NavBar btnLeft={'logo'} btnRight={'mypage'}>
-              동네마실
+              <StNavTitle>{data.title}</StNavTitle>
             </NavBar>
           }
           footer={
@@ -52,18 +61,38 @@ export const DetailPage = () => {
         >
           <StDetailPageContainer img={data.img_url}>
             <StDetailPageHeader>
-              <h1>{data.title}</h1>
-              <StDetailPageInfo>
-                <h3>{data.nickname}</h3>
-                <h6>{data.createdAt}</h6>
-              </StDetailPageInfo>
+              {/* <img src={data.profileImg_url} /> */}
+              <img src="https://source.unsplash.com/random" />
+
+              <h4>서초구 잠원로 155</h4>
+              <p>지도보기</p>
             </StDetailPageHeader>
+            <StTagWrapper>
+              {' '}
+              <Tag text="동물친구들" />
+              <Tag text="연인이랑" isSelected={true} />
+              <AroundMapButton></AroundMapButton>
+            </StTagWrapper>
+            <StDetailPageInfo>
+              <h3>{data.nickname}</h3>
+              <h6>{data.createdAt}</h6>
+            </StDetailPageInfo>
             <StDetailPageContent>
               <img src="https://source.unsplash.com/random" />
+
               <img src="https://source.unsplash.com/random" />
               <img src="https://source.unsplash.com/random" />
               <img src={data.img_url} />
-              <p ref={contentRef}>{data.content}</p>
+
+              <p ref={contentRef}>
+                {data.content}본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의
+                샘플본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의
+                샘플본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의
+                샘플본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의
+                샘플본문의 샘플본문의 샘플본문의 샘플본문의 샘플
+              </p>
+
+              <FooterSpacer />
             </StDetailPageContent>
           </StDetailPageContainer>
         </CommonLayout>
@@ -71,59 +100,3 @@ export const DetailPage = () => {
     </>
   );
 };
-interface StDetailPageContainerProps {
-  img: string;
-}
-
-export const StDetailPageContainer = styled.div<StDetailPageContainerProps>`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  padding: 1rem;
-`;
-export const StDetailPageHeader = styled.div`
-  width: 100%;
-  height: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-`;
-
-export const StDetailPageInfo = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  h3 {
-    font-size: 16px;
-    font-weight: bold;
-    margin-right: 10px;
-  }
-  h6 {
-    font-size: 16px;
-  }
-`;
-
-export const StDetailPageContent = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 0.3rem;
-  img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-  }
-  p {
-    width: 100%;
-    height: 100px;
-    font-size: 16px;
-    line-height: 1.5;
-  }
-`;
