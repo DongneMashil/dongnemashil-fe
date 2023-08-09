@@ -1,4 +1,4 @@
-import { AxiosResponse, AxiosError } from 'axios';
+import { useInfiniteQuery, QueryFunctionContext } from '@tanstack/react-query';
 import { axiosInstance } from './api';
 
 export interface ResponseData {
@@ -40,36 +40,25 @@ export interface Pageable {
   unpaged: boolean;
 }
 
-// export const getReviews = async (
-//   type: string,
-//   page: number
-// ): Promise<ReviewsList[]> => {
-//   try {
-//     const res: AxiosResponse<ResponseData> = await axiosInstance.get(
-//       `/reviews?type=${type}&page=${page}`
-//     );
-//     return res.data.content;
-//   } catch (e: unknown) {
-//     if (e instanceof AxiosError) {
-//       throw new Error(e.response?.data?.errorMessage || e.message);
-//     }
-//     throw e;
-//   }
-// };
+interface PaginationParams {
+  type: string;
+}
 
-// export const getMoreDatas = async (
-//   type: string,
-//   page: number
-// ): Promise<ResponseData> => {
-//   try {
-//     const res: AxiosResponse<ResponseData> = await axiosInstance.get(
-//       `/reviews?type=${type}&page=${page}`
-//     );
-//     return res.data;
-//   } catch (e: unknown) {
-//     if (e instanceof AxiosError) {
-//       throw new Error(e.response?.data?.errorMessage || e.message);
-//     }
-//     throw e;
-//   }
-// };
+const reviewKeys = {
+  all: ['responseData'] as const,
+  lists: () => [...reviewKeys.all, 'list'] as const,
+  list: (type: string) => [...reviewKeys.lists(), { type }] as const,
+};
+
+export const useFetchReviews = ({ type }: PaginationParams) =>
+  useInfiniteQuery(
+    reviewKeys.lists(),
+    ({ pageParam = 1 }: QueryFunctionContext) =>
+      axiosInstance.get<ResponseData>('/reviews', {
+        params: { type, page: pageParam },
+      }),
+    {
+      getNextPageParam: ({ data: { last, number } }) =>
+        last ? undefined : number + 1,
+    }
+  );
