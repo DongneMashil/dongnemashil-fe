@@ -1,4 +1,5 @@
 import axios, { AxiosResponse, AxiosError, AxiosInstance } from 'axios';
+import { axiosInstance } from './api';
 // import { axiosInstance } from './api';
 
 const baseUrl = process.env.REACT_APP_SERVER_API_URL;
@@ -95,8 +96,8 @@ export const getComment = async (
   page?: number
 ): Promise<ExtendedReviewDetailComment> => {
   try {
-    const response: AxiosResponse<ResponseData> = await axios.get(
-      `${process.env.REACT_APP_SERVER_API_URL}/reviews/${detailId}/comments`,
+    const response: AxiosResponse<ResponseData> = await tempInstance.get(
+      `/reviews/${detailId}/comments`,
       {
         params: {
           page: page,
@@ -121,7 +122,7 @@ export const postComment = async (
 ): Promise<Comment> => {
   // 댓글작성
   try {
-    const response: AxiosResponse<Comment> = await tempInstance.post(
+    const response: AxiosResponse<Comment> = await axiosInstance.post(
       `/reviews/${reviewId}/comments`,
       { comment }
     );

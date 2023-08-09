@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { postComment } from 'api/detailApi';
 import { Button, Input } from 'components/common';
-import React from 'react';
+import React, { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
@@ -13,8 +13,8 @@ export const CommentInput = ({
   reviewId,
   $isCommentShow = false,
 }: FooterProps) => {
-  const [comment, setComment] = React.useState('');
-  const [isCommentPost, setIsCommentPost] = React.useState(false);
+  const [comment, setComment] = useState('');
+  const [isCommentPost, setIsCommentPost] = useState(false);
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
   };
