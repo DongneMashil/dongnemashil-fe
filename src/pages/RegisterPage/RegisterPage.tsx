@@ -5,6 +5,7 @@ import { register } from 'api/loginApi';
 import { StVerifyMsg } from './Registerpage.styles';
 import { useMutation } from '@tanstack/react-query';
 import { useVerifyUser } from 'hooks';
+import { useNavigate } from 'react-router-dom';
 
 interface RegitserProps {
   email: string;
@@ -35,6 +36,7 @@ interface VerifyMsgProps {
 export const RegisterPage = () => {
   const [shouldVerify, setShouldVerify] = useState(false);
   const { data } = useVerifyUser(shouldVerify);
+  const navigate = useNavigate();
 
   const [RegitserProps, setRegitserProps] = useState<RegitserProps>({
     email: '',
@@ -67,6 +69,7 @@ export const RegisterPage = () => {
   const { mutate } = useMutation(register, {
     onSuccess: () => {
       setShouldVerify(true);
+      navigate(`/`);
     },
     onError: (err) => {
       console.log('Register Error: ', err);
