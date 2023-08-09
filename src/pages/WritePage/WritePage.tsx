@@ -3,8 +3,6 @@ import {
   StContentBox,
   StContentContainer,
   StHiddenButton,
-  StTagBox,
-  StTagWwrapper,
   StTitle,
 } from './WritePage.styles';
 import { CommonLayout, NavBar } from 'components/layout';
@@ -12,6 +10,7 @@ import { FileSlider } from 'components/WritePage';
 import { useMutation } from '@tanstack/react-query';
 import { submitReview } from 'api/reviews';
 import { useNavigate } from 'react-router-dom';
+import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
 // import { useVerifyUser } from 'hooks';
 // import { useRecoilValue } from 'recoil';
 // import { userIsLoggedInSelector } from 'recoil/userExample';
@@ -22,20 +21,6 @@ interface FormValues {
 }
 
 export const WritePage = () => {
-  const tags = [
-    '한적',
-    '연인',
-    '동물',
-    '사진',
-    '아기',
-    '자전거',
-    '비',
-    '밤',
-    '그늘',
-    '화장실',
-    '자연',
-    '벤치',
-  ];
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState<FormValues>({
     title: '',
@@ -125,14 +110,8 @@ export const WritePage = () => {
     );
   };
 
-  const toggleTag = (tag: string) => {
-    setSelectedTags((prev) => {
-      if (prev.includes(tag)) {
-        return prev.filter((t) => t !== tag);
-      } else {
-        return [...prev, tag];
-      }
-    });
+  const handleTagChange = (tags: string[]) => {
+    setSelectedTags(tags);
   };
 
   const mutation = useMutation(submitReview);
@@ -167,14 +146,14 @@ export const WritePage = () => {
       (file) => file.isCover && file.type === 'image'
     );
     if (coverImage) {
-      formData.append('mainImgUrl', coverImage.file); // File 객체 사용
+      formData.append('mainImgUrl', coverImage.file);
     }
 
     mediaFiles.forEach((file) => {
       if (file.type === 'image' && !file.isCover) {
-        formData.append('subImgUrl', file.file); // File 객체 사용
+        formData.append('subImgUrl', file.file);
       } else if (file.type === 'video') {
-        formData.append('videoUrl', file.file); // File 객체 사용
+        formData.append('videoUrl', file.file);
       }
     });
 
@@ -193,36 +172,12 @@ export const WritePage = () => {
         }
       },
     });
-    // try {
-    //   const response = await submitReview(formData);
-    //   console.log('등록성공', response);
-    //   navigate(`/review/${response.id}`);
-    // } catch (error) {
-    //   if (typeof error === 'string') {
-    //     console.log('실패', error);
-    //   } else if (error instanceof Error) {
-    //     console.log('실패', error.message);
-    //   } else {
-    //     console.log('실패', error);
-    //   }
-    // }
   };
 
   const determineIsCoverImage = (targetFile: File) => {
     const file = mediaFiles.find((file) => file.file === targetFile);
     return file ? file.isCover : false;
   };
-
-  const renderTags = () =>
-    tags.map((tag) => (
-      <StTagBox
-        key={tag}
-        onClick={() => toggleTag(tag)}
-        $isSelected={selectedTags.includes(tag)}
-      >
-        {tag}
-      </StTagBox>
-    ));
 
   return (
     <>
@@ -245,7 +200,8 @@ export const WritePage = () => {
             onChange={onInputChange}
             placeholder="제목 입력"
           />
-          <StTagWwrapper>{renderTags()}</StTagWwrapper>
+          <ToggleTagButton onTagChange={handleTagChange} />
+
           <FileSlider
             files={mediaFiles}
             images={mediaFiles.map((file) => file.file)}
