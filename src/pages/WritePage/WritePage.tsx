@@ -18,7 +18,20 @@ interface FormValues {
 }
 
 export const WritePage = () => {
-  const tags = ['태그1', '태그2', '태그3', '태그4'];
+  const tags = [
+    '한적',
+    '연인',
+    '동물',
+    '사진',
+    '아기',
+    '자전거',
+    '비',
+    '밤',
+    '그늘',
+    '화장실',
+    '자연',
+    '벤치',
+  ];
 
   const [formValues, setFormValues] = useState<FormValues>({
     title: '',
@@ -26,7 +39,7 @@ export const WritePage = () => {
   });
   const [currentPage, setCurrentPage] = useState(0);
   const [mediaFiles, setMediaFiles] = useState<
-    { type: 'image' | 'video'; url: string }[]
+    { type: 'image' | 'video'; url: string; isCover: boolean }[]
   >([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -41,12 +54,10 @@ export const WritePage = () => {
 
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-
     if (mediaFiles.length + files.length > 5) {
       alert('이미지와 동영상의 합은 최대 5개까지 가능합니다.😱');
       return;
     }
-
     if (
       mediaFiles.filter((file) => file.type === 'video').length +
         files.filter((file) => file.type.startsWith('video/')).length >
@@ -55,19 +66,29 @@ export const WritePage = () => {
       alert('동영상은 한개만 가능합니다.😱');
       return;
     }
-
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = function () {
         const fileType = file.type.startsWith('image/') ? 'image' : 'video';
         setMediaFiles((prev) => [
           ...prev,
-          { type: fileType, url: reader.result as string },
+          { type: fileType, url: reader.result as string, isCover: false },
         ]);
       };
       reader.readAsDataURL(file);
     });
   };
+
+  const setCoverImage = (url: string) => {
+    setMediaFiles((prev) =>
+      prev.map((file) =>
+        file.url === url
+          ? { ...file, isCover: true }
+          : { ...file, isCover: false }
+      )
+    );
+  };
+
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) => {
       if (prev.includes(tag)) {
@@ -85,15 +106,29 @@ export const WritePage = () => {
   };
 
   const onSubmithandler = () => {
-    const combinedUrls = mediaFiles.map((file) => file.url).join(',');
-    const data = {
-      title: formValues.title,
-      content: formValues.content,
-      img_url: combinedUrls,
-      address: '서울시 영등포구 여의동로 330',
-      tag: selectedTags,
-    };
-    mutation.mutate(data, {
+    if (mediaFiles.length === 0) {
+      alert('이미지나 동영상을 무조건 하나 선택해야 합니다.');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('title', formValues.title);
+    formData.append('content', formValues.content);
+    formData.append('address', '서울시 영등포구 여의동로 330');
+    formData.append('tag', selectedTags.join(','));
+    const coverImage = mediaFiles.find(
+      (file) => file.isCover && file.type === 'image'
+    );
+    if (coverImage) {
+      formData.append('mainImgUrl', coverImage.url);
+    }
+    mediaFiles.forEach((file) => {
+      if (file.type === 'image' && !file.isCover) {
+        formData.append('subImgUrl', file.url);
+      } else if (file.type === 'video') {
+        formData.append('videoUrl', file.url);
+      }
+    });
+    mutation.mutate(formData, {
       onSuccess: (response) => {
         console.log('등록성공', response);
       },
@@ -108,6 +143,22 @@ export const WritePage = () => {
       },
     });
   };
+
+  const determineIsCoverImage = (url: string) => {
+    const file = mediaFiles.find((file) => file.url === url);
+    return file ? file.isCover : false;
+  };
+
+  const renderTags = () =>
+    tags.map((tag) => (
+      <StTagBox
+        key={tag}
+        onClick={() => toggleTag(tag)}
+        $isSelected={selectedTags.includes(tag)}
+      >
+        {tag}
+      </StTagBox>
+    ));
 
   return (
     <>
@@ -135,6 +186,9 @@ export const WritePage = () => {
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             onAddImage={onButtonClick}
+            onSelectedCoverImage={setCoverImage}
+            isCoverImage={determineIsCoverImage}
+            setCoverImage={setCoverImage}
           />
           <StHiddenButton
             ref={fileInputRef}
@@ -144,17 +198,7 @@ export const WritePage = () => {
             onChange={onFileChange}
           />
           <StContentBox />
-          <StTagWwrapper>
-            {tags.map((tag) => (
-              <StTagBox
-                key={tag}
-                onClick={() => toggleTag(tag)}
-                $isSelected={selectedTags.includes(tag)}
-              >
-                {tag}
-              </StTagBox>
-            ))}
-          </StTagWwrapper>
+          <StTagWwrapper>{renderTags()}</StTagWwrapper>
         </StContentContainer>
       </CommonLayout>
     </>

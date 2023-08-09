@@ -41,6 +41,6 @@ export const StTagBox = styled.span<{ $isSelected: boolean }>`
   border-radius: 1rem;
   font-size: 14px;
   padding: 0 0.79rem
-  background-color:${({ $isSelected }) =>
-    $isSelected ? '#b5a6ca' : 'transparent'};
+  /* background-color:${($isSelected) =>
+    $isSelected ? '#b5a6ca' : 'transparent'}; */
 `;

@@ -68,3 +68,20 @@ export const ArrowButton = styled.button<{ left?: boolean }>`
     opacity: 0.3;
   }
 `;
+
+export const CoverImageButton = styled.button<{ isActive: boolean }>`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: ${props => (props.isActive ? 'green' : 'grey')};
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
+`;

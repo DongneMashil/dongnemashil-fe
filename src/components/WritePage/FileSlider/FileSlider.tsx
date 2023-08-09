@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ArrowButton,
   CenteredBox,
+  CoverImageButton,
   Indicator,
   PageIndicators,
   SlideContainer,
@@ -15,6 +16,9 @@ interface ImageSliderProps {
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   onAddImage: () => void;
+  onSelectedCoverImage?: (url: string) => void;
+  isCoverImage: (url: string) => boolean;
+  setCoverImage: (url: string) => void;
 }
 
 export const FileSlider: React.FC<ImageSliderProps> = ({
@@ -22,6 +26,9 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   currentPage,
   setCurrentPage,
   onAddImage,
+  onSelectedCoverImage,
+  isCoverImage,
+  setCoverImage,
 }) => {
   const onSlideButtonHandler = (direction: 'left' | 'right') => {
     if (direction === 'left' && currentPage > 0) {
@@ -46,10 +53,22 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
             <StPlusButton onClick={onAddImage}>+</StPlusButton>
           </CenteredBox>
         ) : images[currentPage].startsWith('data:image') ? (
-          <StyledImage
-            src={images[currentPage]}
-            alt={`Upload Preview ${currentPage}`}
-          />
+          <>
+            <StyledImage
+              src={images[currentPage]}
+              alt={`Upload Preview ${currentPage}`}
+              onClick={() =>
+                onSelectedCoverImage &&
+                onSelectedCoverImage(images[currentPage])
+              }
+            />
+            <CoverImageButton
+              isActive={isCoverImage(images[currentPage])}
+              onClick={() => setCoverImage(images[currentPage])}
+            >
+              대표
+            </CoverImageButton>
+          </>
         ) : (
           <StyledVideo src={images[currentPage]} controls />
         )}
