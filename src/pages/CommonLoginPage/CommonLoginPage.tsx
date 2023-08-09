@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Input, Button } from 'components/common';
 import { login } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
@@ -11,9 +11,10 @@ interface CommonLoginProps {
 
 export const CommonLoginPage = () => {
   const [shouldVerify, setShouldVerify] = useState(false);
-  const { data } = useVerifyUser(shouldVerify);
+  const { data, isLoading, isError, isSuccess } = useVerifyUser(shouldVerify);
   const { mutate } = useMutation(login, {
     onSuccess: () => {
+      console.log('Common Login Success ', data);
       setShouldVerify(true);
     },
     onError: (err) => {
@@ -42,13 +43,17 @@ export const CommonLoginPage = () => {
     });
   };
 
-  useEffect(() => {
-    if (data) {
-      console.log('Common Login Success ', data);
-      window.location.href = '/';
-    }
-  }, []);
-
+  if (isLoading) {
+    console.log('로그인 처리중');
+  }
+  if (isError) {
+    console.log('로그인 실패');
+  }
+  if (isSuccess) {
+    data && console.log('Common Login Success ', data);
+    setShouldVerify(false);
+    window.location.href = '/';
+  }
   console.log('loginValues', loginValues);
   return (
     <div>
