@@ -84,3 +84,16 @@ export const getNewAccessToken = () => {
       window.location.href = '/';
     });
 };
+
+/** logout */
+export const logout = async () => {
+  try {
+    const res = await axiosInstance.get(`/logout`);
+    console.log('Successfully logged out, ', res.data);
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
+  }
+};
