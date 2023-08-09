@@ -8,15 +8,22 @@ import { useVerifyUser } from 'hooks';
 
 export const HomePage = () => {
   const [shouldVerify, setShouldVerify] = useState(false);
+  // const [shouldLogout, setShouldLogout] = useState(false);
 
   const { data } = useVerifyUser(shouldVerify);
+  // const { dataLogout } = useVerifyUser(shouldLogout);
 
   const onVerifyHandler = useCallback(() => {
     setShouldVerify(true);
   }, []);
 
+  const onLogoutHandler = useCallback(() => {
+    // setShouldLogout(true);
+  }, []);
+
   useEffect(() => {
     if (data) console.log(data);
+    // if (dataLogout) console.log(dataLogout);
   }, []);
 
   return (
@@ -31,6 +38,7 @@ export const HomePage = () => {
       <div style={{ display: 'flex', gap: '15px', marginTop: '30px' }}>
         <Button onClick={onVerifyHandler}>Verify User</Button>
         <Button onClick={getNewAccessToken}>Get New Access Token</Button>
+        <Button onClick={onLogoutHandler}>Logout</Button>
       </div>
       <MapWrapper />
     </CommonLayout>
