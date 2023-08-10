@@ -3,6 +3,7 @@ import { Input, Button } from 'components/common';
 import { login } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
+import { useVerifyUser } from 'hooks';
 
 interface CommonLoginProps {
   id: string;
@@ -11,9 +12,12 @@ interface CommonLoginProps {
 
 export const CommonLoginPage = () => {
   const navigate = useNavigate();
-  const { mutate, isSuccess } = useMutation(login, {
+  const [shouldVerify, setShouldVerify] = useState(false);
+  const { isSuccess } = useVerifyUser(shouldVerify);
+  const { mutate } = useMutation(login, {
     onSuccess: () => {
       console.log('Common Login Success');
+      setShouldVerify(true);
     },
     onError: (err) => {
       console.log('Common Login Error:', err);
