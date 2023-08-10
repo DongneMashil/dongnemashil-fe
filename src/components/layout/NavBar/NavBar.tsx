@@ -7,16 +7,20 @@ export interface NavBarProps {
   children: React.ReactNode;
   btnLeft?: 'logo' | 'back';
   btnRight?: 'close' | 'mypage' | 'submit' | null;
+  onClickSubmit?: () => void;
 }
 
-export const NavBar = ({ btnLeft, btnRight, children }: NavBarProps) => {
+export const NavBar = ({
+  btnLeft,
+  btnRight,
+  children,
+  onClickSubmit,
+}: NavBarProps) => {
   const navigate = useNavigate();
 
   const goBack = () => {
     navigate(-1);
   };
-
-  const onClickSubmit = () => {};
 
   return (
     <StNavBar>
