@@ -9,4 +9,9 @@ export const StNavBar = styled.div<NavBarProps>`
   height: 50px;
   padding: 0 10px;
   background: #ffffff;
+
+  & div {
+    display: flex;
+    gap: 2px;
+  }
 `;
