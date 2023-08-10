@@ -59,6 +59,6 @@ export const useFetchReviews = ({ type }: PaginationParams) =>
       }),
     {
       getNextPageParam: ({ data: { last, number } }) =>
-        last ? undefined : number + 1,
+        last ? undefined : number + 2,
     }
   );
