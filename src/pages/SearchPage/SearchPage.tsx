@@ -10,7 +10,10 @@ export const SearchPage = () => {
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
-  const onSubmitHandler = (e: React.ChangeEvent<HTMLInputElement>) => {};
+  const onSubmitHandler = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.preventDefault();
+    console.log('onSubmitHandler');
+  };
   return (
     <CommonLayout>
       <StSearchHeader>
@@ -27,7 +30,7 @@ export const SearchPage = () => {
           placeholder="예) 강남구"
         />
       </StSearchHeader>
-      <Button>test용 전송버튼</Button>
+      <Button onClick={onSubmitHandler}>test용 전송버튼</Button>
     </CommonLayout>
   );
 };
