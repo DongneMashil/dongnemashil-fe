@@ -10,11 +10,8 @@ export const StTagWrapper = styled.div`
   gap: 0.5rem;
   margin: 0.5rem 0;
 `;
-interface StDetailPageContainerProps {
-  img: string;
-}
 
-export const StDetailPageContainer = styled.div<StDetailPageContainerProps>`
+export const StDetailPageContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
