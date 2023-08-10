@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getReviewDetail, ReviewDetail } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
@@ -15,13 +15,16 @@ import {
 } from './DetailPage.styles';
 import noImage from 'assets/noImage/noimage.png';
 import noUser from 'assets/noImage/nouser.gif';
+import useTimeAgo from 'hooks/useTimeAgo';
 
 export const DetailPage = () => {
-  const contentRef = React.useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const { reviewId } = useParams<{ reviewId: string }>();
   if (!reviewId) {
     throw new Error('Review ID is missing');
   }
+
   const { data, isLoading, isError, error } = useQuery<ReviewDetail, Error>({
     queryKey: ['reviewDetail', reviewId],
     queryFn: () => getReviewDetail(reviewId),
@@ -39,7 +42,7 @@ export const DetailPage = () => {
       });
     }
   };
-  console.log(data);
+
   return (
     <>
       {isLoading && <div>Loading...</div>}
@@ -73,7 +76,7 @@ export const DetailPage = () => {
               ))}
             </StTagWrapper>
             <StDetailPageInfo>
-              <h6>{data.createdAt}</h6>
+              <h6>{useTimeAgo(data.createdAt)}</h6>
             </StDetailPageInfo>
             <StDetailPageContent>
               <img src={data.mainImgUrl || noImage} />

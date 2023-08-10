@@ -2,6 +2,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getComment } from 'api/detailApi';
 import SkeletonUI from 'components/common/SkeletonUI/SkeletonUI';
+import useTimeAgo from 'hooks/useTimeAgo';
 import React, { useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 
@@ -17,7 +18,7 @@ export const Comments = ({
     throw new Error('Review ID is missing');
   }
   const loader = useRef(null);
-
+  const [timeAgos, setTimeAgos] = React.useState<string[]>([]);
   const useInfinityScroll = () => {
     // useInfiniteQuery에서 쓸 함수
     const fetchComment = async ({ pageParam = 1 }) => {
@@ -55,6 +56,15 @@ export const Comments = ({
     }
   };
   useEffect(() => {
+    setTimeAgos(
+      data
+        ? data.pages
+            .flatMap((page) => page.result)
+            .map((comment) => (comment ? useTimeAgo(comment.createdAt) : null))
+            .filter((timeAgo): timeAgo is string => timeAgo !== null)
+        : []
+    );
+    console.log('timeAgos👁️' + JSON.stringify(timeAgos));
     // Intersection Observer를 설정
     const options = {
       root: null, // viewport를 기준으로 함
@@ -89,10 +99,8 @@ export const Comments = ({
                       src={comment.profileImgUrl || ''}
                       alt="프로필 이미지"
                     />
-                    <div className="nickname">
-                      {comment.nickname}
-                      {index}
-                    </div>
+                    <div className="nickname">{comment.nickname}</div>
+                    <div className="date">{timeAgos[index]}</div>
                   </section>
                   <div className="content">{comment.comment}</div>
                 </StDetailPageCommentItem>
@@ -166,6 +174,12 @@ export const StDetailPageCommentItem = styled.div`
     font-size: 1rem;
     font-weight: 600;
     margin-right: 10px;
+  }
+  .date {
+    font-size: 0.875rem;
+    color: gray;
+    margin-right: 10px;
+    margin-left: auto;
   }
 
   .content {
