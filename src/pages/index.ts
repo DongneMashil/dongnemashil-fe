@@ -9,3 +9,5 @@ export * from './WriteMapPage/WriteMapPage';
 export * from './CommonLoginPage/CommonLoginPage';
 export * from './MyPage/MyPage';
 export * from './SearchPage/SearchPage';
+export * from './WriteMapPage/WriteMapPage';
+export * from './WritePage/WritePage';
