@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Input, Button } from 'components/common';
 import { login } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
-import { useVerifyUser } from 'hooks';
+import { useNavigate } from 'react-router';
 
 interface CommonLoginProps {
   id: string;
@@ -10,15 +10,13 @@ interface CommonLoginProps {
 }
 
 export const CommonLoginPage = () => {
-  const [shouldVerify, setShouldVerify] = useState(false);
-  const { data, isLoading, isError, isSuccess } = useVerifyUser(shouldVerify);
-  const { mutate } = useMutation(login, {
+  const navigate = useNavigate();
+  const { mutate, isSuccess } = useMutation(login, {
     onSuccess: () => {
-      console.log('Common Login Success ', data);
-      setShouldVerify(true);
+      console.log('Common Login Success');
     },
     onError: (err) => {
-      console.log('Common Login Error: ', err);
+      console.log('Common Login Error:', err);
     },
   });
 
@@ -43,16 +41,11 @@ export const CommonLoginPage = () => {
     });
   };
 
-  if (isLoading) {
-    console.log('로그인 처리중');
-  }
-  if (isError) {
-    console.log('로그인 실패');
-  }
   if (isSuccess) {
-    data && console.log('Common Login Success ', data);
-    setShouldVerify(false);
-    window.location.href = '/';
+    console.log('로그인 성공');
+    navigate({
+      pathname: `/`,
+    });
   }
   console.log('loginValues', loginValues);
   return (

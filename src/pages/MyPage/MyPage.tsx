@@ -3,11 +3,14 @@ import { Button } from 'components/common';
 import { logout } from 'api/loginApi';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { UserState, userProfileSelector } from 'recoil/userExample';
 
 export const MyPage = () => {
   const navigate = useNavigate();
+  const setUserState = useSetRecoilState(userProfileSelector);
   const [shouldLogout, setShouldLogout] = useState(false);
-  const { data, isLoading, isError, isSuccess, error } = useQuery({
+  const logoutHook = useQuery({
     queryKey: ['logout'],
     queryFn: () => logout(),
     enabled: shouldLogout,
@@ -20,21 +23,26 @@ export const MyPage = () => {
     setShouldLogout(true);
   }, []);
 
-  if (isLoading) {
+  if (logoutHook.isLoading) {
     console.log('로그아웃 시도중');
   }
-  if (isError) {
-    console.log('로그아웃 실패 ', error);
+  if (logoutHook.isError) {
+    console.log('로그아웃 실패 ', logoutHook.error);
   }
-  if (isSuccess) {
-    console.log('로그아웃 완료', data);
-    setShouldLogout(false);
+  if (logoutHook.isSuccess) {
+    console.log('로그아웃 완료', logoutHook.data);
+    const newData: UserState = {
+      userId: '',
+      nickName: '',
+      profileImage: '',
+      isLoggedIn: false,
+    };
+    setUserState(newData);
     navigate(`/`);
   }
   return (
     <div>
       <h3>Mypage</h3>
-
       <div style={{ padding: '80px 0' }}>
         <Button onClick={onLogoutHandler}>Logout</Button>
       </div>

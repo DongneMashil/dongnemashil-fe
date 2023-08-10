@@ -12,7 +12,6 @@ export interface tempUserState {
  * @param {boolean} shouldVerify - useQuery 실행 여부 제어하는 값
  */
 export const useVerifyUser = (shouldVerify: boolean) => {
-  //const queryClient = useQueryClient();
   const setUserState = useSetRecoilState(userProfileSelector);
 
   return useQuery<tempUserState, Error>({
