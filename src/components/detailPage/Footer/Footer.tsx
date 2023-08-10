@@ -7,25 +7,22 @@ import { ReactComponent as CommentIcon } from 'assets/icons/Comment.svg';
 import { ReactComponent as ContentIcon } from 'assets/icons/Content.svg';
 import { Comments } from '../Comments/Comments';
 import { CommentInput } from '../CommentInput/CommentInput';
-import { postLikeOptimistic } from 'api/detailApi';
+import { useLike } from 'hooks';
 
 interface FooterProps {
   reviewId: string;
   likeCnt: number;
   commentCnt: number;
   onClick?: () => void;
-  isLiked?: boolean;
-  // isCommentOpen?: boolean;
+  isLiked: boolean;
 }
 export const Footer = ({
   reviewId,
-  likeCnt: initialLikeCnt = 0,
+  likeCnt: initialLikeCnt,
   commentCnt = 0,
   onClick,
-  isLiked: initialIsLiked = false, // isCommentOpen = false,
+  isLiked: initialIsLiked,
 }: FooterProps) => {
-  const [isLiked, setIsLiked] = useState(initialIsLiked);
-  const [likeCnt, setLikeCnt] = useState(initialLikeCnt);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [isCommentShow, setIsCommentShow] = useState(false);
   useEffect(() => {
@@ -39,33 +36,16 @@ export const Footer = ({
     }
   }, [isCommentOpen]);
 
-  const onLikeClickHandler = async () => {
-    const previousIsLiked = isLiked; // 이전 좋아요 상태
-    const optimisticLikeCnt = isLiked ? likeCnt - 1 : likeCnt + 1; // 낙관적 업데이트 값
-    setIsLiked(!isLiked); // 낙관적 업데이트 실행
-    setLikeCnt(optimisticLikeCnt); // 낙관적 업데이트 실행
-
-    try {
-      const result = await postLikeOptimistic(reviewId, previousIsLiked);
-      if (result !== !previousIsLiked) {
-        // API 응답과 낙관적 업데이트의 결과가 다르면 api기준으로 업데이트
-        setIsLiked(result); // API 응답으로 결과만 업데이트
-        setLikeCnt(likeCnt); // 원래의 좋아요 수로 되돌립니다.
-        //(이 페이지 진입 후, 별도의 페이지에서 이용자가 수정을 했다고 가정하고, 기존 숫자가 맞는걸로 가정함)
-      }
-    } catch (error) {
-      setTimeout(() => {
-        console.log('좋아요 처리 중 오류가 발생했습니다.'); // 오류 처리
-        setIsLiked(previousIsLiked);
-        setLikeCnt(likeCnt); // 원래의 좋아요 수로 되돌립니다.
-      }, 1000); // 1초 후에 실행 (테스트시 너무 안보여서)
-    }
-  };
+  const { isLiked, likeCnt, toggleLikeHandler } = useLike({
+    reviewId,
+    initialIsLiked,
+    initialLikeCnt,
+  });
 
   return (
     <StFooterContatiner $isCommentOpen={isCommentOpen}>
       <StFooterButtonWrapper>
-        <StLike onClick={onLikeClickHandler}>
+        <StLike onClick={toggleLikeHandler}>
           {isLiked ? <FilledHeart /> : <Heart />}
           {likeCnt}
         </StLike>

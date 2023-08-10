@@ -1,6 +1,6 @@
 import { ThumbnailProps } from 'components/homePage';
 import { rest } from 'msw';
-// import { reviewDetaiCommentHandler, reviewDetailHandler } from './reviewDetail';
+import { reviewDetaiCommentHandler } from './reviewDetail';
 
 export interface PaginationResponse<T> {
   contents: T[];
@@ -46,6 +46,6 @@ export const handlers = [
       ctx.delay(500)
     );
   }),
-  // reviewDetaiCommentHandler, //태현 test용
+  reviewDetaiCommentHandler, //태현 test용
   // reviewDetailHandler, //태현 test용
 ];
