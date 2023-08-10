@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { verifyUser, UserStateRes } from 'api/loginApi';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { UserState, userProfileSelector } from 'recoil/userExample';
 // import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +10,6 @@ import { UserState, userProfileSelector } from 'recoil/userExample';
 export const useVerifyUser = (shouldVerify: boolean = true) => {
   // const navigate = useNavigate();
   const setUserState = useSetRecoilState(userProfileSelector);
-  const userState = useRecoilValue(userProfileSelector);
 
   return useQuery<UserStateRes, Error>({
     queryKey: ['isUserValid'],
@@ -23,7 +22,7 @@ export const useVerifyUser = (shouldVerify: boolean = true) => {
         isLoggedIn: true,
       };
       setUserState(newData);
-      console.log('user is valid', userState);
+      console.log('user is valid');
     },
     onError: () => {
       console.log('user is invalid');
