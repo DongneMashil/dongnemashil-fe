@@ -50,31 +50,29 @@ export const CommentInput = ({
   //     alert('댓글 등록에 실패했습니다.');
   //   },
   // });
-  const onSubmitHandler = () => {
+  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     console.log(comment);
-    // setIsCommentPost(true);
     commentMutation.mutate(comment);
   };
 
   return (
     <StFooterContatiner $isCommentShow={$isCommentShow}>
-      <StFooterWrapper>
-        {' '}
+      <StFooterWrapper onSubmit={onSubmitHandler}>
         <Input
           placeholder="댓글을 입력해주세요"
           onChange={onChangeHandler}
           value={comment}
         />
-        <Button type={'normal'} onClick={onSubmitHandler}>
-          등록
-        </Button>
+        <Button inputType="submit" type={'normal'} value="등록" />
       </StFooterWrapper>
     </StFooterContatiner>
   );
 };
 
 export const StFooterWrapper = styled.form`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 80px;
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;

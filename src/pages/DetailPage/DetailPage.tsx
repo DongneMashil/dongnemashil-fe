@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
 import { FooterSpacer, Tag } from 'components/common';
-import { AroundMapButton } from 'components/common/SpecialButtons/AroundMapButton';
 import {
   StDetailPageContainer,
   StDetailPageContent,
@@ -65,17 +64,13 @@ export const DetailPage = () => {
           <StDetailPageContainer>
             <StDetailPageHeader>
               <img src={data.profileImgUrl || noUser} />
-              <h4>서초구 잠원로 155</h4>
+              <h4>{data.address || '주소없음'}</h4>
               <p>지도보기</p>
             </StDetailPageHeader>
             <StTagWrapper>
               {data.tag.map((tag) => (
                 <Tag key={tag.id} text={tag.name} />
               ))}
-
-              <Tag text="동물친구들" />
-              <Tag text="연인이랑" isSelected={true} />
-              <AroundMapButton></AroundMapButton>
             </StTagWrapper>
             <StDetailPageInfo>
               <h6>{data.createdAt}</h6>

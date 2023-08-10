@@ -1,6 +1,7 @@
 // import { Button } from 'components/common';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getComment } from 'api/detailApi';
+import SkeletonUI from 'components/common/SkeletonUI/SkeletonUI';
 import React, { useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 
@@ -100,9 +101,14 @@ export const Comments = ({
 
           {isLoading && <div>로딩중...</div>}
 
-          {!hasNextPage && <div>마지막 페이지입니다.</div>}
-          <div ref={loader}>reef</div>
-          <StFooterSpacer />
+          {hasNextPage && (
+            <>
+              <SkeletonUI ref={loader} width="100%" height="80px" />
+              <SkeletonUI width="100%" height="80px" />
+              <SkeletonUI width="100%" height="80px" />
+              <SkeletonUI width="100%" height="80px" />
+            </>
+          )}
         </StDetailPageCommentList>
       )}
     </StDetailPageComment>
@@ -119,7 +125,7 @@ export const StDetailPageComment = styled.div<{ $isCommentShow: boolean }>`
 `;
 export const StDetailPageCommentList = styled.div`
   width: 100%;
-  height: 100%;
+  // height: 100%;  이거 넣으면 이상하게 레이아웃 깨짐(최하단 spacer가 높이가 0이됨)
   display: flex;
   flex-direction: column;
   gap: 10px;

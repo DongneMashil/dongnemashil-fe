@@ -54,7 +54,7 @@ export const Footer = ({
         </StComment>
         {isCommentOpen ? (
           <Button type={'onlytext'} onClick={() => setIsCommentOpen(false)}>
-            <ContentIcon /> 댓글 닫기
+            ✕
           </Button>
         ) : (
           <Button type={'onlytext'} onClick={onClick}>
