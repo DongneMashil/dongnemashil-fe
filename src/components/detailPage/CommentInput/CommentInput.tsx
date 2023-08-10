@@ -3,8 +3,7 @@ import { postComment } from 'api/detailApi';
 import { Button, Input } from 'components/common';
 import { queryClient } from 'queries/queryClient';
 import React, { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-import { styled } from 'styled-components';
+import { StFooterContatiner, StFooterWrapper } from './CommentInput.styles';
 
 interface FooterProps {
   reviewId: string;
@@ -15,7 +14,6 @@ export const CommentInput = ({
   $isCommentShow = false,
 }: FooterProps) => {
   const [comment, setComment] = useState('');
-  // const [isCommentPost, setIsCommentPost] = useState(false);
 
   const commentMutation = useMutation(
     (newComment: string) => postComment(reviewId, newComment),
@@ -69,38 +67,3 @@ export const CommentInput = ({
     </StFooterContatiner>
   );
 };
-
-export const StFooterWrapper = styled.form`
-  display: grid;
-  grid-template-columns: 1fr 80px;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 10px;
-  gap: 10px;
-  width: 100%;
-  height: 100%;
-`;
-
-export const StFooterContatiner = styled.footer<{ $isCommentShow: boolean }>`
-  opacity: ${({ $isCommentShow }) => ($isCommentShow ? 1 : 0)};
-  transition: all 0.1s ease-in-out;
-  background-color: #fff;
-  height: 75px;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-export const StLike = styled.div`
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
-  cursor: pointer;
-`;
-
-export const StComment = styled.div`
-  display: flex;
-  align-items: center;
-  padding-right: 10px;
-  cursor: pointer;
-`;

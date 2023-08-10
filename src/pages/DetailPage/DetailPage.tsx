@@ -15,7 +15,7 @@ import {
 } from './DetailPage.styles';
 import noImage from 'assets/noImage/noimage.png';
 import noUser from 'assets/noImage/nouser.gif';
-import useTimeAgo from 'hooks/useTimeAgo';
+import timeAgo from 'utils/timeAgo';
 
 export const DetailPage = () => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -76,7 +76,7 @@ export const DetailPage = () => {
               ))}
             </StTagWrapper>
             <StDetailPageInfo>
-              <h6>{useTimeAgo(data.createdAt)}</h6>
+              <h6>{timeAgo(data.createdAt)}</h6>
             </StDetailPageInfo>
             <StDetailPageContent>
               <img src={data.mainImgUrl || noImage} />
@@ -84,13 +84,7 @@ export const DetailPage = () => {
                 <img key={index} src={img} />
               ))}
 
-              <p ref={contentRef}>
-                {data.content}본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의
-                샘플본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의
-                샘플본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의
-                샘플본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의
-                샘플본문의 샘플본문의 샘플본문의 샘플본문의 샘플
-              </p>
+              <p ref={contentRef}>{data.content}</p>
 
               <FooterSpacer />
             </StDetailPageContent>

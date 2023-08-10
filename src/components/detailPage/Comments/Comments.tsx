@@ -1,10 +1,13 @@
-// import { Button } from 'components/common';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getComment } from 'api/detailApi';
 import SkeletonUI from 'components/common/SkeletonUI/SkeletonUI';
-import useTimeAgo from 'hooks/useTimeAgo';
 import React, { useEffect, useRef } from 'react';
-import { styled } from 'styled-components';
+import timeAgo from 'utils/timeAgo';
+import {
+  StDetailPageComment,
+  StDetailPageCommentItem,
+  StDetailPageCommentList,
+} from './Comments.styles';
 
 interface CommentsProps {
   reviewId: string;
@@ -18,14 +21,9 @@ export const Comments = ({
     throw new Error('Review ID is missing');
   }
   const loader = useRef(null);
-  const [timeAgos, setTimeAgos] = React.useState<string[]>([]);
   const useInfinityScroll = () => {
-    // useInfiniteQuery에서 쓸 함수
     const fetchComment = async ({ pageParam = 1 }) => {
       const response = await getComment(reviewId, pageParam);
-
-      console.log('👀' + JSON.stringify(response));
-
       return {
         result: response.content,
         nextPage: pageParam + 1,
@@ -56,22 +54,12 @@ export const Comments = ({
     }
   };
   useEffect(() => {
-    setTimeAgos(
-      data
-        ? data.pages
-            .flatMap((page) => page.result)
-            .map((comment) => (comment ? useTimeAgo(comment.createdAt) : null))
-            .filter((timeAgo): timeAgo is string => timeAgo !== null)
-        : []
-    );
-    console.log('timeAgos👁️' + JSON.stringify(timeAgos));
     // Intersection Observer를 설정
     const options = {
       root: null, // viewport를 기준으로 함
       rootMargin: '0px', //감지위치
       threshold: 0.1, // target이 viewport의 100% 경계선을 넘어가면 콜백 실행
     };
-    console.log('data.pages👁️' + JSON.stringify(data?.pages));
 
     const observer = new IntersectionObserver(handleLoadMore, options);
     if (loader.current) {
@@ -90,8 +78,8 @@ export const Comments = ({
         <StDetailPageCommentList>
           {data.pages
             .flatMap((page) => page.result)
-            .map((comment, index) => {
-              if (!comment) return null; // 만약 comment가 null이라면, null을 반환합니다.
+            .map((comment) => {
+              if (!comment) return null;
               return (
                 <StDetailPageCommentItem key={comment.id}>
                   <section>
@@ -100,7 +88,7 @@ export const Comments = ({
                       alt="프로필 이미지"
                     />
                     <div className="nickname">{comment.nickname}</div>
-                    <div className="date">{timeAgos[index]}</div>
+                    <div className="date">{timeAgo(comment.createdAt)}</div>
                   </section>
                   <div className="content">{comment.comment}</div>
                 </StDetailPageCommentItem>
@@ -122,71 +110,3 @@ export const Comments = ({
     </StDetailPageComment>
   );
 };
-export const StDetailPageComment = styled.div<{ $isCommentShow: boolean }>`
-  opacity: ${({ $isCommentShow }) => ($isCommentShow ? 1 : 0)};
-  transition: all 0.1s ease-in-out;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  min-height: calc(850px);
-`;
-export const StDetailPageCommentList = styled.div`
-  width: 100%;
-  // height: 100%;  이거 넣으면 이상하게 레이아웃 깨짐(최하단 spacer가 높이가 0이됨)
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-export const StDetailPageCommentInput = styled.div`
-  width: 100%;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const StDetailPageCommentItem = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 10px;
-  padding: 1rem;
-  border-radius: 0.875rem;
-  background: #fbfbfb;
-
-  section {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  img {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-
-  .nickname {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-right: 10px;
-  }
-  .date {
-    font-size: 0.875rem;
-    color: gray;
-    margin-right: 10px;
-    margin-left: auto;
-  }
-
-  .content {
-    line-height: 1.3;
-  }
-`;
-
-export const StFooterSpacer = styled.div`
-  height: 50px;
-`;
