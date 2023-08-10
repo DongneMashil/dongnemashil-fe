@@ -16,5 +16,12 @@ export const StThumbnail = styled.div`
     justify-content: space-between;
     align-items: center;
     bottom: 130px;
+
+    & span img {
+      vertical-align: middle;
+      transform: translateY(-2px);
+
+      margin-right: 10px;
+    }
   }
 `;

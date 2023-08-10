@@ -34,7 +34,7 @@ export const HomePage = () => {
           <ToggleTagButton onTagChange={handleTagChange} />
         </>
       }
-      headerHeight={'200px'}
+      headerHeight={'150px'}
     >
       <ThumbnailWrapper selectedTags={selectedTags} />
     </CommonLayout>
