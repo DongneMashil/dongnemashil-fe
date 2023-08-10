@@ -73,7 +73,7 @@ export const CommentInput = ({
   );
 };
 
-export const StFooterWrapper = styled.div`
+export const StFooterWrapper = styled.form`
   display: flex;
   justify-content: space-between;
   align-items: center;
