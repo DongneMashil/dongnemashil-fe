@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { verifyUser } from 'api/loginApi';
+import { logout } from 'api/loginApi';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { UserState, userProfileSelector } from 'recoil/userExample';
 
@@ -12,7 +12,7 @@ export const useLogout = (shouldVerify: boolean = true) => {
 
   const { isSuccess, isError } = useQuery({
     queryKey: ['logout'],
-    queryFn: () => verifyUser(),
+    queryFn: () => logout(),
     enabled: shouldVerify,
     onSuccess: () => {
       const newData: UserState = {
