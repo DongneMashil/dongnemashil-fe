@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Input, Button } from 'components/common';
 import { login } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router';
 import { useVerifyUser } from 'hooks';
 
 interface CommonLoginProps {
@@ -10,14 +11,16 @@ interface CommonLoginProps {
 }
 
 export const CommonLoginPage = () => {
+  const navigate = useNavigate();
   const [shouldVerify, setShouldVerify] = useState(false);
-  const { data } = useVerifyUser(shouldVerify);
+  const { isSuccess } = useVerifyUser(shouldVerify);
   const { mutate } = useMutation(login, {
     onSuccess: () => {
+      console.log('Common Login Success');
       setShouldVerify(true);
     },
     onError: (err) => {
-      console.log('Common Login Error: ', err);
+      console.log('Common Login Error:', err);
     },
   });
 
@@ -42,13 +45,12 @@ export const CommonLoginPage = () => {
     });
   };
 
-  useEffect(() => {
-    if (data) {
-      console.log('Common Login Success ', data);
-      window.location.href = '/';
-    }
-  }, []);
-
+  if (isSuccess) {
+    console.log('로그인 성공');
+    navigate({
+      pathname: `/`,
+    });
+  }
   console.log('loginValues', loginValues);
   return (
     <div>
