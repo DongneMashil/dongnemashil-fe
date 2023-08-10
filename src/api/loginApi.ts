@@ -1,5 +1,10 @@
 import { axiosInstance } from './api';
 
+export interface UserStateRes {
+  email: string;
+  nickname: string;
+}
+
 /** 카카오 로그인 */
 export const loginKakao = () => {
   const loginURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_CLIENT_API_URL}/login/kakao&response_type=code`;
@@ -48,8 +53,6 @@ export const register = async (data: {
 };
 
 /** 로그인 유저 정보 */
-//! 이후 tempUserState => UserState로 변경 필요합니다
-//AxiosResponse<tempUserState>
 export const verifyUser = () => {
   return axiosInstance.get(`/accesstoken`).then((res) => {
     return res.data;
