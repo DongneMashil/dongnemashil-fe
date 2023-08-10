@@ -54,7 +54,7 @@ export type Comment = {
 };
 
 export type ExtendedReviewDetailComment = {
-  comments: Comment[] | null;
+  content: Comment[] | null;
   pageable: ResponseData['pageable'];
   size: number;
   number: number;
@@ -64,7 +64,6 @@ export type ExtendedReviewDetailComment = {
   last: boolean;
   empty: boolean;
 };
-
 type ResponseData = {
   content: Comment[];
   pageable: {
@@ -92,7 +91,7 @@ type ResponseData = {
   empty: boolean;
 };
 export const getComment = async (
-  detailId: undefined | string,
+  detailId: string, // 수정된 부분
   page?: number
 ): Promise<ExtendedReviewDetailComment> => {
   try {
@@ -106,7 +105,7 @@ export const getComment = async (
     );
     return {
       ...response.data,
-      comments: response.data.content,
+      content: response.data.content,
     };
   } catch (e: unknown) {
     if (e instanceof AxiosError) {

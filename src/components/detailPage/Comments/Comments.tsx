@@ -19,13 +19,13 @@ export const Comments = ({
 
   const useInfinityScroll = () => {
     // useInfiniteQuery에서 쓸 함수
-    const fetchComment = async ({ pageParam = 0 }) => {
+    const fetchComment = async ({ pageParam = 1 }) => {
       const response = await getComment(reviewId, pageParam);
 
       console.log('👀' + JSON.stringify(response));
 
       return {
-        result: response.comments,
+        result: response.content,
         nextPage: pageParam + 1,
         isLast: response.last,
       };
@@ -101,7 +101,7 @@ export const Comments = ({
           {isLoading && <div>로딩중...</div>}
 
           {!hasNextPage && <div>마지막 페이지입니다.</div>}
-          <button ref={loader}>reef</button>
+          <div ref={loader}>reef</div>
           <StFooterSpacer />
         </StDetailPageCommentList>
       )}

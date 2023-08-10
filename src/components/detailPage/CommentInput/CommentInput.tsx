@@ -1,6 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { postComment } from 'api/detailApi';
 import { Button, Input } from 'components/common';
+import { queryClient } from 'queries/queryClient';
 import React, { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
@@ -14,32 +15,45 @@ export const CommentInput = ({
   $isCommentShow = false,
 }: FooterProps) => {
   const [comment, setComment] = useState('');
-  const [isCommentPost, setIsCommentPost] = useState(false);
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setComment(e.target.value);
-  };
-  useQuery(
-    ['comment', reviewId, comment],
-    () => postComment(reviewId, comment),
+  // const [isCommentPost, setIsCommentPost] = useState(false);
+
+  const commentMutation = useMutation(
+    (newComment: string) => postComment(reviewId, newComment),
     {
-      enabled: isCommentPost,
       onSuccess: (data) => {
         console.log(data);
         setComment('');
-        setIsCommentPost(false);
-        alert('댓글 등록에 성공했습니다.');
+        queryClient.invalidateQueries(['comment', reviewId]);
       },
       onError: (err) => {
         console.log(err);
         setComment('');
-        setIsCommentPost(false);
         alert('댓글 등록에 실패했습니다.');
       },
     }
   );
+
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setComment(e.target.value);
+  };
+  // useQuery(['comment', reviewId], () => postComment(reviewId, comment), {
+  //   enabled: isCommentPost,
+  //   onSuccess: (data) => {
+  //     console.log(data);
+  //     setComment('');
+  //     setIsCommentPost(false);
+  //   },
+  //   onError: (err) => {
+  //     console.log(err);
+  //     setComment('');
+  //     setIsCommentPost(false);
+  //     alert('댓글 등록에 실패했습니다.');
+  //   },
+  // });
   const onSubmitHandler = () => {
     console.log(comment);
-    setIsCommentPost(true);
+    // setIsCommentPost(true);
+    commentMutation.mutate(comment);
   };
 
   return (
