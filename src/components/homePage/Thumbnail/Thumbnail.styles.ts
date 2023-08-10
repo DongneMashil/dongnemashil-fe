@@ -7,10 +7,6 @@ export const StThumbnail = styled.div`
   padding: 10px 0 24px;
   margin-bottom: 8px;
 
-  & img {
-    border-radius: 10px;
-  }
-
   & div {
     display: flex;
     justify-content: space-between;
@@ -23,5 +19,14 @@ export const StThumbnail = styled.div`
 
       margin-right: 10px;
     }
+  }
+`;
+
+export const StThumnailMain = styled.div`
+  border-radius: 10px;
+  overflow: hidden;
+
+  & img {
+    width: 100%;
   }
 `;
