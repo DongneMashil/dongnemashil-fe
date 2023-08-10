@@ -3,14 +3,12 @@ import { atom } from 'recoil';
 export interface UserState {
   userId: string;
   nickName: string;
-  profileImage: string;
   isLoggedIn: boolean;
 }
 
 const initialState: UserState = {
   userId: '',
   nickName: '',
-  profileImage: '',
   isLoggedIn: false,
 };
 
