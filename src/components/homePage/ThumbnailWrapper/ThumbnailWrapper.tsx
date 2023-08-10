@@ -4,9 +4,14 @@ import { StTarget, StThumbnailWrapper } from './ThumbnailWrapper.styles';
 import { useFetchReviews } from 'api/reviewsApi';
 import { useIntersect } from 'hooks/useIntersect';
 
-export const ThumbnailWrapper = () => {
+export const ThumbnailWrapper = ({
+  selectedTags,
+}: {
+  selectedTags: string[] | null;
+}) => {
   const type = 'likes';
   const [page] = useState(1);
+  console.log(selectedTags);
 
   const { data, hasNextPage, isFetching, fetchNextPage } = useFetchReviews({
     type: type,
