@@ -11,9 +11,9 @@ import { useMutation } from '@tanstack/react-query';
 import { submitReview } from 'api/reviews';
 import { useNavigate } from 'react-router-dom';
 import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
-// import { useVerifyUser } from 'hooks';
-// import { useRecoilValue } from 'recoil';
-// import { userIsLoggedInSelector } from 'recoil/userExample';
+import { useVerifyUser } from 'hooks';
+import { useRecoilValue } from 'recoil';
+import { userIsLoggedInSelector } from 'recoil/userExample';
 
 interface FormValues {
   title: string;
@@ -33,17 +33,9 @@ export const WritePage = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // const [shouldVerify, setShouldVerify] = useState(false);
-  // const { data } = useVerifyUser(shouldVerify);
-  // const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
 
-  // useEffect(() => {
-  //   setShouldVerify(true);
-  //   if (!isLoggedIn) {
-  //     alert('로그인이 만료되었습니다. 다시 로그인해주세요');
-  //     navigate('/login');
-  //   }
-  // }, [data, navigate]);
+  const { isLoading, isError, isSuccess } = useVerifyUser(true);
+  const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
 
   const onInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -137,7 +129,7 @@ export const WritePage = () => {
       address: '서울시 영등포구 여의동로 330',
       tag: selectedTags,
     };
-    
+
     const blob = new Blob([JSON.stringify(jsonData)], {
       type: 'application/json',
     });
@@ -179,6 +171,16 @@ export const WritePage = () => {
     const file = mediaFiles.find((file) => file.file === targetFile);
     return file ? file.isCover : false;
   };
+
+  if (isLoading) {
+    console.log('Loading');
+  }
+  if (isError) {
+    console.log('Error');
+  }
+  if (isSuccess) {
+    console.log('Success, isLoggedIn: ', isLoggedIn);
+  }
 
   return (
     <>

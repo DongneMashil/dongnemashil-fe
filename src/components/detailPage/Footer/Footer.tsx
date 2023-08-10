@@ -1,5 +1,5 @@
 import { Button } from 'components/common';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
@@ -7,25 +7,27 @@ import { ReactComponent as CommentIcon } from 'assets/icons/Comment.svg';
 import { ReactComponent as ContentIcon } from 'assets/icons/Content.svg';
 import { Comments } from '../Comments/Comments';
 import { CommentInput } from '../CommentInput/CommentInput';
+import { useLike } from 'hooks';
+
 interface FooterProps {
   reviewId: string;
   likeCnt: number;
   commentCnt: number;
   onClick?: () => void;
-  isLiked?: boolean;
-  // isCommentOpen?: boolean;
+  isLiked: boolean;
 }
 export const Footer = ({
-  reviewId = '1',
-  likeCnt = 0,
+  reviewId,
+  likeCnt: initialLikeCnt,
   commentCnt = 0,
   onClick,
-  isLiked = false, // isCommentOpen = false,
+  isLiked: initialIsLiked,
 }: FooterProps) => {
-  const [isCommentOpen, setIsCommentOpen] = React.useState(false);
-  const [isCommentShow, setIsCommentShow] = React.useState(false);
+  const [isCommentOpen, setIsCommentOpen] = useState(false);
+  const [isCommentShow, setIsCommentShow] = useState(false);
   useEffect(() => {
     if (isCommentOpen) {
+      console.log('reviewIdonFooter', reviewId); //완료후 제거
       setTimeout(() => {
         setIsCommentShow(true);
       }, 150);
@@ -33,10 +35,17 @@ export const Footer = ({
       setIsCommentShow(false);
     }
   }, [isCommentOpen]);
+
+  const { isLiked, likeCnt, toggleLikeHandler } = useLike({
+    reviewId,
+    initialIsLiked,
+    initialLikeCnt,
+  });
+
   return (
     <StFooterContatiner $isCommentOpen={isCommentOpen}>
       <StFooterButtonWrapper>
-        <StLike>
+        <StLike onClick={toggleLikeHandler}>
           {isLiked ? <FilledHeart /> : <Heart />}
           {likeCnt}
         </StLike>
@@ -45,7 +54,7 @@ export const Footer = ({
         </StComment>
         {isCommentOpen ? (
           <Button type={'onlytext'} onClick={() => setIsCommentOpen(false)}>
-            <ContentIcon /> 댓글 닫기
+            ✕
           </Button>
         ) : (
           <Button type={'onlytext'} onClick={onClick}>
@@ -59,7 +68,7 @@ export const Footer = ({
           <StFooterCommentSection>
             <Comments reviewId={reviewId} $isCommentShow={isCommentShow} />
           </StFooterCommentSection>
-          <CommentInput reviewId="1" $isCommentShow={isCommentShow} />
+          <CommentInput reviewId={reviewId} $isCommentShow={isCommentShow} />
         </>
       )}
     </StFooterContatiner>

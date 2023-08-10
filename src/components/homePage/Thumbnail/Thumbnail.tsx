@@ -2,20 +2,18 @@ import React from 'react';
 import { StThumbnail } from './Thumbnail.styles';
 import { Span } from '../Span/Span';
 import { useNavigate } from 'react-router-dom';
-
-export interface ThumbnailProps {
-  id: number;
-  road_name: string;
-  img_url: string;
-  likeCnt: string;
-}
+import { ReviewsList } from 'api/reviewsApi';
+import { user } from 'assets/user';
 
 export const Thumbnail = ({
   id,
-  road_name,
-  img_url,
+  roadName,
+  mainImgUrl,
+  videoUrl,
+  profileImgUrl,
   likeCnt,
-}: ThumbnailProps) => {
+  likebool,
+}: ReviewsList) => {
   const navigate = useNavigate();
 
   const onClickThumbnail = () => {
@@ -26,11 +24,22 @@ export const Thumbnail = ({
     <StThumbnail onClick={onClickThumbnail}>
       <div>
         <Span size={'title'}>
-          👾 <strong>{road_name}</strong>에서
+          {profileImgUrl ? <img src={profileImgUrl} /> : <img src={user} />}
+          <strong>{roadName}</strong>에서
         </Span>
-        <Span>❤️ {likeCnt}</Span>
+        <Span>
+          {likebool ? '❤️' : '🤍'} {likeCnt}
+        </Span>
       </div>
-      <img src={img_url} />
+      {mainImgUrl ? (
+        <img src={mainImgUrl} />
+      ) : (
+        videoUrl && (
+          <video>
+            <source src={videoUrl} type="video/mp4" />
+          </video>
+        )
+      )}
     </StThumbnail>
   );
 };

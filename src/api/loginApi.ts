@@ -1,6 +1,9 @@
-import { tempUserState } from 'hooks';
 import { axiosInstance } from './api';
-import { AxiosError, AxiosResponse } from 'axios';
+
+export interface UserStateRes {
+  email: string;
+  nickname: string;
+}
 
 /** 카카오 로그인 */
 export const loginKakao = () => {
@@ -43,44 +46,31 @@ export const register = async (data: {
   password: string;
 }) => {
   console.log('요청 데이터: ', data);
-  await axiosInstance
-    .post(`/register`, data)
-    .then((res) => {
-      console.log('register success', res.data);
-    })
-    .catch((err) => {
-      console.log(err);
-      throw err;
-    });
+  return axiosInstance.post(`/register`, data).then((res) => {
+    console.log('register success', res.data);
+    return res.data;
+  });
 };
 
 /** 로그인 유저 정보 */
-//! 이후 tempUserState => UserState로 변경 필요합니다
-export const verifyUser = async (): Promise<tempUserState> => {
-  try {
-    const res: AxiosResponse<tempUserState> = await axiosInstance.get(
-      `/accesstoken`
-    );
-    console.log('Verified User:', res.data);
+export const verifyUser = () => {
+  return axiosInstance.get(`/accesstoken`).then((res) => {
     return res.data;
-  } catch (e: unknown) {
-    if (e instanceof AxiosError) {
-      throw new Error(e.response?.data?.errorMessage || e.message);
-    }
-    throw e;
-  }
+  });
 };
 
 /** refresh token으로 access token 재발급 */
 export const getNewAccessToken = () => {
-  axiosInstance
-    .get(`/refreshtoken`)
-    .then((res) => {
-      console.log('Got new access token', res.data);
-    })
-    .catch((err: AxiosError) => {
-      console.log(err.message);
-      window.alert('다시 로그인해주세요!');
-      window.location.href = '/';
-    });
+  return axiosInstance.get(`/refreshtoken`).then((res) => {
+    console.log('Got new access token', res.data);
+    return res.data;
+  });
+};
+
+/** logout */
+export const logout = () => {
+  return axiosInstance.get(`/logout`).then((res) => {
+    console.log('Successfully logged out, ', res.data);
+    return res.data;
+  });
 };
