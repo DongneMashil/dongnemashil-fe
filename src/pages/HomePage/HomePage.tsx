@@ -1,13 +1,17 @@
-import MapWrapper from 'components/common/Map/MapWrapper';
-import React, { useEffect } from 'react';
-import { Input } from 'components/common';
+import React, { useState, useEffect } from 'react';
 import { CommonLayout, NavBar } from 'components/layout';
 import { ThumbnailWrapper } from 'components/homePage';
+import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
 import { useVerifyUser } from 'hooks';
 import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 
 export const HomePage = () => {
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const handleTagChange = (tags: string[]) => {
+    setSelectedTags(tags);
+  };
   const userState = useRecoilValue(userProfileSelector);
   const { data } = useVerifyUser(true);
 
@@ -21,13 +25,18 @@ export const HomePage = () => {
   return (
     <CommonLayout
       header={
-        <NavBar btnLeft={'logo'} btnRight={'mypage'}>
-          <Input />
-        </NavBar>
+        <>
+          <NavBar
+            btnLeft={'logo'}
+            btnSecondRight={'search'}
+            btnRight={'mypage'}
+          ></NavBar>
+          <ToggleTagButton onTagChange={handleTagChange} />
+        </>
       }
+      headerHeight={'150px'}
     >
-      <ThumbnailWrapper />
-      <MapWrapper />
+      <ThumbnailWrapper selectedTags={selectedTags} />
     </CommonLayout>
   );
 };
