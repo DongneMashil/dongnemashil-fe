@@ -23,12 +23,17 @@ export const ThumbnailWrapper = () => {
   console.log(isFetching);
   console.log(hasNextPage);
 
-  const ref = useIntersect((entry, observer) => {
-    observer.unobserve(entry.target);
-    if (hasNextPage && !isFetching) {
-      fetchNextPage();
+  const ref = useIntersect(
+    (entry, observer) => {
+      observer.unobserve(entry.target);
+      if (hasNextPage && !isFetching) {
+        fetchNextPage();
+      }
+    },
+    {
+      threshold: 0.1,
     }
-  });
+  );
 
   return (
     <StThumbnailWrapper>
