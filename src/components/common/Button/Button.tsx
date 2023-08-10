@@ -8,6 +8,7 @@ export interface ButtonProps {
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   url?: string;
   inputType?: 'button' | 'submit';
+  value?: string;
 }
 
 export const Button = ({
@@ -16,6 +17,7 @@ export const Button = ({
   onClick,
   url,
   inputType = 'button',
+  value,
 }: ButtonProps) => {
   const navigate = useNavigate();
 
@@ -30,10 +32,12 @@ export const Button = ({
   };
 
   return inputType === 'submit' ? (
-    <StSubmitButton className={type} onClick={handleButtonClick}>
-      {' '}
-      {children}
-    </StSubmitButton>
+    <StSubmitButton
+      type="submit"
+      className={type}
+      onClick={handleButtonClick}
+      value={value}
+    />
   ) : (
     <StButton className={type} onClick={handleButtonClick}>
       {children}

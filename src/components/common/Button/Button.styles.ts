@@ -1,7 +1,6 @@
 import { styled } from 'styled-components';
-import { ButtonProps } from './Button';
 
-export const StButton = styled.button<ButtonProps>`
+export const StButton = styled.button`
   background: none;
   display: flex;
   justify-content: center;
@@ -34,7 +33,8 @@ export const StButton = styled.button<ButtonProps>`
   }
 `;
 
-export const StSubmitButton = styled.input<ButtonProps>`
+export const StSubmitButton = styled.input`
+  width: 100%;
   background: none;
   display: flex;
   justify-content: center;
