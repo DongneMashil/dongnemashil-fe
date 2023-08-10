@@ -27,10 +27,7 @@ const Router = () => {
           path="/review/comments/:reviewId"
           element={<DetailCommentPage />}
         /> */}{' '}
-        <Route
-          path="/writemap"
-          element={<ProtectedRoute element={<WriteMapPage />} />}
-        />
+        <Route path="/writemap" element={<WriteMapPage />} />
         <Route
           path="/mypage"
           element={<ProtectedRoute element={<MyPage />} />}
