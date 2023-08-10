@@ -23,10 +23,6 @@ const Router = () => {
         <Route path="/login/common" element={<CommonLoginPage />} />
         <Route path="/login/kakao" element={<KakaoCallbackPage />} />
         <Route path="/review/:reviewId" element={<DetailPage />} />
-        {/* <Route
-          path="/review/comments/:reviewId"
-          element={<DetailCommentPage />}
-        /> */}{' '}
         <Route
           path="/writemap"
           element={<ProtectedRoute element={<WriteMapPage />} />}
