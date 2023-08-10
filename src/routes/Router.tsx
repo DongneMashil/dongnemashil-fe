@@ -8,6 +8,7 @@ import {
   WriteMapPage,
   CommonLoginPage,
   MyPage,
+  WritePage,
 } from 'pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
@@ -25,7 +26,7 @@ const Router = () => {
         {/* <Route
           path="/review/comments/:reviewId"
           element={<DetailCommentPage />}
-        /> */}
+        /> */}{' '}
         <Route
           path="/writemap"
           element={<ProtectedRoute element={<WriteMapPage />} />}
@@ -34,6 +35,7 @@ const Router = () => {
           path="/mypage"
           element={<ProtectedRoute element={<MyPage />} />}
         />
+        <Route path="write" element={<WritePage />} />
       </Routes>
     </BrowserRouter>
   );

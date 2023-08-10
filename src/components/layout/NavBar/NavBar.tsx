@@ -9,6 +9,7 @@ export interface NavBarProps {
   btnLeft?: 'logo' | 'back';
   btnSecondRight?: 'search' | null;
   btnRight?: 'close' | 'mypage' | 'submit' | null;
+  onClickSubmit?: () => void;
 }
 
 export const NavBar = ({
@@ -16,14 +17,13 @@ export const NavBar = ({
   btnSecondRight,
   btnRight,
   children,
+  onClickSubmit,
 }: NavBarProps) => {
   const navigate = useNavigate();
 
   const goBack = () => {
     navigate(-1);
   };
-
-  const onClickSubmit = () => {};
 
   return (
     <StNavBar>
