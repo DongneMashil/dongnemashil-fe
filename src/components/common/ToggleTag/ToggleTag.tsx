@@ -34,12 +34,16 @@ export const ToggleTagButton: React.FC<ToggleTagButtonProps> = ({
     onTagChange && onTagChange(updatedTags);
   };
 
+  const onTagClick = (tag: string) => () => {
+    toggleTag(tag);
+  };
+
   return (
     <StTagWrapper>
       {tags.map((tag) => (
         <StTagBox
           key={tag}
-          onClick={() => toggleTag(tag)}
+          onClick={onTagClick(tag)}
           $isSelected={selectedTags.includes(tag)}
         >
           {tag}

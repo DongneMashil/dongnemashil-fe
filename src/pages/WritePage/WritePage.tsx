@@ -137,6 +137,7 @@ export const WritePage = () => {
       address: '서울시 영등포구 여의동로 330',
       tag: selectedTags,
     };
+    
     const blob = new Blob([JSON.stringify(jsonData)], {
       type: 'application/json',
     });
