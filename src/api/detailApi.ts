@@ -1,11 +1,11 @@
-import axios, { AxiosResponse, AxiosError, AxiosInstance } from 'axios';
+import { AxiosResponse, AxiosError } from 'axios';
 import { axiosInstance } from './api';
 // import { axiosInstance } from './api';
 
-const baseUrl = process.env.REACT_APP_SERVER_API_URL;
-export const tempInstance: AxiosInstance = axios.create({
-  baseURL: baseUrl,
-});
+// const baseUrl = process.env.REACT_APP_SERVER_API_URL;
+// export const tempInstance: AxiosInstance = axios.create({
+//   baseURL: baseUrl,
+// });
 
 export type ReviewDetail = {
   id: number;
@@ -32,7 +32,7 @@ export const getReviewDetail = async (
 ): Promise<ReviewDetail> => {
   // 상세페이지 조회
   try {
-    const response: AxiosResponse<ReviewDetail> = await tempInstance.get(
+    const response: AxiosResponse<ReviewDetail> = await axiosInstance.get(
       `/reviews/${detailId}`
     );
     return response.data;
@@ -53,17 +53,6 @@ export type Comment = {
   modifiedAt: string;
 };
 
-export type ExtendedReviewDetailComment = {
-  content: Comment[] | null;
-  pageable: ResponseData['pageable'];
-  size: number;
-  number: number;
-  sort: ResponseData['sort'];
-  numberOfElements: number;
-  first: boolean;
-  last: boolean;
-  empty: boolean;
-};
 type ResponseData = {
   content: Comment[];
   pageable: {
@@ -93,9 +82,9 @@ type ResponseData = {
 export const getComment = async (
   detailId: string, // 수정된 부분
   page?: number
-): Promise<ExtendedReviewDetailComment> => {
+): Promise<ResponseData> => {
   try {
-    const response: AxiosResponse<ResponseData> = await tempInstance.get(
+    const response: AxiosResponse<ResponseData> = await axiosInstance.get(
       `/reviews/${detailId}/comments`,
       {
         params: {
@@ -134,32 +123,17 @@ export const postComment = async (
   }
 };
 
-// export const postLike = async (
-//   reviewId: undefined | string
-// ): Promise<boolean> => {
-//   try {
-//     const response: AxiosResponse<{ liked: boolean }> = await tempInstance.post(
-//       `/reviews/${reviewId}/likes`
-//     );
-//     return response.data.liked;
-//   } catch (e: unknown) {
-//     if (e instanceof AxiosError) {
-//       throw new Error(e.response?.data?.errorMessage || e.message);
-//     }
-//     throw e;
-//   }
-// };
 export const postLikeOptimistic = async (
   reviewId: undefined | string,
   currentState: boolean // 현재 좋아요 상태를 받아옵니다.
 ): Promise<boolean> => {
-  // 1. UI를 즉시 업데이트합니다. (낙관적 업데이트)
+  //  UI를 즉시 업데이트합니다. (낙관적 업데이트)
   const updatedState = !currentState;
 
   try {
-    // 2. 백엔드에 비동기 요청을 보냅니다.
+    // 백엔드에 비동기 요청을 보냅니다.
     const response: AxiosResponse<{ message: string }> =
-      await tempInstance.post(`/reviews/${reviewId}/likes`);
+      await axiosInstance.post(`/reviews/${reviewId}/likes`);
 
     if (
       //예상과 반대의 값이 올때
@@ -167,12 +141,16 @@ export const postLikeOptimistic = async (
       (updatedState === false && response.data.message === '좋아요 완료')
     ) {
       console.log('좋아요 낙관적 업데이트 알림 : 예상과 반대의 값이 왔습니다.');
-      return !updatedState; // 서버에서 온 값(updatedState의 반대)을 보냅니다.
+      // 다시 요청을 보내 서버의 상태를 UI와 일치시킵니다.
+      const latestStateResponse: AxiosResponse<{ message: string }> =
+        await axiosInstance.post(`/reviews/${reviewId}/likes`);
+      console.log('두번째' + latestStateResponse.data.message);
+      return updatedState;
     }
 
     return updatedState;
   } catch (e: unknown) {
-    // 3. 요청이 실패하면 UI를 이전 상태로 롤백하고 사용자에게 오류 메시지를 표시합니다.
+    // 서버와 통신이 어려울 경우 UI를 이전 상태로 롤백하고 사용자에게 오류 메시지를 표시합니다.
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data?.errorMessage || e.message);
     }

@@ -123,7 +123,12 @@ export const StFooterCommentSection = styled.div`
   gap: 0.5rem;
   width: 100%;
   height: 100%;
-  padding: 0 10px;
+  padding: 10px 10px;
   border-top: 1px solid #e9e9e9;
   overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
