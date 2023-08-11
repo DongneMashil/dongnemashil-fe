@@ -8,6 +8,7 @@ interface InputProps {
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export const Input = ({
@@ -17,6 +18,7 @@ export const Input = ({
   value = '',
   onChange = () => {},
   placeholder = '',
+  disabled = false,
 }: InputProps) => {
   return (
     <StInput
@@ -26,6 +28,7 @@ export const Input = ({
       value={value}
       onChange={onChange}
       placeholder={placeholder}
+      disabled={disabled}
     />
   );
 };
