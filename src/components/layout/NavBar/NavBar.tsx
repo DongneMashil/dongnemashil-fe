@@ -2,8 +2,8 @@ import { Button } from 'components/common';
 import React from 'react';
 import { StNavBar } from './NavBar.styles';
 import { useNavigate } from 'react-router-dom';
-import { ReactComponent as Search } from 'assets/icons/Search.svg';
-import { user } from 'assets/user';
+import { ReactComponent as SearchFlat } from 'assets/icons/SearchFlat.svg';
+import noUser from 'assets/noImage/nouser.gif';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
@@ -45,7 +45,7 @@ export const NavBar = ({
   const renderBtnSecondRight = () => {
     return btnSecondRight === 'search' ? (
       <Button type={'icon'} url={'/search'}>
-        <Search />
+        <SearchFlat width="21" height="21" />
       </Button>
     ) : null;
   };
@@ -57,7 +57,7 @@ export const NavBar = ({
       </Button>
     ) : btnRight === 'mypage' ? (
       <Button type={'icon'} url={'/mypage'}>
-        <img src={user} />
+        <img src={noUser} />
       </Button>
     ) : btnRight === 'submit' ? (
       <Button type={'normal'} onClick={onClickSubmit}>

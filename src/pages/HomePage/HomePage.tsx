@@ -36,7 +36,7 @@ export const HomePage = () => {
       }
       headerHeight={'150px'}
     >
-      <ThumbnailWrapper selectedTags={selectedTags} />
+      <ThumbnailWrapper tag={selectedTags.join(',')} />
     </CommonLayout>
   );
 };

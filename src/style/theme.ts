@@ -26,6 +26,14 @@ export const theme = {
     tablet: `(min-width: ${size.tablet}) and (max-width: ${size.desktop})`,
     desktop: `(min-width: ${size.desktop})`,
   },
+  floatingBox: {
+    width: '100%',
+    backgroundColor: 'white',
+    padding: '1rem',
+    marginBottom: '1rem',
+    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+    borderRadius: '0.8rem',
+  },
 };
 
 // 사용법

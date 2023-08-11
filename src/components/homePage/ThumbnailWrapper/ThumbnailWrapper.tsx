@@ -9,28 +9,24 @@ import { useFetchReviews } from 'api/reviewsApi';
 import { useIntersect } from 'hooks/useIntersect';
 import { Button } from 'components/common';
 
-export const ThumbnailWrapper = ({
-  selectedTags,
-}: {
-  selectedTags: string[] | null;
-}) => {
+export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
   const [type, setType] = useState('likes');
 
-  const [page] = useState(1);
-  console.log(selectedTags);
+  console.log(tag);
 
-  const { data, hasNextPage, isFetching, fetchNextPage } = useFetchReviews({
-    type: type,
-  });
+  const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
+    useFetchReviews({
+      type,
+      tag,
+    });
 
-  console.log(data);
+  console.log(type, data);
 
   const reviews = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data.content) : []),
     [data]
   );
 
-  console.log(page);
   console.log(isFetching);
   console.log(hasNextPage);
 
@@ -47,7 +43,13 @@ export const ThumbnailWrapper = ({
   );
 
   const onClickSort = (type: string) => {
-    type === 'likes' ? setType('likes') : setType('recent');
+    if (type === 'likes') {
+      setType('likes');
+      refetch();
+    } else {
+      setType('recent');
+      refetch();
+    }
   };
 
   return (

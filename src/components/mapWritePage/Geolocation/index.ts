@@ -1,1 +1,1 @@
-export * from './Geolocation'
+export * from './Geolocation';
