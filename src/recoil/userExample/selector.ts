@@ -12,14 +12,6 @@ export const userProfileSelector = selector<UserState>({
   },
 });
 
-export const userHasProfileImageSelector = selector<boolean>({
-  key: 'userHasProfileImageSelector',
-  get: ({ get }) => {
-    const user = get(userState) as UserState;
-    return user.profileImage !== '';
-  },
-});
-
 //userIsDefinedSelector는 userState의 userId가 있는지 없는지를 boolean으로 반환합니다.
 export const userIsDefinedSelector = selector<boolean>({
   key: 'userIsDefinedSelector',

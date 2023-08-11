@@ -1,38 +1,42 @@
-import MapWrapper from 'components/common/Map/MapWrapper';
-import React, { useCallback, useState, useEffect } from 'react';
-import { Button, Input } from 'components/common';
+import React, { useState, useEffect } from 'react';
 import { CommonLayout, NavBar } from 'components/layout';
 import { ThumbnailWrapper } from 'components/homePage';
-import { getNewAccessToken } from 'api/loginApi';
+import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
 import { useVerifyUser } from 'hooks';
+import { useRecoilValue } from 'recoil';
+import { userProfileSelector } from 'recoil/userExample';
 
 export const HomePage = () => {
-  const [shouldVerify, setShouldVerify] = useState(false);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const { data } = useVerifyUser(shouldVerify);
-
-  const onVerifyHandler = useCallback(() => {
-    setShouldVerify(true);
-  }, []);
+  const handleTagChange = (tags: string[]) => {
+    setSelectedTags(tags);
+  };
+  const userState = useRecoilValue(userProfileSelector);
+  const { data } = useVerifyUser(true);
 
   useEffect(() => {
-    if (data) console.log(data);
-  }, []);
+    console.log('current user state: ', userState);
+    if (data) {
+      console.log('useVerifyUser data: ', data);
+    }
+  }, [userState]);
 
   return (
     <CommonLayout
       header={
-        <NavBar btnLeft={'logo'} btnRight={'mypage'}>
-          <Input />
-        </NavBar>
+        <>
+          <NavBar
+            btnLeft={'logo'}
+            btnSecondRight={'search'}
+            btnRight={'mypage'}
+          ></NavBar>
+          <ToggleTagButton onTagChange={handleTagChange} />
+        </>
       }
+      headerHeight={'150px'}
     >
-      <ThumbnailWrapper />
-      <div style={{ display: 'flex', gap: '15px', marginTop: '30px' }}>
-        <Button onClick={onVerifyHandler}>Verify User</Button>
-        <Button onClick={getNewAccessToken}>Get New Access Token</Button>
-      </div>
-      <MapWrapper />
+      <ThumbnailWrapper selectedTags={selectedTags} />
     </CommonLayout>
   );
 };

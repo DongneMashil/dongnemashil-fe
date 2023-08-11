@@ -1,26 +1,42 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getReviewDetail, ReviewDetail } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
 import { FooterSpacer, Tag } from 'components/common';
-import { AroundMapButton } from 'components/common/SpecialButtons/AroundMapButton';
 import {
+  StCreatedTime,
   StDetailPageContainer,
   StDetailPageContent,
   StDetailPageHeader,
-  StDetailPageInfo,
   StNavTitle,
   StTagWrapper,
 } from './DetailPage.styles';
+import noImage from 'assets/noImage/noimage.png';
+import noUser from 'assets/noImage/nouser.gif';
+import timeAgo from 'utils/timeAgo';
+import { useRecoilValue } from 'recoil';
+import { userProfileSelector } from 'recoil/userExample';
+import { useVerifyUser } from 'hooks';
 
 export const DetailPage = () => {
-  const contentRef = React.useRef<HTMLDivElement>(null);
+  const userState = useRecoilValue(userProfileSelector);
+  const { data: userData } = useVerifyUser(true);
+  useEffect(() => {
+    console.log('current user state: ', userState);
+    if (userData) {
+      console.log('useVerifyUser data: ', userData);
+    }
+  }, [userState]);
+
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const { reviewId } = useParams<{ reviewId: string }>();
   if (!reviewId) {
     throw new Error('Review ID is missing');
   }
+
   const { data, isLoading, isError, error } = useQuery<ReviewDetail, Error>({
     queryKey: ['reviewDetail', reviewId],
     queryFn: () => getReviewDetail(reviewId),
@@ -38,7 +54,7 @@ export const DetailPage = () => {
       });
     }
   };
-  console.log(data);
+
   return (
     <>
       {isLoading && <div>Loading...</div>}
@@ -46,8 +62,8 @@ export const DetailPage = () => {
       {data && (
         <CommonLayout
           header={
-            <NavBar btnLeft={'logo'} btnRight={'mypage'}>
-              <StNavTitle>{data.title}</StNavTitle>
+            <NavBar btnLeft={'logo'} btnRight={'close'}>
+              <StNavTitle>{data.address}</StNavTitle>
             </NavBar>
           }
           footer={
@@ -56,42 +72,29 @@ export const DetailPage = () => {
               likeCnt={data.likeCnt}
               commentCnt={data.commentCnt}
               onClick={handleGotoContent}
+              isLiked={data.likebool}
             ></Footer>
           }
         >
-          <StDetailPageContainer img={data.img_url}>
+          <StDetailPageContainer>
+            <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
             <StDetailPageHeader>
-              {/* <img src={data.profileImg_url} /> */}
-              <img src="https://source.unsplash.com/random" />
-
-              <h4>서초구 잠원로 155</h4>
-              <p>지도보기</p>
+              <img src={data.profileImgUrl || noUser} />
+              <h4>{data.title || '제목없음'}</h4>
             </StDetailPageHeader>
-            <StTagWrapper>
-              {' '}
-              <Tag text="동물친구들" />
-              <Tag text="연인이랑" isSelected={true} />
-              <AroundMapButton></AroundMapButton>
-            </StTagWrapper>
-            <StDetailPageInfo>
-              <h3>{data.nickname}</h3>
-              <h6>{data.createdAt}</h6>
-            </StDetailPageInfo>
+
             <StDetailPageContent>
-              <img src="https://source.unsplash.com/random" />
+              <img src={data.mainImgUrl || noImage} />
+              {data.subImgUrl.map((img, index) =>
+                img !== '' ? <img key={index} src={img} /> : null
+              )}
 
-              <img src="https://source.unsplash.com/random" />
-              <img src="https://source.unsplash.com/random" />
-              <img src={data.img_url} />
-
-              <p ref={contentRef}>
-                {data.content}본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의
-                샘플본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의
-                샘플본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의
-                샘플본문의 샘플본문의 샘플본문의 샘플본문의 샘플본문의
-                샘플본문의 샘플본문의 샘플본문의 샘플본문의 샘플
-              </p>
-
+              <p ref={contentRef}>{data.content}</p>
+              <StTagWrapper>
+                {data.tag.map((tag) => (
+                  <Tag key={tag.id} text={tag.name} />
+                ))}
+              </StTagWrapper>
               <FooterSpacer />
             </StDetailPageContent>
           </StDetailPageContainer>
