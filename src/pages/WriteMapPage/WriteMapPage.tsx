@@ -9,9 +9,15 @@ import {
   StPostButton,
 } from './WriteMapPage.styles.ts';
 import { Geolocation } from 'components/writeMapPage';
+import { useNavigate } from 'react-router-dom';
 
 export const WriteMapPage = () => {
   const [currentAddress, setCurrentAddress] = useState<string>('');
+  const navigate = useNavigate();
+
+  const onGoWritePageHandler = () => {
+    navigate('/write');
+  };
 
   return (
     <CommonLayout>
@@ -25,7 +31,7 @@ export const WriteMapPage = () => {
             현위치: {currentAddress}
           </StCurrentLocationText>
         </StInputWrapper>
-        <StPostButton>글 작성</StPostButton>
+        <StPostButton onClick={onGoWritePageHandler}>글 작성</StPostButton>
       </StCurrentLocationContainer>
       <Geolocation onAddressUpdate={setCurrentAddress} />
     </CommonLayout>
