@@ -8,9 +8,9 @@ import {
   StLoginTag,
   StLoginButtonWrapper,
 } from './LoginPage.styles';
-import { ReactComponent as LogoImage } from 'assets/images/Logo.svg';
+// import { ReactComponent as LogoImage } from 'assets/images/Logo.svg';
 import { ReactComponent as Lightning } from 'assets/icons/Lightning.svg';
-import { ReactComponent as KakaoIcon } from 'assets/icons/KakaoIcon.svg';
+// import { ReactComponent as KakaoIcon } from 'assets/icons/KakaoIcon.svg';
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -28,14 +28,14 @@ export const LoginPage = () => {
   return (
     <CommonLayout>
       <StLoginContainer>
-        <LogoImage />
+        {/* <LogoImage /> */}
         <StLoginButtonWrapper>
           <StLoginTag>
             3초만에 시작하기
             <Lightning />
           </StLoginTag>
           <StLoginButton $type="kakao" onClick={onKakaoHandler}>
-            <KakaoIcon />
+            {/* <KakaoIcon /> */}
             카카오로 로그인
           </StLoginButton>
           <StLoginButton onClick={onLoginHandler}>
