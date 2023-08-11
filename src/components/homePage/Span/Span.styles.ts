@@ -16,9 +16,9 @@ export const StSpan = styled.span<SpanProps>`
   }
 
   &.title {
-    font-size: 1.1rem;
-    font-weight: 500;
-    line-height: 3.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.6rem;
 
     strong {
       font-weight: 700;
