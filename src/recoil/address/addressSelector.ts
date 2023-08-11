@@ -1,4 +1,4 @@
-import { selector } from "recoil";
+import { selector } from 'recoil';
 import { selectedAddressAtom } from './selectedAddressAtom';
 
 export const addressSelector = selector({

@@ -1,13 +1,13 @@
 import React from 'react';
 import {
-  ArrowButton,
   CenteredBox,
   CoverImageButton,
   SlideContainer,
   StPlusButton,
   StyledImage,
+  StyledImageContainer,
   StyledVideo,
-} from './FileSlider.styles'
+} from './FileSlider.styles';
 import { ReactComponent as FileUpload } from 'assets/icons/FileUpload.svg';
 
 interface ImageSliderProps {
@@ -23,70 +23,43 @@ interface ImageSliderProps {
 
 export const FileSlider: React.FC<ImageSliderProps> = ({
   images,
-  currentPage,
-  setCurrentPage,
   onAddImage,
   onSelectedCoverImage,
   isCoverImage,
   setCoverImage,
   files,
 }) => {
-  const onSlideButtonHandler = (direction: 'left' | 'right') => {
-    if (direction === 'left' && currentPage > 0) {
-      setCurrentPage((prev) => prev - 1);
-    } else if (direction === 'right' && currentPage < images.length) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
-
   return (
-    <div>
-      <SlideContainer>
-        <ArrowButton
-          onClick={() => onSlideButtonHandler('left')}
-          disabled={currentPage === 0}
-          left
-        >
-          &larr;
-        </ArrowButton>
-        {currentPage === images.length ? (
-          <CenteredBox>
-            <StPlusButton onClick={onAddImage}>
-              <FileUpload />
-              <p>{`${images.length} / 5`}</p>
-            </StPlusButton>
-          </CenteredBox>
-        ) : files[currentPage].type === 'image' ? (
-          <>
-            <StyledImage
-              src={URL.createObjectURL(images[currentPage])}
-              alt={`Upload Preview ${currentPage}`}
-              onClick={() =>
-                onSelectedCoverImage &&
-                onSelectedCoverImage(images[currentPage])
-              }
-            />
-            <CoverImageButton
-              isActive={isCoverImage(images[currentPage])}
-              onClick={() => setCoverImage(images[currentPage])}
-            >
-              대표
-            </CoverImageButton>
-          </>
-        ) : (
-          <StyledVideo
-            src={URL.createObjectURL(images[currentPage])}
-            controls
-          />
-        )}
-        ..
-        <ArrowButton
-          onClick={() => onSlideButtonHandler('right')}
-          disabled={currentPage === images.length}
-        >
-          &rarr;
-        </ArrowButton>
-      </SlideContainer>
-    </div>
+    <SlideContainer>
+      {files.map((file, index) => (
+        <StyledImageContainer key={index}>
+          {file.type === 'image' ? (
+            <>
+              <StyledImage
+                src={URL.createObjectURL(images[index])}
+                alt={`Upload Preview ${index}`}
+                onClick={() =>
+                  onSelectedCoverImage && onSelectedCoverImage(images[index])
+                }
+              />
+              <CoverImageButton
+                isActive={isCoverImage(images[index])}
+                onClick={() => setCoverImage(images[index])}
+              >
+                대표
+              </CoverImageButton>
+            </>
+          ) : (
+            <StyledVideo src={URL.createObjectURL(images[index])} controls />
+          )}
+        </StyledImageContainer>
+      ))}
+      <CenteredBox>
+        <StPlusButton onClick={onAddImage}>
+          <FileUpload />
+          <p>{`${images.length} / 5`}</p>
+        </StPlusButton>
+      </CenteredBox>
+    </SlideContainer>
   );
 };

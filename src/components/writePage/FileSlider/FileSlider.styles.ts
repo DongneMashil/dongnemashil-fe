@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 
 export const SlideContainer = styled.div`
   display: flex;
+  flex-direction: column;
   overflow: hidden;
   position: relative;
   min-height: 200px;
@@ -20,43 +21,47 @@ export const CenteredBox = styled.div`
 `;
 
 export const StPlusButton = styled.div`
-  width: 3.34rem;
-  height: 3.34rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+
+  cursor: pointer;
+
+  & > p {
+    color: #9a7b9a;
+    text-align: center;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
 `;
 
 export const StyledImage = styled.img`
-  width: 90%;
+  width: 100%;
   height: 100%;
   object-fit: cover;
+  margin: 0.5rem 0;
 `;
 
 export const StyledVideo = styled.video`
-  width: 90%;
+  width: 100%;
   height: 100%;
+  margin-bottom: 0.5rem 0;
 `;
 
-
-export const ArrowButton = styled.button<{ left?: boolean }>`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  ${(props) => (props.left ? 'left: 10px;' : 'right: 10px;')}
-  background-color: rgba(255, 255, 255, 0.2); // 반투명한 흰색 배경
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 2;
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.3;
-  }
+export const StyledImageContainer = styled.div`
+  position: relative;
+  width: 90%;
+  height: 100%;
 `;
 
 export const CoverImageButton = styled.button<{ isActive: boolean }>`
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 0.8rem;
+  right: 0.9rem;
   background: ${(props) => (props.isActive ? 'green' : 'grey')};
   color: white;
   border: none;
