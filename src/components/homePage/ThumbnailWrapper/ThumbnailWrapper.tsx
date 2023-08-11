@@ -15,6 +15,7 @@ export const ThumbnailWrapper = ({
   selectedTags: string[] | null;
 }) => {
   const [type, setType] = useState('likes');
+
   const [page] = useState(1);
   console.log(selectedTags);
 
@@ -52,11 +53,19 @@ export const ThumbnailWrapper = ({
   return (
     <StThumbnailWrapper>
       <StSort>
-        <Button onClick={() => onClickSort('likes')} type="onlytext">
+        <Button
+          onClick={() => onClickSort('likes')}
+          type="onlytext"
+          $active={type === 'likes'}
+        >
           인기순
         </Button>{' '}
         |{' '}
-        <Button onClick={() => onClickSort('recent')} type="onlytext">
+        <Button
+          onClick={() => onClickSort('recent')}
+          type="onlytext"
+          $active={type === 'recent'}
+        >
           최신순
         </Button>
       </StSort>

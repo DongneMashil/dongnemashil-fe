@@ -9,6 +9,7 @@ export interface ButtonProps {
   url?: string;
   inputType?: 'button' | 'submit';
   value?: string;
+  $active?: boolean;
 }
 
 export const Button = ({
@@ -18,6 +19,7 @@ export const Button = ({
   url,
   inputType = 'button',
   value,
+  $active,
 }: ButtonProps) => {
   const navigate = useNavigate();
 
@@ -39,7 +41,7 @@ export const Button = ({
       value={value}
     />
   ) : (
-    <StButton className={type} onClick={handleButtonClick}>
+    <StButton className={type} onClick={handleButtonClick} $active={$active}>
       {children}
     </StButton>
   );
