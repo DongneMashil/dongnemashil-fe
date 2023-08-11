@@ -38,8 +38,6 @@ export const Thumbnail = ({
     if (imageRef.current) {
       const imageWidth = imageRef.current.naturalWidth;
       const imageHeight = imageRef.current.naturalHeight;
-      console.log(`Image Width: ${imageWidth}`);
-      console.log(`Image Height: ${imageHeight}`);
 
       imageWidth < imageHeight
         ? setImgRatio('LongerHight')
