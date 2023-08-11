@@ -43,11 +43,8 @@ export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
   );
 
   const onClickSort = (type: string) => {
-    if (type === 'likes') {
-      setType('likes');
-      refetch();
-    } else {
-      setType('recent');
+    if (type === 'likes' || type === 'recent') {
+      setType(type);
       refetch();
     }
   };
