@@ -6,6 +6,14 @@ import { StVerifyMsg } from './Registerpage.styles';
 import { useMutation } from '@tanstack/react-query';
 import { useVerifyUser } from 'hooks';
 import { useNavigate } from 'react-router-dom';
+import { HeaderText } from 'components/common/HeaderText/HeaderText';
+import { CommonLayout } from 'components/layout';
+import { ReactComponent as LogoImage } from 'assets/images/Logo.svg';
+import {
+  StLoginContainer,
+  StLoginWrapper,
+  StLogoBox,
+} from './Registerpage.styles';
 
 interface RegitserProps {
   email: string;
@@ -130,46 +138,54 @@ export const RegisterPage = () => {
   }, []);
 
   return (
-    <div>
-      <h3>동네마실 환영합니다!</h3>
-      <h4>이메일</h4>
-      <Input
-        type="email"
-        name="email"
-        id="email"
-        value={RegitserProps.email}
-        onChange={onChangeHandler}
-      />
-      <StVerifyMsg $isValid={verifyMsg.email.isValid}>
-        {verifyMsg.email.msg}
-      </StVerifyMsg>
-      <h4>닉네임</h4>
-      <Input
-        type="text"
-        name="nickname"
-        id="nickname"
-        value={RegitserProps.nickname}
-        onChange={onChangeHandler}
-      />
-      <p>{verifyMsg.nickname.msg}</p>
-      <h4>비밀번호</h4>
-      <Input
-        type="password"
-        name="password"
-        id="password"
-        value={RegitserProps.password}
-        onChange={onChangeHandler}
-      />
-      <p>{verifyMsg.password.msg}</p>
-      <Input
-        type="password"
-        name="passwordVerify"
-        id="passwordVerify"
-        value={RegitserProps.passwordVerify}
-        onChange={onChangeHandler}
-      />
-      <p>{verifyMsg.passwordVerify.msg}</p>
-      <Button onClick={onSubmitHandler}>회원가입</Button>
-    </div>
+    <CommonLayout>
+      <StLoginContainer>
+        <StLogoBox>
+          <LogoImage width={32} height={36} />
+          <span>동네마실</span>
+        </StLogoBox>
+        <HeaderText type="h1">회원가입</HeaderText>
+        <StLoginWrapper>
+          <h4>이메일</h4>
+          <Input
+            type="email"
+            name="email"
+            id="email"
+            value={RegitserProps.email}
+            onChange={onChangeHandler}
+          />
+          <StVerifyMsg $isValid={verifyMsg.email.isValid}>
+            {verifyMsg.email.msg}
+          </StVerifyMsg>
+          <h4>닉네임</h4>
+          <Input
+            type="text"
+            name="nickname"
+            id="nickname"
+            value={RegitserProps.nickname}
+            onChange={onChangeHandler}
+          />
+          <p>{verifyMsg.nickname.msg}</p>
+          <h4>비밀번호</h4>
+          <Input
+            type="password"
+            name="password"
+            id="password"
+            value={RegitserProps.password}
+            onChange={onChangeHandler}
+          />
+          <p>{verifyMsg.password.msg}</p>
+          <Input
+            type="password"
+            name="passwordVerify"
+            id="passwordVerify"
+            value={RegitserProps.passwordVerify}
+            onChange={onChangeHandler}
+          />
+          <p>{verifyMsg.passwordVerify.msg}</p>
+        </StLoginWrapper>
+        <Button onClick={onSubmitHandler}>회원가입</Button>
+      </StLoginContainer>
+    </CommonLayout>
   );
 };
