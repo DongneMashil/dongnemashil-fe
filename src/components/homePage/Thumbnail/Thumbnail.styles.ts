@@ -15,19 +15,18 @@ export const StThumbnailTitle = styled.div`
   align-items: center;
   bottom: 130px;
   margin: 10px 0;
-
-  & div {
-    & img {
-      width: 30px;
-      height: 30px;
-      margin-right: 10px;
-    }
-  }
 `;
 
 export const StThumbnailTitleLeft = styled.div`
   display: flex;
   align-items: center;
+
+  img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0 10px 0 8px;
+  }
 `;
 
 export const StTitleText = styled.div`
