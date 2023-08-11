@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Input, Button } from 'components/common';
+import { CommonLayout } from 'components/layout';
 import { login } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { useVerifyUser } from 'hooks';
+import { StCommonLoginLayout } from './CommonLoginPage.styles';
 
 interface CommonLoginProps {
   id: string;
@@ -53,25 +55,27 @@ export const CommonLoginPage = () => {
   }
   console.log('loginValues', loginValues);
   return (
-    <div>
-      <h3>회원 아이디로 로그인</h3>
-      <h4>아이디</h4>
-      <Input
-        type="email"
-        name="id"
-        id="id"
-        value={loginValues.id}
-        onChange={onChangeHandler}
-      />
-      <h4>password</h4>
-      <Input
-        type="password"
-        name="password"
-        id="password"
-        value={loginValues.password}
-        onChange={onChangeHandler}
-      />
-      <Button onClick={onSubmitHandler}>로그인</Button>
-    </div>
+    <CommonLayout>
+      <StCommonLoginLayout>
+        <h3>회원 아이디로 로그인</h3>
+        <h4>아이디</h4>
+        <Input
+          type="email"
+          name="id"
+          id="id"
+          value={loginValues.id}
+          onChange={onChangeHandler}
+        />
+        <h4>password</h4>
+        <Input
+          type="password"
+          name="password"
+          id="password"
+          value={loginValues.password}
+          onChange={onChangeHandler}
+        />
+        <Button onClick={onSubmitHandler}>로그인</Button>
+      </StCommonLoginLayout>
+    </CommonLayout>
   );
 };
