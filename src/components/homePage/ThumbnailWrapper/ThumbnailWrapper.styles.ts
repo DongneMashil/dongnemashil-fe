@@ -18,5 +18,6 @@ export const StSort = styled.div`
   align-items: center;
   justify-content: right;
   gap: 6px;
-  padding: 16px 0;
+  padding-top: 16px;
+  color: ${theme.lightGrayColor};
 `;
