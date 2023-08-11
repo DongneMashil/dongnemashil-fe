@@ -8,7 +8,7 @@ import {
   StMarker,
   StPostButton,
 } from './WriteMapPage.styles.ts';
-import { Geolocation } from 'components/writeMapPage';
+import { Geolocation } from 'components/mapWritePage';
 import { useNavigate } from 'react-router-dom';
 
 export const WriteMapPage = () => {
