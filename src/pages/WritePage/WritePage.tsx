@@ -6,7 +6,7 @@ import {
   StTitle,
 } from './WritePage.styles';
 import { CommonLayout, NavBar } from 'components/layout';
-import { FileSlider } from 'components/writePage/FileSlider/FileSlider';
+import { FileSlider } from 'components/writePage';
 import { useMutation } from '@tanstack/react-query';
 import { submitReview } from 'api/reviews';
 import { useNavigate } from 'react-router-dom';
