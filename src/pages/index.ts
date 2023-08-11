@@ -11,3 +11,4 @@ export * from './MyPage/MyPage';
 export * from './SearchPage/SearchPage';
 export * from './WriteMapPage/WriteMapPage';
 export * from './WritePage/WritePage';
+export * from './SearchResultMapPage/SearchResultMapPage';
