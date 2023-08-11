@@ -3,19 +3,20 @@ import React from 'react';
 import { StNavBar } from './NavBar.styles';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
+import { user } from 'assets/user';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
-  btnLeft?: 'logo' | 'back';
+  btnLeft?: 'logo' | 'back' | 'cancel';
   btnSecondRight?: 'search' | null;
-  btnRight?: 'close' | 'mypage' | 'submit' | null;
+  btnRight?: 'done' | 'mypage' | 'submit' | 'map' | null;
   onClickSubmit?: () => void;
 }
 
 export const NavBar = ({
-  btnLeft,
+  btnLeft = 'logo',
   btnSecondRight,
-  btnRight,
+  btnRight = 'mypage',
   children,
   onClickSubmit,
 }: NavBarProps) => {
@@ -25,40 +26,57 @@ export const NavBar = ({
     navigate(-1);
   };
 
+  const renderBtnLeft = () => {
+    return btnLeft === 'back' ? (
+      <Button type={'icon'} onClick={goBack}>
+        ⬅️
+      </Button>
+    ) : btnLeft === 'cancel' ? (
+      <Button type={'onlytext'} url={'/'}>
+        취소
+      </Button>
+    ) : (
+      <Button type={'icon'} url={'/'}>
+        🏃🏻‍♀️
+      </Button>
+    );
+  };
+
+  const renderBtnSecondRight = () => {
+    return btnSecondRight === 'search' ? (
+      <Button type={'icon'} url={'/search'}>
+        <Search />
+      </Button>
+    ) : null;
+  };
+
+  const renderBtnRight = () => {
+    return btnRight === 'done' ? (
+      <Button type={'onlytext'} url={'/'}>
+        완료
+      </Button>
+    ) : btnRight === 'mypage' ? (
+      <Button type={'icon'} url={'/mypage'}>
+        <img src={user} />
+      </Button>
+    ) : btnRight === 'submit' ? (
+      <Button type={'normal'} onClick={onClickSubmit}>
+        Submit
+      </Button>
+    ) : btnRight === 'map' ? (
+      <Button type={'onlytext'} url={'/'}>
+        지도보기 {'>'}
+      </Button>
+    ) : null;
+  };
+
   return (
     <StNavBar>
-      {btnLeft === 'logo' ? (
-        <Button type={'icon'} url={'/'}>
-          {/* <img src={'/logo.jpg'} /> */}
-          🏃🏻‍♀️
-        </Button>
-      ) : (
-        <Button type={'icon'} onClick={goBack}>
-          {/* <img src={'/backArrow.jpg'} /> */}
-          ⬅️
-        </Button>
-      )}
+      {renderBtnLeft()}
       {children ? <div>{children}</div> : null}
       <div>
-        {btnSecondRight === 'search' ? (
-          <Button type={'icon'} url={'/search'}>
-            <Search />
-          </Button>
-        ) : null}
-        {btnRight === 'close' ? (
-          <Button type={'icon'} url={'/'}>
-            {/* <img src={'/close.jpg'} /> */}
-            ✖️
-          </Button>
-        ) : btnRight === 'mypage' ? (
-          <Button type={'normal'} url={'/mypage'}>
-            👀
-          </Button>
-        ) : btnRight === 'submit' ? (
-          <Button type={'normal'} onClick={onClickSubmit}>
-            Submit
-          </Button>
-        ) : null}
+        {renderBtnSecondRight()}
+        {renderBtnRight()}
       </div>
     </StNavBar>
   );

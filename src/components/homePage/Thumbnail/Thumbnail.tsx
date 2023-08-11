@@ -1,9 +1,19 @@
 import React from 'react';
-import { StThumbnail } from './Thumbnail.styles';
+import {
+  StThumbnail,
+  StThumbnailTitle,
+  StThumbnailTitleLeft,
+  StThumnailMain,
+  StTitleText,
+} from './Thumbnail.styles';
 import { Span } from '../Span/Span';
 import { useNavigate } from 'react-router-dom';
 import { ReviewsList } from 'api/reviewsApi';
 import { user } from 'assets/user';
+import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
+import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
+import { useLike } from 'hooks';
+import { StLike } from 'components/detailPage';
 
 export const Thumbnail = ({
   id,
@@ -11,8 +21,8 @@ export const Thumbnail = ({
   mainImgUrl,
   videoUrl,
   profileImgUrl,
-  likeCnt,
-  likebool,
+  likeCnt: initialLikeCnt,
+  likebool: initialIsLiked,
 }: ReviewsList) => {
   const navigate = useNavigate();
 
@@ -20,26 +30,39 @@ export const Thumbnail = ({
     navigate(`/review/${id}`);
   };
 
+  const { isLiked, likeCnt, toggleLikeHandler } = useLike({
+    reviewId: id.toString(),
+    initialIsLiked,
+    initialLikeCnt,
+  });
+
   return (
-    <StThumbnail onClick={onClickThumbnail}>
-      <div>
-        <Span size={'title'}>
+    <StThumbnail>
+      <StThumnailMain onClick={onClickThumbnail}>
+        {mainImgUrl ? (
+          <img src={mainImgUrl} />
+        ) : (
+          videoUrl && (
+            <video>
+              <source src={videoUrl} type="video/mp4" />
+            </video>
+          )
+        )}
+      </StThumnailMain>
+      <StThumbnailTitle>
+        <StThumbnailTitleLeft>
           {profileImgUrl ? <img src={profileImgUrl} /> : <img src={user} />}
-          <strong>{roadName}</strong>에서
-        </Span>
-        <Span>
-          {likebool ? '❤️' : '🤍'} {likeCnt}
-        </Span>
-      </div>
-      {mainImgUrl ? (
-        <img src={mainImgUrl} />
-      ) : (
-        videoUrl && (
-          <video>
-            <source src={videoUrl} type="video/mp4" />
-          </video>
-        )
-      )}
+          <StTitleText>
+            <Span size={'title'}>
+              <strong>{roadName}</strong>에서
+            </Span>
+            <Span size={'small'}>2시간 전</Span>
+          </StTitleText>
+        </StThumbnailTitleLeft>
+        <StLike onClick={toggleLikeHandler}>
+          {isLiked ? <FilledHeart /> : <Heart />} {likeCnt}
+        </StLike>
+      </StThumbnailTitle>
     </StThumbnail>
   );
 };
