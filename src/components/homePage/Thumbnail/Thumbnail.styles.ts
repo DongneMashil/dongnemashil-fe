@@ -62,10 +62,10 @@ const LongerWidth = css`
 `;
 
 export const StThumnailMain = styled.div<{
-  $imgRatio?: 'LongerHight' | 'LongerWidth' | null;
+  $imgRatio?: 'LongerHeight' | 'LongerWidth' | null;
 }>`
   ${(props) =>
-    props.$imgRatio === 'LongerHight'
+    props.$imgRatio === 'LongerHeight'
       ? LongerHight
       : props.$imgRatio === 'LongerWidth'
       ? LongerWidth

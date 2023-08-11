@@ -26,7 +26,7 @@ export const Thumbnail = ({
 }: ReviewsList) => {
   const navigate = useNavigate();
   const [imgRatio, setImgRatio] = useState<
-    'LongerHight' | 'LongerWidth' | null
+    'LongerHeight' | 'LongerWidth' | null
   >(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
@@ -34,16 +34,18 @@ export const Thumbnail = ({
     navigate(`/review/${id}`);
   };
 
-  useEffect(() => {
+  const handleImageLoad = () => {
     if (imageRef.current) {
       const imageWidth = imageRef.current.naturalWidth;
       const imageHeight = imageRef.current.naturalHeight;
 
-      imageWidth < imageHeight
-        ? setImgRatio('LongerHight')
-        : setImgRatio('LongerWidth');
+      if (imageWidth < imageHeight) {
+        setImgRatio('LongerHeight');
+      } else {
+        setImgRatio('LongerWidth');
+      }
     }
-  }, [imageRef.current]);
+  };
 
   const { isLiked, likeCnt, toggleLikeHandler } = useLike({
     reviewId: id.toString(),
@@ -55,7 +57,7 @@ export const Thumbnail = ({
     <StThumbnail>
       <StThumnailMain onClick={onClickThumbnail} $imgRatio={imgRatio}>
         {mainImgUrl ? (
-          <img ref={imageRef} src={mainImgUrl} />
+          <img ref={imageRef} src={mainImgUrl} onLoad={handleImageLoad} />
         ) : videoUrl ? (
           <video>
             <source src={videoUrl} type="video/mp4" />
