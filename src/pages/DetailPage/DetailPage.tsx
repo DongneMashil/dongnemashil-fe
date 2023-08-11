@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getReviewDetail, ReviewDetail } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
@@ -6,18 +6,30 @@ import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
 import { FooterSpacer, Tag } from 'components/common';
 import {
+  StCreatedTime,
   StDetailPageContainer,
   StDetailPageContent,
   StDetailPageHeader,
-  StDetailPageInfo,
   StNavTitle,
   StTagWrapper,
 } from './DetailPage.styles';
 import noImage from 'assets/noImage/noimage.png';
 import noUser from 'assets/noImage/nouser.gif';
 import timeAgo from 'utils/timeAgo';
+import { useRecoilValue } from 'recoil';
+import { userProfileSelector } from 'recoil/userExample';
+import { useVerifyUser } from 'hooks';
 
 export const DetailPage = () => {
+  const userState = useRecoilValue(userProfileSelector);
+  const { data: userData } = useVerifyUser(true);
+  useEffect(() => {
+    console.log('current user state: ', userState);
+    if (userData) {
+      console.log('useVerifyUser data: ', userData);
+    }
+  }, [userState]);
+
   const contentRef = useRef<HTMLDivElement>(null);
 
   const { reviewId } = useParams<{ reviewId: string }>();
@@ -50,8 +62,8 @@ export const DetailPage = () => {
       {data && (
         <CommonLayout
           header={
-            <NavBar btnLeft={'logo'} btnRight={'mypage'}>
-              <StNavTitle>{data.title}</StNavTitle>
+            <NavBar btnLeft={'logo'} btnRight={'close'}>
+              <StNavTitle>{data.address}</StNavTitle>
             </NavBar>
           }
           footer={
@@ -65,27 +77,24 @@ export const DetailPage = () => {
           }
         >
           <StDetailPageContainer>
+            <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
             <StDetailPageHeader>
               <img src={data.profileImgUrl || noUser} />
-              <h4>{data.address || '주소없음'}</h4>
-              <p>지도보기</p>
+              <h4>{data.title || '제목없음'}</h4>
             </StDetailPageHeader>
-            <StTagWrapper>
-              {data.tag.map((tag) => (
-                <Tag key={tag.id} text={tag.name} />
-              ))}
-            </StTagWrapper>
-            <StDetailPageInfo>
-              <h6>{timeAgo(data.createdAt)}</h6>
-            </StDetailPageInfo>
+
             <StDetailPageContent>
               <img src={data.mainImgUrl || noImage} />
-              {data.subImgUrl.map((img, index) => (
-                <img key={index} src={img} />
-              ))}
+              {data.subImgUrl.map((img, index) =>
+                img !== '' ? <img key={index} src={img} /> : null
+              )}
 
               <p ref={contentRef}>{data.content}</p>
-
+              <StTagWrapper>
+                {data.tag.map((tag) => (
+                  <Tag key={tag.id} text={tag.name} />
+                ))}
+              </StTagWrapper>
               <FooterSpacer />
             </StDetailPageContent>
           </StDetailPageContainer>

@@ -24,6 +24,7 @@ export const Comments = ({
   const useInfinityScroll = () => {
     const fetchComment = async ({ pageParam = 1 }) => {
       const response = await getComment(reviewId, pageParam);
+      console.log(JSON.stringify(response));
       return {
         result: response.content,
         nextPage: pageParam + 1,

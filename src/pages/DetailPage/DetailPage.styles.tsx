@@ -21,20 +21,16 @@ export const StDetailPageContainer = styled.div`
 `;
 export const StDetailPageHeader = styled.div`
   width: 100%;
-  height: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #e5e5e5;
+  margin: 1rem 0;
   h4 {
+    font-size: 2rem;
     margin-left: 1rem;
     margin-right: auto;
-  }
-  h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
   }
   img {
     width: 30px;
@@ -43,17 +39,15 @@ export const StDetailPageHeader = styled.div`
   }
 `;
 
-export const StDetailPageInfo = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  h3 {
-    font-size: 16px;
-    font-weight: bold;
-    margin-right: 10px;
-  }
-  h6 {
-    font-size: 16px;
-  }
+export const StCreatedTime = styled.div`
+  color: #8e8e8e;
+  font-family: Pretendard;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
 `;
 
 export const StDetailPageContent = styled.div`
