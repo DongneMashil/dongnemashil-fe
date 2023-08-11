@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getComment } from 'api/detailApi';
 import SkeletonUI from 'components/common/SkeletonUI/SkeletonUI';
-import noUser from 'assets/noImage/nouser.gif';
+import noUser from 'assets/images/NoUser.gif';
 import React, { useEffect, useRef } from 'react';
 import timeAgo from 'utils/timeAgo';
 import {

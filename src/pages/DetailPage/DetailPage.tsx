@@ -13,8 +13,8 @@ import {
   StNavTitle,
   StTagWrapper,
 } from './DetailPage.styles';
-import noImage from 'assets/noImage/noimage.png';
-import noUser from 'assets/noImage/nouser.gif';
+import noImage from 'assets/images/NoImage.png';
+import noUser from 'assets/images/NoUser.gif';
 import timeAgo from 'utils/timeAgo';
 import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';

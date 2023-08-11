@@ -3,7 +3,7 @@ import React from 'react';
 import { StNavBar } from './NavBar.styles';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as SearchFlat } from 'assets/icons/SearchFlat.svg';
-import noUser from 'assets/noImage/nouser.gif';
+import noUser from 'assets/images/NoUser.gif';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
