@@ -1,30 +1,41 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { TabButton } from '../TabButton/TabButton';
-export const TabMenu = () => {
-  const [isMyReviewSelected, setIsMyReviewSelected] = useState(true);
-  const onTabClickHandler = useCallback(() => {
-    setIsMyReviewSelected(!isMyReviewSelected);
-  }, [isMyReviewSelected]);
+import { GetMyReviewsResponse, getMyReviews } from 'api/mypageApi';
+import { useQuery } from '@tanstack/react-query';
+export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
+  const [selectedTab, setSelectedTab] = useState('reviews');
 
+  const { data } = useQuery<GetMyReviewsResponse, Error>({
+    queryKey: ['myPage', nickName, selectedTab],
+    queryFn: () => getMyReviews(selectedTab),
+    enabled: !!nickName,
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log('🟢' + error);
+    },
+  });
+  console.log(data);
   return (
     <StTabContainer>
       <StTabButtonWrapper>
         <TabButton
-          selected={isMyReviewSelected}
-          onClick={!isMyReviewSelected ? onTabClickHandler : undefined}
+          selected={selectedTab === 'reviews'}
+          onClick={() => setSelectedTab('reviews')}
         >
           내가 쓴
         </TabButton>
         <TabButton
-          selected={!isMyReviewSelected}
-          onClick={isMyReviewSelected ? onTabClickHandler : undefined}
+          selected={selectedTab === 'likes'}
+          onClick={() => setSelectedTab('likes')}
         >
           좋아요 한
         </TabButton>
       </StTabButtonWrapper>
       <StTabContentBox>
-        {isMyReviewSelected ? (
+        {selectedTab === 'reviews' ? (
           <>
             {Array(10)
               .fill(null)

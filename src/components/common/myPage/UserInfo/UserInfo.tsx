@@ -1,19 +1,48 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
-export const UserInfo = () => {
+import noUser from 'assets/noImage/nouser.gif';
+import { useNavigate } from 'react-router-dom';
+interface UserInfoProps {
+  profileImgUrl: string | null | undefined;
+  nickName?: string;
+  email?: string;
+}
+export const UserInfo = ({
+  profileImgUrl,
+  nickName = '닉네임',
+  email = 'userId',
+}: UserInfoProps) => {
+  useEffect(() => {
+    console.log(profileImgUrl + '프로필 이미지');
+  }, [profileImgUrl]);
+  const navigate = useNavigate();
+  const navigateToProfileHandler = () => {
+    navigate('/mypage/profile');
+  };
+
   return (
     <StUserInfoContainer>
       <div className="profile">
-        <img src="https://picsum.photos/200" alt="프로필 이미지" />
+        <img src={profileImgUrl || noUser} alt="프로필 이미지" />
         <div className="nameWrapper">
-          <div className="nickname">닉네임</div>
-          <div className="userId">@userId</div>
+          <div className="nickname">{nickName}</div>
+          <div className="userId">{email}</div>
         </div>
       </div>
-      <div className="edit">〉</div>
+      <StToProfileButton className="edit" onClick={navigateToProfileHandler}>
+        〉
+      </StToProfileButton>
     </StUserInfoContainer>
   );
 };
+export const StToProfileButton = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4f4f4f;
+`;
 
 export const StUserInfoContainer = styled.div`
   ${(props) => props.theme.floatingBox}
