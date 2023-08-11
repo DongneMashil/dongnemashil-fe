@@ -1,5 +1,5 @@
 import { theme } from 'style/theme';
-import { styled } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StThumbnail = styled.div`
   display: flex;
@@ -15,21 +15,18 @@ export const StThumbnailTitle = styled.div`
   align-items: center;
   bottom: 130px;
   margin: 10px 0;
-
-  & div {
-    & img {
-      width: 30px;
-      height: 30px;
-      /* vertical-align: middle;
-      transform: translateY(-2px); */
-      margin-right: 10px;
-    }
-  }
 `;
 
 export const StThumbnailTitleLeft = styled.div`
   display: flex;
   align-items: center;
+
+  img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0 10px 0 8px;
+  }
 `;
 
 export const StTitleText = styled.div`
@@ -37,18 +34,43 @@ export const StTitleText = styled.div`
   flex-direction: column;
 `;
 
-export const StThumnailMain = styled.div`
-  border-radius: 10px;
-  overflow: hidden;
-  /* max-height: 100vw; */
-  /* padding-bottom: 100%; */
+const LongerHight = css`
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    padding-bottom: 100%;
+  }
 
   & img {
-    /* width: 100%;
-    vertical-align: middle; */
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
+    position: absolute;
+    object-fit: cover;
   }
+`;
+
+const LongerWidth = css`
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    vertical-align: middle;
+  }
+`;
+
+export const StThumnailMain = styled.div<{
+  $imgRatio?: 'LongerHeight' | 'LongerWidth' | null;
+}>`
+  ${(props) =>
+    props.$imgRatio === 'LongerHeight'
+      ? LongerHight
+      : props.$imgRatio === 'LongerWidth'
+      ? LongerWidth
+      : null}
+
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
 `;
