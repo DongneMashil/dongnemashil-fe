@@ -3,6 +3,7 @@ import React from 'react';
 import { StNavBar } from './NavBar.styles';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
+import { user } from 'assets/user';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
@@ -51,8 +52,8 @@ export const NavBar = ({
             ✖️
           </Button>
         ) : btnRight === 'mypage' ? (
-          <Button type={'normal'} url={'/mypage'}>
-            👀
+          <Button type={'icon'} url={'/mypage'}>
+            <img src={user} />
           </Button>
         ) : btnRight === 'submit' ? (
           <Button type={'normal'} onClick={onClickSubmit}>
