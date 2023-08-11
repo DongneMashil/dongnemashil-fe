@@ -16,7 +16,7 @@ export interface NavBarProps {
 export const NavBar = ({
   btnLeft = 'logo',
   btnSecondRight,
-  btnRight,
+  btnRight = 'mypage',
   children,
   onClickSubmit,
 }: NavBarProps) => {
