@@ -3,7 +3,7 @@ import { Button } from 'components/common';
 import { ReactComponent as SearchFlat } from 'assets/icons/SearchFlat.svg';
 import { StSearchInput, StSearchHeader } from './SearchPage.styles';
 import { CommonLayout } from 'components/layout';
-import { HeaderText } from 'components/layout/HeaderText/HeaderText';
+import { HeaderText } from 'components/common/HeaderText/HeaderText';
 
 export const SearchPage = () => {
   const [value, setValue] = useState('');
