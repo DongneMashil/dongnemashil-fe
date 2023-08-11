@@ -37,7 +37,7 @@ export const DetailPage = () => {
     throw new Error('Review ID is missing');
   }
 
-  const { data, isLoading, isError, error } = useQuery<ReviewDetail, Error>({
+  const { data } = useQuery<ReviewDetail, Error>({
     queryKey: ['reviewDetail', reviewId],
     queryFn: () => getReviewDetail(reviewId),
     enabled: !!reviewId,
@@ -57,16 +57,14 @@ export const DetailPage = () => {
 
   return (
     <>
-      {isLoading && <div>Loading...</div>}
-      {isError && <div>{String(error)}</div>}
-      {data && (
-        <CommonLayout
-          header={
-            <NavBar btnLeft={'logo'} btnRight={'mypage'}>
-              <StNavTitle>{data.address}</StNavTitle>
-            </NavBar>
-          }
-          footer={
+      <CommonLayout
+        header={
+          <NavBar btnLeft={'logo'} btnRight={'mypage'}>
+            {data && <StNavTitle>{data.address}</StNavTitle>}
+          </NavBar>
+        }
+        footer={
+          data && (
             <Footer
               reviewId={reviewId}
               likeCnt={data.likeCnt}
@@ -74,33 +72,36 @@ export const DetailPage = () => {
               onClick={handleGotoContent}
               isLiked={data.likebool}
             ></Footer>
-          }
-          backgroundColor="#FFF"
-        >
-          <StDetailPageContainer>
-            <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
-            <StDetailPageHeader>
-              <img src={data.profileImgUrl || noUser} />
-              <h4>{data.title || '제목없음'}</h4>
-            </StDetailPageHeader>
+          )
+        }
+        backgroundColor="#FFF"
+      >
+        <StDetailPageContainer>
+          {data && (
+            <>
+              <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
+              <StDetailPageHeader>
+                <img src={data.profileImgUrl || noUser} />
+                <h4>{data.title || '제목없음'}</h4>
+              </StDetailPageHeader>
+              <StDetailPageContent>
+                <img src={data.mainImgUrl || noImage} />
+                {data.subImgUrl.map((img, index) =>
+                  img !== '' ? <img key={index} src={img} /> : null
+                )}
 
-            <StDetailPageContent>
-              <img src={data.mainImgUrl || noImage} />
-              {data.subImgUrl.map((img, index) =>
-                img !== '' ? <img key={index} src={img} /> : null
-              )}
-
-              <p ref={contentRef}>{data.content}</p>
-              <StTagWrapper>
-                {data.tag.map((tag) => (
-                  <Tag key={tag.id} text={tag.name} />
-                ))}
-              </StTagWrapper>
-              <FooterSpacer />
-            </StDetailPageContent>
-          </StDetailPageContainer>
-        </CommonLayout>
-      )}
+                <p ref={contentRef}>{data.content}</p>
+                <StTagWrapper>
+                  {data.tag.map((tag) => (
+                    <Tag key={tag.id} text={tag.name} />
+                  ))}
+                </StTagWrapper>
+                <FooterSpacer />
+              </StDetailPageContent>
+            </>
+          )}
+        </StDetailPageContainer>
+      </CommonLayout>
     </>
   );
 };
