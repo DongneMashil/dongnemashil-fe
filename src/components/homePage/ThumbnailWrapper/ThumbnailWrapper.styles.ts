@@ -12,3 +12,11 @@ export const StThumbnailWrapper = styled.div`
 export const StTarget = styled.div`
   height: 1px;
 `;
+
+export const StSort = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: 6px;
+  padding: 16px 0;
+`;

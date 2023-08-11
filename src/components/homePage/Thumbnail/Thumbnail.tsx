@@ -1,5 +1,11 @@
 import React from 'react';
-import { StThumbnail, StThumnailMain } from './Thumbnail.styles';
+import {
+  StThumbnail,
+  StThumbnailTitle,
+  StThumbnailTitleLeft,
+  StThumnailMain,
+  StTitleText,
+} from './Thumbnail.styles';
 import { Span } from '../Span/Span';
 import { useNavigate } from 'react-router-dom';
 import { ReviewsList } from 'api/reviewsApi';
@@ -32,15 +38,6 @@ export const Thumbnail = ({
 
   return (
     <StThumbnail>
-      <div>
-        <Span size={'title'}>
-          {profileImgUrl ? <img src={profileImgUrl} /> : <img src={user} />}
-          <strong>{roadName}</strong>에서
-        </Span>
-        <StLike onClick={toggleLikeHandler}>
-          {isLiked ? <FilledHeart /> : <Heart />} {likeCnt}
-        </StLike>
-      </div>
       <StThumnailMain onClick={onClickThumbnail}>
         {mainImgUrl ? (
           <img src={mainImgUrl} />
@@ -52,6 +49,20 @@ export const Thumbnail = ({
           )
         )}
       </StThumnailMain>
+      <StThumbnailTitle>
+        <StThumbnailTitleLeft>
+          {profileImgUrl ? <img src={profileImgUrl} /> : <img src={user} />}
+          <StTitleText>
+            <Span size={'title'}>
+              <strong>{roadName}</strong>에서
+            </Span>
+            <Span size={'small'}>2시간 전</Span>
+          </StTitleText>
+        </StThumbnailTitleLeft>
+        <StLike onClick={toggleLikeHandler}>
+          {isLiked ? <FilledHeart /> : <Heart />} {likeCnt}
+        </StLike>
+      </StThumbnailTitle>
     </StThumbnail>
   );
 };
