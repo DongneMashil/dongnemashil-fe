@@ -9,7 +9,7 @@ import {
 
   StPostButton,
 } from './WriteMapPage.styles.ts';
-import { Geolocation } from 'components/WriteMapPage/index.js';
+import { Geolocation } from 'components/writeMapPage';
 // import { ReactComponent as Marker } from 'assets/icons/Marker.svg';
 
 export const WriteMapPage = () => {

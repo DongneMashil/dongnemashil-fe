@@ -7,7 +7,7 @@ import {
   StPlusButton,
   StyledImage,
   StyledVideo,
-} from './FileSlider.styles';
+} from './FileSlider.styles'
 import { ReactComponent as FileUpload } from 'assets/icons/FileUpload.svg';
 
 interface ImageSliderProps {
