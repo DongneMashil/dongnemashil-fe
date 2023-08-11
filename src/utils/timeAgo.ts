@@ -1,8 +1,26 @@
 const timeAgo = (timeString: string): string => {
   const now = new Date();
-  const timeDate = new Date(timeString);
 
-  const secondsDiff = (now.getTime() - timeDate.getTime()) / 1000;
+  // UTC 기준의 현재 시간과 입력된 시간을 가져옵니다.
+  const utcNow = Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    now.getUTCHours(),
+    now.getUTCMinutes(),
+    now.getUTCSeconds()
+  );
+  const timeDate = new Date(timeString);
+  const utcTimeDate = Date.UTC(
+    timeDate.getUTCFullYear(),
+    timeDate.getUTCMonth(),
+    timeDate.getUTCDate(),
+    timeDate.getUTCHours(),
+    timeDate.getUTCMinutes(),
+    timeDate.getUTCSeconds()
+  );
+
+  const secondsDiff = (utcNow - utcTimeDate) / 1000;
   const minutesDiff = secondsDiff / 60;
   const hoursDiff = minutesDiff / 60;
   const daysDiff = hoursDiff / 24;
