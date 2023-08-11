@@ -14,6 +14,9 @@ import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
 import { useVerifyUser } from 'hooks';
 import { useRecoilValue } from 'recoil';
 import { userIsLoggedInSelector } from 'recoil/userExample';
+import { addressSelector } from 'recoil/address/addressSelector';
+
+
 interface FormValues {
   title: string;
   content: string;
@@ -30,6 +33,8 @@ export const WritePage = () => {
     { type: 'image' | 'video'; file: File; isCover: boolean }[]
   >([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const addressData = useRecoilValue(addressSelector);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -125,7 +130,8 @@ export const WritePage = () => {
     const jsonData = {
       title: formValues.title,
       content: formValues.content,
-      address: '서울시 영등포구 여의동로 330',
+      address: addressData.fullAddress,
+      roadName: addressData.roadName,
       tag: selectedTags,
     };
 
@@ -190,7 +196,7 @@ export const WritePage = () => {
             btnRight={'submit'}
             onClickSubmit={onSubmithandler}
           >
-            주소값
+            {addressData.roadName}
           </NavBar>
         }
       >
