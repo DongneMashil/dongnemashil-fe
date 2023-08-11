@@ -7,9 +7,6 @@ export const StThumbnail = styled.div`
 
   padding: 26px 0 8px;
   border-bottom: 1px solid ${theme.lightGrayColor};
-
-  & div {
-  }
 `;
 
 export const StThumbnailTitle = styled.div`
@@ -43,8 +40,15 @@ export const StTitleText = styled.div`
 export const StThumnailMain = styled.div`
   border-radius: 10px;
   overflow: hidden;
+  /* max-height: 100vw; */
+  /* padding-bottom: 100%; */
 
   & img {
+    /* width: 100%;
+    vertical-align: middle; */
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
   }
 `;
