@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
   StThumbnail,
   StThumbnailTitle,
@@ -9,11 +9,11 @@ import {
 import { Span } from '../Span/Span';
 import { useNavigate } from 'react-router-dom';
 import { ReviewsList } from 'api/reviewsApi';
-import { user } from 'assets/user';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { useLike } from 'hooks';
 import { StLike } from 'components/detailPage';
+import noUser from 'assets/noImage/nouser.gif';
 
 export const Thumbnail = ({
   id,
@@ -25,9 +25,26 @@ export const Thumbnail = ({
   likebool: initialIsLiked,
 }: ReviewsList) => {
   const navigate = useNavigate();
+  const [imgRatio, setImgRatio] = useState<
+    'LongerHeight' | 'LongerWidth' | null
+  >(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   const onClickThumbnail = () => {
     navigate(`/review/${id}`);
+  };
+
+  const handleImageLoad = () => {
+    if (imageRef.current) {
+      const imageWidth = imageRef.current.naturalWidth;
+      const imageHeight = imageRef.current.naturalHeight;
+
+      if (imageWidth < imageHeight) {
+        setImgRatio('LongerHeight');
+      } else {
+        setImgRatio('LongerWidth');
+      }
+    }
   };
 
   const { isLiked, likeCnt, toggleLikeHandler } = useLike({
@@ -38,20 +55,18 @@ export const Thumbnail = ({
 
   return (
     <StThumbnail>
-      <StThumnailMain onClick={onClickThumbnail}>
+      <StThumnailMain onClick={onClickThumbnail} $imgRatio={imgRatio}>
         {mainImgUrl ? (
-          <img src={mainImgUrl} />
-        ) : (
-          videoUrl && (
-            <video>
-              <source src={videoUrl} type="video/mp4" />
-            </video>
-          )
-        )}
+          <img ref={imageRef} src={mainImgUrl} onLoad={handleImageLoad} />
+        ) : videoUrl ? (
+          <video>
+            <source src={videoUrl} type="video/mp4" />
+          </video>
+        ) : null}
       </StThumnailMain>
       <StThumbnailTitle>
         <StThumbnailTitleLeft>
-          {profileImgUrl ? <img src={profileImgUrl} /> : <img src={user} />}
+          <img src={profileImgUrl || noUser} alt="프로필 이미지" />
           <StTitleText>
             <Span size={'title'}>
               <strong>{roadName}</strong>에서
