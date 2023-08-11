@@ -1,28 +1,17 @@
 import { AxiosResponse, AxiosError } from 'axios';
 import { axiosInstance } from './api';
 
-export type ReviewDetail = {
-  id: number;
-  content: string;
-  img_url: string;
-  title: string;
-  video_url: string | null;
-  createdAt: string;
+export type MyProfile = {
+  email: string;
+  profileImgUrl: string;
   nickname: string;
-  profileImg_url: string;
-  address: string;
-  likeCnt: number;
-  commentCnt: number;
-  comments: unknown[] | null;
 };
 
-export const getMypage = async (
-  detailId: undefined | string
-): Promise<ReviewDetail> => {
-  // 상세페이지 조회
+export const getMyProfile = async (): Promise<MyProfile> => {
+  // 마이페이지 조회
   try {
-    const response: AxiosResponse<ReviewDetail> = await axiosInstance.get(
-      `/reviews/${detailId}`
+    const response: AxiosResponse<MyProfile> = await axiosInstance.get(
+      `/mypage`
     );
     return response.data;
   } catch (e: unknown) {
@@ -33,24 +22,13 @@ export const getMypage = async (
   }
 };
 
-export type MyPageDetail = {
-  detailsId: number;
-  userId: number;
-  content: string;
-  imgUrl: string;
-  videoUrl: string | null;
-  createdAt: string;
-  nickname: string;
-  profileImgUrl: string;
-};
-
-export const getMyPageDetails = async (
-  qValue: 'likes' | 'comments' | 'review'
-): Promise<MyPageDetail[]> => {
+export const getMyReviews = async (type: string): Promise<MyProfile> => {
+  // 마이페이지 조회
   try {
-    const response: AxiosResponse<{ selectList: MyPageDetail[] }> =
-      await axiosInstance.get(`/mypage/list?q=${qValue}`);
-    return response.data.selectList;
+    const response: AxiosResponse<MyProfile> = await axiosInstance.get(
+      `/mypage/list?q{${type}}`
+    );
+    return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data?.errorMessage || e.message);

@@ -8,7 +8,7 @@ import {
   WriteMapPage,
   CommonLoginPage,
   MyPage,
-  MyPageProfile,
+  MyProfilePage,
   SearchPage,
   WritePage,
 } from 'pages';
@@ -35,10 +35,10 @@ const Router = () => {
         />
         <Route
           path="/mypage/profile"
-          element={<ProtectedRoute element={<MyPageProfile />} />}
+          element={<ProtectedRoute element={<MyProfilePage />} />}
         />
         <Route path="/temp/mypage" element={<MyPage />} />
-        <Route path="/temp/mypage/profile" element={<MyPageProfile />} />
+        <Route path="/temp/mypage/profile" element={<MyProfilePage />} />
         <Route path="write" element={<WritePage />} />
         <Route path="search" element={<SearchPage />} />
       </Routes>
