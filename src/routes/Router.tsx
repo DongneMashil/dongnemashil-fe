@@ -11,6 +11,7 @@ import {
   MyProfilePage,
   SearchPage,
   WritePage,
+  SearchResultMapPage,
 } from 'pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
@@ -41,6 +42,7 @@ const Router = () => {
         <Route path="/temp/mypage/profile" element={<MyProfilePage />} />
         <Route path="write" element={<WritePage />} />
         <Route path="search" element={<SearchPage />} />
+        <Route path="search/map" element={<SearchResultMapPage />} />
       </Routes>
     </BrowserRouter>
   );
