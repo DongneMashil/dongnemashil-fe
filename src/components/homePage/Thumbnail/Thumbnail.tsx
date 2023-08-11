@@ -9,11 +9,11 @@ import {
 import { Span } from '../Span/Span';
 import { useNavigate } from 'react-router-dom';
 import { ReviewsList } from 'api/reviewsApi';
-import { user } from 'assets/user';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { useLike } from 'hooks';
 import { StLike } from 'components/detailPage';
+import noUser from 'assets/noImage/nouser.gif';
 
 export const Thumbnail = ({
   id,
@@ -66,7 +66,7 @@ export const Thumbnail = ({
       </StThumnailMain>
       <StThumbnailTitle>
         <StThumbnailTitleLeft>
-          {profileImgUrl ? <img src={profileImgUrl} /> : <img src={user} />}
+          <img src={profileImgUrl || noUser} alt="프로필 이미지" />
           <StTitleText>
             <Span size={'title'}>
               <strong>{roadName}</strong>에서
