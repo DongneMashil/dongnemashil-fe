@@ -32,7 +32,7 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
   footer,
   headerHeight = '50px',
   hideHeader = true,
-  backgroundColor = '#fff',
+  backgroundColor = 'transparent',
 }) => {
   const [isShow, setIsShow] = React.useState(true);
   const [prevPosition, setPrevPosition] = React.useState(0);

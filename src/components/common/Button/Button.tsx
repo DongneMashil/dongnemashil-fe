@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 export interface ButtonProps {
   children?: React.ReactNode;
-  type?: 'icon' | 'normal' | 'circle' | 'onlytext';
+  type?: 'icon' | 'normal' | 'circle' | 'onlytext' | 'onlytexttoggle';
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   url?: string;
   inputType?: 'button' | 'submit';
   value?: string;
+  $active?: boolean;
 }
 
 export const Button = ({
@@ -18,6 +19,7 @@ export const Button = ({
   url,
   inputType = 'button',
   value,
+  $active,
 }: ButtonProps) => {
   const navigate = useNavigate();
 
@@ -39,7 +41,7 @@ export const Button = ({
       value={value}
     />
   ) : (
-    <StButton className={type} onClick={handleButtonClick}>
+    <StButton className={type} onClick={handleButtonClick} $active={$active}>
       {children}
     </StButton>
   );
