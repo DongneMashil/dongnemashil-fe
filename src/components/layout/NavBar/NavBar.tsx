@@ -7,14 +7,14 @@ import { user } from 'assets/user';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
-  btnLeft?: 'logo' | 'back';
+  btnLeft?: 'logo' | 'back' | 'cancle';
   btnSecondRight?: 'search' | null;
-  btnRight?: 'close' | 'mypage' | 'submit' | 'map' | null;
+  btnRight?: 'done' | 'mypage' | 'submit' | 'map' | null;
   onClickSubmit?: () => void;
 }
 
 export const NavBar = ({
-  btnLeft,
+  btnLeft = 'logo',
   btnSecondRight,
   btnRight,
   children,
@@ -27,15 +27,17 @@ export const NavBar = ({
   };
 
   const renderBtnLeft = () => {
-    return btnLeft === 'logo' ? (
-      <Button type={'icon'} url={'/'}>
-        {/* <img src={'/logo.jpg'} /> */}
-        🏃🏻‍♀️
+    return btnLeft === 'back' ? (
+      <Button type={'icon'} onClick={goBack}>
+        ⬅️
+      </Button>
+    ) : btnLeft === 'cancle' ? (
+      <Button type={'onlytext'} url={'/'}>
+        취소
       </Button>
     ) : (
-      <Button type={'icon'} onClick={goBack}>
-        {/* <img src={'/backArrow.jpg'} /> */}
-        ⬅️
+      <Button type={'icon'} url={'/'}>
+        🏃🏻‍♀️
       </Button>
     );
   };
@@ -49,10 +51,9 @@ export const NavBar = ({
   };
 
   const renderBtnRight = () => {
-    return btnRight === 'close' ? (
-      <Button type={'icon'} url={'/'}>
-        {/* <img src={'/close.jpg'} /> */}
-        ✖️
+    return btnRight === 'done' ? (
+      <Button type={'onlytext'} url={'/'}>
+        완료
       </Button>
     ) : btnRight === 'mypage' ? (
       <Button type={'icon'} url={'/mypage'}>
@@ -63,7 +64,7 @@ export const NavBar = ({
         Submit
       </Button>
     ) : btnRight === 'map' ? (
-      <Button type={'normal'} onClick={onClickSubmit}>
+      <Button type={'onlytext'} url={'/'}>
         지도보기 {'>'}
       </Button>
     ) : null;
