@@ -7,7 +7,7 @@ import { user } from 'assets/user';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
-  btnLeft?: 'logo' | 'back' | 'cancle';
+  btnLeft?: 'logo' | 'back' | 'cancel';
   btnSecondRight?: 'search' | null;
   btnRight?: 'done' | 'mypage' | 'submit' | 'map' | null;
   onClickSubmit?: () => void;
@@ -31,7 +31,7 @@ export const NavBar = ({
       <Button type={'icon'} onClick={goBack}>
         ⬅️
       </Button>
-    ) : btnLeft === 'cancle' ? (
+    ) : btnLeft === 'cancel' ? (
       <Button type={'onlytext'} url={'/'}>
         취소
       </Button>
