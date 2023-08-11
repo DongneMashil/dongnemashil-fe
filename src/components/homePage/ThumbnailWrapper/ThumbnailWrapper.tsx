@@ -9,18 +9,15 @@ import { useFetchReviews } from 'api/reviewsApi';
 import { useIntersect } from 'hooks/useIntersect';
 import { Button } from 'components/common';
 
-export const ThumbnailWrapper = ({
-  selectedTags,
-}: {
-  selectedTags: string[] | null;
-}) => {
+export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
   const [type, setType] = useState('likes');
 
   const [page] = useState(1);
-  console.log(selectedTags);
+  console.log(tag);
 
   const { data, hasNextPage, isFetching, fetchNextPage } = useFetchReviews({
-    type: type,
+    type,
+    tag,
   });
 
   console.log(data);

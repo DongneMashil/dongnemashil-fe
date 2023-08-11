@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StThumbnail,
   StThumbnailTitle,
@@ -25,10 +25,27 @@ export const Thumbnail = ({
   likebool: initialIsLiked,
 }: ReviewsList) => {
   const navigate = useNavigate();
+  const [imgRatio, setImgRatio] = useState<
+    'LongerHight' | 'LongerWidth' | null
+  >(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   const onClickThumbnail = () => {
     navigate(`/review/${id}`);
   };
+
+  useEffect(() => {
+    if (imageRef.current) {
+      const imageWidth = imageRef.current.naturalWidth;
+      const imageHeight = imageRef.current.naturalHeight;
+      console.log(`Image Width: ${imageWidth}`);
+      console.log(`Image Height: ${imageHeight}`);
+
+      imageWidth < imageHeight
+        ? setImgRatio('LongerHight')
+        : setImgRatio('LongerWidth');
+    }
+  }, [imageRef.current]);
 
   const { isLiked, likeCnt, toggleLikeHandler } = useLike({
     reviewId: id.toString(),
@@ -38,16 +55,14 @@ export const Thumbnail = ({
 
   return (
     <StThumbnail>
-      <StThumnailMain onClick={onClickThumbnail}>
+      <StThumnailMain onClick={onClickThumbnail} $imgRatio={imgRatio}>
         {mainImgUrl ? (
-          <img src={mainImgUrl} />
-        ) : (
-          videoUrl && (
-            <video>
-              <source src={videoUrl} type="video/mp4" />
-            </video>
-          )
-        )}
+          <img ref={imageRef} src={mainImgUrl} />
+        ) : videoUrl ? (
+          <video>
+            <source src={videoUrl} type="video/mp4" />
+          </video>
+        ) : null}
       </StThumnailMain>
       <StThumbnailTitle>
         <StThumbnailTitleLeft>
