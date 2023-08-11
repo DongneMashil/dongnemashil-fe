@@ -21,6 +21,7 @@ export const Comments = ({
   if (!reviewId) {
     throw new Error('Review ID is missing');
   }
+  const latestCommentRef = useRef(null);
   const loader = useRef(null);
   const useInfinityScroll = () => {
     const fetchComment = async ({ pageParam = 1 }) => {
@@ -38,12 +39,12 @@ export const Comments = ({
         if (!lastPage.isLast) return lastPage.nextPage;
         return undefined;
       },
-      refetchOnWindowFocus: false,
-      refetchOnMount: true,
+      refetchOnWindowFocus: true, // 예: 창에 포커스가 갔을 때만 재요청하도록 설정
+      refetchOnMount: false,
       refetchOnReconnect: true,
-      retry: 1,
+      retry: false,
+      staleTime: 3000, // 3초 동안 데이터는 fresh 상태를 유지, 무분별한 요청을 막기 위함.
     });
-
     return query;
   };
   const { data, fetchNextPage, hasNextPage, isLoading } = useInfinityScroll();
@@ -74,16 +75,29 @@ export const Comments = ({
     };
   }, [isLoading, hasNextPage]);
 
+  useEffect(() => {
+    if (latestCommentRef.current) {
+      // ref가 DOM을 가르키는지 확인시켜줌
+      const element: HTMLElement = latestCommentRef.current as HTMLElement;
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [data]);
+
   return (
     <StDetailPageComment $isCommentShow={$isCommentShow}>
       {data && (
         <StDetailPageCommentList>
           {data.pages
             .flatMap((page) => page.result)
-            .map((comment) => {
+            .map((comment, index, array) => {
               if (!comment) return null;
+              const isLastComment = index === array.length - 1;
+
               return (
-                <StDetailPageCommentItem key={comment.id}>
+                <StDetailPageCommentItem
+                  key={comment.id}
+                  ref={isLastComment ? latestCommentRef : null}
+                >
                   <section>
                     <img
                       src={comment.profileImgUrl || noUser}
