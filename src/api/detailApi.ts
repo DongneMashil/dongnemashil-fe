@@ -53,17 +53,6 @@ export type Comment = {
   modifiedAt: string;
 };
 
-export type ExtendedReviewDetailComment = {
-  content: Comment[] | null;
-  pageable: ResponseData['pageable'];
-  size: number;
-  number: number;
-  sort: ResponseData['sort'];
-  numberOfElements: number;
-  first: boolean;
-  last: boolean;
-  empty: boolean;
-};
 type ResponseData = {
   content: Comment[];
   pageable: {
@@ -93,7 +82,7 @@ type ResponseData = {
 export const getComment = async (
   detailId: string, // 수정된 부분
   page?: number
-): Promise<ExtendedReviewDetailComment> => {
+): Promise<ResponseData> => {
   try {
     const response: AxiosResponse<ResponseData> = await axiosInstance.get(
       `/reviews/${detailId}/comments`,
