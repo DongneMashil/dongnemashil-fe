@@ -18,6 +18,7 @@ export const StLayoutBody = styled.div`
   max-height: 850px; // 최대 높이 -> 추후 반응형 적용
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 `;
+
 export const StLayoutSection = styled.div<{
   $headerHeight: string;
   $backgroundColor: string;
