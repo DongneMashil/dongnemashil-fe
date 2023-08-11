@@ -28,13 +28,13 @@ const timeAgo = (timeString: string): string => {
   let displayTime: string;
 
   if (secondsDiff < 60) {
-    displayTime = `${Math.round(secondsDiff)}초전`;
+    displayTime = `${Math.round(secondsDiff)}초 전`;
   } else if (minutesDiff < 60) {
-    displayTime = `${Math.round(minutesDiff)}분전`;
+    displayTime = `${Math.round(minutesDiff)}분 전`;
   } else if (hoursDiff < 12) {
-    displayTime = `${Math.round(hoursDiff)}시간전`;
+    displayTime = `${Math.round(hoursDiff)}시간 전`;
   } else if (daysDiff < 15) {
-    displayTime = `${Math.round(daysDiff)}일전`;
+    displayTime = `${Math.round(daysDiff)}일 전`;
   } else if (now.getFullYear() === timeDate.getFullYear()) {
     displayTime = `${String(timeDate.getMonth() + 1).padStart(
       2,
