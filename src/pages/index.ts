@@ -8,5 +8,6 @@ export * from './WriteMapPage/WriteMapPage';
 //export * from './DetailCommentPage/DetailCommentPage';
 export * from './CommonLoginPage/CommonLoginPage';
 export * from './MyPage/MyPage';
+export * from './SearchPage/SearchPage';
 export * from './WriteMapPage/WriteMapPage';
 export * from './WritePage/WritePage';

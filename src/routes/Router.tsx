@@ -8,6 +8,7 @@ import {
   WriteMapPage,
   CommonLoginPage,
   MyPage,
+  SearchPage,
   WritePage,
 } from 'pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -32,6 +33,7 @@ const Router = () => {
           element={<ProtectedRoute element={<MyPage />} />}
         />
         <Route path="write" element={<WritePage />} />
+        <Route path="search" element={<SearchPage />} />
       </Routes>
     </BrowserRouter>
   );
