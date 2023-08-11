@@ -5,9 +5,12 @@ const colors = {
   darkGrayColor: '#656e75',
   blackColor: '#000000',
 
-  primaryColor: '#35c5f0',
-  primaryDarkColor: '#09addb',
-  secondaryColor: '#FF7777',
+  mainColor: '#9A7B9A',
+  subColor: '#B5A6CA',
+  pointColor: '#886F88',
+
+  mainTextColor: '#333333',
+  titleTextColor: '#060606',
 };
 
 const size = {

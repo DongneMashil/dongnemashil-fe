@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
+import { theme } from './theme';
 
 const GlobalStyle = createGlobalStyle`
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
 
 * { box-sizing: border-box; }
 html, body, div, span, applet, object, iframe,
@@ -23,8 +23,11 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
-	color: #2F3438;
+	color: ${theme.mainTextColor};
 	letter-spacing: -0.4px;
+	line-height: normal;
+	font-style: normal;
+	font-weight: 400;
 }
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {

@@ -7,7 +7,7 @@ export const StDetailPageComment = styled.div<{ $isCommentShow: boolean }>`
   height: 100%;
   display: flex;
   flex-direction: column;
-  min-height: calc(850px);
+  // min-height: calc(850px); 이거 넣으니깐 한두개 있을때 안보임.
 `;
 export const StDetailPageCommentList = styled.div`
   width: 100%;
