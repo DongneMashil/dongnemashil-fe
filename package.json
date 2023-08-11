@@ -13,6 +13,7 @@
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
     "axios": "^1.4.0",
+    "browser-image-compression": "^2.0.2",
     "install": "^0.13.0",
     "json-server": "^0.17.3",
     "msw": "^1.2.3",
