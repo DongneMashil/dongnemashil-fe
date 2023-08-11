@@ -1,3 +1,5 @@
+import { css } from 'styled-components';
+
 const colors = {
   whiteColor: '#ffffff',
   lightGrayColor: '#e2e2e2',
@@ -19,8 +21,16 @@ const size = {
   desktop: '1000px',
 };
 
+const authLayout = css`
+  width: 100%;
+  height: 100%;
+  background-color: whiteColor;
+  padding: 43px 26px;
+`;
+
 export const theme = {
   ...colors,
+  authLayout,
   device: {
     mobile: `(max-width: ${size.mobile})`,
     tablet: `(min-width: ${size.tablet}) and (max-width: ${size.desktop})`,
