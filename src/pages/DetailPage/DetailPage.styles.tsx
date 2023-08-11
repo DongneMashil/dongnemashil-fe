@@ -13,7 +13,7 @@ export const StTagWrapper = styled.div`
 
 export const StDetailPageContainer = styled.div`
   width: 100%;
-  height: 100%;
+  // height: 100%;  백그라운드 색상 때문에 높이를 100%로 주면 안됨
   display: flex;
   flex-direction: column;
   position: relative;

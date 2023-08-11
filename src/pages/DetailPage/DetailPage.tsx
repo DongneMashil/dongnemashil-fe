@@ -62,7 +62,7 @@ export const DetailPage = () => {
       {data && (
         <CommonLayout
           header={
-            <NavBar btnLeft={'logo'} btnRight={'close'}>
+            <NavBar btnLeft={'logo'} btnRight={'mypage'}>
               <StNavTitle>{data.address}</StNavTitle>
             </NavBar>
           }
@@ -75,6 +75,7 @@ export const DetailPage = () => {
               isLiked={data.likebool}
             ></Footer>
           }
+          backgroundColor="#FFF"
         >
           <StDetailPageContainer>
             <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
