@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  CenteredBox,
-  CoverImageButton,
-  SlideContainer,
+  StCenteredBox,
+  StCoverImageButton,
+  StSlideContainer,
   StPlusButton,
   StyledImage,
   StyledImageContainer,
@@ -29,8 +29,16 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   setCoverImage,
   files,
 }) => {
+  const onImageClick = (image: File) => {
+    onSelectedCoverImage && onSelectedCoverImage(image);
+  };
+
+  const onCoverButtonClick = (image: File) => {
+    setCoverImage(image);
+  };
+
   return (
-    <SlideContainer>
+    <StSlideContainer>
       {files.map((file, index) => (
         <StyledImageContainer key={index}>
           {file.type === 'image' ? (
@@ -38,28 +46,26 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
               <StyledImage
                 src={URL.createObjectURL(images[index])}
                 alt={`Upload Preview ${index}`}
-                onClick={() =>
-                  onSelectedCoverImage && onSelectedCoverImage(images[index])
-                }
+                onClick={() => onImageClick(images[index])}
               />
-              <CoverImageButton
+              <StCoverImageButton
                 isActive={isCoverImage(images[index])}
-                onClick={() => setCoverImage(images[index])}
+                onClick={() => onCoverButtonClick(images[index])}
               >
                 대표
-              </CoverImageButton>
+              </StCoverImageButton>
             </>
           ) : (
             <StyledVideo src={URL.createObjectURL(images[index])} controls />
           )}
         </StyledImageContainer>
       ))}
-      <CenteredBox>
+      <StCenteredBox>
         <StPlusButton onClick={onAddImage}>
           <FileUpload />
           <p>{`${images.length} / 5`}</p>
         </StPlusButton>
-      </CenteredBox>
-    </SlideContainer>
+      </StCenteredBox>
+    </StSlideContainer>
   );
 };

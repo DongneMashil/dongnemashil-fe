@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-export const SlideContainer = styled.div`
+export const StSlideContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -12,12 +12,13 @@ export const SlideContainer = styled.div`
   margin: 0 auto;
 `;
 
-export const CenteredBox = styled.div`
+export const StCenteredBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 90%;
   height: 100%;
+  padding: 5rem;
 `;
 
 export const StPlusButton = styled.div`
@@ -58,7 +59,7 @@ export const StyledImageContainer = styled.div`
   height: 100%;
 `;
 
-export const CoverImageButton = styled.button<{ isActive: boolean }>`
+export const StCoverImageButton = styled.button<{ isActive: boolean }>`
   position: absolute;
   top: 0.8rem;
   right: 0.9rem;

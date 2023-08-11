@@ -72,7 +72,6 @@ export const StTitle = styled.input`
 
 export const StFormWrapper = styled.div`
   width: 24.4rem;
-  height: 37.3rem;
   margin-top: 0.75rem;
   background-color: #fff;
   border-top-left-radius: 0.875rem;
