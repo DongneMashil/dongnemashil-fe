@@ -1,5 +1,7 @@
 import { postLikeOptimistic } from 'api/detailApi';
 import { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { userProfileSelector } from 'recoil/userExample';
 
 interface UseLikeProps {
   initialIsLiked: boolean;
@@ -18,8 +20,10 @@ export const useLike = ({
 } => {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCnt, setLikeCnt] = useState(initialLikeCnt);
-
+  const userState = useRecoilValue(userProfileSelector);
   const toggleLikeHandler = async () => {
+    if (userState.isLoggedIn === false)
+      return alert('로그인 하시면 좋아요를 누를 수 있습니다.');
     const previousIsLiked = isLiked;
     const optimisticLikeCnt = isLiked ? likeCnt - 1 : likeCnt + 1;
     setIsLiked(!isLiked);
