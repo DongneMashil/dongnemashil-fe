@@ -2,15 +2,17 @@ import { Button } from 'components/common';
 import React from 'react';
 import { StNavBar } from './NavBar.styles';
 import { useNavigate } from 'react-router-dom';
-import { ReactComponent as Search } from 'assets/icons/Search.svg';
-import { user } from 'assets/user';
+import { ReactComponent as SearchFlat } from 'assets/icons/SearchFlat.svg';
+import noUser from 'assets/images/NoUser.gif';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
-  btnLeft?: 'logo' | 'back' | 'cancel';
+  btnLeft?: 'logo' | 'back' | 'cancel' | 'backfunction' | null;
   btnSecondRight?: 'search' | null;
   btnRight?: 'done' | 'mypage' | 'submit' | 'map' | null;
   onClickSubmit?: () => void;
+  onClickRight?: () => void;
+  onClickLeft?: () => void;
 }
 
 export const NavBar = ({
@@ -19,6 +21,8 @@ export const NavBar = ({
   btnRight = 'mypage',
   children,
   onClickSubmit,
+  onClickRight,
+  onClickLeft,
 }: NavBarProps) => {
   const navigate = useNavigate();
 
@@ -35,9 +39,13 @@ export const NavBar = ({
       <Button type={'onlytext'} url={'/'}>
         취소
       </Button>
-    ) : (
+    ) : btnLeft === 'logo' ? (
       <Button type={'icon'} url={'/'}>
         🏃🏻‍♀️
+      </Button>
+    ) : (
+      <Button type={'onlytext'} onClick={onClickLeft}>
+        {'<'}
       </Button>
     );
   };
@@ -45,7 +53,7 @@ export const NavBar = ({
   const renderBtnSecondRight = () => {
     return btnSecondRight === 'search' ? (
       <Button type={'icon'} url={'/search'}>
-        <Search />
+        <SearchFlat width="21" height="21" />
       </Button>
     ) : null;
   };
@@ -57,14 +65,14 @@ export const NavBar = ({
       </Button>
     ) : btnRight === 'mypage' ? (
       <Button type={'icon'} url={'/mypage'}>
-        <img src={user} />
+        <img src={noUser} />
       </Button>
     ) : btnRight === 'submit' ? (
       <Button type={'normal'} onClick={onClickSubmit}>
         Submit
       </Button>
     ) : btnRight === 'map' ? (
-      <Button type={'onlytext'} url={'/'}>
+      <Button type={'onlytext'} onClick={onClickRight}>
         지도보기 {'>'}
       </Button>
     ) : null;

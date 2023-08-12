@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import { styled } from 'styled-components';
-import noUser from 'assets/noImage/nouser.gif';
+import noUser from 'assets/images/NoUser.gif';
 import imageCompression from 'browser-image-compression';
 import { Button, Input } from 'components/common';
 export const MyProfilePage = () => {

@@ -41,6 +41,12 @@ export const StButton = styled.button<{ $active?: boolean }>`
       props.$active ? theme.blackColor : theme.mediumGrayColor};
     font-weight: 600;
   }
+
+  & img {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+  }
 `;
 
 export const StSubmitButton = styled.input`
