@@ -13,14 +13,16 @@ import {
   StNavTitle,
   StTagWrapper,
 } from './DetailPage.styles';
-import noImage from 'assets/noImage/noimage.png';
-import noUser from 'assets/noImage/nouser.gif';
+import noImage from 'assets/images/NoImage.png';
+import noUser from 'assets/images/NoUser.gif';
 import timeAgo from 'utils/timeAgo';
 import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import { useVerifyUser } from 'hooks';
+import { DetailMap } from 'components/detailPage';
 
 export const DetailPage = () => {
+  const [isMapOpen, setIsMapOpen] = React.useState(false);
   const userState = useRecoilValue(userProfileSelector);
   const { data: userData } = useVerifyUser(true);
   useEffect(() => {
@@ -37,7 +39,7 @@ export const DetailPage = () => {
     throw new Error('Review ID is missing');
   }
 
-  const { data, isLoading, isError, error } = useQuery<ReviewDetail, Error>({
+  const { data } = useQuery<ReviewDetail, Error>({
     queryKey: ['reviewDetail', reviewId],
     queryFn: () => getReviewDetail(reviewId),
     enabled: !!reviewId,
@@ -55,49 +57,75 @@ export const DetailPage = () => {
     }
   };
 
+  const defaultAddress = '서울특별시 마포구 와우산로 94';
   return (
     <>
-      {isLoading && <div>Loading...</div>}
-      {isError && <div>{String(error)}</div>}
-      {data && (
+      {isMapOpen ? (
         <CommonLayout
           header={
-            <NavBar btnLeft={'logo'} btnRight={'mypage'}>
-              <StNavTitle>{data.address}</StNavTitle>
+            <NavBar
+              btnLeft="backfunction"
+              onClickLeft={() => setIsMapOpen(false)}
+            />
+          }
+          backgroundColor="#FFF"
+        >
+          <DetailMap
+            height="100%"
+            width="100%"
+            initMap={(map, setMapCenterByAddress) => {
+              setMapCenterByAddress(data ? data.address : defaultAddress, map);
+            }}
+          />
+        </CommonLayout>
+      ) : (
+        <CommonLayout
+          header={
+            <NavBar
+              btnLeft={'logo'}
+              btnRight={'map'}
+              onClickRight={() => setIsMapOpen(true)}
+            >
+              {data && <StNavTitle>{data.address}</StNavTitle>}
             </NavBar>
           }
           footer={
-            <Footer
-              reviewId={reviewId}
-              likeCnt={data.likeCnt}
-              commentCnt={data.commentCnt}
-              onClick={handleGotoContent}
-              isLiked={data.likebool}
-            ></Footer>
+            data && (
+              <Footer
+                reviewId={reviewId}
+                likeCnt={data.likeCnt}
+                commentCnt={data.commentCnt}
+                onClick={handleGotoContent}
+                isLiked={data.likebool}
+              ></Footer>
+            )
           }
           backgroundColor="#FFF"
         >
           <StDetailPageContainer>
-            <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
-            <StDetailPageHeader>
-              <img src={data.profileImgUrl || noUser} />
-              <h4>{data.title || '제목없음'}</h4>
-            </StDetailPageHeader>
+            {data && (
+              <>
+                <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
+                <StDetailPageHeader>
+                  <img src={data.profileImgUrl || noUser} />
+                  <h4>{data.title || '제목없음'}</h4>
+                </StDetailPageHeader>
+                <StDetailPageContent>
+                  <img src={data.mainImgUrl || noImage} />
+                  {data.subImgUrl.map((img, index) =>
+                    img !== '' ? <img key={index} src={img} /> : null
+                  )}
 
-            <StDetailPageContent>
-              <img src={data.mainImgUrl || noImage} />
-              {data.subImgUrl.map((img, index) =>
-                img !== '' ? <img key={index} src={img} /> : null
-              )}
-
-              <p ref={contentRef}>{data.content}</p>
-              <StTagWrapper>
-                {data.tag.map((tag) => (
-                  <Tag key={tag.id} text={tag.name} />
-                ))}
-              </StTagWrapper>
-              <FooterSpacer />
-            </StDetailPageContent>
+                  <p ref={contentRef}>{data.content}</p>
+                  <StTagWrapper>
+                    {data.tag.map((tag) => (
+                      <Tag key={tag.id} text={tag.name} />
+                    ))}
+                  </StTagWrapper>
+                  <FooterSpacer />
+                </StDetailPageContent>
+              </>
+            )}
           </StDetailPageContainer>
         </CommonLayout>
       )}

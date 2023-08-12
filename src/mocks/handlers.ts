@@ -1,5 +1,5 @@
 import { ReviewsList } from 'api/reviewsApi';
-import noUser from 'assets/noImage/nouser.gif';
+import noUser from 'assets/images/nouser.gif';
 import { rest } from 'msw';
 import { reviewDetaiCommentHandler } from './reviewDetail';
 
