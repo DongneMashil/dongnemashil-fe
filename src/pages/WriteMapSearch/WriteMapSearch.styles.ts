@@ -17,8 +17,10 @@ export const StSearchWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-top: 0.87rem;
-`
+  padding-top: 0.87rem;
+  background-color: #fff;
+  height: 100%;
+`;
 
 export const StMarker = styled(MarkerIcon)`
   width: 0.8125rem;
@@ -35,9 +37,42 @@ export const StSearchInput = styled.input`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  outline: none;
+`;
+
+export const StSeacrhResultWrapper = styled.div`
+  width: 24rem;
+  border-top: 1px solid #e3e3e3;
+  margin-top: 0.44rem;
+  box-sizing: border-box;
+  background-color: #fff;
 `;
 
 export const StSearchResult = styled.div`
-  width: 10rem;
-  height: 10rem;
-`
+  width: 24.4rem;
+  height: 4.81rem;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #e3e3e3;
+  padding-left: 1.56rem;
+  padding-top: 1.25rem;
+  box-sizing: border-box;
+`;
+
+export const StPlaceName = styled.span`
+  text-align: center;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-right: auto;
+`;
+
+export const StRoadName = styled.span`
+  color: #929292;
+  text-align: center;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+`;

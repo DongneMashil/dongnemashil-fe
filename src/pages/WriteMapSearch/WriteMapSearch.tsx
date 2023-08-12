@@ -2,6 +2,9 @@ import { CommonLayout, NavBar } from 'components/layout';
 import React, { ChangeEvent, useState } from 'react';
 import {
   StMarker,
+  StPlaceName,
+  StRoadName,
+  StSeacrhResultWrapper,
   StSearchBox,
   StSearchInput,
   StSearchResult,
@@ -40,6 +43,21 @@ export const WriteMapSearch = () => {
     setSearch(e.target.value);
   };
 
+  const highlightSearchText = (text: string, searchText: string) => {
+    const splitText = text.split(new RegExp(`(${searchText})`, 'i'));
+    return splitText.map((part, index) =>
+      part.toLowerCase() === searchText.toLowerCase() ? (
+        <span key={index} style={{ color: '#598EFF' }}>
+          {part}
+        </span>
+      ) : (
+        <span key={index} style={{ color: '#333' }}>
+          {part}
+        </span>
+      )
+    );
+  };
+
   return (
     <CommonLayout
       header={
@@ -58,16 +76,20 @@ export const WriteMapSearch = () => {
             onChange={onInputChangeHandler}
           />
         </StSearchBox>
-        <div>
+        <StSeacrhResultWrapper>
           {responseData?.documents.map((result: Document, index: number) => (
             <StSearchResult key={index}>
-              {result.road_address_name || result.address_name}
-              {result.place_name ? `(${result.place_name})` : ''}
+              <StPlaceName>
+                {highlightSearchText(result.place_name || '', search)}
+              </StPlaceName>
+              <StRoadName>
+                {result.road_address_name || result.address_name}
+              </StRoadName>
+              {isError && <div>Error: {(error as Error).message}</div>}
+              {isLoading && <div>Loading...</div>}
             </StSearchResult>
           ))}
-        </div>
-        {isError && <div>Error: {(error as Error).message}</div>}
-        {isLoading && <div>Loading...</div>}
+        </StSeacrhResultWrapper>
       </StSearchWrapper>
     </CommonLayout>
   );
