@@ -13,7 +13,7 @@ import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { useLike } from 'hooks';
 import { StLike } from 'components/detailPage';
-import noUser from 'assets/noImage/nouser.gif';
+import noUser from 'assets/images/NoUser.gif';
 
 export const Thumbnail = ({
   id,

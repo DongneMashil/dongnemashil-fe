@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
-import noUser from 'assets/noImage/nouser.gif';
+import noUser from 'assets/images/NoUser.gif';
 import { useNavigate } from 'react-router-dom';
 interface UserInfoProps {
   profileImgUrl: string | null | undefined;
