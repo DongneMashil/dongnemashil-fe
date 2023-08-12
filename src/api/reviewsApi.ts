@@ -41,7 +41,7 @@ export interface Pageable {
 
 interface PaginationParams {
   type: string;
-  tag: string | null;
+  // tag: string | null;
 }
 
 const reviewKeys = {
@@ -50,12 +50,12 @@ const reviewKeys = {
   // list: (type: string) => [...reviewKeys.lists(), { type }] as const,
 };
 
-export const useFetchReviews = ({ type, tag }: PaginationParams) =>
+export const useFetchReviews = ({ type }: PaginationParams) =>
   useInfiniteQuery(
     reviewKeys.lists(),
     ({ pageParam = 1 }: QueryFunctionContext) =>
       axiosInstance.get<ResponseData>('/reviews', {
-        params: { type, page: pageParam, tag },
+        params: { type, page: pageParam },
       }),
     {
       getNextPageParam: ({ data: { last, number } }) =>
