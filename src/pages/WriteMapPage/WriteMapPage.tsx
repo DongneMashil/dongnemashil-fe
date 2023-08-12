@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { CommonLayout } from 'components/layout';
 import {
   StCurrentLocationContainer,
@@ -10,13 +10,21 @@ import {
 } from './WriteMapPage.styles.ts';
 import { Geolocation } from 'components/mapWritePage';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { addressSelector } from 'recoil/address/addressSelector';
+import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
 
 export const WriteMapPage = () => {
-  const [currentAddress, setCurrentAddress] = useState<string>('');
+  const addressData = useRecoilValue(addressSelector);
+  const setCurrentAddress = useSetRecoilState(selectedAddressAtom);
   const navigate = useNavigate();
 
   const onGoWritePageHandler = () => {
-    navigate('/write');
+    if (addressData.fullAddress.includes('서울시')) {
+      navigate('/write');
+    } else {
+      alert('서울턱별시만 가능합니다만😱');
+    }
   };
 
   return (
@@ -28,7 +36,7 @@ export const WriteMapPage = () => {
         <StInputWrapper>
           <StMarker />
           <StCurrentLocationText>
-            현위치: {currentAddress}
+            현위치: {addressData.fullAddress}
           </StCurrentLocationText>
         </StInputWrapper>
         <StPostButton onClick={onGoWritePageHandler}>글 작성</StPostButton>
