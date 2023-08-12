@@ -46,6 +46,7 @@ export const StCurrentLocationText = styled.span`
   font-size: 1rem;
   font-weight: 600;
   line-height: normal;
+  cursor: pointer;
 `;
 
 export const StPostButton = styled.button`

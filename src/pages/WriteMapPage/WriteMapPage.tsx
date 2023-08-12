@@ -20,11 +20,19 @@ export const WriteMapPage = () => {
   const navigate = useNavigate();
 
   const onGoWritePageHandler = () => {
-    if (addressData.fullAddress.includes('서울시')) {
+    if (
+      addressData.fullAddress.includes('서울') ||
+      addressData.fullAddress.includes('서울특별시') ||
+      addressData.fullAddress.includes('서울시')
+    ) {
       navigate('/write');
     } else {
       alert('서울턱별시만 가능합니다만😱');
     }
+  };
+
+  const onGoWriteMapSearchPageHandler = () => {
+    navigate('/writemapsearch');
   };
 
   return (
@@ -35,7 +43,7 @@ export const WriteMapPage = () => {
         </StCurrentLocationTitle>
         <StInputWrapper>
           <StMarker />
-          <StCurrentLocationText>
+          <StCurrentLocationText onClick={onGoWriteMapSearchPageHandler}>
             현위치: {addressData.fullAddress}
           </StCurrentLocationText>
         </StInputWrapper>
