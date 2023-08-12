@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
-import { deleteComment, getComment } from 'api/detailApi';
+import { deleteComment, editComment, getComment } from 'api/detailApi';
 import SkeletonUI from 'components/common/SkeletonUI/SkeletonUI';
 import noUser from 'assets/images/NoUser.gif';
 import React, { useEffect, useRef, useState } from 'react';
@@ -101,15 +101,6 @@ export const Comments = ({
     }
   }, [commentAddListener, hasNextPage, isFetching, data]);
 
-  // useEffect(() => {
-  //   if (commentAddListener && latestCommentRef.current && !isFetching) {
-  //     // ref가 DOM을 가르키는지 확인시켜줌
-  //     const element: HTMLElement = latestCommentRef.current as HTMLElement;
-  //     element.scrollIntoView({ behavior: 'smooth' });
-  //     setCommentAddListener(false); // 상태를 다시 초기화
-  //   }
-  // }, [data, commentAddListener]);
-
   const deleteCommentMutation = useMutation(deleteComment, {
     onSuccess: () => {
       // 성공적으로 댓글이 삭제된 후에는 다시 댓글 목록을 불러옵니다.
@@ -130,6 +121,18 @@ export const Comments = ({
   const onEditEndHandler = () => {
     setIsEdit({ state: false, id: 0, comment: '' });
   };
+
+  const onEditSubmitHandler = () => {
+    if (!isEdit.comment) {
+      alert('댓글을 입력해주세요');
+      return;
+    }
+    editComment(isEdit.id.toString(), isEdit.comment).then(() => {
+      onEditEndHandler();
+      queryClient.invalidateQueries(['comment', reviewId]);
+    });
+  };
+
   return (
     <StDetailPageComment $isCommentShow={$isCommentShow}>
       {data && (
@@ -163,8 +166,10 @@ export const Comments = ({
                             value={isEdit.comment}
                             onChange={onChangeCommentHandler}
                           />
-                          <button>수정취소</button>
-                          <button onClick={onEditEndHandler}>수정완료</button>
+                          <button onClick={onEditEndHandler}>수정취소</button>
+                          <button onClick={onEditSubmitHandler}>
+                            수정완료
+                          </button>
                         </>
                       ) : (
                         <>
