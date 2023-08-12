@@ -7,7 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import { styled } from 'styled-components';
 import noUser from 'assets/images/NoUser.gif';
-// import imageCompression from 'browser-image-compression';
+import imageCompression from 'browser-image-compression';
 import { Button, Input } from 'components/common';
 export const MyProfilePage = () => {
   const userState = useRecoilValue(userProfileSelector);
@@ -34,38 +34,39 @@ export const MyProfilePage = () => {
     onSuccess: (data) => {
       console.log(data);
       setFileUrl(data.profileImgUrl);
+      setPostData((prev) => ({ ...prev, nickname: data.nickname }));
     },
     onError: (error) => {
       console.log('🔴' + error);
     },
   });
   console.log(data);
-  // // ⬇️ 이미지 압축 옵션
-  // const options = {
-  //   maxSizeMB: 0.8,
-  //   maxWidthOrHeight: 500,
-  //   useWebWorker: true,
-  // };
-  // ⬇️ 이미지 압축
+  // ⬇️ 이미지 압축 옵션
+  const options = {
+    maxSizeMB: 0.8,
+    maxWidthOrHeight: 500,
+    useWebWorker: true,
+  };
+  //⬇️ 이미지 압축
   const onChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const imageFile = e.target.files?.[0];
-    // if (!imageFile) return;
-    // try {
-    //   const compressedFile = await imageCompression(imageFile, options);
-    //   const imgUrl = URL.createObjectURL(compressedFile);
-    //   setFileUrl(imgUrl);
-    //   setPostData({ ...postData, imgUrl: compressedFile });
-    //   console.log(postData + '이미지 압축');
-    // } catch (error) {
-    //   console.error(error);
-    // }
-
-    // 압축되지 않은 원본 이미지를 사용하도록 코드를 추가합니다.
-    if (imageFile) {
-      const imgUrl: string = URL.createObjectURL(imageFile);
+    if (!imageFile) return;
+    try {
+      const compressedFile = await imageCompression(imageFile, options);
+      const imgUrl = URL.createObjectURL(compressedFile);
       setFileUrl(imgUrl);
       setPostData((prev) => ({ ...prev, imgUrl: imageFile }));
+      console.log(postData + '이미지 압축');
+    } catch (error) {
+      console.error(error);
     }
+
+    // 압축되지 않은 원본 이미지를 사용하도록 코드를 추가합니다.
+    //   if (imageFile) {
+    //     const imgUrl: string = URL.createObjectURL(imageFile);
+    //     setFileUrl(imgUrl);
+    //     setPostData((prev) => ({ ...prev, imgUrl: imageFile }));
+    //   }
   };
 
   const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,54 +95,6 @@ export const MyProfilePage = () => {
     console.log(`PostPage🐼/onSubmitHandler/${JSON.stringify(postData)}`);
   };
 
-  // const onSubmithandler = async () => {
-
-  //   const formData = new FormData();
-  //   const jsonData = {
-  //     title: formValues.title,
-  //     content: formValues.content,
-  //     address: addressData.fullAddress,
-  //     roadName: addressData.roadName,
-  //     tag: selectedTags,
-  //   };
-
-  //   const blob = new Blob([JSON.stringify(jsonData)], {
-  //     type: 'application/json',
-  //   });
-  //   formData.append('data', blob);
-
-  //   const coverImage = mediaFiles.find(
-  //     (file) => file.isCover && file.type === 'image'
-  //   );
-  //   if (coverImage) {
-  //     formData.append('mainImgUrl', coverImage.file);
-  //   }
-
-  //   mediaFiles.forEach((file) => {
-  //     if (file.type === 'image' && !file.isCover) {
-  //       formData.append('subImgUrl', file.file);
-  //     } else if (file.type === 'video') {
-  //       formData.append('videoUrl', file.file);
-  //     }
-  //   });
-
-  //   mutation.mutate(formData, {
-  //     onSuccess: (response) => {
-  //       console.log('등록성공', response);
-  //       navigate(`/review/${response.id}`);
-  //     },
-  //     onError: (error: unknown) => {
-  //       if (typeof error === 'string') {
-  //         console.log('실패', error);
-  //       } else if (error instanceof Error) {
-  //         console.log('실패', error.message);
-  //       } else {
-  //         console.log('실패', error);
-  //       }
-  //     },
-  //   });
-  // };
-
   return (
     <CommonLayout header={<NavBar>회원정보수정</NavBar>} backgroundColor="#fff">
       <StMyProfileContainer>
@@ -169,7 +122,7 @@ export const MyProfilePage = () => {
           />
           <Button type="normal">중복확인</Button>
         </StNickNameWrapper>
-        <button onClick={onSubmitHandler}>제출</button>
+        <Button onClick={onSubmitHandler}>제출</Button>
       </StMyProfileContainer>
     </CommonLayout>
   );
