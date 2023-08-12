@@ -88,16 +88,22 @@ export const postProfile = async (post: { imgUrl: File; nickname: string }) => {
       post.imgUrl,
       `userProfile.${profileExt}` // 파일이름을 영문 단어로 통일
     );
-    formedData.append('nickname', post.nickname);
+    formedData.append(
+      'nickname',
+      new Blob([post.nickname], { type: 'text/plain' })
+    );
+
     console.log(Array.from(formedData.entries()));
 
-    const response = await axiosInstance.patch('/mypage', formedData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        // 'Content-Encoding': 'gzip',   // 추가함
-      },
-    });
+    const config = {
+      method: 'patch',
+      url: '/mypage',
+      maxBodyLength: Infinity,
+      headers: { 'Content-Type': 'multipart/form-data' },
+      data: formedData,
+    };
 
+    const response = await axiosInstance.request(config);
     console.log(JSON.stringify(response) + '🏠');
 
     return response.data;
