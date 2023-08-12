@@ -1,5 +1,5 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { getComment } from 'api/detailApi';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
+import { deleteComment, getComment } from 'api/detailApi';
 import SkeletonUI from 'components/common/SkeletonUI/SkeletonUI';
 import noUser from 'assets/images/NoUser.gif';
 import React, { useEffect, useRef } from 'react';
@@ -9,6 +9,10 @@ import {
   StDetailPageCommentItem,
   StDetailPageCommentList,
 } from './Comments.styles';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { userProfileSelector } from 'recoil/userExample';
+import { queryClient } from 'queries/queryClient';
+import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 
 interface CommentsProps {
   reviewId: string;
@@ -18,6 +22,8 @@ export const Comments = ({
   reviewId,
   $isCommentShow = false,
 }: CommentsProps) => {
+  const userState = useRecoilValue(userProfileSelector);
+  const setCommentCount = useSetRecoilState(commentCountAtom);
   if (!reviewId) {
     throw new Error('Review ID is missing');
   }
@@ -26,6 +32,8 @@ export const Comments = ({
   const useInfinityScroll = () => {
     const fetchComment = async ({ pageParam = 1 }) => {
       const response = await getComment(reviewId, pageParam);
+      setCommentCount(Number(response.totalElements)); // Recoil 상태 업데이트
+
       console.log(JSON.stringify(response));
       return {
         result: response.content,
@@ -83,6 +91,17 @@ export const Comments = ({
     }
   }, [data]);
 
+  const deleteCommentMutation = useMutation(deleteComment, {
+    onSuccess: () => {
+      // 성공적으로 댓글이 삭제된 후에는 다시 댓글 목록을 불러옵니다.
+      // 이 때, 기존 댓글 목록 캐시를 무효화하여 새로 불러올 수 있습니다.
+      queryClient.invalidateQueries(['comment', reviewId]);
+    },
+  });
+  const onDeleteCommentHandler = (commentId: number) => {
+    deleteCommentMutation.mutate(String(commentId)); // API 요청을 발생시키기 위해 mutate를 호출합니다.
+  };
+
   return (
     <StDetailPageComment $isCommentShow={$isCommentShow}>
       {data && (
@@ -107,6 +126,11 @@ export const Comments = ({
                     <div className="date">{timeAgo(comment.createdAt)}</div>
                   </section>
                   <div className="content">{comment.comment}</div>
+                  {userState.nickName === comment.nickname && (
+                    <button onClick={() => onDeleteCommentHandler(comment.id)}>
+                      삭제
+                    </button>
+                  )}
                 </StDetailPageCommentItem>
               );
             })}

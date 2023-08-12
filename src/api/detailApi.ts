@@ -78,6 +78,8 @@ type ResponseData = {
   first: boolean;
   last: boolean;
   empty: boolean;
+  totalPages: number;
+  totalElements: number;
 };
 export const getComment = async (
   detailId: string, // 수정된 부분
@@ -151,6 +153,19 @@ export const postLikeOptimistic = async (
     return updatedState;
   } catch (e: unknown) {
     // 서버와 통신이 어려울 경우 UI를 이전 상태로 롤백하고 사용자에게 오류 메시지를 표시합니다.
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
+  }
+};
+
+export const deleteComment = async (commentId: string) => {
+  try {
+    const response: AxiosResponse<{ message: string }> =
+      await axiosInstance.delete(`/comments/${commentId}`);
+    return response.data;
+  } catch (e: unknown) {
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data?.errorMessage || e.message);
     }

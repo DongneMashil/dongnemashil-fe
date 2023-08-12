@@ -16,13 +16,15 @@ import {
 import noImage from 'assets/images/NoImage.png';
 import noUser from 'assets/images/NoUser.gif';
 import timeAgo from 'utils/timeAgo';
-import { useRecoilValue } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import { useVerifyUser } from 'hooks';
 import { DetailMap } from 'components/detailPage';
+import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 
 export const DetailPage = () => {
   const [isMapOpen, setIsMapOpen] = React.useState(false);
+  const setCommentCount = useSetRecoilState(commentCountAtom);
   const userState = useRecoilValue(userProfileSelector);
   const { data: userData } = useVerifyUser(true);
   useEffect(() => {
@@ -45,6 +47,7 @@ export const DetailPage = () => {
     enabled: !!reviewId,
     onSuccess: (data) => {
       console.log(data);
+      setCommentCount(data.commentCnt); // Recoil 상태에 댓글 개수를 설정
     },
   });
 
@@ -94,7 +97,6 @@ export const DetailPage = () => {
               <Footer
                 reviewId={reviewId}
                 likeCnt={data.likeCnt}
-                commentCnt={data.commentCnt}
                 onClick={handleGotoContent}
                 isLiked={data.likebool}
               ></Footer>
