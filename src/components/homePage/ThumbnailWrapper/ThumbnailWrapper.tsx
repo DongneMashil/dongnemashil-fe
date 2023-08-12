@@ -61,8 +61,7 @@ export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
           $active={type === 'likes'}
         >
           인기순
-        </Button>{' '}
-        |{' '}
+        </Button>
         <Button
           onClick={() => onClickSort('recent')}
           type="onlytexttoggle"

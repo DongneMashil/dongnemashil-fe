@@ -17,7 +17,16 @@ export const StSort = styled.div`
   display: flex;
   align-items: center;
   justify-content: right;
-  gap: 6px;
   padding-top: 16px;
   color: ${theme.lightGrayColor};
+
+  & button:nth-child(2):before {
+    align-self: center;
+    background: #ebebeb;
+    content: '';
+    height: 10px;
+    margin-left: 8px;
+    margin-right: 8px;
+    width: 1px;
+  }
 `;
