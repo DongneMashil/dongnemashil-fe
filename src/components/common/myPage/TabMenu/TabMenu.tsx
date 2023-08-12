@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { TabButton } from '../TabButton/TabButton';
-import { GetMyReviewsResponse, getMyReviews } from 'api/mypageApi';
+import {
+  GetMyReviewsResponse,
+  getMyComments,
+  getMyReviews,
+} from 'api/mypageApi';
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
   const [selectedTab, setSelectedTab] = useState('reviews');
-
+  const navigate = useNavigate();
   const { data } = useQuery<GetMyReviewsResponse, Error>({
     queryKey: ['myPage', nickName, selectedTab],
     queryFn: () => getMyReviews(selectedTab),
     enabled: !!nickName,
     onSuccess: (data) => {
-      console.log(data);
+      console.log('🥶' + JSON.stringify(data));
+      getMyComments().then((res) => {
+        console.log('🤬' + JSON.stringify(res));
+      });
     },
     onError: (error) => {
       console.log('🟢' + error);
@@ -35,41 +43,19 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
         </TabButton>
       </StTabButtonWrapper>
       <StTabContentBox>
-        {selectedTab === 'reviews' ? (
-          <>
-            {Array(10)
-              .fill(null)
-              .map((_, index) => (
-                <StReviewBox key={index}>
-                  <img
-                    src={`https://picsum.photos/200/300?random=${index}`}
-                    alt="img"
-                  />
-                  <div className="contentWrapper">
-                    <div className="title">잠원로{index}</div>
-                    <div className="date">9월 {index}일</div>
-                  </div>
-                </StReviewBox>
-              ))}
-          </>
-        ) : (
-          <>
-            {Array(20)
-              .fill(null)
-              .map((_, index) => (
-                <StReviewBox key={index}>
-                  <img
-                    src={`https://picsum.photos/200/300?random=${index + 20}`}
-                    alt="img"
-                  />
-                  <div className="contentWrapper">
-                    <div className="title">한강대로{index}</div>
-                    <div className="date">9월 {index}일</div>
-                  </div>
-                </StReviewBox>
-              ))}
-          </>
-        )}
+        {data &&
+          data.content.map((item, index) => (
+            <StReviewBox
+              key={index}
+              onClick={() => navigate(`/review/${item.reviewId}`)}
+            >
+              <img src={item.imgUrl || ''} alt="img" />
+              <div className="contentWrapper">
+                <div className="title">{item.address}</div>
+                <div className="date">{item.createdAt}</div>
+              </div>
+            </StReviewBox>
+          ))}
       </StTabContentBox>
     </StTabContainer>
   );
@@ -80,6 +66,7 @@ export const StReviewBox = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 0.8rem;
+  cursor: pointer;
   margin-bottom: 1rem;
   img {
     width: 100%;

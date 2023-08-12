@@ -1,24 +1,21 @@
 import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
 import noUser from 'assets/images/NoUser.gif';
-import { useNavigate } from 'react-router-dom';
 interface UserInfoProps {
   profileImgUrl: string | null | undefined;
   nickName?: string;
   email?: string;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export const UserInfo = ({
   profileImgUrl,
   nickName = '닉네임',
   email = 'userId',
+  setIsModalOpen,
 }: UserInfoProps) => {
   useEffect(() => {
     console.log(profileImgUrl + '프로필 이미지');
   }, [profileImgUrl]);
-  const navigate = useNavigate();
-  const navigateToProfileHandler = () => {
-    navigate('/mypage/profile');
-  };
 
   return (
     <StUserInfoContainer>
@@ -29,8 +26,8 @@ export const UserInfo = ({
           <div className="userId">{email}</div>
         </div>
       </div>
-      <StToProfileButton className="edit" onClick={navigateToProfileHandler}>
-        〉
+      <StToProfileButton className="edit" onClick={() => setIsModalOpen(true)}>
+        ⚙️ 〉
       </StToProfileButton>
     </StUserInfoContainer>
   );
