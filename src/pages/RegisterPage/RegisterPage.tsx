@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
-//import { CommonLayout, NavBar } from 'components/layout';
-import { Input, Button } from 'components/common';
+import { AuthInputBox } from 'components/common/AuthInputBox/AuthInputBox';
+import { Button } from 'components/common';
 import { register } from 'api/loginApi';
 import { StVerifyMsg } from './Registerpage.styles';
 import { useMutation } from '@tanstack/react-query';
 import { useVerifyUser } from 'hooks';
 import { useNavigate } from 'react-router-dom';
 import { HeaderText } from 'components/common/HeaderText/HeaderText';
+import { AuthLogoBox } from 'components/common';
 import { CommonLayout } from 'components/layout';
-import { ReactComponent as LogoImage } from 'assets/images/Logo.svg';
-import {
-  StLoginContainer,
-  StLoginWrapper,
-  StLogoBox,
-} from './Registerpage.styles';
+import { StLoginContainer, StLoginWrapper } from './Registerpage.styles';
 
 interface RegitserProps {
   email: string;
@@ -140,34 +136,37 @@ export const RegisterPage = () => {
   return (
     <CommonLayout>
       <StLoginContainer>
-        <StLogoBox>
-          <LogoImage width={32} height={36} />
-          <span>동네마실</span>
-        </StLogoBox>
+        <AuthLogoBox />
         <HeaderText type="h1">회원가입</HeaderText>
         <StLoginWrapper>
           <h4>이메일</h4>
-          <Input
+          <AuthInputBox
             type="email"
             name="email"
             id="email"
             value={RegitserProps.email}
+            placeholder="이메일을 입력해주세요."
             onChange={onChangeHandler}
+            onClick={() => console.log('이메일 중복확인 클릭!')}
+            btnText="중복 확인"
           />
           <StVerifyMsg $isValid={verifyMsg.email.isValid}>
             {verifyMsg.email.msg}
           </StVerifyMsg>
           <h4>닉네임</h4>
-          <Input
+          <AuthInputBox
             type="text"
             name="nickname"
             id="nickname"
             value={RegitserProps.nickname}
             onChange={onChangeHandler}
+            placeholder="닉네임을 입력해주세요."
+            onClick={() => console.log('닉네임 중복확인 클릭!')}
+            btnText="중복 확인"
           />
           <p>{verifyMsg.nickname.msg}</p>
           <h4>비밀번호</h4>
-          <Input
+          <AuthInputBox
             type="password"
             name="password"
             id="password"
@@ -175,7 +174,7 @@ export const RegisterPage = () => {
             onChange={onChangeHandler}
           />
           <p>{verifyMsg.password.msg}</p>
-          <Input
+          <AuthInputBox
             type="password"
             name="passwordVerify"
             id="passwordVerify"
@@ -184,7 +183,9 @@ export const RegisterPage = () => {
           />
           <p>{verifyMsg.passwordVerify.msg}</p>
         </StLoginWrapper>
-        <Button onClick={onSubmitHandler}>회원가입</Button>
+        <Button type="authNormal" onClick={onSubmitHandler} $active={false}>
+          회원가입
+        </Button>
       </StLoginContainer>
     </CommonLayout>
   );

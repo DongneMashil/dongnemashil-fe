@@ -2,9 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router';
 import { loginKakao } from 'api/loginApi';
 import { CommonLayout } from 'components/layout';
+import { Button } from 'components/common';
 import {
   StLoginContainer,
-  StLoginButton,
   StLoginTag,
   StLoginButtonWrapper,
 } from './LoginPage.styles';
@@ -28,22 +28,22 @@ export const LoginPage = () => {
   return (
     <CommonLayout>
       <StLoginContainer>
-        <LogoImage />
+        <LogoImage width={190} height={214} />
         <StLoginButtonWrapper>
           <StLoginTag>
             3초만에 시작하기
             <Lightning />
           </StLoginTag>
-          <StLoginButton $type="kakao" onClick={onKakaoHandler}>
+          <Button type="authKakao" onClick={onKakaoHandler}>
             <KakaoIcon />
             카카오로 로그인
-          </StLoginButton>
-          <StLoginButton onClick={onLoginHandler}>
+          </Button>
+          <Button type="authNormal" onClick={onLoginHandler}>
             회원 아이디로 로그인
-          </StLoginButton>
-          <StLoginButton $type="register" onClick={onRegisterHandler}>
+          </Button>
+          <Button type="authOutline" onClick={onRegisterHandler}>
             회원가입
-          </StLoginButton>
+          </Button>
         </StLoginButtonWrapper>
       </StLoginContainer>
     </CommonLayout>

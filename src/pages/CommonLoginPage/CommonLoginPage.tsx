@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Input, Button } from 'components/common';
+import { Button } from 'components/common';
+import { AuthInputBox } from 'components/common';
+import { AuthLogoBox } from 'components/common';
 import { CommonLayout } from 'components/layout';
 import { login } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
@@ -57,24 +59,24 @@ export const CommonLoginPage = () => {
   return (
     <CommonLayout>
       <StCommonLoginLayout>
-        <h3>회원 아이디로 로그인</h3>
-        <h4>아이디</h4>
-        <Input
+        <AuthLogoBox align="center" />
+        <AuthInputBox
           type="email"
           name="id"
           id="id"
           value={loginValues.id}
           onChange={onChangeHandler}
         />
-        <h4>password</h4>
-        <Input
+        <AuthInputBox
           type="password"
           name="password"
           id="password"
           value={loginValues.password}
           onChange={onChangeHandler}
         />
-        <Button onClick={onSubmitHandler}>로그인</Button>
+        <Button type="authNormal" onClick={onSubmitHandler}>
+          로그인
+        </Button>
       </StCommonLoginLayout>
     </CommonLayout>
   );
