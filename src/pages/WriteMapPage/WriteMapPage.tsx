@@ -32,7 +32,7 @@ export const WriteMapPage = () => {
   };
 
   const onGoWriteMapSearchPageHandler = () => {
-    navigate('/writemapsearch');
+    navigate('/writemap/search');
   };
 
   return (

@@ -27,6 +27,7 @@ export const StMarker = styled(MarkerIcon)`
 `;
 
 export const StSearchInput = styled.input`
+  width: 90%;
   background-color: transparent;
   border: none;
   color: #333;
