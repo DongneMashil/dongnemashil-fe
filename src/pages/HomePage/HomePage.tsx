@@ -37,7 +37,7 @@ export const HomePage = () => {
         </>
       }
       headerHeight={'150px'}
-      footer={<FixFooter />}
+      footer={<FixFooter rightButtons={'write'} />}
     >
       <ThumbnailWrapper tag={selectedTags.join(',')} />
     </CommonLayout>
