@@ -4,7 +4,15 @@ import { useNavigate } from 'react-router-dom';
 
 export interface ButtonProps {
   children?: React.ReactNode;
-  type?: 'icon' | 'normal' | 'circle' | 'onlytext' | 'onlytexttoggle';
+  type?:
+    | 'icon'
+    | 'normal'
+    | 'circle'
+    | 'onlytext'
+    | 'onlytexttoggle'
+    | 'authKakao'
+    | 'authNormal'
+    | 'authOutline';
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   url?: string;
   inputType?: 'button' | 'submit';
@@ -19,7 +27,7 @@ export const Button = ({
   url,
   inputType = 'button',
   value,
-  $active,
+  $active = true,
 }: ButtonProps) => {
   const navigate = useNavigate();
 
