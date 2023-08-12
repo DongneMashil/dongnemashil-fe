@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'components/common';
 import { ReactComponent as SearchFlat } from 'assets/icons/SearchFlat.svg';
 import { StSearchInput, StSearchHeader } from './SearchPage.styles';
-import { CommonLayout } from 'components/layout';
 import { HeaderText } from 'components/common/HeaderText/HeaderText';
+import { CommonLayout } from 'components/layout';
 
 export const SearchPage = () => {
+  const navigate = useNavigate();
   const [value, setValue] = useState('');
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -13,9 +15,10 @@ export const SearchPage = () => {
   const onSubmitHandler = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();
     console.log('onSubmitHandler');
+    navigate(`/search/result?q=${value}`);
   };
   return (
-    <CommonLayout>
+    <CommonLayout backgroundColor="#ffffff">
       <StSearchHeader>
         <div>
           <SearchFlat width={16} height={16} />

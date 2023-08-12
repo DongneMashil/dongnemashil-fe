@@ -10,5 +10,6 @@ export * from './MyProfilePage/MyProfilePage';
 export * from './SearchPage/SearchPage';
 export * from './WriteMapPage/WriteMapPage';
 export * from './WritePage/WritePage';
+export * from './SearchResultPage/SearchResultPage';
 export * from './SearchResultMapPage/SearchResultMapPage';
 export * from './WriteMapSearch/WriteMapSearch'
