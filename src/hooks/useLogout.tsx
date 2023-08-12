@@ -22,6 +22,7 @@ export const useLogout = (shouldVerify: boolean = true) => {
       };
       setUserState(newData);
       console.log('successfully logged out', userState);
+      window.location.href = '/';
       window.alert('로그아웃 되었습니다!');
     },
     onError: () => {
