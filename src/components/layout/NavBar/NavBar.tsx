@@ -80,7 +80,7 @@ export const NavBar = ({
 
   return (
     <StNavBar>
-      {renderBtnLeft()}
+      <div>{renderBtnLeft()}</div>
       {children ? <div>{children}</div> : null}
       <div>
         {renderBtnSecondRight()}

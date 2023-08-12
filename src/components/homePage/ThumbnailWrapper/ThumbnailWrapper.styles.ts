@@ -25,8 +25,8 @@ export const StSort = styled.div`
     background: #ebebeb;
     content: '';
     height: 10px;
-    margin-left: 8px;
-    margin-right: 8px;
+    margin-left: 8.5px;
+    margin-right: 8.5px;
     width: 1px;
   }
 `;
