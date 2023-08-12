@@ -2,7 +2,7 @@ import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { deleteComment, getComment } from 'api/detailApi';
 import SkeletonUI from 'components/common/SkeletonUI/SkeletonUI';
 import noUser from 'assets/images/NoUser.gif';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import timeAgo from 'utils/timeAgo';
 import {
   StDetailPageComment,
@@ -120,7 +120,16 @@ export const Comments = ({
   const onDeleteCommentHandler = (commentId: number) => {
     deleteCommentMutation.mutate(String(commentId)); // API 요청을 발생시키기 위해 mutate를 호출합니다.
   };
-
+  const [isEdit, setIsEdit] = useState({ state: false, id: 0, comment: '' });
+  const onEditCommentHandler = (commentId: number, comment: string) => {
+    setIsEdit({ state: true, id: commentId, comment });
+  };
+  const onChangeCommentHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsEdit({ ...isEdit, comment: e.target.value });
+  };
+  const onEditEndHandler = () => {
+    setIsEdit({ state: false, id: 0, comment: '' });
+  };
   return (
     <StDetailPageComment $isCommentShow={$isCommentShow}>
       {data && (
@@ -146,9 +155,36 @@ export const Comments = ({
                   </section>
                   <div className="content">{comment.comment}</div>
                   {userState.nickName === comment.nickname && (
-                    <button onClick={() => onDeleteCommentHandler(comment.id)}>
-                      삭제
-                    </button>
+                    <>
+                      {isEdit.state && isEdit.id === comment.id ? (
+                        <>
+                          <input
+                            type="text"
+                            value={isEdit.comment}
+                            onChange={onChangeCommentHandler}
+                          />
+                          <button>수정취소</button>
+                          <button onClick={onEditEndHandler}>수정완료</button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            disabled={isEdit.state}
+                            onClick={() => onDeleteCommentHandler(comment.id)}
+                          >
+                            삭제
+                          </button>
+                          <button
+                            disabled={isEdit.state}
+                            onClick={() =>
+                              onEditCommentHandler(comment.id, comment.comment)
+                            }
+                          >
+                            수정
+                          </button>
+                        </>
+                      )}
+                    </>
                   )}
                 </StDetailPageCommentItem>
               );

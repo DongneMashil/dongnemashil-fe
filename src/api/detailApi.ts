@@ -172,3 +172,18 @@ export const deleteComment = async (commentId: string) => {
     throw e;
   }
 };
+
+export const editComment = async (commentId: string, comment: string) => {
+  try {
+    const response: AxiosResponse<Comment> = await axiosInstance.put(
+      `/comments/${commentId}`,
+      { comment }
+    );
+    return response.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
+  }
+};
