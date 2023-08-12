@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StTagBox, StTagWrapper } from './ToggleTag.styles';
 import * as tagImg from 'assets/tags';
+
 interface ToggleTagButtonProps {
   onTagChange?: (selectedTags: string[]) => void;
 }
