@@ -9,7 +9,7 @@ import {
   StSearchInput,
   StSearchResult,
   StSearchWrapper,
-} from './WriteMapSearch.styles';
+} from './WriteMapSearchPage.styles';
 import { searchAddress } from 'api/kakaoSearch';
 import { useQuery } from '@tanstack/react-query';
 
@@ -23,7 +23,7 @@ interface Document {
   place_name?: string;
 }
 
-export const WriteMapSearch = () => {
+export const WriteMapSearchPage = () => {
   const [search, setSearch] = useState('');
 
   const {

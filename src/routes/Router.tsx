@@ -11,7 +11,7 @@ import {
   MyProfilePage,
   SearchPage,
   WritePage,
-  WriteMapSearch,
+  WriteMapSearchPage,
   SearchResultPage,
 } from 'pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -28,7 +28,7 @@ const Router = () => {
         <Route path="/login/kakao" element={<KakaoCallbackPage />} />
         <Route path="/review/:reviewId" element={<DetailPage />} />
         <Route path="/writemap" element={<WriteMapPage />} />
-        <Route path="/writemap/search" element={<WriteMapSearch />} />
+        <Route path="/writemap/search" element={<WriteMapSearchPage />} />
         <Route
           path="/mypage"
           element={<ProtectedRoute element={<MyPage />} />}
