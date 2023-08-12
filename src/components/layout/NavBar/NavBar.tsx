@@ -7,7 +7,7 @@ import noUser from 'assets/images/NoUser.gif';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
-  btnLeft?: 'logo' | 'back' | 'cancel' | 'backfunction' | null;
+  btnLeft?: 'logo' | 'back' | 'cancel' | 'backfunction';
   btnSecondRight?: 'search' | null;
   btnRight?: 'done' | 'mypage' | 'submit' | 'map' | null;
   onClickSubmit?: () => void;
@@ -30,61 +30,67 @@ export const NavBar = ({
     navigate(-1);
   };
 
-  const renderBtnLeft = () => {
-    return btnLeft === 'back' ? (
+  const leftButtons = {
+    back: (
       <Button type={'icon'} onClick={goBack}>
         ⬅️
       </Button>
-    ) : btnLeft === 'cancel' ? (
+    ),
+    cancel: (
       <Button type={'onlytext'} url={'/'}>
         취소
       </Button>
-    ) : btnLeft === 'logo' ? (
+    ),
+    logo: (
       <Button type={'icon'} url={'/'}>
         🏃🏻‍♀️
       </Button>
-    ) : (
+    ),
+    backfunction: (
       <Button type={'onlytext'} onClick={onClickLeft}>
         {'<'}
       </Button>
-    );
+    ),
   };
 
-  const renderBtnSecondRight = () => {
-    return btnSecondRight === 'search' ? (
+  const secondRightButtons = {
+    search: (
       <Button type={'icon'} url={'/search'}>
         <SearchFlat width="21" height="21" />
       </Button>
-    ) : null;
+    ),
   };
 
-  const renderBtnRight = () => {
-    return btnRight === 'done' ? (
+  const rightButtons = {
+    done: (
       <Button type={'onlytext'} url={'/'}>
         완료
       </Button>
-    ) : btnRight === 'mypage' ? (
+    ),
+    mypage: (
       <Button type={'icon'} url={'/mypage'}>
-        <img src={noUser} />
+        <img src={noUser} alt="user" />
       </Button>
-    ) : btnRight === 'submit' ? (
+    ),
+    submit: (
       <Button type={'normal'} onClick={onClickSubmit}>
         Submit
       </Button>
-    ) : btnRight === 'map' ? (
+    ),
+    map: (
       <Button type={'onlytext'} onClick={onClickRight}>
         지도보기 {'>'}
       </Button>
-    ) : null;
+    ),
   };
 
   return (
     <StNavBar>
-      <div>{renderBtnLeft()}</div>
+      <div>{leftButtons[btnLeft]}</div>
       {children ? <div>{children}</div> : null}
       <div>
-        {renderBtnSecondRight()}
-        {renderBtnRight()}
+        {btnSecondRight ? secondRightButtons[btnSecondRight] : null}
+        {btnRight ? rightButtons[btnRight] : null}
       </div>
     </StNavBar>
   );
