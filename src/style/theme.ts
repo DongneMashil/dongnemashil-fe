@@ -28,9 +28,20 @@ const authLayout = css`
   padding: 43px 26px;
 `;
 
+const authButton = css`
+  width: 100%;
+  height: 44px;
+  font-size: 16px;
+  border: 0;
+  font-weight: 700;
+  border-radius: 25px;
+  position: relative;
+`;
+
 export const theme = {
   ...colors,
   authLayout,
+  authButton,
   device: {
     mobile: `(max-width: ${size.mobile})`,
     tablet: `(min-width: ${size.tablet}) and (max-width: ${size.desktop})`,
