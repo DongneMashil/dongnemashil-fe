@@ -9,10 +9,11 @@ import {
   StDetailPageCommentItem,
   StDetailPageCommentList,
 } from './Comments.styles';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import { queryClient } from 'queries/queryClient';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
+import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
 
 interface CommentsProps {
   reviewId: string;
@@ -24,6 +25,9 @@ export const Comments = ({
 }: CommentsProps) => {
   const userState = useRecoilValue(userProfileSelector);
   const setCommentCount = useSetRecoilState(commentCountAtom);
+  const [commentAddListener, setCommentAddListener] = useRecoilState(
+    commentAddListenerAtom
+  );
   if (!reviewId) {
     throw new Error('Review ID is missing');
   }
@@ -84,12 +88,13 @@ export const Comments = ({
   }, [isLoading, hasNextPage]);
 
   useEffect(() => {
-    if (latestCommentRef.current) {
+    if (commentAddListener && latestCommentRef.current) {
       // ref가 DOM을 가르키는지 확인시켜줌
       const element: HTMLElement = latestCommentRef.current as HTMLElement;
       element.scrollIntoView({ behavior: 'smooth' });
+      setCommentAddListener(false); // 상태를 다시 초기화
     }
-  }, [data]);
+  }, [data, commentAddListener]);
 
   const deleteCommentMutation = useMutation(deleteComment, {
     onSuccess: () => {

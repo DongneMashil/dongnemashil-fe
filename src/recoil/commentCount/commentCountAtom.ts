@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
 export const commentCountAtom = atom({
-  key: 'commentCountState',
+  key: 'commentCountAtom',
   default: 0,
 });
