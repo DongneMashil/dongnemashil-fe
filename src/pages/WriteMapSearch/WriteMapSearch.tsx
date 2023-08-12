@@ -1,5 +1,5 @@
 import { CommonLayout, NavBar } from 'components/layout';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import {
   StMarker,
   StSearchBox,
@@ -8,6 +8,7 @@ import {
   StSearchWrapper,
 } from './WriteMapSearch.styles';
 import { searchAddress } from 'api/kakaoSearch';
+import { useQuery } from '@tanstack/react-query';
 
 interface ApiResponse {
   documents: Document[];
@@ -21,27 +22,19 @@ interface Document {
 
 export const WriteMapSearch = () => {
   const [search, setSearch] = useState('');
-  const [data, setData] = useState<ApiResponse | null>(null);
-  const [error, setError] = useState<Error | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (search) {
-      setIsLoading(true);
-      searchAddress(search)
-        .then((response) => {
-          setData(response.data);
-          setError(null);
-        })
-        .catch((err) => {
-          setError(err);
-          setData(null);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+  const {
+    data: responseData,
+    isError,
+    error,
+    isLoading,
+  } = useQuery<ApiResponse>(
+    ['searchAddress', search],
+    () => searchAddress(search).then((res) => res.data),
+    {
+      enabled: !!search,
     }
-  }, [search]);
+  );
 
   const onInputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -66,14 +59,14 @@ export const WriteMapSearch = () => {
           />
         </StSearchBox>
         <div>
-          {data?.documents.map((result, index) => (
+          {responseData?.documents.map((result: Document, index: number) => (
             <StSearchResult key={index}>
               {result.road_address_name || result.address_name}
               {result.place_name ? `(${result.place_name})` : ''}
             </StSearchResult>
           ))}
         </div>
-        {error && <div>Error: {error.message}</div>}
+        {isError && <div>Error: {(error as Error).message}</div>}
         {isLoading && <div>Loading...</div>}
       </StSearchWrapper>
     </CommonLayout>

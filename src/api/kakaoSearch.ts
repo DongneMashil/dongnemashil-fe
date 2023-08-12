@@ -6,7 +6,7 @@ export const searchAddress = (query: string) => {
   const apiUrl = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${query}`;
   return axios.get(apiUrl, {
     headers: {
-      Authorization: `KakaoAk ${apiKey}`,
+      Authorization: `KakaoAK ${apiKey}`,
     },
   });
 };
