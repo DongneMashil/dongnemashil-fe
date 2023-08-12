@@ -1,5 +1,6 @@
 import Map from 'components/common/Map/Map';
 import React from 'react';
+import Marker from 'assets/icons/Marker.png';
 
 interface IProps {
   onMarkerClick?: () => void;
@@ -10,6 +11,7 @@ interface IMarkerOptions {
   map: kakao.maps.Map;
   position: kakao.maps.LatLng;
   draggable: boolean;
+  image?: kakao.maps.MarkerImage;
 }
 
 export const Geolocation: React.FC<IProps> = ({
@@ -42,10 +44,20 @@ export const Geolocation: React.FC<IProps> = ({
     locPosition: kakao.maps.LatLng,
     onClick?: () => void
   ) => {
+    const svgMarkerImageSrc = Marker;
+
+    const markerSize = new kakao.maps.Size(36, 48);
+
+    const markerImage = new kakao.maps.MarkerImage(
+      svgMarkerImageSrc,
+      markerSize
+    );
+
     const markerOptions: IMarkerOptions = {
       map: map,
       position: locPosition,
       draggable: true,
+      image: markerImage,
     };
 
     const marker = new kakao.maps.Marker(markerOptions);

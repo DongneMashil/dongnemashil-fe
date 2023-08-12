@@ -1,9 +1,14 @@
 import React, { ChangeEvent, useRef, useState } from 'react';
 import {
+  StCurrentAddress,
+  StCurrentAddressWrapper,
   StContentBox,
   StContentContainer,
   StHiddenButton,
   StTitle,
+  StTotalTag,
+  StTagContainer,
+  StFormWrapper,
 } from './WritePage.styles';
 import { CommonLayout, NavBar } from 'components/layout';
 import { FileSlider } from 'components/writePage';
@@ -14,6 +19,9 @@ import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
 import { useVerifyUser } from 'hooks';
 import { useRecoilValue } from 'recoil';
 import { userIsLoggedInSelector } from 'recoil/userExample';
+import { addressSelector } from 'recoil/address/addressSelector';
+import { ReactComponent as PurpleMarker } from 'assets/icons/PurpleMarker.svg';
+
 interface FormValues {
   title: string;
   content: string;
@@ -30,6 +38,8 @@ export const WritePage = () => {
     { type: 'image' | 'video'; file: File; isCover: boolean }[]
   >([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const addressData = useRecoilValue(addressSelector);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -112,6 +122,21 @@ export const WritePage = () => {
   };
 
   const onSubmithandler = async () => {
+    if (formValues.title.trim() === '') {
+      alert('제목을 입력해주세요.');
+      return;
+    }
+
+    if (formValues.content.trim() === '') {
+      alert('내용을 입력해주세요.');
+      return;
+    }
+
+    if (selectedTags.length === 0) {
+      alert('태그를 최소 하나 선택해주세요.');
+      return;
+    }
+
     if (mediaFiles.length === 0) {
       alert('최소 하나의 이미지를 선택해야 합니다.');
       return;
@@ -125,7 +150,8 @@ export const WritePage = () => {
     const jsonData = {
       title: formValues.title,
       content: formValues.content,
-      address: '서울시 영등포구 여의동로 330',
+      address: addressData.fullAddress,
+      roadName: addressData.roadName,
       tag: selectedTags,
     };
 
@@ -181,6 +207,10 @@ export const WritePage = () => {
     console.log('Success, isLoggedIn: ', isLoggedIn);
   }
 
+  const onGoToWriteMapPageHandler = () => {
+    navigate('/writemap');
+  };
+
   return (
     <>
       <CommonLayout
@@ -190,44 +220,53 @@ export const WritePage = () => {
             btnRight={'submit'}
             onClickSubmit={onSubmithandler}
           >
-            주소값
+            {addressData.roadName}
           </NavBar>
         }
       >
         <StContentContainer>
-          <StTitle
-            type="text"
-            name="title"
-            value={formValues.title}
-            onChange={onInputChange}
-            placeholder="제목 입력"
-          />
-          <ToggleTagButton onTagChange={handleTagChange} />
-
-          <FileSlider
-            files={mediaFiles}
-            images={mediaFiles.map((file) => file.file)}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            onAddImage={onButtonClick}
-            onSelectedCoverImage={setCoverImage}
-            isCoverImage={determineIsCoverImage}
-            setCoverImage={setCoverImage}
-          />
-          <StHiddenButton
-            ref={fileInputRef}
-            type="file"
-            accept="image/*, video/*"
-            multiple
-            onChange={onFileChange}
-          />
-
-          <StContentBox
-            name="content"
-            value={formValues.content}
-            onChange={onInputChange}
-            placeholder="산책은 어땠나요?"
-          />
+          <StTagContainer>
+            <StCurrentAddressWrapper>
+              <div onClick={onGoToWriteMapPageHandler}>
+                <PurpleMarker />
+                <StCurrentAddress>{addressData.roadName}</StCurrentAddress>
+              </div>
+              <StTotalTag>{selectedTags.length}개 선택</StTotalTag>
+            </StCurrentAddressWrapper>
+            <ToggleTagButton onTagChange={handleTagChange} />
+          </StTagContainer>
+          <StFormWrapper>
+            <StTitle
+              type="text"
+              name="title"
+              value={formValues.title}
+              onChange={onInputChange}
+              placeholder="제목"
+            />
+            <FileSlider
+              files={mediaFiles}
+              images={mediaFiles.map((file) => file.file)}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              onAddImage={onButtonClick}
+              onSelectedCoverImage={setCoverImage}
+              isCoverImage={determineIsCoverImage}
+              setCoverImage={setCoverImage}
+            />
+            <StHiddenButton
+              ref={fileInputRef}
+              type="file"
+              accept="image/*, video/*"
+              multiple
+              onChange={onFileChange}
+            />
+            <StContentBox
+              name="content"
+              value={formValues.content}
+              onChange={onInputChange}
+              placeholder="산책은 어땠나요?"
+            />
+          </StFormWrapper>
         </StContentContainer>
       </CommonLayout>
     </>
