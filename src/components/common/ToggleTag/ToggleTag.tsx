@@ -1,52 +1,79 @@
 import React, { useState } from 'react';
 import { StTagBox, StTagWrapper } from './ToggleTag.styles';
+import * as tagImg from 'assets/tags';
+
 interface ToggleTagButtonProps {
-  // initialTags?: string[];
   onTagChange?: (selectedTags: string[]) => void;
 }
 
+interface TagProps {
+  id: number;
+  img: string;
+  label: string;
+  isSelected: boolean;
+}
+
 export const ToggleTagButton: React.FC<ToggleTagButtonProps> = ({
-  // initialTags = [],
   onTagChange,
 }) => {
-  const tags = [
-    '한적',
-    '연인',
-    '동물',
-    '사진',
-    '아기',
-    '자전거',
-    '비',
-    '밤',
-    '그늘',
-    '화장실',
-    '자연',
-    '벤치',
+  const initialTags: TagProps[] = [
+    {
+      id: 1,
+      img: tagImg.animalFriends,
+      label: '동물친구들',
+      isSelected: false,
+    },
+    { id: 2, img: tagImg.withLover, label: '연인이랑', isSelected: false },
+    { id: 3, img: tagImg.bench, label: '벤치', isSelected: false },
+    { id: 4, img: tagImg.quiet, label: '한적해요', isSelected: false },
+    { id: 5, img: tagImg.shade, label: '그늘', isSelected: false },
+    { id: 6, img: tagImg.toilet, label: '화장실', isSelected: false },
+    { id: 7, img: tagImg.photoPlace, label: '사진맛집', isSelected: false },
+    { id: 8, img: tagImg.nature, label: '자연', isSelected: false },
+    { id: 9, img: tagImg.rainyDay, label: '비와도OK', isSelected: false },
+    { id: 10, img: tagImg.nightWalk, label: '밤산책', isSelected: false },
+    { id: 11, img: tagImg.withBaby, label: '아기랑', isSelected: false },
+    { id: 12, img: tagImg.bicycle, label: '자전거', isSelected: false },
   ];
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const toggleTag = (tag: string) => {
-    const updatedTags = selectedTags.includes(tag)
-      ? selectedTags.filter((t) => t !== tag)
-      : [...selectedTags, tag];
+  const [tags, setTags] = useState<TagProps[]>(initialTags);
 
-    setSelectedTags(updatedTags);
-    onTagChange && onTagChange(updatedTags);
+  const toggleTag = (tag: TagProps) => {
+    const updatedTags = tags.map((t) =>
+      t.id === tag.id ? { ...t, isSelected: !t.isSelected } : t
+    );
+
+    setTags(updatedTags);
+    onTagChange?.(updatedTags.filter((t) => t.isSelected).map((t) => t.label));
   };
 
-  const onTagClick = (tag: string) => () => {
-    toggleTag(tag);
-  };
+  const selectedTags = tags.filter((tag) => tag.isSelected);
+  const unselectedTags = tags.filter((tag) => !tag.isSelected);
 
   return (
     <StTagWrapper>
-      {tags.map((tag) => (
+      {selectedTags.map((tag) => (
         <StTagBox
-          key={tag}
-          onClick={onTagClick(tag)}
-          $isSelected={selectedTags.includes(tag)}
+          key={tag.id}
+          onClick={() => toggleTag(tag)}
+          $isSelected={true}
         >
-          {tag}
+          <span>
+            <img src={tag.img} alt={tag.label} />
+            <span>{tag.label}</span>
+          </span>
+        </StTagBox>
+      ))}
+      {unselectedTags.map((tag) => (
+        <StTagBox
+          key={tag.id}
+          onClick={() => toggleTag(tag)}
+          $isSelected={false}
+        >
+          <span>
+            <img src={tag.img} alt={tag.label} />
+            <span>{tag.label}</span>
+          </span>
         </StTagBox>
       ))}
     </StTagWrapper>

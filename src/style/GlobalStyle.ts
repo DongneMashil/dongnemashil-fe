@@ -60,6 +60,7 @@ table {
 button {
 	font-family: inherit;
 	border: 0;
+  padding: 0;
 	cursor: pointer;
 }
 a {
