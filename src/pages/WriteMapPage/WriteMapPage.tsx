@@ -20,11 +20,7 @@ export const WriteMapPage = () => {
   const navigate = useNavigate();
 
   const onGoWritePageHandler = () => {
-    if (
-      addressData.fullAddress.includes('서울') ||
-      addressData.fullAddress.includes('서울특별시') ||
-      addressData.fullAddress.includes('서울시')
-    ) {
+    if (addressData.fullAddress.includes('서울')) {
       navigate('/write');
     } else {
       alert('서울턱별시만 가능합니다만😱');

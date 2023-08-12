@@ -36,3 +36,8 @@ export const StSearchInput = styled.input`
   font-weight: 400;
   line-height: normal;
 `;
+
+export const StSearchResult = styled.div`
+  width: 10rem;
+  height: 10rem;
+`
