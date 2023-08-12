@@ -1,19 +1,47 @@
-import { Button } from 'components/common';
 import React from 'react';
-import { StLocationWrapper,StLocationBox } from './WriteMapPage.styles.ts';
+import { CommonLayout } from 'components/layout';
+import {
+  StCurrentLocationContainer,
+  StCurrentLocationText,
+  StCurrentLocationTitle,
+  StInputWrapper,
+  StMarker,
+  StPostButton,
+} from './WriteMapPage.styles.ts';
+import { Geolocation } from 'components/mapWritePage';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { addressSelector } from 'recoil/address/addressSelector';
+import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
+
 export const WriteMapPage = () => {
+  const addressData = useRecoilValue(addressSelector);
+  const setCurrentAddress = useSetRecoilState(selectedAddressAtom);
+  const navigate = useNavigate();
+
+  const onGoWritePageHandler = () => {
+    if (addressData.fullAddress.includes('서울')) {
+      navigate('/write');
+    } else {
+      alert('서울턱별시만 가능합니다만😱');
+    }
+  };
 
   return (
-    <>
-      <div>
-        <Button url={"/"} />
-        <span>좋았던 산책 지점을 선택해주세요</span>
-      </div>
-      <div>지도가 들어갈 부분</div>
-      <StLocationWrapper>
-        <StLocationBox>위치 들어갈 div</StLocationBox>
-        <Button url="/write" />
-      </StLocationWrapper>
-    </>
+    <CommonLayout>
+      <StCurrentLocationContainer>
+        <StCurrentLocationTitle>
+          산책 지점을 먼저 선택해주세요!
+        </StCurrentLocationTitle>
+        <StInputWrapper>
+          <StMarker />
+          <StCurrentLocationText>
+            현위치: {addressData.fullAddress}
+          </StCurrentLocationText>
+        </StInputWrapper>
+        <StPostButton onClick={onGoWritePageHandler}>글 작성</StPostButton>
+      </StCurrentLocationContainer>
+      <Geolocation onAddressUpdate={setCurrentAddress} />
+    </CommonLayout>
   );
 };

@@ -7,6 +7,7 @@ export const StButton = styled.button<{ $active?: boolean }>`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+
   &.icon {
     font-size: 20px;
   }
@@ -36,10 +37,15 @@ export const StButton = styled.button<{ $active?: boolean }>`
   &.onlytexttoggle {
     text-align: center;
     font-size: 0.875rem;
-    gap: 0.5rem;
     color: ${(props) =>
       props.$active ? theme.blackColor : theme.mediumGrayColor};
-    font-weight: 600;
+    font-weight: 400;
+  }
+
+  & img {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
   }
 `;
 

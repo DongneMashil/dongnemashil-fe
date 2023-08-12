@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 export const StLayoutOuter = styled.div`
   width: 100vw;
   min-height: 100vh;
-  background-color: #f8f9fa; // 기본 배경 색상 -> 추후 테마 적용
+  background-color: #404040; //#f8f9fa 기본 배경 색상 -> 추후 테마 적용
   display: flex;
   flex-direction: column;
   align-items: center;

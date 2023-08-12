@@ -5,16 +5,20 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from 'queries/queryClient';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RecoilRoot } from 'recoil';
+import { ThemeProvider } from 'styled-components';
+import { theme } from 'style/theme';
 
 function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <GlobalStyle />
-          <Router />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </RecoilRoot>
+        <ThemeProvider theme={theme}>
+          <RecoilRoot>
+            <GlobalStyle />
+            <Router />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </RecoilRoot>
+        </ThemeProvider>
       </QueryClientProvider>
     </>
   );

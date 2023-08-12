@@ -8,21 +8,22 @@ import { ReactComponent as ContentIcon } from 'assets/icons/Content.svg';
 import { Comments } from '../Comments/Comments';
 import { CommentInput } from '../CommentInput/CommentInput';
 import { useLike } from 'hooks';
+import { useRecoilValue } from 'recoil';
+import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 
 interface FooterProps {
   reviewId: string;
   likeCnt: number;
-  commentCnt: number;
   onClick?: () => void;
   isLiked: boolean;
 }
 export const Footer = ({
   reviewId,
   likeCnt: initialLikeCnt,
-  commentCnt = 0,
   onClick,
   isLiked: initialIsLiked,
 }: FooterProps) => {
+  const commentCount = useRecoilValue(commentCountAtom);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [isCommentShow, setIsCommentShow] = useState(false);
   useEffect(() => {
@@ -50,7 +51,7 @@ export const Footer = ({
           {likeCnt}
         </StLike>
         <StComment onClick={() => setIsCommentOpen(!isCommentOpen)}>
-          <CommentIcon /> {commentCnt}
+          <CommentIcon /> {commentCount}
         </StComment>
         {isCommentOpen ? (
           <Button type={'onlytext'} onClick={() => setIsCommentOpen(false)}>
@@ -123,7 +124,12 @@ export const StFooterCommentSection = styled.div`
   gap: 0.5rem;
   width: 100%;
   height: 100%;
-  padding: 0 10px;
+  padding: 10px 10px;
   border-top: 1px solid #e9e9e9;
   overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

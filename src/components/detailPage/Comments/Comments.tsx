@@ -1,13 +1,19 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { getComment } from 'api/detailApi';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
+import { deleteComment, editComment, getComment } from 'api/detailApi';
 import SkeletonUI from 'components/common/SkeletonUI/SkeletonUI';
-import React, { useEffect, useRef } from 'react';
+import noUser from 'assets/images/NoUser.gif';
+import React, { useEffect, useRef, useState } from 'react';
 import timeAgo from 'utils/timeAgo';
 import {
   StDetailPageComment,
   StDetailPageCommentItem,
   StDetailPageCommentList,
 } from './Comments.styles';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { userProfileSelector } from 'recoil/userExample';
+import { queryClient } from 'queries/queryClient';
+import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
+import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
 
 interface CommentsProps {
   reviewId: string;
@@ -17,13 +23,22 @@ export const Comments = ({
   reviewId,
   $isCommentShow = false,
 }: CommentsProps) => {
+  const userState = useRecoilValue(userProfileSelector);
+  const setCommentCount = useSetRecoilState(commentCountAtom);
+  const [commentAddListener, setCommentAddListener] = useRecoilState(
+    commentAddListenerAtom
+  );
   if (!reviewId) {
     throw new Error('Review ID is missing');
   }
+  const latestCommentRef = useRef(null);
   const loader = useRef(null);
   const useInfinityScroll = () => {
     const fetchComment = async ({ pageParam = 1 }) => {
       const response = await getComment(reviewId, pageParam);
+      setCommentCount(Number(response.totalElements)); // Recoil 상태 업데이트
+
+      console.log(JSON.stringify(response));
       return {
         result: response.content,
         nextPage: pageParam + 1,
@@ -36,15 +51,16 @@ export const Comments = ({
         if (!lastPage.isLast) return lastPage.nextPage;
         return undefined;
       },
-      refetchOnWindowFocus: false,
-      refetchOnMount: true,
+      refetchOnWindowFocus: true, // 예: 창에 포커스가 갔을 때만 재요청하도록 설정
+      refetchOnMount: false,
       refetchOnReconnect: true,
-      retry: 1,
+      retry: false,
+      staleTime: 3000, // 3초 동안 데이터는 fresh 상태를 유지, 무분별한 요청을 막기 위함.
     });
-
     return query;
   };
-  const { data, fetchNextPage, hasNextPage, isLoading } = useInfinityScroll();
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetching } =
+    useInfinityScroll();
 
   const handleLoadMore = (info: IntersectionObserverEntry[]) => {
     console.log(info); //이벤트 정보 출력
@@ -72,25 +88,109 @@ export const Comments = ({
     };
   }, [isLoading, hasNextPage]);
 
+  useEffect(() => {
+    if (commentAddListener) {
+      if (hasNextPage) {
+        //다음 페이지가 있는경우, 마지막 항목에 있는 Ref가 없으므로
+        fetchNextPage(); // 댓글이 새로 추가되었을 때, 마지막페이지까지 모두 불러오기
+      } else if (!isFetching && latestCommentRef.current) {
+        const element: HTMLElement = latestCommentRef.current as HTMLElement;
+        element.scrollIntoView({ behavior: 'smooth' });
+        setCommentAddListener(false); // 상태를 다시 초기화
+      }
+    }
+  }, [commentAddListener, hasNextPage, isFetching, data]);
+
+  const deleteCommentMutation = useMutation(deleteComment, {
+    onSuccess: () => {
+      // 성공적으로 댓글이 삭제된 후에는 다시 댓글 목록을 불러옵니다.
+      // 이 때, 기존 댓글 목록 캐시를 무효화하여 새로 불러올 수 있습니다.
+      queryClient.invalidateQueries(['comment', reviewId]);
+    },
+  });
+  const onDeleteCommentHandler = (commentId: number) => {
+    deleteCommentMutation.mutate(String(commentId)); // API 요청을 발생시키기 위해 mutate를 호출합니다.
+  };
+  const [isEdit, setIsEdit] = useState({ state: false, id: 0, comment: '' });
+  const onEditCommentHandler = (commentId: number, comment: string) => {
+    setIsEdit({ state: true, id: commentId, comment });
+  };
+  const onChangeCommentHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsEdit({ ...isEdit, comment: e.target.value });
+  };
+  const onEditEndHandler = () => {
+    setIsEdit({ state: false, id: 0, comment: '' });
+  };
+
+  const onEditSubmitHandler = () => {
+    if (!isEdit.comment) {
+      alert('댓글을 입력해주세요');
+      return;
+    }
+    editComment(isEdit.id.toString(), isEdit.comment).then(() => {
+      onEditEndHandler();
+      queryClient.invalidateQueries(['comment', reviewId]);
+    });
+  };
+
   return (
     <StDetailPageComment $isCommentShow={$isCommentShow}>
       {data && (
         <StDetailPageCommentList>
           {data.pages
             .flatMap((page) => page.result)
-            .map((comment) => {
+            .map((comment, index, array) => {
               if (!comment) return null;
+              const isLastComment = index === array.length - 1;
+
               return (
-                <StDetailPageCommentItem key={comment.id}>
+                <StDetailPageCommentItem
+                  key={comment.id}
+                  ref={isLastComment ? latestCommentRef : null}
+                >
                   <section>
                     <img
-                      src={comment.profileImgUrl || ''}
+                      src={comment.profileImgUrl || noUser}
                       alt="프로필 이미지"
                     />
                     <div className="nickname">{comment.nickname}</div>
                     <div className="date">{timeAgo(comment.createdAt)}</div>
                   </section>
                   <div className="content">{comment.comment}</div>
+                  {userState.nickName === comment.nickname && (
+                    <>
+                      {isEdit.state && isEdit.id === comment.id ? (
+                        <>
+                          <input
+                            type="text"
+                            value={isEdit.comment}
+                            onChange={onChangeCommentHandler}
+                          />
+                          <button onClick={onEditEndHandler}>수정취소</button>
+                          <button onClick={onEditSubmitHandler}>
+                            수정완료
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            disabled={isEdit.state}
+                            onClick={() => onDeleteCommentHandler(comment.id)}
+                          >
+                            삭제
+                          </button>
+                          <button
+                            disabled={isEdit.state}
+                            onClick={() =>
+                              onEditCommentHandler(comment.id, comment.comment)
+                            }
+                          >
+                            수정
+                          </button>
+                        </>
+                      )}
+                    </>
+                  )}
                 </StDetailPageCommentItem>
               );
             })}

@@ -5,6 +5,10 @@ import { queryClient } from 'queries/queryClient';
 import React, { useState } from 'react';
 import { StFooterContatiner, StFooterWrapper } from './CommentInput.styles';
 
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { userProfileSelector } from 'recoil/userExample';
+import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
+
 interface FooterProps {
   reviewId: string;
   $isCommentShow?: boolean;
@@ -14,7 +18,7 @@ export const CommentInput = ({
   $isCommentShow = false,
 }: FooterProps) => {
   const [comment, setComment] = useState('');
-
+  const setCommentAddListener = useSetRecoilState(commentAddListenerAtom);
   const commentMutation = useMutation(
     (newComment: string) => postComment(reviewId, newComment),
     {
@@ -22,6 +26,7 @@ export const CommentInput = ({
         console.log(data);
         setComment('');
         queryClient.invalidateQueries(['comment', reviewId]);
+        setCommentAddListener(true); // 댓글 추가된것을 감지 -> 스크롤 이벤트
       },
       onError: (err) => {
         console.log(err);
@@ -53,16 +58,32 @@ export const CommentInput = ({
     console.log(comment);
     commentMutation.mutate(comment);
   };
-
+  const userState = useRecoilValue(userProfileSelector);
   return (
     <StFooterContatiner $isCommentShow={$isCommentShow}>
       <StFooterWrapper onSubmit={onSubmitHandler}>
-        <Input
-          placeholder="댓글을 입력해주세요"
-          onChange={onChangeHandler}
-          value={comment}
-        />
-        <Button inputType="submit" type={'normal'} value="등록" />
+        {userState?.isLoggedIn ? (
+          <>
+            {' '}
+            <Input
+              placeholder="댓글을 입력해주세요"
+              onChange={onChangeHandler}
+              value={comment}
+            />
+            <Button inputType="submit" type={'normal'} value="등록" />
+          </>
+        ) : (
+          <>
+            {' '}
+            <Input
+              placeholder="로그인 후 댓글 입력이 가능합니다."
+              disabled={true}
+            />
+            <Button inputType="button" type={'normal'} url="/login">
+              로그인
+            </Button>
+          </>
+        )}
       </StFooterWrapper>
     </StFooterContatiner>
   );

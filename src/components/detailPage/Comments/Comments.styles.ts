@@ -7,10 +7,12 @@ export const StDetailPageComment = styled.div<{ $isCommentShow: boolean }>`
   height: 100%;
   display: flex;
   flex-direction: column;
+
   // min-height: calc(850px); 이거 넣으니깐 한두개 있을때 안보임.
 `;
 export const StDetailPageCommentList = styled.div`
   width: 100%;
+
   // height: 100%;  이거 넣으면 이상하게 레이아웃 깨짐(최하단 spacer가 높이가 0이됨)
   display: flex;
   flex-direction: column;

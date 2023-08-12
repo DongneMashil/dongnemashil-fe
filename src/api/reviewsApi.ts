@@ -21,7 +21,6 @@ export interface ReviewsList {
   id: number;
   roadName: string;
   mainImgUrl: string;
-  videoUrl: string | null;
   profileImgUrl: string | null;
   likeCnt: number;
   likebool: boolean;
@@ -42,12 +41,13 @@ export interface Pageable {
 
 interface PaginationParams {
   type: string;
+  // tag: string | null;
 }
 
 const reviewKeys = {
   all: ['responseData'] as const,
   lists: () => [...reviewKeys.all, 'list'] as const,
-  list: (type: string) => [...reviewKeys.lists(), { type }] as const,
+  // list: (type: string) => [...reviewKeys.lists(), { type }] as const,
 };
 
 export const useFetchReviews = ({ type }: PaginationParams) =>
