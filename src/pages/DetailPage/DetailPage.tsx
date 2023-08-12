@@ -113,7 +113,7 @@ export const DetailPage = () => {
                   <h4>{data.title || '제목없음'}</h4>
                 </StDetailPageHeader>
                 <StDetailPageContent>
-                  <img src={data.mainImgUrl || noImage} />
+                  <img className="detailimg" src={data.mainImgUrl || noImage} />
                   {data.subImgUrl.map((img, index) =>
                     img !== '' ? <img key={index} src={img} /> : null
                   )}
@@ -121,7 +121,11 @@ export const DetailPage = () => {
                   <p ref={contentRef}>{data.content}</p>
                   <StTagWrapper>
                     {data.tag.map((tag) => (
-                      <Tag key={tag.id} text={tag.name} />
+                      <Tag
+                        key={tag.id}
+                        text={tag.name}
+                        isHoverEnabled={false}
+                      />
                     ))}
                   </StTagWrapper>
                   <FooterSpacer />
