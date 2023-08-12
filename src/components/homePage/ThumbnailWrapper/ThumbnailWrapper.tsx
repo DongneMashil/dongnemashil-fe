@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Thumbnail } from '../Thumbnail/Thumbnail';
 import {
   StSort,
@@ -17,7 +17,7 @@ export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
   const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
     useFetchReviews({
       type,
-      tag,
+      // tag,
     });
 
   console.log(type, data);
@@ -42,13 +42,13 @@ export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
     }
   );
 
+  useEffect(() => {
+    refetch();
+  }, [type]);
+
   const onClickSort = (type: string) => {
-    if (type === 'likes') {
-      setType('likes');
-      refetch();
-    } else {
-      setType('recent');
-      refetch();
+    if (type === 'likes' || type === 'recent') {
+      setType(type);
     }
   };
 
@@ -61,8 +61,7 @@ export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
           $active={type === 'likes'}
         >
           인기순
-        </Button>{' '}
-        |{' '}
+        </Button>
         <Button
           onClick={() => onClickSort('recent')}
           type="onlytexttoggle"
@@ -78,7 +77,6 @@ export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
           id={review.id}
           roadName={review.roadName}
           mainImgUrl={review.mainImgUrl}
-          videoUrl={review.videoUrl}
           profileImgUrl={review.profileImgUrl}
           likeCnt={review.likeCnt}
           likebool={review.likebool}

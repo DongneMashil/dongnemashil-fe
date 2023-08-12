@@ -1,17 +1,14 @@
 import { WriteButton } from 'components/common/SpecialButtons';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
-interface FooterProps {
-  onClickOurTown?: () => void;
-  onClickWrite?: () => void;
-}
-export const Footer = ({
-  onClickWrite = () => {
-    alert('작성하기 연결중'); // 지워도 됩니다
-  },
-}: FooterProps) => {
+export const Footer = () => {
+  const navigate = useNavigate();
+  const onClickWrite = () => {
+    navigate('/write');
+  };
   return (
     <StFooterContatiner>
       <StFooterWrapper>

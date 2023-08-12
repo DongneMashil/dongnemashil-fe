@@ -1,14 +1,24 @@
 import { styled } from 'styled-components';
 
 export const StNavTitle = styled.h1`
+  max-width: 70vw;
   font-size: 1.2rem;
   font-weight: bold;
+  white-space: nowrap; // 한줄로
+  overflow: hidden; // 넘치면 숨김
+  text-overflow: ellipsis; //넘치면 ...
+
+  direction: rtl; //...을 앞에 붙임
 `;
-export const StTagWrapper = styled.div`
+
+export const StTagWrapper = styled.ul`
+  width: 100%;
+  height: fit-content;
+  // padding: 1rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0.5rem 0;
+  gap: 0.5rem 0;
+  align-items: center;
 `;
 
 export const StDetailPageContainer = styled.div`
@@ -56,7 +66,7 @@ export const StDetailPageContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
   gap: 0.3rem;
-  img {
+  .detailimg {
     width: 100%;
     height: 300px;
     object-fit: cover;

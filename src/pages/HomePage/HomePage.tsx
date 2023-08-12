@@ -30,7 +30,9 @@ export const HomePage = () => {
             btnLeft={'logo'}
             btnSecondRight={'search'}
             btnRight={'mypage'}
-          ></NavBar>
+          >
+            <h1>서울 전체</h1>
+          </NavBar>
           <ToggleTagButton onTagChange={handleTagChange} />
         </>
       }
