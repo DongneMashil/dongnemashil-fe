@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Thumbnail } from '../Thumbnail/Thumbnail';
 import {
   StSort,
@@ -17,7 +17,7 @@ export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
   const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
     useFetchReviews({
       type,
-      tag,
+      // tag,
     });
 
   console.log(type, data);
@@ -42,10 +42,13 @@ export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
     }
   );
 
+  useEffect(() => {
+    refetch();
+  }, [type]);
+
   const onClickSort = (type: string) => {
     if (type === 'likes' || type === 'recent') {
       setType(type);
-      refetch();
     }
   };
 
