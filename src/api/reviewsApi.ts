@@ -21,7 +21,6 @@ export interface ReviewsList {
   id: number;
   roadName: string;
   mainImgUrl: string;
-  videoUrl: string | null;
   profileImgUrl: string | null;
   likeCnt: number;
   likebool: boolean;

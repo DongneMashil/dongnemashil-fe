@@ -18,8 +18,6 @@ export const result = Array.from(Array(1000).keys()).map(
     id,
     roadName: '서울숲로',
     mainImgUrl: 'https://source.unsplash.com/random',
-    videoUrl:
-      'https://dongnemashil-image.s3.ap-northeast-2.amazonaws.com/f8b850ad-a2b6-4f56-a1e2-a6b5c8dc382c-KakaoTalk_Video_2023-08-09-15-47-34.mp4',
     profileImgUrl: noUser,
     likeCnt: 1200,
     likebool: false,

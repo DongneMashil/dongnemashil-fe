@@ -19,7 +19,6 @@ export const Thumbnail = ({
   id,
   roadName,
   mainImgUrl,
-  videoUrl,
   profileImgUrl,
   likeCnt: initialLikeCnt,
   likebool: initialIsLiked,
@@ -58,10 +57,6 @@ export const Thumbnail = ({
       <StThumnailMain onClick={onClickThumbnail} $imgRatio={imgRatio}>
         {mainImgUrl ? (
           <img ref={imageRef} src={mainImgUrl} onLoad={handleImageLoad} />
-        ) : videoUrl ? (
-          <video>
-            <source src={videoUrl} type="video/mp4" />
-          </video>
         ) : null}
       </StThumnailMain>
       <StThumbnailTitle>
