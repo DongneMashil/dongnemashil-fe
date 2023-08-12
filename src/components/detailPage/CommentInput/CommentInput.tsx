@@ -5,8 +5,9 @@ import { queryClient } from 'queries/queryClient';
 import React, { useState } from 'react';
 import { StFooterContatiner, StFooterWrapper } from './CommentInput.styles';
 
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
+import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
 
 interface FooterProps {
   reviewId: string;
@@ -17,7 +18,7 @@ export const CommentInput = ({
   $isCommentShow = false,
 }: FooterProps) => {
   const [comment, setComment] = useState('');
-
+  const setCommentAddListener = useSetRecoilState(commentAddListenerAtom);
   const commentMutation = useMutation(
     (newComment: string) => postComment(reviewId, newComment),
     {
@@ -25,6 +26,7 @@ export const CommentInput = ({
         console.log(data);
         setComment('');
         queryClient.invalidateQueries(['comment', reviewId]);
+        setCommentAddListener(true); // 댓글 추가된것을 감지 -> 스크롤 이벤트
       },
       onError: (err) => {
         console.log(err);
