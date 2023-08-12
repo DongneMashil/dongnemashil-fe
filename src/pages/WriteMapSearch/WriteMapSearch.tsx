@@ -1,5 +1,22 @@
+import { CommonLayout, NavBar } from 'components/layout';
 import React from 'react';
-export const WriteMapSearch = () => {
+import { StMarker, StSearchBox, StSearchInput, StSearchWrapper } from './WriteMapSearch.styles';
 
- return <div>WriteMapSearch</div>;
+export const WriteMapSearch = () => {
+  return (
+    <CommonLayout
+      header={
+        <NavBar btnLeft={'back'} btnRight={null}>
+          위치 검색
+        </NavBar>
+      }
+    >
+      <StSearchWrapper>
+        <StSearchBox>
+          <StMarker />
+          <StSearchInput type="text" placeholder="주소" />
+        </StSearchBox>
+      </StSearchWrapper>
+    </CommonLayout>
+  );
 };
