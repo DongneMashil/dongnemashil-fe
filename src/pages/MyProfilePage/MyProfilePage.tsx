@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { MyProfile, getMyProfile } from 'api/mypageApi';
+import { MyProfile, getMyProfile, postProfile } from 'api/mypageApi';
 import { CommonLayout, NavBar } from 'components/layout';
 import { useVerifyUser } from 'hooks';
 import React, { useEffect, useRef, useState } from 'react';
@@ -7,14 +7,18 @@ import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import { styled } from 'styled-components';
 import noUser from 'assets/images/NoUser.gif';
-import imageCompression from 'browser-image-compression';
+// import imageCompression from 'browser-image-compression';
 import { Button, Input } from 'components/common';
 export const MyProfilePage = () => {
   const userState = useRecoilValue(userProfileSelector);
   const { data: userData } = useVerifyUser(true);
+
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const fileUpload = useRef();
-  const [postData, setPostData] = useState<{ imgUrl?: File }>({});
+  const [postData, setPostData] = useState<{
+    nickname?: string;
+    imgUrl?: File;
+  }>({});
   // const [input, setInput] = useState({});
   useEffect(() => {
     console.log('current user state: ', userState);
@@ -36,26 +40,107 @@ export const MyProfilePage = () => {
     },
   });
   console.log(data);
-  // ⬇️ 이미지 압축 옵션
-  const options = {
-    maxSizeMB: 0.8,
-    maxWidthOrHeight: 1020,
-    useWebWorker: true,
-  };
+  // // ⬇️ 이미지 압축 옵션
+  // const options = {
+  //   maxSizeMB: 0.8,
+  //   maxWidthOrHeight: 500,
+  //   useWebWorker: true,
+  // };
   // ⬇️ 이미지 압축
   const onChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const imageFile = e.target.files?.[0];
-    if (!imageFile) return;
-    try {
-      const compressedFile = await imageCompression(imageFile, options);
-      const imgUrl = URL.createObjectURL(compressedFile);
+    // if (!imageFile) return;
+    // try {
+    //   const compressedFile = await imageCompression(imageFile, options);
+    //   const imgUrl = URL.createObjectURL(compressedFile);
+    //   setFileUrl(imgUrl);
+    //   setPostData({ ...postData, imgUrl: compressedFile });
+    //   console.log(postData + '이미지 압축');
+    // } catch (error) {
+    //   console.error(error);
+    // }
+
+    // 압축되지 않은 원본 이미지를 사용하도록 코드를 추가합니다.
+    if (imageFile) {
+      const imgUrl: string = URL.createObjectURL(imageFile);
       setFileUrl(imgUrl);
-      setPostData({ imgUrl: compressedFile });
-      console.log(postData + '이미지 압축');
-    } catch (error) {
-      console.error(error);
+      setPostData((prev) => ({ ...prev, imgUrl: imageFile }));
     }
   };
+
+  const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPostData({ ...postData, [name]: value });
+  };
+
+  const onSubmitHandler = async () => {
+    console.log('👦🏾' + JSON.stringify(postData));
+
+    if (!postData.imgUrl) {
+      alert('이미지를 업로드해주세요.');
+      return;
+    }
+
+    try {
+      const response = await postProfile({
+        imgUrl: postData.imgUrl as File,
+        nickname: postData.nickname || '',
+      });
+      console.log('👁️' + JSON.stringify(response));
+      alert('성공적으로 등록되었습니다.');
+    } catch (error) {
+      console.error('😀' + error);
+    }
+    console.log(`PostPage🐼/onSubmitHandler/${JSON.stringify(postData)}`);
+  };
+
+  // const onSubmithandler = async () => {
+
+  //   const formData = new FormData();
+  //   const jsonData = {
+  //     title: formValues.title,
+  //     content: formValues.content,
+  //     address: addressData.fullAddress,
+  //     roadName: addressData.roadName,
+  //     tag: selectedTags,
+  //   };
+
+  //   const blob = new Blob([JSON.stringify(jsonData)], {
+  //     type: 'application/json',
+  //   });
+  //   formData.append('data', blob);
+
+  //   const coverImage = mediaFiles.find(
+  //     (file) => file.isCover && file.type === 'image'
+  //   );
+  //   if (coverImage) {
+  //     formData.append('mainImgUrl', coverImage.file);
+  //   }
+
+  //   mediaFiles.forEach((file) => {
+  //     if (file.type === 'image' && !file.isCover) {
+  //       formData.append('subImgUrl', file.file);
+  //     } else if (file.type === 'video') {
+  //       formData.append('videoUrl', file.file);
+  //     }
+  //   });
+
+  //   mutation.mutate(formData, {
+  //     onSuccess: (response) => {
+  //       console.log('등록성공', response);
+  //       navigate(`/review/${response.id}`);
+  //     },
+  //     onError: (error: unknown) => {
+  //       if (typeof error === 'string') {
+  //         console.log('실패', error);
+  //       } else if (error instanceof Error) {
+  //         console.log('실패', error.message);
+  //       } else {
+  //         console.log('실패', error);
+  //       }
+  //     },
+  //   });
+  // };
 
   return (
     <CommonLayout header={<NavBar>회원정보수정</NavBar>} backgroundColor="#fff">
@@ -75,9 +160,16 @@ export const MyProfilePage = () => {
         </StProfileImage>
         <StNickNameTitle>닉네임</StNickNameTitle>
         <StNickNameWrapper>
-          <Input type="text" placeholder="닉네임" />
+          <Input
+            type="text"
+            placeholder="닉네임"
+            value={postData.nickname}
+            onChange={onChangeValue}
+            name="nickname"
+          />
           <Button type="normal">중복확인</Button>
         </StNickNameWrapper>
+        <button onClick={onSubmitHandler}>제출</button>
       </StMyProfileContainer>
     </CommonLayout>
   );
