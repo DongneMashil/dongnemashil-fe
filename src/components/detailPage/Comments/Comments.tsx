@@ -59,7 +59,8 @@ export const Comments = ({
     });
     return query;
   };
-  const { data, fetchNextPage, hasNextPage, isLoading } = useInfinityScroll();
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetching } =
+    useInfinityScroll();
 
   const handleLoadMore = (info: IntersectionObserverEntry[]) => {
     console.log(info); //이벤트 정보 출력
@@ -88,13 +89,26 @@ export const Comments = ({
   }, [isLoading, hasNextPage]);
 
   useEffect(() => {
-    if (commentAddListener && latestCommentRef.current) {
-      // ref가 DOM을 가르키는지 확인시켜줌
-      const element: HTMLElement = latestCommentRef.current as HTMLElement;
-      element.scrollIntoView({ behavior: 'smooth' });
-      setCommentAddListener(false); // 상태를 다시 초기화
+    if (commentAddListener) {
+      if (hasNextPage) {
+        //다음 페이지가 있는경우, 마지막 항목에 있는 Ref가 없으므로
+        fetchNextPage(); // 댓글이 새로 추가되었을 때, 마지막페이지까지 모두 불러오기
+      } else if (!isFetching && latestCommentRef.current) {
+        const element: HTMLElement = latestCommentRef.current as HTMLElement;
+        element.scrollIntoView({ behavior: 'smooth' });
+        setCommentAddListener(false); // 상태를 다시 초기화
+      }
     }
-  }, [data, commentAddListener]);
+  }, [commentAddListener, hasNextPage, isFetching, data]);
+
+  // useEffect(() => {
+  //   if (commentAddListener && latestCommentRef.current && !isFetching) {
+  //     // ref가 DOM을 가르키는지 확인시켜줌
+  //     const element: HTMLElement = latestCommentRef.current as HTMLElement;
+  //     element.scrollIntoView({ behavior: 'smooth' });
+  //     setCommentAddListener(false); // 상태를 다시 초기화
+  //   }
+  // }, [data, commentAddListener]);
 
   const deleteCommentMutation = useMutation(deleteComment, {
     onSuccess: () => {
