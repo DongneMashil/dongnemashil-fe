@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { StTagBox, StTagWrapper } from './ToggleTag.styles';
+import { StTagWrapper } from './ToggleTag.styles';
 import * as tagImg from 'assets/tags';
+import { Tag } from '../Tag/Tag'; // make sure the path is correct
 
 interface ToggleTagButtonProps {
   onTagChange?: (selectedTags: string[]) => void;
@@ -46,36 +47,63 @@ export const ToggleTagButton: React.FC<ToggleTagButtonProps> = ({
     setTags(updatedTags);
     onTagChange?.(updatedTags.filter((t) => t.isSelected).map((t) => t.label));
   };
-
-  const selectedTags = tags.filter((tag) => tag.isSelected);
-  const unselectedTags = tags.filter((tag) => !tag.isSelected);
-
+  const sortedTags = [...tags].sort(
+    (a, b) => (b.isSelected ? 1 : -1) - (a.isSelected ? 1 : -1)
+  );
   return (
     <StTagWrapper>
-      {selectedTags.map((tag) => (
-        <StTagBox
+      {sortedTags.map((tag) => (
+        <Tag
           key={tag.id}
+          text={tag.label}
+          isSelected={tag.isSelected}
           onClick={() => toggleTag(tag)}
-          $isSelected={true}
-        >
-          <span>
-            <img src={tag.img} alt={tag.label} />
-            <span>{tag.label}</span>
-          </span>
-        </StTagBox>
-      ))}
-      {unselectedTags.map((tag) => (
-        <StTagBox
-          key={tag.id}
-          onClick={() => toggleTag(tag)}
-          $isSelected={false}
-        >
-          <span>
-            <img src={tag.img} alt={tag.label} />
-            <span>{tag.label}</span>
-          </span>
-        </StTagBox>
+        />
       ))}
     </StTagWrapper>
   );
 };
+
+//   const [tags, setTags] = useState<TagProps[]>(initialTags);
+
+//   const toggleTag = (tag: TagProps) => {
+//     const updatedTags = tags.map((t) =>
+//       t.id === tag.id ? { ...t, isSelected: !t.isSelected } : t
+//     );
+
+//     setTags(updatedTags);
+//     onTagChange?.(updatedTags.filter((t) => t.isSelected).map((t) => t.label));
+//   };
+
+//   const selectedTags = tags.filter((tag) => tag.isSelected);
+//   const unselectedTags = tags.filter((tag) => !tag.isSelected);
+
+//   return (
+//     <StTagWrapper>
+//       {selectedTags.map((tag) => (
+//         <StTagBox
+//           key={tag.id}
+//           onClick={() => toggleTag(tag)}
+//           $isSelected={true}
+//         >
+//           <span>
+//             <img src={tag.img} alt={tag.label} />
+//             <span>{tag.label}</span>
+//           </span>
+//         </StTagBox>
+//       ))}
+//       {unselectedTags.map((tag) => (
+//         <StTagBox
+//           key={tag.id}
+//           onClick={() => toggleTag(tag)}
+//           $isSelected={false}
+//         >
+//           <span>
+//             <img src={tag.img} alt={tag.label} />
+//             <span>{tag.label}</span>
+//           </span>
+//         </StTagBox>
+//       ))}
+//     </StTagWrapper>
+//   );
+// };

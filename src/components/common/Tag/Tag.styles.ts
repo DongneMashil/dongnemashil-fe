@@ -1,43 +1,48 @@
 import { styled } from 'styled-components';
 interface StTagProps {
   readonly $isSelected: boolean;
+  $isHoverEnabled?: boolean;
 }
-export const StTagContainer = styled.div<StTagProps>`
-  display: flex;
-  justify-content: center;
+export const StTagContainer = styled.li<StTagProps>`
+  display: inline-flex;
   align-items: center;
-  padding: 0.5rem 1.2rem;
-  transition: all 0.1s ease-in-out;
+  justify-content: center;
+
   width: fit-content;
-  height: 2rem;
-  border-radius: 1.5rem;
-  cursor: pointer;
+  margin-right: 10px;
   gap: 0.5rem;
+  padding: 0rem 1rem;
+  border-radius: 1.5rem;
+
+  white-space: nowrap;
+
+  transition: all 0.1s ease-in-out;
+
+  background-color: ${(props) =>
+    props.$isSelected ? 'rgba(181, 166, 202, 0.21)' : '#FFF'};
+  border: ${(props) =>
+    props.$isSelected
+      ? ' 1px solid var(--main, #9A7B9A)'
+      : '1px solid #DEDEDE'};
 
   ${(props) =>
-    props.$isSelected
-      ? `
-      background: #EDE9ED;
-      border:none;
-      &:hover {
-        opacity: 0.8;
-      }
-        `
-      : `
-      background: #fff;
-      border: 1px solid #b5a6ca;
-      &:hover {
-        background: #EDE9ED;
-      }
-        `}
+    props.$isHoverEnabled &&
+    `  
+    cursor: pointer; 
+    &:hover {
+    opacity: ${(props: StTagProps) => (props.$isSelected ? 0.8 : 1)};
+    background: ${(props: StTagProps) =>
+      props.$isSelected ? '#EDE9ED' : '#EDE9ED'};
+  }`}
 
   h5 {
-    color: var(--textcolor, #373737);
+    color: var(--textcolor, #333);
     text-align: center;
     font-family: Pretendard;
     font-size: 0.875rem;
     font-style: normal;
-    font-weight: 400;
+    font-weight: ${(props) => (props.$isSelected ? '600' : '400')};
     line-height: normal;
+    margin: 0.6rem 0;
   }
 `;
