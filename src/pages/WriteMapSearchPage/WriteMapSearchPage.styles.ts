@@ -52,7 +52,7 @@ export const StSearchResult = styled.div`
   width: 24.4rem;
   height: 4.81rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   border-top: 1px solid #e3e3e3;
   padding-left: 1.56rem;
   padding-top: 1.25rem;
@@ -68,6 +68,13 @@ export const StPlaceName = styled.span`
   margin-right: auto;
 `;
 
+export const StRoadBox = styled.div`
+  width: 19.62rem;
+  height: 4.81rem;
+  display: flex;
+  flex-direction: column;
+`;
+
 export const StRoadName = styled.span`
   color: #929292;
   text-align: center;
@@ -75,4 +82,21 @@ export const StRoadName = styled.span`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  margin-right: auto;
+  margin-bottom: 0.38rem;
+`;
+
+export const StChooseButton = styled.button`
+  width: 3.81rem;
+  height: 1.94rem;
+  border-radius: 1.25rem;
+  background-color: #fff;
+  border: 1px solid #e2e2e2;
+  margin-right: 0.94rem;
+  box-sizing: border-box;
+  color: #333;
+  text-align: center;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
 `;

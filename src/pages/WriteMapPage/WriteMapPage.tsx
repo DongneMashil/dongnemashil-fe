@@ -23,7 +23,7 @@ export const WriteMapPage = () => {
     if (addressData.fullAddress.includes('서울')) {
       navigate('/write');
     } else {
-      alert('서울턱별시만 가능합니다만😱');
+      alert('서울특별시만 가능합니다😱');
     }
   };
 
