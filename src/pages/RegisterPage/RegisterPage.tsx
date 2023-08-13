@@ -145,7 +145,7 @@ export const RegisterPage = () => {
             name="email"
             id="email"
             value={RegitserProps.email}
-            placeholder="이메일을 입력해주세요."
+            placeholder="이메일을 입력해주세요"
             onChange={onChangeHandler}
             onClick={() => console.log('이메일 중복확인 클릭!')}
             btnText="중복 확인"
@@ -160,7 +160,7 @@ export const RegisterPage = () => {
             id="nickname"
             value={RegitserProps.nickname}
             onChange={onChangeHandler}
-            placeholder="닉네임을 입력해주세요."
+            placeholder="한글 또는 영문 대소문자 4자리 이상"
             onClick={() => console.log('닉네임 중복확인 클릭!')}
             btnText="중복 확인"
           />
@@ -172,6 +172,7 @@ export const RegisterPage = () => {
             id="password"
             value={RegitserProps.password}
             onChange={onChangeHandler}
+            placeholder="영문, 숫자, 특수문자(!@#$%^&*) 포함 8~15자리"
           />
           <p>{verifyMsg.password.msg}</p>
           <AuthInputBox
