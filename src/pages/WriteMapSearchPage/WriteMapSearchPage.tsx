@@ -1,8 +1,10 @@
 import { CommonLayout, NavBar } from 'components/layout';
 import React, { ChangeEvent, useState } from 'react';
 import {
+  StChooseButton,
   StMarker,
   StPlaceName,
+  StRoadBox,
   StRoadName,
   StSeacrhResultWrapper,
   StSearchBox,
@@ -79,12 +81,15 @@ export const WriteMapSearchPage = () => {
         <StSeacrhResultWrapper>
           {responseData?.documents.map((result: Document, index: number) => (
             <StSearchResult key={index}>
-              <StPlaceName>
-                {highlightSearchText(result.place_name || '', search)}
-              </StPlaceName>
-              <StRoadName>
-                {result.road_address_name || result.address_name}
-              </StRoadName>
+              <StRoadBox>
+                <StPlaceName>
+                  {highlightSearchText(result.place_name || '', search)}
+                </StPlaceName>
+                <StRoadName>
+                  {result.road_address_name || result.address_name}
+                </StRoadName>
+              </StRoadBox>
+              <StChooseButton>선택</StChooseButton>
               {isError && <div>Error: {(error as Error).message}</div>}
               {isLoading && <div>Loading...</div>}
             </StSearchResult>
