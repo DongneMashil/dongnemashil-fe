@@ -13,7 +13,7 @@ export const StAuthInputBox = styled.div`
   & > input {
     width: 100%;
     height: 100%;
-    padding: 12px 0;
+    padding: 16px 0 8px;
     box-sizing: border-box;
     font-size: 16px;
     font-weight: 400;
@@ -24,6 +24,9 @@ export const StAuthInputBox = styled.div`
 
     &[type='password'] {
       letter-spacing: 0.375rem;
+      &::placeholder {
+        letter-spacing: normal;
+      }
     }
 
     &::placeholder {
