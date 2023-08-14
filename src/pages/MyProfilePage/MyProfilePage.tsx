@@ -96,7 +96,10 @@ export const MyProfilePage = () => {
   };
 
   return (
-    <CommonLayout header={<NavBar>회원정보수정</NavBar>} backgroundColor="#fff">
+    <CommonLayout
+      header={<NavBar btnLeft="back">회원정보수정</NavBar>}
+      backgroundColor="#fff"
+    >
       <StMyProfileContainer>
         <StProfileImage>
           <img src={fileUrl || noUser} alt="프로필 이미지" />

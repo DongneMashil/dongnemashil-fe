@@ -53,9 +53,15 @@ export const MyPage = () => {
   return (
     <CommonLayout
       header={
-        <NavBar btnLeft="logo" btnRight="mypage">
-          {' '}
-        </NavBar>
+        isModalOpen ? (
+          <NavBar
+            btnLeft="backfunction"
+            onClickLeft={() => setIsModalOpen(false)}
+            btnRight="mypage"
+          ></NavBar>
+        ) : (
+          <NavBar btnLeft="logo" btnRight="mypage"></NavBar>
+        )
       }
       footer={<Footer />}
       hideHeader={false}

@@ -4,36 +4,83 @@ import { styled } from 'styled-components';
 
 import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
-import { GetMyCommentsResponse, getMyComments } from 'api/mypageApi';
-import { useQuery } from '@tanstack/react-query';
+import { Comment, getMyComments } from 'api/mypageApi';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useIntersect } from 'hooks/useIntersect';
 
 export const MyCommentsPage = () => {
   const userState = useRecoilValue(userProfileSelector);
-  const { data } = useQuery<GetMyCommentsResponse, Error>({
-    queryKey: ['mycomments', userState.nickName],
-    queryFn: () => getMyComments(),
-    enabled: userState.isLoggedIn,
-    onSuccess: (data: GetMyCommentsResponse) => {
-      console.log('🇨🇦' + data);
-    },
-    onError: (error: Error) => {
-      console.log('🎁' + error);
-    },
-  });
+  // const { data } = useQuery<GetMyCommentResponse, Error>({
+  //   queryKey: ['mycomments', userState.nickName],
+  //   queryFn: () => getMyComments(),
+  //   enabled: userState.isLoggedIn,
+  //   onSuccess: (data: GetMyCommentResponse) => {
+  //     console.log('🇨🇦' + data);
+  //   },
+  //   onError: (error: Error) => {
+  //     console.log('🎁' + error);
+  //   },
+  // });
 
+  const useInfinityScroll = () => {
+    const fetchComment = async ({ pageParam = 1 }) => {
+      const response = await getMyComments(pageParam);
+
+      console.log(JSON.stringify(response));
+      return {
+        ...response,
+        isLast: response.last,
+        nextPage: pageParam + 1,
+      };
+    };
+
+    const query = useInfiniteQuery(
+      ['myComment', userState.nickName],
+      fetchComment,
+      {
+        getNextPageParam: (currentPage) => {
+          if (!currentPage.isLast) return currentPage.nextPage;
+          return undefined;
+        },
+      }
+    );
+    return query;
+  };
+  const { data, fetchNextPage, hasNextPage, isLoading } = useInfinityScroll();
+
+  // useIntersect 콜백함수
+  const onIntersectCallback = () => {
+    if (!isLoading) {
+      fetchNextPage();
+    }
+  };
+
+  // 커스텀훅 사용
+  const loaderRef = useIntersect(onIntersectCallback, {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1,
+  });
   return (
     <CommonLayout header={<NavBar />} backgroundColor="#f5f5f5">
       <StMyPageContainer>
         {data &&
-          data.content.map((item, index) => (
-            <StButton key={index}>
-              <p>{item.id}</p>
-              <p>{item.nickname}</p>
-              <p>{item.comment}</p>
-              <p>{item.createdAt}</p>
-              <img src={item.profileImgUrl || ''} />
-            </StButton>
-          ))}
+          data.pages.map((page) =>
+            page.content.map((item: Comment, index: number) => (
+              <StButton key={index}>
+                <p>{item.id}</p>
+                <p>{item.nickname}</p>
+                <p>{item.comment}</p>
+                <p>{item.createdAt}</p>
+                <img src={item.profileImgUrl || ''} />
+              </StButton>
+            ))
+          )}
+        {hasNextPage && (
+          <>
+            <div ref={loaderRef} />
+          </>
+        )}
       </StMyPageContainer>
     </CommonLayout>
   );
