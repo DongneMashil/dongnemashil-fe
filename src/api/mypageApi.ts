@@ -138,17 +138,21 @@ export const getMyComments = async (
   }
 };
 
-export const postProfile = async (post: { imgUrl: File; nickname: string }) => {
+export const postProfile = async (post: {
+  imgUrl: File | null;
+  nickname: string;
+}) => {
   // 사진전송 및 게시
   try {
-    const profileExt = post.imgUrl.name.split('.').pop();
-
     const formedData = new FormData();
-    formedData.append(
-      'file',
-      post.imgUrl,
-      `userProfile.${profileExt}` // 파일이름을 영문 단어로 통일
-    );
+    if (post.imgUrl) {
+      const profileExt = post.imgUrl.name.split('.').pop();
+      formedData.append(
+        'file',
+        post.imgUrl,
+        `userProfile.${profileExt}` // 파일이름을 영문 단어로 통일
+      );
+    }
     formedData.append(
       'nickname',
       new Blob([post.nickname], { type: 'text/plain' })
