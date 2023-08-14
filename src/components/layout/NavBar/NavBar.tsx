@@ -1,9 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+import { MyProfile, getMyProfile } from 'api/mypageApi';
+
 import { Button } from 'components/common';
-import React from 'react';
+import React, { useState } from 'react';
 import { StNavBar } from './NavBar.styles';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as SearchFlat } from 'assets/icons/SearchFlat.svg';
 import noUser from 'assets/images/NoUser.gif';
+import { useVerifyUser } from 'hooks';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
@@ -24,6 +28,23 @@ export const NavBar = ({
   onClickRight,
   onClickLeft,
 }: NavBarProps) => {
+  const { data: userData } = useVerifyUser(true);
+  const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
+
+  const { data } = useQuery<MyProfile, Error>({
+    queryKey: ['myPage', userData?.nickname],
+    queryFn: () => getMyProfile(),
+    // enabled: !!userData?.nickname,
+    onSuccess: (data) => {
+      console.log(data);
+      setFileUrl(data.profileImgUrl);
+    },
+    onError: (error) => {
+      console.log('🔴' + error);
+    },
+  });
+  console.log(data);
+
   const navigate = useNavigate();
 
   const goBack = () => {
@@ -69,7 +90,7 @@ export const NavBar = ({
     ),
     mypage: (
       <Button type={'icon'} url={'/mypage'}>
-        <img src={noUser} alt="user" />
+        <img src={fileUrl || noUser} alt="프로필 이미지" />
       </Button>
     ),
     submit: (
