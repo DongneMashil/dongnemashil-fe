@@ -5,6 +5,7 @@ export const StCurrentLocationContainer = styled.div`
   height: 12.9rem;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   box-sizing: border-box;
   position: absolute;
   bottom: 0;
@@ -23,12 +24,11 @@ export const StCurrentLocationTitle = styled.span`
   font-weight: 700;
   line-height: normal;
   color: #333;
-  margin-right: auto;
   margin-bottom: 1.4rem;
 `;
 
 export const StInputWrapper = styled.div`
-  width: 22.5rem;
+  width: 90%;
   height: 2rem;
   border-bottom: 1px solid #dbdbdb;
 `;
@@ -43,18 +43,23 @@ export const StCurrentLocationText = styled.span`
   width: 11.125rem;
   height: 1.1875rem;
   color: #5f5f5f;
-  font-size: 1rem;
+  font-size: 0.89rem;
   font-weight: 600;
   line-height: normal;
   cursor: pointer;
 `;
 
 export const StPostButton = styled.button`
-  width: 6.19rem;
-  height: 2rem;
-  border-radius: 1rem;
+  width: 90%;
+  height: 3.13rem;
+  border-radius: 0.75rem;
   border: 1px solid #9a7b9a;
-  background: #9a7b9a;
+  background: #996899;
   color: #fff;
-  margin: 1.44rem 1.88rem 3.56rem 16.31rem ;
+  margin-top: 2.34rem;
+  color: #fff;
+  text-align: center;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 700;
 `;

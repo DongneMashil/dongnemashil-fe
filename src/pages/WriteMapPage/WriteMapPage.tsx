@@ -23,9 +23,6 @@ export const WriteMapPage = () => {
 
   const disableCurrentLocation = location.state?.fromSearch || false;
 
-  console.log('selectedAddress:', selectedAddress);
-  console.log('disableCurrentLocation:', disableCurrentLocation);
-
   const onGoWritePageHandler = () => {
     if (addressData.fullAddress.includes('서울')) {
       navigate('/write');
