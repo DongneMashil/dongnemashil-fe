@@ -13,6 +13,7 @@ import {
   WritePage,
   WriteMapSearchPage,
   SearchResultPage,
+  MyCommentsPage,
 } from 'pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
@@ -37,8 +38,13 @@ const Router = () => {
           path="/mypage/profile"
           element={<ProtectedRoute element={<MyProfilePage />} />}
         />
+        <Route
+          path="/mypage/comments"
+          element={<ProtectedRoute element={<MyCommentsPage />} />}
+        />
         <Route path="/temp/mypage" element={<MyPage />} />
         <Route path="/temp/mypage/profile" element={<MyProfilePage />} />
+        <Route path="/temp/mypage/comments" element={<MyCommentsPage />} />
         <Route path="/write" element={<WritePage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search/result" element={<SearchResultPage />} />
