@@ -17,7 +17,7 @@ export const FixFooter = ({ centerButtons, rightButtons }: FixFooterProps) => {
   const centerWrapper = {
     map: (
       <Button
-        type="borderround"
+        type="borderRound"
         $width={'90px'}
         $height={'27px'}
         $round={'16px'}
@@ -32,13 +32,13 @@ export const FixFooter = ({ centerButtons, rightButtons }: FixFooterProps) => {
   const rightWrapper = {
     write: (
       <>
-        <Button type="circlefill" $width={'57px'} $height={'57px'}>
+        <Button type="circleFill" $width={'57px'} $height={'57px'}>
           우리
           <br />
           동네
         </Button>
         <Button
-          type="borderround"
+          type="borderRound"
           $width={'70px'}
           $height={'70px'}
           $round={'50%'}
@@ -49,7 +49,7 @@ export const FixFooter = ({ centerButtons, rightButtons }: FixFooterProps) => {
       </>
     ),
     goTop: (
-      <Button type="circlefill" $width={'57px'} $height={'57px'}>
+      <Button type="circleFill" $width={'57px'} $height={'57px'}>
         우리
         <br />
         동네

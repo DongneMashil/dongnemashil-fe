@@ -61,7 +61,7 @@ export const NavBar = ({
       </Button>
     ),
     cancel: (
-      <Button type={'onlytext'} url={'/'}>
+      <Button type={'onlyText'} url={'/'}>
         취소
       </Button>
     ),
@@ -107,7 +107,7 @@ export const NavBar = ({
       </Button>
     ),
     map: (
-      <Button type={'onlytext'} onClick={onClickRight}>
+      <Button type={'onlyText'} onClick={onClickRight}>
         지도보기 {'>'}
       </Button>
     ),

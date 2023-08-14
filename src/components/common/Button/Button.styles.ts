@@ -31,7 +31,7 @@ export const StButton = styled.button<{
     padding: 0 1rem;
   }
 
-  &.borderround {
+  &.borderRound {
     width: ${(props) => props.$width};
     height: ${(props) => props.$height};
     border-radius: ${(props) => props.$round};
@@ -46,7 +46,7 @@ export const StButton = styled.button<{
     }
   }
 
-  &.circlefill {
+  &.circleFill {
     width: ${(props) => props.$width};
     height: ${(props) => props.$height};
     border-radius: 50%;
@@ -60,13 +60,13 @@ export const StButton = styled.button<{
     line-height: normal;
   }
 
-  &.onlytext {
+  &.onlyText {
     text-align: center;
     font-size: 0.875rem;
     gap: 0.5rem;
   }
 
-  &.onlytexttoggle {
+  &.onlyTextToggle {
     text-align: center;
     font-size: 0.875rem;
     color: ${(props) =>
@@ -160,7 +160,7 @@ export const StSubmitButton = styled.input<{
     margin-right: 0.5rem;
   }
 
-  &.onlytext {
+  &.onlyText {
     text-align: center;
     font-size: 0.875rem;
     gap: 0.5rem;
