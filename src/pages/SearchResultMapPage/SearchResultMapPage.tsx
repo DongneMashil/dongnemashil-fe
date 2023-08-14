@@ -2,6 +2,7 @@ import React from 'react';
 import Map from 'components/common/Map/Map';
 import { ReviewResultsProps } from 'pages/SearchResultPage/SearchResultPage';
 import Marker from 'assets/icons/Marker.png';
+import MarkerSelected from 'assets/icons/MarkerSelected.png';
 
 export const SearchResultMapPage = ({
   reviewList,
@@ -10,12 +11,18 @@ export const SearchResultMapPage = ({
 }) => {
   console.log('reviewList ', reviewList);
 
-  const imgSrc = Marker;
-  const imgSize = new kakao.maps.Size(36, 48);
-  const markerImage = new kakao.maps.MarkerImage(imgSrc, imgSize);
+  //const imgSrc = Marker;
+  const markerImage = new kakao.maps.MarkerImage(
+    Marker,
+    new kakao.maps.Size(21, 28)
+  );
+  const markerSelectedImage = new kakao.maps.MarkerImage(
+    MarkerSelected,
+    new kakao.maps.Size(36, 48)
+  );
 
   const initMap = (map: kakao.maps.Map) => {
-    //const markers: kakao.maps.Marker[] = []; // 마커 배열
+    let selectedMarker: kakao.maps.Marker | null = null;
 
     // 마커 및 오버레이 세팅
     reviewList.map((data: ReviewResultsProps) => {
@@ -37,7 +44,6 @@ export const SearchResultMapPage = ({
             position: coord,
           });
           marker.setMap(map); // 마커 맵에 추가
-          //markers.push(marker); // 마커 저장
 
           // 툴팁 생성
           const overlay = new kakao.maps.CustomOverlay({
@@ -47,20 +53,35 @@ export const SearchResultMapPage = ({
             <img src='${data.mainImgUrl}' width="100px" height="100px"/>
             </a>
           </div>`,
-            xAnchor: 0.45,
-            yAnchor: 1.12,
+            xAnchor: 0.475,
+            yAnchor: 1.35,
             clickable: true,
           });
 
           kakao.maps.event.addListener(marker, 'click', () => {
+            if (!selectedMarker) {
+              marker.setImage(markerSelectedImage);
+            }
+            if (selectedMarker !== marker) {
+              marker.setImage(markerSelectedImage);
+              selectedMarker?.setImage(markerImage);
+            }
+            selectedMarker = marker;
+
             overlay.setMap(map); // 툴팁 열기 이벤트 리스너 추가
           });
           kakao.maps.event.addListener(map, 'click', () => {
+            selectedMarker?.setImage(markerImage);
+            selectedMarker = null;
             overlay.setMap(null); // 툴팁 닫기 이벤트 리스너 추가
           });
         }
       });
     });
   };
-  return <Map width="100%" height="100%" initMap={initMap} />;
+  return (
+    <div style={{ width: '100%', height: '100%' }}>
+      <Map width="100%" height="100%" initMap={initMap} />
+    </div>
+  );
 };
