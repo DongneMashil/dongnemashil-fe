@@ -78,6 +78,7 @@ export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
           roadName={review.roadName}
           mainImgUrl={review.mainImgUrl}
           profileImgUrl={review.profileImgUrl}
+          createdAt={review.createdAt}
           likeCnt={review.likeCnt}
           likebool={review.likebool}
         />

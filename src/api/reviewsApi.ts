@@ -22,6 +22,7 @@ export interface ReviewsList {
   roadName: string;
   mainImgUrl: string;
   profileImgUrl: string | null;
+  createdAt: string;
   likeCnt: number;
   likebool: boolean;
 }
