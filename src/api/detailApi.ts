@@ -7,8 +7,9 @@ import { axiosInstance } from './api';
 //   baseURL: baseUrl,
 // });
 
-export type ReviewDetail = {
+export type ReviewDetailResponse = {
   id: number;
+  nickname: string;
   content: string;
   profileImgUrl: string | null;
   address: string;
@@ -29,12 +30,11 @@ export type ReviewDetail = {
 
 export const getReviewDetail = async (
   detailId: undefined | string
-): Promise<ReviewDetail> => {
+): Promise<ReviewDetailResponse> => {
   // 상세페이지 조회
   try {
-    const response: AxiosResponse<ReviewDetail> = await axiosInstance.get(
-      `/reviews/${detailId}`
-    );
+    const response: AxiosResponse<ReviewDetailResponse> =
+      await axiosInstance.get(`/reviews/${detailId}`);
     return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
