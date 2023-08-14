@@ -3,7 +3,7 @@ import { MyProfile, getMyProfile } from 'api/mypageApi';
 
 import { Button } from 'components/common';
 import React, { useState } from 'react';
-import { StNavBar } from './NavBar.styles';
+import { StCenterWrapper, StNavBar, StRighttWrapper } from './NavBar.styles';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import noUser from 'assets/images/NoUser.gif';
@@ -116,11 +116,11 @@ export const NavBar = ({
   return (
     <StNavBar>
       <div>{leftButtons[btnLeft]}</div>
-      {children ? <div>{children}</div> : null}
-      <div>
+      {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
+      <StRighttWrapper>
         {btnSecondRight ? secondRightButtons[btnSecondRight] : null}
         {btnRight ? rightButtons[btnRight] : null}
-      </div>
+      </StRighttWrapper>
     </StNavBar>
   );
 };
