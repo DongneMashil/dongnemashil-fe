@@ -1,6 +1,14 @@
 import React from 'react';
 import { StAuthErrorMsg } from './AuthErrorMsg.styles';
 
-export const AuthErrorMsg = ({ children }: { children: string }) => {
-  return <StAuthErrorMsg>{children}</StAuthErrorMsg>;
+interface AuthErrorMsgProps {
+  children: string;
+  isValid?: boolean;
+}
+
+export const AuthErrorMsg = ({
+  children,
+  isValid = false,
+}: AuthErrorMsgProps) => {
+  return <StAuthErrorMsg $isValid={isValid}>{children}</StAuthErrorMsg>;
 };
