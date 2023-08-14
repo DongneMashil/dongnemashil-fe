@@ -44,7 +44,7 @@ export const StTabContentBox = styled.div`
   width: 100%;
 
   background-color: #fff;
-  padding: 5px;
+  padding: 10px;
 
   margin-bottom: 1rem;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.03);
@@ -54,7 +54,7 @@ export const StTabContentBox = styled.div`
   grid-template-columns: repeat(1, 1fr);
   //   justify-items: center;
   //   align-items: center;
-  gap: 5px;
+  gap: 10px;
 
   @media (min-width: 300px) {
     grid-template-columns: repeat(2, 1fr);
