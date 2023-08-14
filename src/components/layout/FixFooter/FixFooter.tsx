@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from 'components/common';
 import { ReactComponent as Pen } from 'assets/icons/Pen.svg';
 import { ReactComponent as PurpleMarker } from 'assets/icons/PurpleMarker.svg';
+import { ReactComponent as ChevronTop } from 'assets/icons/ChevronTop.svg';
 import {
   StRightBtnWrapper,
   StCenterBtnWrapper,
@@ -49,10 +50,14 @@ export const FixFooter = ({ centerButtons, rightButtons }: FixFooterProps) => {
       </>
     ),
     goTop: (
-      <Button type="circlefill" $width={'57px'} $height={'57px'}>
-        우리
-        <br />
-        동네
+      <Button
+        type="borderround"
+        $width={'48px'}
+        $height={'48px'}
+        $round={'50%'}
+        $stroke={'1px'}
+      >
+        <ChevronTop />
       </Button>
     ),
   };
