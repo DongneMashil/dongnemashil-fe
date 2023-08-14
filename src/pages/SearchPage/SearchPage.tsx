@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'components/common';
-import { ReactComponent as SearchFlat } from 'assets/icons/SearchFlat.svg';
+import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import { StSearchInput, StSearchHeader } from './SearchPage.styles';
 import { HeaderText } from 'components/common/HeaderText/HeaderText';
 import { CommonLayout } from 'components/layout';
@@ -21,7 +21,7 @@ export const SearchPage = () => {
     <CommonLayout backgroundColor="#ffffff">
       <StSearchHeader>
         <div>
-          <SearchFlat width={16} height={16} />
+          <Search width={16} height={16} />
           <HeaderText type="h1">구를 입력해주세요!</HeaderText>
         </div>
         <StSearchInput
