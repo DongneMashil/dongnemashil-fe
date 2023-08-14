@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CommonLayout, NavBar } from 'components/layout';
+import { CommonLayout, FixFooter, NavBar } from 'components/layout';
 import { ThumbnailWrapper } from 'components/homePage';
 import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
 import { useVerifyUser } from 'hooks';
@@ -21,6 +21,7 @@ export const HomePage = () => {
       console.log('useVerifyUser data: ', data);
     }
   }, [userState]);
+  console.log(selectedTags);
 
   return (
     <CommonLayout
@@ -37,8 +38,11 @@ export const HomePage = () => {
         </>
       }
       headerHeight={'150px'}
+      footer={<FixFooter rightButtons={'write'} />}
     >
-      <ThumbnailWrapper tag={selectedTags.join(',')} />
+      <ThumbnailWrapper
+        tag={selectedTags.length > 0 ? selectedTags.join(',') : null}
+      />
     </CommonLayout>
   );
 };

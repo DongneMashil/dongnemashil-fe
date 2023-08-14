@@ -1,7 +1,13 @@
 import { theme } from 'style/theme';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 
-export const StButton = styled.button<{ $active?: boolean }>`
+export const StButton = styled.button<{
+  $width?: string;
+  $height?: string;
+  $stroke?: string;
+  $round?: string;
+  $active?: boolean;
+}>`
   background: none;
   display: flex;
   justify-content: center;
@@ -25,7 +31,33 @@ export const StButton = styled.button<{ $active?: boolean }>`
     padding: 0 1rem;
   }
 
-  &.circle {
+  &.borderround {
+    width: ${(props) => props.$width};
+    height: ${(props) => props.$height};
+    border-radius: ${(props) => props.$round};
+    border: ${(props) => props.$stroke} solid ${theme.mainColor};
+    background: rgba(247, 246, 246, 0.8);
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+
+    & span {
+      color: ${theme.pointColor};
+      font-weight: 700;
+      margin-left: 6px;
+    }
+  }
+
+  &.circlefill {
+    width: ${(props) => props.$width};
+    height: ${(props) => props.$height};
+    border-radius: 50%;
+    background: ${theme.mainColor};
+    opacity: 0.9;
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+
+    color: ${theme.whiteColor};
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: normal;
   }
 
   &.onlytext {

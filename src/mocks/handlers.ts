@@ -20,6 +20,7 @@ export const result = Array.from(Array(1000).keys()).map(
     roadName: '서울숲로',
     mainImgUrl: 'https://source.unsplash.com/random',
     profileImgUrl: noUser,
+    createdAt: '2시간전',
     likeCnt: 1200,
     likebool: false,
   })
