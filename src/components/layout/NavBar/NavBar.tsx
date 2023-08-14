@@ -5,7 +5,7 @@ import { Button } from 'components/common';
 import React, { useState } from 'react';
 import { StNavBar } from './NavBar.styles';
 import { useNavigate } from 'react-router-dom';
-import { ReactComponent as SearchFlat } from 'assets/icons/SearchFlat.svg';
+import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import noUser from 'assets/images/NoUser.gif';
 import { useVerifyUser } from 'hooks';
 
@@ -77,7 +77,7 @@ export const NavBar = ({
   const secondRightButtons = {
     search: (
       <Button type={'icon'} url={'/search'}>
-        <SearchFlat width="21" height="21" />
+        <Search width="21" height="21" />
       </Button>
     ),
   };
