@@ -5,20 +5,30 @@ import {
   StTarget,
   StThumbnailWrapper,
 } from './ThumbnailWrapper.styles';
-import { useFetchReviews } from 'api/reviewsApi';
+import { useFetchReviews, useFetchSearchReviews } from 'api/reviewsApi';
 import { useIntersect } from 'hooks/useIntersect';
 import { Button } from 'components/common';
 
-export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
+export const ThumbnailWrapper = ({
+  tag,
+  isSearch,
+}: {
+  tag: string | null;
+  isSearch: boolean;
+}) => {
   const [type, setType] = useState('likes');
 
-  console.log(tag);
+  const fetchApi = isSearch ? useFetchSearchReviews : useFetchReviews;
+  const { data, hasNextPage, isFetching, fetchNextPage, refetch } = fetchApi({
+    type,
+    tag,
+  });
 
-  const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
-    useFetchReviews({
-      type,
-      tag,
-    });
+  // const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
+  //   useFetchReviews({
+  //     type,
+  //     tag,
+  //   });
 
   console.log(type, data?.pages[0].data.content);
 
