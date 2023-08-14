@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import {
   StThumbnail,
+  StThumbnailLike,
   StThumbnailTitle,
   StThumbnailTitleLeft,
   StThumnailMain,
@@ -12,14 +13,16 @@ import { ReviewsList } from 'api/reviewsApi';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { useLike } from 'hooks';
-import { StLike } from 'components/detailPage';
 import noUser from 'assets/images/NoUser.gif';
+import { numberWithCommas } from 'utils';
+import timeAgo from 'utils/timeAgo';
 
 export const Thumbnail = ({
   id,
   roadName,
   mainImgUrl,
   profileImgUrl,
+  createdAt,
   likeCnt: initialLikeCnt,
   likebool: initialIsLiked,
 }: ReviewsList) => {
@@ -64,14 +67,14 @@ export const Thumbnail = ({
           <img src={profileImgUrl || noUser} alt="프로필 이미지" />
           <StTitleText>
             <Span size={'title'}>
-              <strong>{roadName}</strong>에서
+              <strong>{roadName}</strong>
             </Span>
-            <Span size={'small'}>2시간 전</Span>
+            <Span size={'small'}>{timeAgo(createdAt)}</Span>
           </StTitleText>
         </StThumbnailTitleLeft>
-        <StLike onClick={toggleLikeHandler}>
-          {isLiked ? <FilledHeart /> : <Heart />} {likeCnt}
-        </StLike>
+        <StThumbnailLike onClick={toggleLikeHandler}>
+          {isLiked ? <FilledHeart /> : <Heart />} {numberWithCommas(likeCnt)}
+        </StThumbnailLike>
       </StThumbnailTitle>
     </StThumbnail>
   );
