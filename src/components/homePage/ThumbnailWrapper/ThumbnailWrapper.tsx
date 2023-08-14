@@ -17,10 +17,10 @@ export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
   const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
     useFetchReviews({
       type,
-      // tag,
+      tag,
     });
 
-  console.log(type, data);
+  console.log(type, data?.pages[0].data.content);
 
   const reviews = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data.content) : []),
@@ -44,7 +44,7 @@ export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
 
   useEffect(() => {
     refetch();
-  }, [type]);
+  }, [type, tag]);
 
   const onClickSort = (type: string) => {
     if (type === 'likes' || type === 'recent') {

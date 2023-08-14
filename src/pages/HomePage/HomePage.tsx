@@ -21,6 +21,7 @@ export const HomePage = () => {
       console.log('useVerifyUser data: ', data);
     }
   }, [userState]);
+  console.log(selectedTags);
 
   return (
     <CommonLayout
@@ -39,7 +40,9 @@ export const HomePage = () => {
       headerHeight={'150px'}
       footer={<FixFooter rightButtons={'write'} />}
     >
-      <ThumbnailWrapper tag={selectedTags.join(',')} />
+      <ThumbnailWrapper
+        tag={selectedTags.length > 0 ? selectedTags.join(',') : null}
+      />
     </CommonLayout>
   );
 };

@@ -42,7 +42,7 @@ export interface Pageable {
 
 interface PaginationParams {
   type: string;
-  // tag: string | null;
+  tag: string | null;
 }
 
 const reviewKeys = {
@@ -51,15 +51,16 @@ const reviewKeys = {
   // list: (type: string) => [...reviewKeys.lists(), { type }] as const,
 };
 
-export const useFetchReviews = ({ type }: PaginationParams) =>
-  useInfiniteQuery(
+export const useFetchReviews = ({ type, tag }: PaginationParams) => {
+  return useInfiniteQuery(
     reviewKeys.lists(),
     ({ pageParam = 1 }: QueryFunctionContext) =>
       axiosInstance.get<ResponseData>('/reviews', {
-        params: { type, page: pageParam },
+        params: { type, page: pageParam, tag },
       }),
     {
       getNextPageParam: ({ data: { last, number } }) =>
         last ? undefined : number + 2,
     }
   );
+};
