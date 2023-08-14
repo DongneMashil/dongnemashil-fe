@@ -7,6 +7,8 @@ import { userProfileSelector } from 'recoil/userExample';
 import { Comment, getMyComments } from 'api/mypageApi';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useIntersect } from 'hooks/useIntersect';
+import { ReactComponent as ChevronRight } from 'assets/icons/ChevronRight.svg';
+import { ReactComponent as CommentS } from 'assets/icons/CommentS.svg';
 
 export const MyCommentsPage = () => {
   const userState = useRecoilValue(userProfileSelector);
@@ -63,53 +65,83 @@ export const MyCommentsPage = () => {
   });
   return (
     <CommonLayout header={<NavBar />} backgroundColor="#f5f5f5">
-      <StMyPageContainer>
+      {data && (
+        <StMyCommentCounter>
+          {data.pages[0].totalElements}개의 댓글
+        </StMyCommentCounter>
+      )}
+      <StMyCommentContainer>
+        {' '}
         {data &&
           data.pages.map((page) =>
             page.content.map((item: Comment, index: number) => (
               <StButton key={index}>
-                <p>{item.id}</p>
-                <p>{item.nickname}</p>
-                <p>{item.comment}</p>
-                <p>{item.createdAt}</p>
+                {' '}
+                <CommentS className="CommentS" />
+                <p className="comment">{item.comment}</p>
                 <img src={item.profileImgUrl || ''} />
+                <ChevronRight className="ChevronRight" />
               </StButton>
             ))
           )}
-        {hasNextPage && (
-          <>
-            <div ref={loaderRef} />
-          </>
-        )}
-      </StMyPageContainer>
+      </StMyCommentContainer>
+
+      {hasNextPage && (
+        <>
+          <div ref={loaderRef} />
+        </>
+      )}
     </CommonLayout>
   );
 };
 
-const StButton = styled.button`
-  ${(props) => props.theme.floatingBox}
+const StMyCommentCounter = styled.div`
+  color: rgb(131, 131, 131);
+  font-family: Pretendard;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin: 1rem;
+`;
+
+const StButton = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 1rem;
   cursor: pointer;
-  width: 95%;
+  width: 100%;
+  border-bottom: 1px solid rgb(226, 226, 226);
+  padding: 0.7rem 1.5rem;
   img {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    margin-right: 0.2rem;
+    margin-left: auto;
+    width: 4.375rem;
+    height: 4.375rem;
+    border-radius: 0.5625rem;
   }
-  .title {
-    font-size: 1.125rem;
-    font-weight: 600;
+  .CommentS {
+    width: 0.8125rem;
+    height: 0.82806rem;
+    flex-shrink: 0;
+  }
+  .ChevronRight {
+    width: 0.47606rem;
+    height: 1.0625rem;
+    flex-shrink: 0;
   }
 `;
 
-const StMyPageContainer = styled.div`
+const StMyCommentContainer = styled.div`
+  width: 100%;
+  background-color: white;
+  margin-bottom: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  border-radius: 0.8rem;
+  padding: 0rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
-  width: 100%;
-  height: 100%;
 `;
