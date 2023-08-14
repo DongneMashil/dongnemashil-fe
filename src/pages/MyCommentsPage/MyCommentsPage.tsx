@@ -64,14 +64,15 @@ export const MyCommentsPage = () => {
     threshold: 0.1,
   });
   return (
-    <CommonLayout header={<NavBar />} backgroundColor="#f5f5f5">
-      {data && (
+    <CommonLayout header={<NavBar btnLeft="back" />} backgroundColor="#f5f5f5">
+      {data ? (
         <StMyCommentCounter>
           {data.pages[0].totalElements}개의 댓글
         </StMyCommentCounter>
+      ) : (
+        <StMyCommentCounter>댓글이 없습니다🫥</StMyCommentCounter>
       )}
       <StMyCommentContainer>
-        {' '}
         {data &&
           data.pages.map((page) =>
             page.content.map((item: Comment, index: number) => (
@@ -99,9 +100,9 @@ const StMyCommentCounter = styled.div`
   color: rgb(131, 131, 131);
   font-family: Pretendard;
   font-size: 0.875rem;
-  font-style: normal;
+
   font-weight: 600;
-  line-height: normal;
+
   margin: 1rem;
 `;
 
