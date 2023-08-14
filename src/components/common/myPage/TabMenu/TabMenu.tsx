@@ -43,7 +43,7 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
         </TabButton>
       </StTabButtonWrapper>
       <StTabContentBox>
-        {data &&
+        {data ? (
           data.content.map((item, index) => (
             <StReviewBox
               key={index}
@@ -55,7 +55,10 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
                 <div className="date">{item.createdAt}</div>
               </div>
             </StReviewBox>
-          ))}
+          ))
+        ) : (
+          <div>👀 데이터가 없습니다!</div>
+        )}
       </StTabContentBox>
     </StTabContainer>
   );

@@ -12,6 +12,8 @@ import { userProfileSelector } from 'recoil/userExample';
 import { useQuery } from '@tanstack/react-query';
 import noUser from 'assets/images/NoUser.gif';
 import { useNavigate } from 'react-router-dom';
+import { ReactComponent as LogoutIcon } from 'assets/icons/Logout.svg';
+import { ReactComponent as CommentIcon } from 'assets/icons/CommentL.svg';
 export const MyPage = () => {
   const [shouldLogout, setShouldLogout] = useState(false);
   const { isError } = useLogout(shouldLogout);
@@ -70,35 +72,19 @@ export const MyPage = () => {
       <StMyPageContainer>
         {isModalOpen ? (
           <>
-            <p>내 정보</p>
+            <p className="category">내 정보</p>
             <StButton onClick={() => navigate('/mypage/comments')}>
-              <img
-                src={
-                  'https://w7.pngwing.com/pngs/459/323/png-transparent-smiley-happiness-line-comment-icon-face-smiley-head-thumbnail.png'
-                }
-              />
+              <CommentIcon />
               <div className="title">내가 쓴 댓글</div>
             </StButton>
             <StButton onClick={navigateToProfileHandler}>
               <img src={noUser} alt="프로필 이미지" />
               <div className="title">프로필 수정</div>
             </StButton>
-            <p>설정</p>
+            <p className="category">설정</p>
             <StButton onClick={onLogoutHandler}>
-              <img
-                src={
-                  'https://static.vecteezy.com/system/resources/previews/000/575/503/original/vector-logout-sign-icon.jpg'
-                }
-              />
+              <LogoutIcon />
               <div className="title">로그아웃</div>
-            </StButton>
-            <StButton onClick={() => setIsModalOpen(false)}>
-              <img
-                src={
-                  'https://image.shutterstock.com/image-vector/vector-illustration-go-back-left-260nw-2276203955.jpg'
-                }
-              />
-              <div className="title">돌아가기</div>
             </StButton>
           </>
         ) : (
@@ -127,16 +113,19 @@ export const StToProfileButton = styled.button`
 `;
 
 export const StButton = styled.button`
-  ${(props) => props.theme.floatingBox}
+  ${(props) => props.theme.floatingBox};
+  padding: 1rem;
+  margin-bottom: 1rem;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 1rem;
   cursor: pointer;
   width: 95%;
+  height: 5rem;
   img {
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: 50%;
   }
   .title {
@@ -149,7 +138,17 @@ export const StMyPageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
+  margin-top: 1rem;
   width: 100%;
   height: 100%;
+  .category {
+    margin: 1rem auto 1rem 1rem;
+    color: #767676;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
 `;

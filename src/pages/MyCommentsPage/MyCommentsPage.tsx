@@ -135,11 +135,7 @@ const StButton = styled.div`
 `;
 
 const StMyCommentContainer = styled.div`
-  width: 100%;
-  background-color: white;
-  margin-bottom: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-  border-radius: 0.8rem;
+  ${(props) => props.theme.floatingBox}
   padding: 0rem;
   display: flex;
   flex-direction: column;

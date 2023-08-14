@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
 import noUser from 'assets/images/NoUser.gif';
+import { ReactComponent as ChevronRight } from 'assets/icons/ChevronRight.svg';
 interface UserInfoProps {
   profileImgUrl: string | null | undefined;
   nickName?: string;
@@ -27,7 +28,7 @@ export const UserInfo = ({
         </div>
       </div>
       <StToProfileButton className="edit" onClick={() => setIsModalOpen(true)}>
-        ⚙️ 〉
+        <ChevronRight />
       </StToProfileButton>
     </StUserInfoContainer>
   );
@@ -43,6 +44,8 @@ export const StToProfileButton = styled.button`
 
 export const StUserInfoContainer = styled.div`
   ${(props) => props.theme.floatingBox}
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
