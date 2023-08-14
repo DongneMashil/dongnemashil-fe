@@ -88,7 +88,11 @@ export const CommonLoginPage = () => {
           {errorMsg && <AuthErrorMsg isValid={false}>{errorMsg}</AuthErrorMsg>}
         </StLoginErrorMsgBox>
         <StLoginButtonWrapper>
-          <Button type="authNormal" onClick={onSubmitHandler}>
+          <Button
+            type="authNormal"
+            onClick={onSubmitHandler}
+            $active={loginValues.id !== '' && loginValues.password !== ''}
+          >
             로그인
           </Button>
         </StLoginButtonWrapper>
