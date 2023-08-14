@@ -7,8 +7,9 @@ import { axiosInstance } from './api';
 //   baseURL: baseUrl,
 // });
 
-export type ReviewDetail = {
+export type ReviewDetailResponse = {
   id: number;
+  nickname: string;
   content: string;
   profileImgUrl: string | null;
   address: string;
@@ -29,12 +30,11 @@ export type ReviewDetail = {
 
 export const getReviewDetail = async (
   detailId: undefined | string
-): Promise<ReviewDetail> => {
+): Promise<ReviewDetailResponse> => {
   // 상세페이지 조회
   try {
-    const response: AxiosResponse<ReviewDetail> = await axiosInstance.get(
-      `/reviews/${detailId}`
-    );
+    const response: AxiosResponse<ReviewDetailResponse> =
+      await axiosInstance.get(`/reviews/${detailId}`);
     return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
@@ -53,7 +53,7 @@ export type Comment = {
   modifiedAt: string;
 };
 
-type ResponseData = {
+type GetCommentResponse = {
   content: Comment[];
   pageable: {
     sort: {
@@ -84,9 +84,9 @@ type ResponseData = {
 export const getComment = async (
   detailId: string, // 수정된 부분
   page?: number
-): Promise<ResponseData> => {
+): Promise<GetCommentResponse> => {
   try {
-    const response: AxiosResponse<ResponseData> = await axiosInstance.get(
+    const response: AxiosResponse<GetCommentResponse> = await axiosInstance.get(
       `/reviews/${detailId}/comments`,
       {
         params: {
@@ -94,10 +94,7 @@ export const getComment = async (
         },
       }
     );
-    return {
-      ...response.data,
-      content: response.data.content,
-    };
+    return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data?.errorMessage || e.message);

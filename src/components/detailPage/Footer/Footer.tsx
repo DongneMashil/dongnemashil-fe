@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
-import { ReactComponent as CommentIcon } from 'assets/icons/Comment.svg';
+import { ReactComponent as CommentIcon } from 'assets/icons/CommentS.svg';
 import { ReactComponent as ContentIcon } from 'assets/icons/Content.svg';
+import { ReactComponent as Close } from 'assets/icons/Close.svg';
 import { Comments } from '../Comments/Comments';
 import { CommentInput } from '../CommentInput/CommentInput';
 import { useLike } from 'hooks';
@@ -37,7 +38,7 @@ export const Footer = ({
     }
   }, [isCommentOpen]);
 
-  const { isLiked, likeCnt, toggleLikeHandler } = useLike({
+  const { isLiked, likeCnt, toggleLikeHandler, canClick } = useLike({
     reviewId,
     initialIsLiked,
     initialLikeCnt,
@@ -46,20 +47,20 @@ export const Footer = ({
   return (
     <StFooterContatiner $isCommentOpen={isCommentOpen}>
       <StFooterButtonWrapper>
-        <StLike onClick={toggleLikeHandler}>
+        <StLike onClick={() => canClick && toggleLikeHandler()}>
           {isLiked ? <FilledHeart /> : <Heart />}
           {likeCnt}
         </StLike>
         <StComment onClick={() => setIsCommentOpen(!isCommentOpen)}>
-          <CommentIcon /> {commentCount}
+          <CommentIcon className="CommentIcon" /> {commentCount}
         </StComment>
         {isCommentOpen ? (
           <Button type={'onlytext'} onClick={() => setIsCommentOpen(false)}>
-            ✕
+            <Close />
           </Button>
         ) : (
           <Button type={'onlytext'} onClick={onClick}>
-            <ContentIcon /> 본문 보기
+            <ContentIcon /> 본문으로
           </Button>
         )}
       </StFooterButtonWrapper>
@@ -98,6 +99,8 @@ export const StFooterButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  padding-right: 10px;
   width: 100%;
 `;
 export const StLike = styled.div`
@@ -116,6 +119,10 @@ export const StComment = styled.div`
   align-items: center;
   padding-right: 10px;
   cursor: pointer;
+  .CommentIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
 `;
 export const StFooterCommentSection = styled.div`
   display: flex;
