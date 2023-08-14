@@ -10,6 +10,7 @@ import {
   StDetailPageContainer,
   StDetailPageContent,
   StDetailPageHeader,
+  StDetailTitle,
   StNavTitle,
   StTagWrapper,
 } from './DetailPage.styles';
@@ -107,10 +108,11 @@ export const DetailPage = () => {
           <StDetailPageContainer>
             {data && (
               <>
-                <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
+                <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>
                 <StDetailPageHeader>
                   <img src={data.profileImgUrl || noUser} />
-                  <h4>{data.title || '제목없음'}</h4>
+                  <span className="nickname">닉네임여기에</span>
+                  <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
                 </StDetailPageHeader>
                 <StDetailPageContent>
                   <img className="detailimg" src={data.mainImgUrl || noImage} />
