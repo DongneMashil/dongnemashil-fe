@@ -1,6 +1,7 @@
 import React from 'react';
 import { CommonLayout } from 'components/layout';
 import {
+  StBackButton,
   StCurrentLocationContainer,
   StCurrentLocationText,
   StCurrentLocationTitle,
@@ -13,6 +14,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { addressSelector } from 'recoil/address/addressSelector';
 import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
+import { ReactComponent as Back } from 'assets/icons/Back.svg';
 
 export const WriteMapPage = () => {
   const addressData = useRecoilValue(addressSelector);
@@ -35,8 +37,15 @@ export const WriteMapPage = () => {
     navigate('/writemap/search');
   };
 
+  const onGoBackHandler = () => {
+    window.history.back();
+  };
+
   return (
     <CommonLayout>
+      <StBackButton onClick={onGoBackHandler}>
+        <Back />
+      </StBackButton>
       <StCurrentLocationContainer>
         <StCurrentLocationTitle>
           산책 지점을 먼저 선택해주세요!
@@ -49,11 +58,11 @@ export const WriteMapPage = () => {
         </StInputWrapper>
         <StPostButton onClick={onGoWritePageHandler}>글 작성</StPostButton>
       </StCurrentLocationContainer>
-      <Geolocation
-        selectedAddress={selectedAddress}
-        onAddressUpdate={setCurrentAddress}
-        disableCurrentLocation={disableCurrentLocation}
-      />
+        <Geolocation
+          selectedAddress={selectedAddress}
+          onAddressUpdate={setCurrentAddress}
+          disableCurrentLocation={disableCurrentLocation}
+        />
     </CommonLayout>
   );
 };
