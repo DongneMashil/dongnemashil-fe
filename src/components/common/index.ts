@@ -5,3 +5,5 @@ export * from './TempButton/TempButton';
 export * from './FooterSpacer/FooterSpacer';
 export * from './SpecialButtons';
 export * from './SkeletonUI/SkeletonUI';
+export * from './AuthInputBox/AuthInputBox';
+export * from './AuthLogoBox/AuthLogoBox';

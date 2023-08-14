@@ -1,149 +1,114 @@
 import React, { useState } from 'react';
-import { styled } from 'styled-components';
 import { TabButton } from '../TabButton/TabButton';
-import { GetMyReviewsResponse, getMyReviews } from 'api/mypageApi';
-import { useQuery } from '@tanstack/react-query';
+import { getMyReviews } from 'api/mypageApi';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import {
+  StCounter,
+  StReviewBox,
+  StTabButtonBox,
+  StTabButtonWrapper,
+  StTabContainer,
+  StTabContentBox,
+} from './TabMenu.styles';
+import { timeFormatWithoutTime } from 'utils';
+import { useIntersect } from 'hooks/useIntersect';
 export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
   const [selectedTab, setSelectedTab] = useState('reviews');
+  const navigate = useNavigate();
 
-  const { data } = useQuery<GetMyReviewsResponse, Error>({
-    queryKey: ['myPage', nickName, selectedTab],
-    queryFn: () => getMyReviews(selectedTab),
-    enabled: !!nickName,
-    onSuccess: (data) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.log('🟢' + error);
-    },
+  const useInfinityScroll = () => {
+    const fetchComment = async ({ pageParam = 1 }) => {
+      const response = await getMyReviews(selectedTab, pageParam);
+
+      console.log(JSON.stringify(response));
+      return {
+        ...response,
+        isLast: response.last,
+        nextPage: pageParam + 1,
+      };
+    };
+
+    const query = useInfiniteQuery(
+      ['myPage', nickName, selectedTab],
+      fetchComment,
+      {
+        getNextPageParam: (currentPage) => {
+          if (!currentPage.isLast) return currentPage.nextPage;
+          return undefined;
+        },
+      }
+    );
+    return query;
+  };
+  const { data, fetchNextPage, hasNextPage, isLoading } = useInfinityScroll();
+
+  // useIntersect 콜백함수
+  const onIntersectCallback = () => {
+    if (!isLoading) {
+      fetchNextPage();
+    }
+  };
+
+  // 커스텀훅 사용
+  const loaderRef = useIntersect(onIntersectCallback, {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1,
   });
-  console.log(data);
   return (
     <StTabContainer>
       <StTabButtonWrapper>
-        <TabButton
-          selected={selectedTab === 'reviews'}
-          onClick={() => setSelectedTab('reviews')}
-        >
-          내가 쓴
-        </TabButton>
-        <TabButton
-          selected={selectedTab === 'likes'}
-          onClick={() => setSelectedTab('likes')}
-        >
-          좋아요 한
-        </TabButton>
+        <StCounter>
+          {data ? data.pages[0].totalElements : '0'}개의 게시물
+        </StCounter>
+        <StTabButtonBox>
+          <TabButton
+            selected={selectedTab === 'reviews'}
+            onClick={() => setSelectedTab('reviews')}
+          >
+            내가 쓴
+          </TabButton>
+          <TabButton
+            selected={selectedTab === 'likes'}
+            onClick={() => setSelectedTab('likes')}
+          >
+            좋아요 한
+          </TabButton>
+        </StTabButtonBox>
       </StTabButtonWrapper>
       <StTabContentBox>
-        {selectedTab === 'reviews' ? (
-          <>
-            {Array(10)
-              .fill(null)
-              .map((_, index) => (
-                <StReviewBox key={index}>
-                  <img
-                    src={`https://picsum.photos/200/300?random=${index}`}
-                    alt="img"
-                  />
-                  <div className="contentWrapper">
-                    <div className="title">잠원로{index}</div>
-                    <div className="date">9월 {index}일</div>
-                  </div>
-                </StReviewBox>
-              ))}
-          </>
+        {data ? (
+          data.pages.map((page) =>
+            page.content.map(
+              (item, index) =>
+                item.imgUrl && (
+                  <StReviewBox
+                    key={index}
+                    onClick={() => navigate(`/review/${item.reviewId}`)}
+                  >
+                    <img src={item.imgUrl} alt="img" />
+                    <div className="contentWrapper">
+                      <div className="title">{item.address}</div>
+                      {selectedTab === 'reviews' && (
+                        <div className="date">
+                          {timeFormatWithoutTime(item.createdAt)}
+                        </div>
+                      )}
+                    </div>
+                    {hasNextPage && (
+                      <>
+                        <div ref={loaderRef} />
+                      </>
+                    )}
+                  </StReviewBox>
+                )
+            )
+          )
         ) : (
-          <>
-            {Array(20)
-              .fill(null)
-              .map((_, index) => (
-                <StReviewBox key={index}>
-                  <img
-                    src={`https://picsum.photos/200/300?random=${index + 20}`}
-                    alt="img"
-                  />
-                  <div className="contentWrapper">
-                    <div className="title">한강대로{index}</div>
-                    <div className="date">9월 {index}일</div>
-                  </div>
-                </StReviewBox>
-              ))}
-          </>
+          <div>👀 데이터가 없습니다!</div>
         )}
       </StTabContentBox>
     </StTabContainer>
   );
 };
-
-export const StReviewBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.8rem;
-  margin-bottom: 1rem;
-  img {
-    width: 100%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-    border-radius: 0.875rem;
-  }
-  .contentWrapper {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 0.7rem;
-    gap: 0.2rem;
-    .title {
-      font-size: 1rem;
-      font-weight: 600;
-    }
-    .date {
-      font-size: 0.875rem;
-      font-weight: 400;
-      color: #828282;
-    }
-  }
-`;
-
-export const StTabContentBox = styled.div`
-  width: 100%;
-  // height: 100%;
-
-  background-color: #fff;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.03);
-  border-radius: 0.875rem;
-
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  justify-items: center;
-  gap: 5px;
-
-  @media (min-width: 300px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  img {
-    width: 100%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-    border-radius: 0.875rem;
-  }
-`;
-
-export const StTabContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  //   margin-top: 2rem;
-  width: 100%;
-  height: 100%;
-`;
-export const StTabButtonWrapper = styled.div`
-  display: flex;
-  margin-right: 0.3rem;
-  margin-left: auto;
-`;

@@ -43,7 +43,7 @@ export const StSlidingHeader = styled.div<{ $isShow: boolean }>`
   top: 0;
   width: 100%;
   opacity: ${(props) => (props.$isShow ? '1' : '0')};
-  @media (max-height: 850px) {
-    transform: translateY(${(props) => (props.$isShow ? '0' : '-50px')});
-  } //overflow문제로 모바일에서만 적용함
+  // @media (max-height: 850px) {
+  //   transform: translateY(${(props) => (props.$isShow ? '0' : '-50px')});
+  // } //overflow문제로 모바일에서만 적용함 // 문제가 있어서 일단 지움 2023.8.14
 `;

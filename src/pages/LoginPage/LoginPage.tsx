@@ -2,15 +2,16 @@ import React from 'react';
 import { useNavigate } from 'react-router';
 import { loginKakao } from 'api/loginApi';
 import { CommonLayout } from 'components/layout';
+import { Button } from 'components/common';
 import {
   StLoginContainer,
-  StLoginButton,
   StLoginTag,
   StLoginButtonWrapper,
 } from './LoginPage.styles';
 import { ReactComponent as LogoImage } from 'assets/images/Logo.svg';
 import { ReactComponent as Lightning } from 'assets/icons/Lightning.svg';
 import { ReactComponent as KakaoIcon } from 'assets/icons/KakaoIcon.svg';
+import { ReactComponent as BackButton } from 'assets/icons/ChevronLeft.svg';
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -24,26 +25,32 @@ export const LoginPage = () => {
   const onRegisterHandler = () => {
     navigate('/register');
   };
+  // const onBackHandler = () => {
+  //   navigate(-1);
+  // };
 
   return (
     <CommonLayout>
       <StLoginContainer>
-        <LogoImage />
+        <Button type="icon" url="/">
+          <BackButton />
+        </Button>
+        <LogoImage width={190} height={214} />
         <StLoginButtonWrapper>
           <StLoginTag>
             3초만에 시작하기
             <Lightning />
           </StLoginTag>
-          <StLoginButton $type="kakao" onClick={onKakaoHandler}>
+          <Button type="authKakao" $active={true} onClick={onKakaoHandler}>
             <KakaoIcon />
             카카오로 로그인
-          </StLoginButton>
-          <StLoginButton onClick={onLoginHandler}>
+          </Button>
+          <Button type="authNormal" $active={true} onClick={onLoginHandler}>
             회원 아이디로 로그인
-          </StLoginButton>
-          <StLoginButton $type="register" onClick={onRegisterHandler}>
+          </Button>
+          <Button type="authOutline" $active={true} onClick={onRegisterHandler}>
             회원가입
-          </StLoginButton>
+          </Button>
         </StLoginButtonWrapper>
       </StLoginContainer>
     </CommonLayout>

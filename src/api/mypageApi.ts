@@ -22,18 +22,17 @@ export const getMyProfile = async (): Promise<MyProfile> => {
   }
 };
 
-export type Comment = {
-  id: number;
+export type Review = {
   nickname: string;
-  profileImgUrl: string | null;
-  comment: string;
+  userprofileImgUrl: string | null;
+  imgUrl: string | null;
+  address: string;
   createdAt: string;
-  modifiedAt: string;
   reviewId: number;
 };
 
 export type GetMyReviewsResponse = {
-  content: Comment[];
+  content: Review[];
   pageable: {
     sort: {
       empty: boolean;
@@ -62,12 +61,18 @@ export type GetMyReviewsResponse = {
 };
 
 export const getMyReviews = async (
-  type: string
+  type: string,
+  page?: number
 ): Promise<GetMyReviewsResponse> => {
-  // 마이페이지 조회
+  // 내 게시글과 내 좋아요 글 조회
   try {
     const response: AxiosResponse<GetMyReviewsResponse> =
-      await axiosInstance.get(`/mypage/list?q=${type}`);
+      await axiosInstance.get(`/mypage/list`, {
+        params: {
+          q: type,
+          page,
+        },
+      });
     return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
@@ -77,17 +82,77 @@ export const getMyReviews = async (
   }
 };
 
-export const postProfile = async (post: { imgUrl: File; nickname: string }) => {
+export type Comment = {
+  id: number;
+  nickname: string;
+  profileImgUrl: string | null;
+  comment: string;
+  createdAt: string;
+  modifiedAt: string;
+};
+
+export type GetMyCommentResponse = {
+  content: Comment[];
+  pageable: {
+    sort: {
+      empty: boolean;
+      unsorted: boolean;
+      sorted: boolean;
+    };
+    offset: number;
+    pageNumber: number;
+    pageSize: number;
+    unpaged: boolean;
+    paged: boolean;
+  };
+  size: number;
+  number: number;
+  sort: {
+    empty: boolean;
+    unsorted: boolean;
+    sorted: boolean;
+  };
+  numberOfElements: number;
+  first: boolean;
+  last: boolean;
+  empty: boolean;
+  totalPages: number;
+  totalElements: number;
+};
+export const getMyComments = async (
+  page?: number
+): Promise<GetMyCommentResponse> => {
+  try {
+    const response: AxiosResponse<GetMyCommentResponse> =
+      await axiosInstance.get(`/mypage/comments`, {
+        params: {
+          page: page,
+        },
+      });
+    return response.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
+  }
+};
+
+export const postProfile = async (post: {
+  imgUrl: File | null;
+  nickname: string;
+}) => {
   // 사진전송 및 게시
   try {
-    const profileExt = post.imgUrl.name.split('.').pop();
-
     const formedData = new FormData();
-    formedData.append(
-      'file',
-      post.imgUrl,
-      `userProfile.${profileExt}` // 파일이름을 영문 단어로 통일
-    );
+    if (post.imgUrl) {
+      const profileExt = post.imgUrl.name.split('.').pop();
+      formedData.append(
+        'file',
+        post.imgUrl,
+        `userProfile.${profileExt}` // 파일이름을 영문 단어로 통일
+      );
+    }
     formedData.append(
       'nickname',
       new Blob([post.nickname], { type: 'text/plain' })
