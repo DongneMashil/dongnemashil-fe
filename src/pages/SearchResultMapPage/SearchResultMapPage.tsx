@@ -23,6 +23,7 @@ export const SearchResultMapPage = ({
 
   const initMap = (map: kakao.maps.Map) => {
     let selectedMarker: kakao.maps.Marker | null = null;
+    let selectedOverlay: kakao.maps.CustomOverlay | null = null;
 
     // 마커 및 오버레이 세팅
     reviewList.map((data: ReviewResultsProps) => {
@@ -60,15 +61,25 @@ export const SearchResultMapPage = ({
 
           kakao.maps.event.addListener(marker, 'click', () => {
             if (!selectedMarker) {
+              console.log('selected marker is null', selectedMarker);
               marker.setImage(markerSelectedImage);
             }
             if (selectedMarker !== marker) {
+              console.log(
+                'marker: ',
+                marker,
+                'selected marker: ',
+                selectedMarker
+              );
               marker.setImage(markerSelectedImage);
               selectedMarker?.setImage(markerImage);
+              selectedOverlay?.setMap(null);
             }
-            selectedMarker = marker;
 
             overlay.setMap(map); // 툴팁 열기 이벤트 리스너 추가
+
+            selectedMarker = marker;
+            selectedOverlay = overlay;
           });
           kakao.maps.event.addListener(map, 'click', () => {
             selectedMarker?.setImage(markerImage);
