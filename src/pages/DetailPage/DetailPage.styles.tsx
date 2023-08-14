@@ -29,6 +29,11 @@ export const StDetailPageContainer = styled.div`
   position: relative;
   padding: 1rem;
 `;
+
+export const StDetailTitle = styled.h1`
+  margin-top: 0.5rem;
+  font-size: 2rem;
+`;
 export const StDetailPageHeader = styled.div`
   width: 100%;
   display: flex;
@@ -37,10 +42,13 @@ export const StDetailPageHeader = styled.div`
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #e5e5e5;
   margin: 1rem 0;
-  h4 {
-    font-size: 2rem;
-    margin-left: 1rem;
+  .nickname {
+    margin-left: 0.5rem;
     margin-right: auto;
+    color: var(--textcolor, #333);
+    font-family: Pretendard;
+    font-size: 0.875rem;
+    font-weight: 400;
   }
   img {
     width: 30px;

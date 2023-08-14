@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getReviewDetail, ReviewDetail } from 'api/detailApi';
+import { getReviewDetail, ReviewDetailResponse } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
@@ -10,6 +10,7 @@ import {
   StDetailPageContainer,
   StDetailPageContent,
   StDetailPageHeader,
+  StDetailTitle,
   StNavTitle,
   StTagWrapper,
 } from './DetailPage.styles';
@@ -41,7 +42,7 @@ export const DetailPage = () => {
     throw new Error('Review ID is missing');
   }
 
-  const { data } = useQuery<ReviewDetail, Error>({
+  const { data } = useQuery<ReviewDetailResponse, Error>({
     queryKey: ['reviewDetail', reviewId],
     queryFn: () => getReviewDetail(reviewId),
     enabled: !!reviewId,
@@ -67,7 +68,7 @@ export const DetailPage = () => {
         <CommonLayout
           header={
             <NavBar
-              btnLeft="backfunction"
+              btnLeft="closeModal"
               onClickLeft={() => setIsMapOpen(false)}
             />
           }
@@ -107,10 +108,11 @@ export const DetailPage = () => {
           <StDetailPageContainer>
             {data && (
               <>
-                <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
+                <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>
                 <StDetailPageHeader>
                   <img src={data.profileImgUrl || noUser} />
-                  <h4>{data.title || '제목없음'}</h4>
+                  <span className="nickname">{data.nickname}</span>
+                  <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
                 </StDetailPageHeader>
                 <StDetailPageContent>
                   <img className="detailimg" src={data.mainImgUrl || noImage} />
