@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import {
   StThumbnail,
+  StThumbnailLike,
   StThumbnailTitle,
   StThumbnailTitleLeft,
   StThumnailMain,
@@ -12,7 +13,6 @@ import { ReviewsList } from 'api/reviewsApi';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { useLike } from 'hooks';
-import { StLike } from 'components/detailPage';
 import noUser from 'assets/images/NoUser.gif';
 import { numberWithCommas } from 'utils';
 
@@ -67,12 +67,12 @@ export const Thumbnail = ({
             <Span size={'title'}>
               <strong>{roadName}</strong>에서
             </Span>
-            <Span size={'small'}>2시간 전</Span>
+            <Span size={'small'}>2시간 전 (서버 작업 대기)</Span>
           </StTitleText>
         </StThumbnailTitleLeft>
-        <StLike onClick={toggleLikeHandler}>
+        <StThumbnailLike onClick={toggleLikeHandler}>
           {isLiked ? <FilledHeart /> : <Heart />} {numberWithCommas(likeCnt)}
-        </StLike>
+        </StThumbnailLike>
       </StThumbnailTitle>
     </StThumbnail>
   );

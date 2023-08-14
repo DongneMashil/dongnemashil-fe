@@ -51,6 +51,22 @@ const LongerHight = css`
   }
 `;
 
+export const StThumbnailLike = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  padding-left: 10px;
+  cursor: pointer;
+
+  font-size: 0.75rem;
+  color: ${theme.mediumGrayColor};
+
+  svg {
+    width: 26px;
+  }
+`;
+
 const LongerWidth = css`
   & img {
     width: 100%;
