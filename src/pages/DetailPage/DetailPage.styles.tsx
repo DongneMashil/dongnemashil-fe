@@ -1,22 +1,29 @@
 import { styled } from 'styled-components';
 
 export const StNavTitle = styled.h1`
+  max-width: 70vw;
   font-size: 1.2rem;
   font-weight: bold;
+  white-space: nowrap; // 한줄로
+  overflow: hidden; // 넘치면 숨김
+  text-overflow: ellipsis; //넘치면 ...
+
+  direction: rtl; //...을 앞에 붙임
 `;
-export const StTagWrapper = styled.div`
+
+export const StTagWrapper = styled.ul`
+  width: 100%;
+  height: fit-content;
+  // padding: 1rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0.5rem 0;
+  gap: 0.5rem 0;
+  align-items: center;
 `;
-interface StDetailPageContainerProps {
-  img: string;
-}
 
-export const StDetailPageContainer = styled.div<StDetailPageContainerProps>`
+export const StDetailPageContainer = styled.div`
   width: 100%;
-  height: 100%;
+  // height: 100%;  백그라운드 색상 때문에 높이를 100%로 주면 안됨
   display: flex;
   flex-direction: column;
   position: relative;
@@ -24,20 +31,16 @@ export const StDetailPageContainer = styled.div<StDetailPageContainerProps>`
 `;
 export const StDetailPageHeader = styled.div`
   width: 100%;
-  height: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #e5e5e5;
+  margin: 1rem 0;
   h4 {
+    font-size: 2rem;
     margin-left: 1rem;
     margin-right: auto;
-  }
-  h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
   }
   img {
     width: 30px;
@@ -46,17 +49,15 @@ export const StDetailPageHeader = styled.div`
   }
 `;
 
-export const StDetailPageInfo = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  h3 {
-    font-size: 16px;
-    font-weight: bold;
-    margin-right: 10px;
-  }
-  h6 {
-    font-size: 16px;
-  }
+export const StCreatedTime = styled.div`
+  color: #8e8e8e;
+  font-family: Pretendard;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
 `;
 
 export const StDetailPageContent = styled.div`
@@ -65,7 +66,7 @@ export const StDetailPageContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
   gap: 0.3rem;
-  img {
+  .detailimg {
     width: 100%;
     height: 300px;
     object-fit: cover;

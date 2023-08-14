@@ -1,36 +1,65 @@
 import React from 'react';
 import { StTagContainer } from './Tag.styles';
-import { useNavigate } from 'react-router-dom';
-import { ReactComponent as Dog } from 'assets/icons/Dog.svg';
-import { ReactComponent as Alone } from 'assets/icons/Alone.svg';
-import { ReactComponent as Couple } from 'assets/icons/Couple.svg';
+import * as tagImg from 'assets/tags'; // 아이콘 가져오기
 interface TagProps {
   text: string;
   onClick?: () => void;
-  url?: string;
   isSelected?: boolean;
+  isHoverEnabled?: boolean;
 }
+type IconKeys =
+  | 'animalFriends'
+  | 'alone'
+  | 'withLover'
+  | 'bench'
+  | 'quiet'
+  | 'shade'
+  | 'toilet'
+  | 'photoPlace'
+  | 'nature'
+  | 'rainyDay'
+  | 'nightWalk'
+  | 'withBaby'
+  | 'bicycle';
 
-export const Tag = ({ text, onClick, url, isSelected = false }: TagProps) => {
-  const navigate = useNavigate();
+const iconMapping: { [key: string]: IconKeys } = {
+  동물친구들: 'animalFriends',
+  혼자서: 'alone', // 이 부분은 실제 tagImg의 키값과 일치해야 합니다.
+  연인이랑: 'withLover',
+  벤치: 'bench',
+  한적해요: 'quiet',
+  그늘: 'shade',
+  화장실: 'toilet',
+  사진맛집: 'photoPlace',
+  자연: 'nature',
+  비와도OK: 'rainyDay',
+  밤산책: 'nightWalk',
+  아기랑: 'withBaby',
+  자전거: 'bicycle',
+};
+type SvgPath = string;
 
+export const Tag = ({
+  text,
+  onClick,
+  isSelected = false,
+  isHoverEnabled = true,
+}: TagProps) => {
+  const getIcon = (label: string) => {
+    const iconName = iconMapping[label];
+    const iconSrc = iconName && (tagImg as Record<IconKeys, SvgPath>)[iconName];
+    if (iconSrc) {
+      return <img src={iconSrc} alt={label} />;
+    }
+    return null;
+  };
   return (
     <StTagContainer
       $isSelected={isSelected}
-      onClick={url ? () => navigate(url) : onClick}
+      onClick={onClick}
+      $isHoverEnabled={isHoverEnabled}
     >
-      {(() => {
-        switch (text) {
-          case '동물친구들':
-            return <Dog />;
-          case '혼자서':
-            return <Alone />;
-          case '연인이랑':
-            return <Couple />;
-          default:
-            return null;
-        }
-      })()}
+      {getIcon(text)}
       <h5>{text}</h5>
     </StTagContainer>
   );

@@ -1,33 +1,48 @@
-import React from 'react';
-// import React, { useCallback, useState, useEffect } from 'react';
-import { CommonLayout, NavBar } from 'components/layout';
+import React, { useState, useEffect } from 'react';
+import { CommonLayout, FixFooter, NavBar } from 'components/layout';
 import { ThumbnailWrapper } from 'components/homePage';
-// import { useVerifyUser } from 'hooks';
+import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
+import { useVerifyUser } from 'hooks';
+import { useRecoilValue } from 'recoil';
+import { userProfileSelector } from 'recoil/userExample';
 
 export const HomePage = () => {
-  // const [shouldVerify, setShouldVerify] = useState(false);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  // const { data } = useVerifyUser(shouldVerify);
+  const handleTagChange = (tags: string[]) => {
+    setSelectedTags(tags);
+  };
+  const userState = useRecoilValue(userProfileSelector);
+  const { data } = useVerifyUser(true);
 
-  // const onVerifyHandler = useCallback(() => {
-  //   setShouldVerify(true);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (data) console.log(data);
-  // }, []);
+  useEffect(() => {
+    console.log('current user state: ', userState);
+    if (data) {
+      console.log('useVerifyUser data: ', data);
+    }
+  }, [userState]);
+  console.log(selectedTags);
 
   return (
     <CommonLayout
       header={
-        <NavBar
-          btnLeft={'logo'}
-          btnSecondRight={'search'}
-          btnRight={'mypage'}
-        ></NavBar>
+        <>
+          <NavBar
+            btnLeft={'logo'}
+            btnSecondRight={'search'}
+            btnRight={'mypage'}
+          >
+            <h1>서울 전체</h1>
+          </NavBar>
+          <ToggleTagButton onTagChange={handleTagChange} />
+        </>
       }
+      headerHeight={'150px'}
+      footer={<FixFooter rightButtons={'write'} />}
     >
-      <ThumbnailWrapper />
+      <ThumbnailWrapper
+        tag={selectedTags.length > 0 ? selectedTags.join(',') : null}
+      />
     </CommonLayout>
   );
 };

@@ -1,8 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { Button } from 'components/common';
-import { NavBar } from 'components/layout';
 import { loginKakao } from 'api/loginApi';
+import { CommonLayout } from 'components/layout';
+import {
+  StLoginContainer,
+  StLoginButton,
+  StLoginTag,
+  StLoginButtonWrapper,
+} from './LoginPage.styles';
+import { ReactComponent as LogoImage } from 'assets/images/Logo.svg';
+import { ReactComponent as Lightning } from 'assets/icons/Lightning.svg';
+import { ReactComponent as KakaoIcon } from 'assets/icons/KakaoIcon.svg';
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -18,33 +26,26 @@ export const LoginPage = () => {
   };
 
   return (
-    <div>
-      <NavBar btnLeft={'logo'} btnRight={'mypage'}>
-        동네마실
-      </NavBar>
-
-      <div
-        style={{
-          width: '200px',
-          height: '200px',
-          margin: '0 auto',
-          backgroundColor: '#ccc',
-          marginTop: '50px',
-        }}
-      ></div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-          padding: '100px 20px 20px 20px',
-        }}
-      >
-        <p>바로 시작 가능!</p>
-        <Button onClick={onKakaoHandler}>카카오로 로그인</Button>
-        <Button onClick={onLoginHandler}>회원 아이디로 로그인</Button>
-        <Button onClick={onRegisterHandler}>회원가입</Button>
-      </div>
-    </div>
+    <CommonLayout>
+      <StLoginContainer>
+        <LogoImage />
+        <StLoginButtonWrapper>
+          <StLoginTag>
+            3초만에 시작하기
+            <Lightning />
+          </StLoginTag>
+          <StLoginButton $type="kakao" onClick={onKakaoHandler}>
+            <KakaoIcon />
+            카카오로 로그인
+          </StLoginButton>
+          <StLoginButton onClick={onLoginHandler}>
+            회원 아이디로 로그인
+          </StLoginButton>
+          <StLoginButton $type="register" onClick={onRegisterHandler}>
+            회원가입
+          </StLoginButton>
+        </StLoginButtonWrapper>
+      </StLoginContainer>
+    </CommonLayout>
   );
 };

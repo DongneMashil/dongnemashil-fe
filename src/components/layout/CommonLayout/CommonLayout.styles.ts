@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 export const StLayoutOuter = styled.div`
   width: 100vw;
   min-height: 100vh;
-  background-color: #f8f9fa; // 기본 배경 색상 -> 추후 테마 적용
+  background-color: #404040; //#f8f9fa 기본 배경 색상 -> 추후 테마 적용
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,7 +11,6 @@ export const StLayoutOuter = styled.div`
 `;
 
 export const StLayoutBody = styled.div`
-  flex: 1;
   position: relative;
   width: 100vw;
   max-width: 390px; // 최대 너비 -> 추후 반응형 적용
@@ -19,6 +18,7 @@ export const StLayoutBody = styled.div`
   max-height: 850px; // 최대 높이 -> 추후 반응형 적용
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 `;
+
 export const StLayoutSection = styled.div<{
   $headerHeight: string;
   $backgroundColor: string;

@@ -1,13 +1,17 @@
 const colors = {
   whiteColor: '#ffffff',
-  lightGrayColor: '#dddddd',
-  mediumGrayColor: '#939393',
+  whiteGrayColor: '#e2e2e2',
+  lightGrayColor: '#8e8e8e',
+  mediumGrayColor: '#878787',
   darkGrayColor: '#656e75',
   blackColor: '#000000',
 
-  primaryColor: '#35c5f0',
-  primaryDarkColor: '#09addb',
-  secondaryColor: '#FF7777',
+  mainColor: '#9A7B9A',
+  subColor: '#B5A6CA',
+  pointColor: '#886F88',
+
+  mainTextColor: '#333333',
+  titleTextColor: '#060606',
 };
 
 const size = {
@@ -22,6 +26,14 @@ export const theme = {
     mobile: `(max-width: ${size.mobile})`,
     tablet: `(min-width: ${size.tablet}) and (max-width: ${size.desktop})`,
     desktop: `(min-width: ${size.desktop})`,
+  },
+  floatingBox: {
+    width: '100%',
+    backgroundColor: 'white',
+    padding: '1rem',
+    marginBottom: '1rem',
+    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+    borderRadius: '0.8rem',
   },
 };
 

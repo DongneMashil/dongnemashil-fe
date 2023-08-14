@@ -1,7 +1,13 @@
+import { useMutation } from '@tanstack/react-query';
+import { postComment } from 'api/detailApi';
 import { Button, Input } from 'components/common';
-import React from 'react';
-// import { useNavigate } from 'react-router-dom';
-import { styled } from 'styled-components';
+import { queryClient } from 'queries/queryClient';
+import React, { useState } from 'react';
+import { StFooterContatiner, StFooterWrapper } from './CommentInput.styles';
+
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { userProfileSelector } from 'recoil/userExample';
+import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
 
 interface FooterProps {
   reviewId: string;
@@ -11,62 +17,74 @@ export const CommentInput = ({
   reviewId,
   $isCommentShow = false,
 }: FooterProps) => {
-  const [comment, setComment] = React.useState('');
+  const [comment, setComment] = useState('');
+  const setCommentAddListener = useSetRecoilState(commentAddListenerAtom);
+  const commentMutation = useMutation(
+    (newComment: string) => postComment(reviewId, newComment),
+    {
+      onSuccess: (data) => {
+        console.log(data);
+        setComment('');
+        queryClient.invalidateQueries(['comment', reviewId]);
+        setCommentAddListener(true); // 댓글 추가된것을 감지 -> 스크롤 이벤트
+      },
+      onError: (err) => {
+        console.log(err);
+        setComment('');
+        alert('댓글 등록에 실패했습니다.');
+      },
+    }
+  );
+
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
   };
+  // useQuery(['comment', reviewId], () => postComment(reviewId, comment), {
+  //   enabled: isCommentPost,
+  //   onSuccess: (data) => {
+  //     console.log(data);
+  //     setComment('');
+  //     setIsCommentPost(false);
+  //   },
+  //   onError: (err) => {
+  //     console.log(err);
+  //     setComment('');
+  //     setIsCommentPost(false);
+  //     alert('댓글 등록에 실패했습니다.');
+  //   },
+  // });
+  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(comment);
+    commentMutation.mutate(comment);
+  };
+  const userState = useRecoilValue(userProfileSelector);
   return (
     <StFooterContatiner $isCommentShow={$isCommentShow}>
-      <StFooterWrapper>
-        {' '}
-        <Input
-          placeholder="댓글을 입력해주세요"
-          onChange={onChangeHandler}
-          value={comment}
-        />
-        <Button
-          type={'normal'}
-          onClick={() => {
-            console.log({ reviewId });
-          }}
-        >
-          등록
-        </Button>
+      <StFooterWrapper onSubmit={onSubmitHandler}>
+        {userState?.isLoggedIn ? (
+          <>
+            {' '}
+            <Input
+              placeholder="댓글을 입력해주세요"
+              onChange={onChangeHandler}
+              value={comment}
+            />
+            <Button inputType="submit" type={'normal'} value="등록" />
+          </>
+        ) : (
+          <>
+            {' '}
+            <Input
+              placeholder="로그인 후 댓글 입력이 가능합니다."
+              disabled={true}
+            />
+            <Button inputType="button" type={'normal'} url="/login">
+              로그인
+            </Button>
+          </>
+        )}
       </StFooterWrapper>
     </StFooterContatiner>
   );
 };
-
-export const StFooterWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 10px;
-  gap: 10px;
-  width: 100%;
-  height: 100%;
-`;
-
-export const StFooterContatiner = styled.footer<{ $isCommentShow: boolean }>`
-  opacity: ${({ $isCommentShow }) => ($isCommentShow ? 1 : 0)};
-  transition: all 0.1s ease-in-out;
-  background-color: #fff;
-  height: 75px;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-export const StLike = styled.div`
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
-  cursor: pointer;
-`;
-
-export const StComment = styled.div`
-  display: flex;
-  align-items: center;
-  padding-right: 10px;
-  cursor: pointer;
-`;

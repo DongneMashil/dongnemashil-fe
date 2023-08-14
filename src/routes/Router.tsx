@@ -8,6 +8,10 @@ import {
   WriteMapPage,
   CommonLoginPage,
   MyPage,
+  MyProfilePage,
+  SearchPage,
+  WritePage,
+  SearchResultPage,
 } from 'pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
@@ -22,18 +26,20 @@ const Router = () => {
         <Route path="/login/common" element={<CommonLoginPage />} />
         <Route path="/login/kakao" element={<KakaoCallbackPage />} />
         <Route path="/review/:reviewId" element={<DetailPage />} />
-        {/* <Route
-          path="/review/comments/:reviewId"
-          element={<DetailCommentPage />}
-        /> */}
-        <Route
-          path="/writemap"
-          element={<ProtectedRoute element={<WriteMapPage />} />}
-        />
+        <Route path="/writemap" element={<WriteMapPage />} />
         <Route
           path="/mypage"
           element={<ProtectedRoute element={<MyPage />} />}
         />
+        <Route
+          path="/mypage/profile"
+          element={<ProtectedRoute element={<MyProfilePage />} />}
+        />
+        <Route path="/temp/mypage" element={<MyPage />} />
+        <Route path="/temp/mypage/profile" element={<MyProfilePage />} />
+        <Route path="/write" element={<WritePage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/search/result" element={<SearchResultPage />} />
       </Routes>
     </BrowserRouter>
   );
