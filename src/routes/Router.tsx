@@ -11,6 +11,7 @@ import {
   MyProfilePage,
   SearchPage,
   WritePage,
+  WriteMapSearchPage,
   SearchResultPage,
   MyCommentsPage,
 } from 'pages';
@@ -28,6 +29,7 @@ const Router = () => {
         <Route path="/login/kakao" element={<KakaoCallbackPage />} />
         <Route path="/review/:reviewId" element={<DetailPage />} />
         <Route path="/writemap" element={<WriteMapPage />} />
+        <Route path="/writemap/search" element={<WriteMapSearchPage />} />
         <Route
           path="/mypage"
           element={<ProtectedRoute element={<MyPage />} />}
