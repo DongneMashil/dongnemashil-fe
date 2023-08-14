@@ -38,10 +38,11 @@ export const SearchResultListPage = () => {
         </>
       }
       headerHeight={'150px'}
-      footer={<FixFooter centerButtons={'map'} rightButtons={'goTop'} />}
     >
+      <FixFooter centerButtons={'map'} rightButtons={'goTop'} />
       <ThumbnailWrapper
         tag={selectedTags.length > 0 ? selectedTags.join(',') : null}
+        isSearch={true}
       />
     </CommonLayout>
   );

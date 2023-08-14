@@ -42,6 +42,7 @@ export const HomePage = () => {
     >
       <ThumbnailWrapper
         tag={selectedTags.length > 0 ? selectedTags.join(',') : null}
+        isSearch={false}
       />
     </CommonLayout>
   );
