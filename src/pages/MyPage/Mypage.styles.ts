@@ -21,8 +21,7 @@ export const StButton = styled.button`
   height: 5rem;
   gap: 1rem;
   cursor: pointer;
-  width: 90%; // 이 부분을 padding으로 처리할 경우, UserInfo, TabMenu의 width가 100%가 되지 않음
-
+  width: 95%; // 이 부분을 padding으로 처리할 경우, UserInfo, TabMenu의 width가 100%가 되지 않음
   img {
     width: 2rem;
     height: 2rem;
