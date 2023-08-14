@@ -16,7 +16,7 @@ import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
 
 export const WriteMapPage = () => {
   const addressData = useRecoilValue(addressSelector);
-  const selectedAddress = useRecoilValue(selectedAddressAtom); // <- 추가된 부분
+  const selectedAddress = useRecoilValue(selectedAddressAtom);
   const setCurrentAddress = useSetRecoilState(selectedAddressAtom);
   const navigate = useNavigate();
   const location = useLocation();
@@ -53,7 +53,7 @@ export const WriteMapPage = () => {
         <StPostButton onClick={onGoWritePageHandler}>글 작성</StPostButton>
       </StCurrentLocationContainer>
       <Geolocation
-        selectedAddress={selectedAddress} // <- 추가된 부분
+        selectedAddress={selectedAddress}
         onAddressUpdate={setCurrentAddress}
         disableCurrentLocation={disableCurrentLocation}
       />
