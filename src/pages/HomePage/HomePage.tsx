@@ -37,7 +37,7 @@ export const HomePage = () => {
           <ToggleTagButton onTagChange={handleTagChange} />
         </>
       }
-      headerHeight={'150px'}
+      headerHeight={'168px'}
       footer={<FixFooter rightButtons={'write'} />}
     >
       <ThumbnailWrapper
