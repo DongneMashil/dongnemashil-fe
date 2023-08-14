@@ -33,8 +33,9 @@ const authButton = css`
   height: 44px;
   font-size: 16px;
   border: 0;
+  box-sizing: border-box;
   font-weight: 700;
-  border-radius: 25px;
+  border-radius: 20px;
   position: relative;
 `;
 
