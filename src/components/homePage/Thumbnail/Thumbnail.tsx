@@ -15,12 +15,14 @@ import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { useLike } from 'hooks';
 import noUser from 'assets/images/NoUser.gif';
 import { numberWithCommas } from 'utils';
+import timeAgo from 'utils/timeAgo';
 
 export const Thumbnail = ({
   id,
   roadName,
   mainImgUrl,
   profileImgUrl,
+  createdAt,
   likeCnt: initialLikeCnt,
   likebool: initialIsLiked,
 }: ReviewsList) => {
@@ -67,7 +69,7 @@ export const Thumbnail = ({
             <Span size={'title'}>
               <strong>{roadName}</strong>
             </Span>
-            <Span size={'small'}>2시간 전 (서버 작업 대기)</Span>
+            <Span size={'small'}>{timeAgo(createdAt)}</Span>
           </StTitleText>
         </StThumbnailTitleLeft>
         <StThumbnailLike onClick={toggleLikeHandler}>
