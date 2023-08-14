@@ -3,6 +3,11 @@ import Map from 'components/common/Map/Map';
 import { ReviewResultsProps } from 'pages/SearchResultPage/SearchResultPage';
 import Marker from 'assets/icons/Marker.png';
 import MarkerSelected from 'assets/icons/MarkerSelected.png';
+import {
+  StResultMapContainer,
+  StCurPosButton,
+} from './SearchResultMapPage.styles';
+//import { Button } from 'components/common';
 
 export const SearchResultMapPage = ({
   reviewList,
@@ -11,7 +16,6 @@ export const SearchResultMapPage = ({
 }) => {
   console.log('reviewList ', reviewList);
 
-  //const imgSrc = Marker;
   const markerImage = new kakao.maps.MarkerImage(
     Marker,
     new kakao.maps.Size(21, 28)
@@ -91,8 +95,18 @@ export const SearchResultMapPage = ({
     });
   };
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <StResultMapContainer>
       <Map width="100%" height="100%" initMap={initMap} />
-    </div>
+      <StCurPosButton
+        type="borderround"
+        $width="50px"
+        $height="50px"
+        onClick={() => {
+          console.log('click!');
+        }}
+      >
+        현위치
+      </StCurPosButton>
+    </StResultMapContainer>
   );
 };
