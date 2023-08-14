@@ -1,3 +1,4 @@
+import { AxiosResponse, AxiosError } from 'axios';
 import { axiosInstance } from './api';
 
 export interface UserStateRes {
@@ -46,10 +47,56 @@ export const register = async (data: {
   password: string;
 }) => {
   console.log('요청 데이터: ', data);
-  return axiosInstance.post(`/register`, data).then((res) => {
-    console.log('register success', res.data);
-    return res.data;
-  });
+  try {
+    const response: AxiosResponse = await axiosInstance.post(`/register`, data);
+    console.log('register success', response.data);
+    return response.data;
+  } catch (e: unknown) {
+    console.log(e);
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data || e.message);
+    }
+    throw e;
+  }
+};
+
+/** 회원가입 아이디 중복 체크 */
+export const confirmId = async (email: string) => {
+  try {
+    const req = {
+      email,
+    };
+    const response: AxiosResponse = await axiosInstance.post(
+      `/register/email`,
+      req
+    );
+    return response.data;
+  } catch (e: unknown) {
+    console.log(e);
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.message || e.message);
+    }
+    throw e;
+  }
+};
+
+/** 회원가입 닉네임 중복 체크 */
+export const confirmNickname = async (nickname: string) => {
+  try {
+    const req = {
+      nickname,
+    };
+    const response: AxiosResponse = await axiosInstance.post(
+      `/register/nickname`,
+      req
+    );
+    return response.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.message || e.message);
+    }
+    throw e;
+  }
 };
 
 /** 로그인 유저 정보 */
