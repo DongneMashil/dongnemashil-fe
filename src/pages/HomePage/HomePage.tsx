@@ -34,12 +34,11 @@ export const HomePage = () => {
           >
             <h1>서울 전체</h1>
           </NavBar>
-          <ToggleTagButton onTagChange={handleTagChange} />
         </>
       }
-      headerHeight={'168px'}
       footer={<FixFooter rightButtons={'write'} />}
     >
+      <ToggleTagButton onTagChange={handleTagChange} />
       <ThumbnailWrapper
         tag={selectedTags.length > 0 ? selectedTags.join(',') : null}
       />
