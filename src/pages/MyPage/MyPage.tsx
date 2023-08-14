@@ -1,26 +1,24 @@
-import { Footer, TabMenu, UserInfo } from 'components/common/myPage';
-import { CommonLayout, NavBar } from 'components/layout';
-// import React from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { styled } from 'styled-components';
-
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { useQuery } from '@tanstack/react-query';
 import { useLogout, useVerifyUser } from 'hooks';
 import { MyProfile, getMyProfile } from 'api/mypageApi';
-import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
-import { useQuery } from '@tanstack/react-query';
+import { Footer, TabMenu, UserInfo } from 'components/common/myPage';
+import { CommonLayout, NavBar } from 'components/layout';
 import noUser from 'assets/images/NoUser.gif';
-import { useNavigate } from 'react-router-dom';
 import { ReactComponent as LogoutIcon } from 'assets/icons/Logout.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/CommentL.svg';
+import { StButton, StMyPageContainer } from './Mypage.styles';
 export const MyPage = () => {
-  const [shouldLogout, setShouldLogout] = useState(false);
-  const { isError } = useLogout(shouldLogout);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const navigate = useNavigate();
   const userState = useRecoilValue(userProfileSelector);
   const { data: userData } = useVerifyUser(true);
+
+  const [shouldLogout, setShouldLogout] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     console.log('current user state: ', userState);
     if (userData) {
@@ -32,6 +30,7 @@ export const MyPage = () => {
     setShouldLogout(true);
   }, []);
 
+  const { isError } = useLogout(shouldLogout);
   if (isError) {
     console.log('로그아웃 실패');
   }
@@ -39,7 +38,6 @@ export const MyPage = () => {
   const { data } = useQuery<MyProfile, Error>({
     queryKey: ['myPage', userData?.nickname],
     queryFn: () => getMyProfile(),
-    // enabled: !!userData?.nickname,
     onSuccess: (data) => {
       console.log(data);
     },
@@ -48,10 +46,10 @@ export const MyPage = () => {
     },
   });
 
-  const navigate = useNavigate();
   const navigateToProfileHandler = () => {
     navigate('/mypage/profile');
   };
+
   return (
     <CommonLayout
       header={
@@ -89,7 +87,6 @@ export const MyPage = () => {
           </>
         ) : (
           <>
-            {' '}
             <UserInfo
               profileImgUrl={data?.profileImgUrl}
               nickName={data?.nickname}
@@ -103,52 +100,3 @@ export const MyPage = () => {
     </CommonLayout>
   );
 };
-export const StToProfileButton = styled.button`
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #4f4f4f;
-`;
-
-export const StButton = styled.button`
-  ${(props) => props.theme.floatingBox};
-  padding: 1rem;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 1rem;
-  cursor: pointer;
-  width: 95%;
-  height: 5rem;
-  img {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-  }
-  .title {
-    font-size: 1.125rem;
-    font-weight: 600;
-  }
-`;
-
-export const StMyPageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 1rem;
-  width: 100%;
-  height: 100%;
-  .category {
-    margin: 1rem auto 1rem 1rem;
-    color: #767676;
-    text-align: center;
-    font-family: Pretendard;
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-`;
