@@ -12,10 +12,21 @@ export const SearchPage = () => {
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
+  const search = () => {
+    console.log('Searching... 검색어: ', value);
+    navigate(`/search/result?q=${value}`);
+  };
   const onSubmitHandler = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();
     console.log('onSubmitHandler');
-    navigate(`/search/result?q=${value}`);
+    search();
+  };
+  const onKeyPressHandler = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      console.log('onKeyPressHandler');
+      search();
+    }
   };
   return (
     <CommonLayout backgroundColor="#ffffff">
@@ -30,6 +41,7 @@ export const SearchPage = () => {
           id="searchQuery"
           value={value}
           onChange={onChangeHandler}
+          onKeyPress={onKeyPressHandler}
           placeholder="예) 강남구"
         />
       </StSearchHeader>
