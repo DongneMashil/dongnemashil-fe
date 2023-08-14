@@ -62,7 +62,7 @@ export const Button = ({
   ) : (
     <StButton
       className={type}
-      onClick={$active ? handleButtonClick : () => {}}
+      onClick={handleButtonClick}
       $width={$width}
       $height={$height}
       $round={$round}
