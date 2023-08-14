@@ -41,14 +41,14 @@ export const LoginPage = () => {
             3초만에 시작하기
             <Lightning />
           </StLoginTag>
-          <Button type="authKakao" onClick={onKakaoHandler}>
+          <Button type="authKakao" $active={true} onClick={onKakaoHandler}>
             <KakaoIcon />
             카카오로 로그인
           </Button>
-          <Button type="authNormal" onClick={onLoginHandler}>
+          <Button type="authNormal" $active={true} onClick={onLoginHandler}>
             회원 아이디로 로그인
           </Button>
-          <Button type="authOutline" onClick={onRegisterHandler}>
+          <Button type="authOutline" $active={true} onClick={onRegisterHandler}>
             회원가입
           </Button>
         </StLoginButtonWrapper>
