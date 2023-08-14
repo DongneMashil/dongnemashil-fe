@@ -6,15 +6,14 @@ export const StThumbnail = styled.div`
   flex-direction: column;
 
   padding: 26px 0 8px;
-  border-bottom: 1px solid ${theme.lightGrayColor};
+  border-bottom: 1px solid ${theme.whiteGrayColor};
 `;
 
 export const StThumbnailTitle = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  bottom: 130px;
-  margin: 10px 0;
+  margin: 14px 0 12px;
 `;
 
 export const StThumbnailTitleLeft = styled.div`
@@ -25,7 +24,7 @@ export const StThumbnailTitleLeft = styled.div`
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    margin: 0 10px 0 8px;
+    margin: 0 10px 3px 8px;
   }
 `;
 
@@ -60,7 +59,7 @@ export const StThumbnailLike = styled.div`
   cursor: pointer;
 
   font-size: 0.75rem;
-  color: ${theme.mediumGrayColor};
+  color: ${theme.lightGrayColor};
 
   svg {
     width: 26px;

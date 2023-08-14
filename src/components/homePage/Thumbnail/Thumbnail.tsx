@@ -65,7 +65,7 @@ export const Thumbnail = ({
           <img src={profileImgUrl || noUser} alt="프로필 이미지" />
           <StTitleText>
             <Span size={'title'}>
-              <strong>{roadName}</strong>에서
+              <strong>{roadName}</strong>
             </Span>
             <Span size={'small'}>2시간 전 (서버 작업 대기)</Span>
           </StTitleText>
