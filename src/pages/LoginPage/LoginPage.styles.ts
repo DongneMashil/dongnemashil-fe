@@ -8,17 +8,25 @@ export interface StLoginButtonProps {
 export const StLoginContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding: 3rem;
+  padding: 25px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+
+  & > button:first-of-type {
+    position: absolute;
+    top: 57px;
+    left: 25px;
+  }
 `;
 
 export const StLoginButtonWrapper = styled.div`
   width: 100%;
   margin-top: 145px;
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
