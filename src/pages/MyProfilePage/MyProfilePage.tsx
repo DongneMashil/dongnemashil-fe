@@ -149,6 +149,7 @@ export const MyProfilePage = () => {
           btnLeft="back"
           btnRight="submit"
           onClickSubmit={onSubmitHandler}
+          onClickActive={postData.imgUrl !== null}
         >
           회원정보수정
         </NavBar>

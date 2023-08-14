@@ -68,7 +68,7 @@ export const DetailPage = () => {
         <CommonLayout
           header={
             <NavBar
-              btnLeft="backfunction"
+              btnLeft="closeModal"
               onClickLeft={() => setIsMapOpen(false)}
             />
           }

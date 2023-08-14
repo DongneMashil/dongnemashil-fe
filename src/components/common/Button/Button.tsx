@@ -13,7 +13,9 @@ export interface ButtonProps {
     | 'onlytexttoggle'
     | 'authKakao'
     | 'authNormal'
-    | 'authOutline';
+    | 'authOutline'
+    | 'iconLeft'
+    | 'confirm';
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   url?: string;
   inputType?: 'button' | 'submit';

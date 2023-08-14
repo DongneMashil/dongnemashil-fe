@@ -55,7 +55,7 @@ export const MyPage = () => {
       header={
         isModalOpen ? (
           <NavBar
-            btnLeft="backfunction"
+            btnLeft="closeModal"
             onClickLeft={() => setIsModalOpen(false)}
             btnRight="mypage"
           ></NavBar>
