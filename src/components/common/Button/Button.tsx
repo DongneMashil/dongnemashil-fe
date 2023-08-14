@@ -10,7 +10,10 @@ export interface ButtonProps {
     | 'borderround'
     | 'circlefill'
     | 'onlytext'
-    | 'onlytexttoggle';
+    | 'onlytexttoggle'
+    | 'authKakao'
+    | 'authNormal'
+    | 'authOutline';
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   url?: string;
   inputType?: 'button' | 'submit';

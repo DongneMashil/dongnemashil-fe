@@ -1,3 +1,5 @@
+import { css } from 'styled-components';
+
 const colors = {
   whiteColor: '#ffffff',
   whiteGrayColor: '#e2e2e2',
@@ -20,8 +22,28 @@ const size = {
   desktop: '1000px',
 };
 
+const authLayout = css`
+  width: 100%;
+  height: 100%;
+  background-color: whiteColor;
+  padding: 43px 26px;
+`;
+
+const authButton = css`
+  width: 100%;
+  height: 44px;
+  font-size: 16px;
+  border: 0;
+  box-sizing: border-box;
+  font-weight: 700;
+  border-radius: 20px;
+  position: relative;
+`;
+
 export const theme = {
   ...colors,
+  authLayout,
+  authButton,
   device: {
     mobile: `(max-width: ${size.mobile})`,
     tablet: `(min-width: ${size.tablet}) and (max-width: ${size.desktop})`,
