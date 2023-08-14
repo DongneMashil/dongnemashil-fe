@@ -14,6 +14,7 @@ import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { useLike } from 'hooks';
 import { StLike } from 'components/detailPage';
 import noUser from 'assets/images/NoUser.gif';
+import { numberWithCommas } from 'utils';
 
 export const Thumbnail = ({
   id,
@@ -70,7 +71,7 @@ export const Thumbnail = ({
           </StTitleText>
         </StThumbnailTitleLeft>
         <StLike onClick={toggleLikeHandler}>
-          {isLiked ? <FilledHeart /> : <Heart />} {likeCnt}
+          {isLiked ? <FilledHeart /> : <Heart />} {numberWithCommas(likeCnt)}
         </StLike>
       </StThumbnailTitle>
     </StThumbnail>
