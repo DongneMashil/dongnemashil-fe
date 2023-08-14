@@ -53,7 +53,7 @@ export type Comment = {
   modifiedAt: string;
 };
 
-type ResponseData = {
+type GetCommentResponse = {
   content: Comment[];
   pageable: {
     sort: {
@@ -84,9 +84,9 @@ type ResponseData = {
 export const getComment = async (
   detailId: string, // 수정된 부분
   page?: number
-): Promise<ResponseData> => {
+): Promise<GetCommentResponse> => {
   try {
-    const response: AxiosResponse<ResponseData> = await axiosInstance.get(
+    const response: AxiosResponse<GetCommentResponse> = await axiosInstance.get(
       `/reviews/${detailId}/comments`,
       {
         params: {
@@ -94,10 +94,7 @@ export const getComment = async (
         },
       }
     );
-    return {
-      ...response.data,
-      content: response.data.content,
-    };
+    return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data?.errorMessage || e.message);

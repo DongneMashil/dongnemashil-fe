@@ -61,12 +61,18 @@ export type GetMyReviewsResponse = {
 };
 
 export const getMyReviews = async (
-  type: string
+  type: string,
+  page?: number
 ): Promise<GetMyReviewsResponse> => {
   // 내 게시글과 내 좋아요 글 조회
   try {
     const response: AxiosResponse<GetMyReviewsResponse> =
-      await axiosInstance.get(`/mypage/list?q=${type}`);
+      await axiosInstance.get(`/mypage/list`, {
+        params: {
+          q: type,
+          page,
+        },
+      });
     return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
@@ -78,15 +84,14 @@ export const getMyReviews = async (
 
 export type Comment = {
   id: number;
-  comment: string;
   nickname: string;
   profileImgUrl: string | null;
+  comment: string;
   createdAt: string;
   modifiedAt: string;
-  reviewId: number;
 };
 
-export type GetMyCommentsResponse = {
+export type GetMyCommentResponse = {
   content: Comment[];
   pageable: {
     sort: {
@@ -111,15 +116,19 @@ export type GetMyCommentsResponse = {
   first: boolean;
   last: boolean;
   empty: boolean;
-  totalElements: number;
   totalPages: number;
+  totalElements: number;
 };
-
-export const getMyComments = async (): Promise<GetMyCommentsResponse> => {
-  // 내댓글조회
+export const getMyComments = async (
+  page?: number
+): Promise<GetMyCommentResponse> => {
   try {
-    const response: AxiosResponse<GetMyCommentsResponse> =
-      await axiosInstance.get(`/mypage/comments`);
+    const response: AxiosResponse<GetMyCommentResponse> =
+      await axiosInstance.get(`/mypage/comments`, {
+        params: {
+          page: page,
+        },
+      });
     return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
