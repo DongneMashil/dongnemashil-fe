@@ -9,15 +9,22 @@ import {
   StPostButton,
 } from './WriteMapPage.styles.ts';
 import { Geolocation } from 'components/mapWritePage';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { addressSelector } from 'recoil/address/addressSelector';
 import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
 
 export const WriteMapPage = () => {
   const addressData = useRecoilValue(addressSelector);
+  const selectedAddress = useRecoilValue(selectedAddressAtom); // <- 추가된 부분
   const setCurrentAddress = useSetRecoilState(selectedAddressAtom);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const disableCurrentLocation = location.state?.fromSearch || false;
+
+  console.log('selectedAddress:', selectedAddress);
+  console.log('disableCurrentLocation:', disableCurrentLocation);
 
   const onGoWritePageHandler = () => {
     if (addressData.fullAddress.includes('서울')) {
@@ -45,7 +52,11 @@ export const WriteMapPage = () => {
         </StInputWrapper>
         <StPostButton onClick={onGoWritePageHandler}>글 작성</StPostButton>
       </StCurrentLocationContainer>
-      <Geolocation onAddressUpdate={setCurrentAddress} />
+      <Geolocation
+        selectedAddress={selectedAddress} // <- 추가된 부분
+        onAddressUpdate={setCurrentAddress}
+        disableCurrentLocation={disableCurrentLocation}
+      />
     </CommonLayout>
   );
 };

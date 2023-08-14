@@ -14,6 +14,9 @@ import {
 } from './WriteMapSearchPage.styles';
 import { searchAddress } from 'api/kakaoSearch';
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
 
 interface ApiResponse {
   documents: Document[];
@@ -26,7 +29,9 @@ interface Document {
 }
 
 export const WriteMapSearchPage = () => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
+  const setSelectedAddress = useSetRecoilState(selectedAddressAtom);
 
   const {
     data: responseData,
@@ -43,6 +48,11 @@ export const WriteMapSearchPage = () => {
 
   const onInputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
+  };
+
+  const onSelectAddressHandler = (selectedAddress: string) => {
+    setSelectedAddress(selectedAddress);
+    navigate('/writemap', { state: { fromSearch: true } });
   };
 
   const highlightSearchText = (text: string, searchText: string) => {
@@ -89,7 +99,15 @@ export const WriteMapSearchPage = () => {
                   {result.road_address_name || result.address_name}
                 </StRoadName>
               </StRoadBox>
-              <StChooseButton>선택</StChooseButton>
+              <StChooseButton
+                onClick={() =>
+                  onSelectAddressHandler(
+                    result.road_address_name || result.address_name
+                  )
+                }
+              >
+                선택
+              </StChooseButton>
               {isError && <div>Error: {(error as Error).message}</div>}
               {isLoading && <div>Loading...</div>}
             </StSearchResult>
