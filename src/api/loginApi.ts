@@ -30,14 +30,16 @@ export const loginKakaoCallback = async (code: string) => {
 
 /** 로그인 */
 export const login = async (data: { email: string; password: string }) => {
-  await axiosInstance
-    .post(`/login`, data)
-    .then((res) => {
-      console.log('login success', res.data);
-    })
-    .catch((err) => {
-      throw err;
-    });
+  try {
+    const response: AxiosResponse = await axiosInstance.post(`/login`, data);
+    console.log('Login Success, ', response.data);
+    return response.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data || e.message);
+    }
+    throw e;
+  }
 };
 
 /** 회원가입 */
