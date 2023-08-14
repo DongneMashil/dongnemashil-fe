@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import { Button } from 'components/common';
 import { AuthInputBox } from 'components/common';
 import { AuthLogoBox } from 'components/common';
+import { AuthErrorMsg } from 'components/common/AuthErrorMsg/AuthErrorMsg';
 import { CommonLayout } from 'components/layout';
 import { login } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { useVerifyUser } from 'hooks';
-import { StCommonLoginLayout } from './CommonLoginPage.styles';
+import {
+  StCommonLoginLayout,
+  StLoginErrorMsgBox,
+  StLoginButtonWrapper,
+} from './CommonLoginPage.styles';
 
 interface CommonLoginProps {
   id: string;
@@ -17,14 +22,16 @@ interface CommonLoginProps {
 export const CommonLoginPage = () => {
   const navigate = useNavigate();
   const [shouldVerify, setShouldVerify] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const { isSuccess } = useVerifyUser(shouldVerify);
   const { mutate } = useMutation(login, {
     onSuccess: () => {
       console.log('Common Login Success');
       setShouldVerify(true);
     },
-    onError: (err) => {
+    onError: (err: Error) => {
       console.log('Common Login Error:', err);
+      setErrorMsg(err.message);
     },
   });
 
@@ -56,6 +63,7 @@ export const CommonLoginPage = () => {
     });
   }
   console.log('loginValues', loginValues);
+  console.log('errmsg', errorMsg);
   return (
     <CommonLayout>
       <StCommonLoginLayout>
@@ -66,6 +74,7 @@ export const CommonLoginPage = () => {
           id="id"
           value={loginValues.id}
           onChange={onChangeHandler}
+          placeholder="아이디"
         />
         <AuthInputBox
           type="password"
@@ -73,10 +82,16 @@ export const CommonLoginPage = () => {
           id="password"
           value={loginValues.password}
           onChange={onChangeHandler}
+          placeholder="비밀번호"
         />
-        <Button type="authNormal" onClick={onSubmitHandler}>
-          로그인
-        </Button>
+        <StLoginErrorMsgBox>
+          {errorMsg && <AuthErrorMsg isValid={false}>{errorMsg}</AuthErrorMsg>}
+        </StLoginErrorMsgBox>
+        <StLoginButtonWrapper>
+          <Button type="authNormal" onClick={onSubmitHandler}>
+            로그인
+          </Button>
+        </StLoginButtonWrapper>
       </StCommonLoginLayout>
     </CommonLayout>
   );
