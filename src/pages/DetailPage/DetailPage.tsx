@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getReviewDetail, ReviewDetail } from 'api/detailApi';
+import { getReviewDetail, ReviewDetailResponse } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
@@ -42,7 +42,7 @@ export const DetailPage = () => {
     throw new Error('Review ID is missing');
   }
 
-  const { data } = useQuery<ReviewDetail, Error>({
+  const { data } = useQuery<ReviewDetailResponse, Error>({
     queryKey: ['reviewDetail', reviewId],
     queryFn: () => getReviewDetail(reviewId),
     enabled: !!reviewId,
@@ -111,7 +111,7 @@ export const DetailPage = () => {
                 <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>
                 <StDetailPageHeader>
                   <img src={data.profileImgUrl || noUser} />
-                  <span className="nickname">닉네임여기에</span>
+                  <span className="nickname">{data.nickname}</span>
                   <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
                 </StDetailPageHeader>
                 <StDetailPageContent>

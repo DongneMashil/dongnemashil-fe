@@ -4,9 +4,10 @@ export const StReviewBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 1rem;
   gap: 0.8rem;
   cursor: pointer;
-  margin-bottom: 1rem;
+
   img {
     width: 100%;
     aspect-ratio: 1/1;
@@ -15,15 +16,21 @@ export const StReviewBox = styled.div`
   }
   .contentWrapper {
     display: flex;
+    flex-direction: column;
     width: 100%;
-    flex-direction: row;
     justify-content: space-between;
-    align-items: center;
-    padding: 0 0.7rem;
-    gap: 0.2rem;
+    align-items: flex-start;
+    padding: 0.1rem 0.6rem;
+    gap: 0.3rem;
     .title {
       font-size: 1rem;
       font-weight: 600;
+      //   white-space: nowrap; // 한줄로
+      //   overflow: hidden; // 넘치면 숨김
+      //   text-overflow: ellipsis; //넘치면 ...
+
+      //   direction: rtl; //...을 앞에 붙임
+      //   max-width: 110px;
     }
     .date {
       font-size: 0.875rem;
@@ -37,14 +44,16 @@ export const StTabContentBox = styled.div`
   width: 100%;
 
   background-color: #fff;
-  padding: 1rem;
+  padding: 5px;
+
   margin-bottom: 1rem;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.03);
   border-radius: 0.875rem;
 
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  justify-items: center;
+  //   justify-items: center;
+  //   align-items: center;
   gap: 5px;
 
   @media (min-width: 300px) {

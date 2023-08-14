@@ -21,7 +21,10 @@ const size = {
   tablet: '768px',
   desktop: '1000px',
 };
-
+const maxSizes = {
+  maxWidth: '390px',
+  maxHeight: '850px',
+};
 const authLayout = css`
   width: 100%;
   height: 100%;
@@ -42,6 +45,7 @@ const authButton = css`
 
 export const theme = {
   ...colors,
+  ...maxSizes,
   authLayout,
   authButton,
   device: {
