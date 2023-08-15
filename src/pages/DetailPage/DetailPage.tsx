@@ -62,6 +62,7 @@ export const DetailPage = () => {
   };
 
   const defaultAddress = '서울특별시 마포구 와우산로 94';
+
   return (
     <>
       {isMapOpen ? (

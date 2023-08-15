@@ -14,7 +14,7 @@ import { CommonLayout, NavBar } from 'components/layout';
 import { FileSlider } from 'components/writePage';
 import { useMutation } from '@tanstack/react-query';
 import { submitReview } from 'api/reviews';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
 import { useVerifyUser } from 'hooks';
 import { useRecoilValue } from 'recoil';
@@ -45,6 +45,10 @@ export const WritePage = () => {
 
   const { isLoading, isError, isSuccess } = useVerifyUser(true);
   const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
+
+  const location = useLocation();
+  const reviewData = location.state?.review;
+  console.log(reviewData);
 
   const onInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

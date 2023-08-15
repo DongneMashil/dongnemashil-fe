@@ -15,7 +15,6 @@ export const submitReview = async (data: globalThis.FormData) => {
     return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
-      // 각 에러 코드에 따라 특정 에러 메시지를 던질 수 있습니다.
       if (e.response?.status === 400) {
         throw new Error('content가 필요합니다.');
       } else if (e.response?.status === 409) {
