@@ -70,6 +70,7 @@ export const SearchResultPage = () => {
 
   return (
     <CommonLayout backgroundColor="#ffffff">
+      {/* 수진님이 뿌려줄 리스트 컴포넌트 */}
       {isMapOpen && <SearchResultMapPage reviewList={data} />}
     </CommonLayout>
   );

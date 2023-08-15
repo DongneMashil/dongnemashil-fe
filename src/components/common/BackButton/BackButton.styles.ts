@@ -1,6 +1,6 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
-export const StBackButton = styled.div`
+export const StBackButton = styled.button`
   width: 2.375rem;
   height: 2.375rem;
   background-color: #fff;

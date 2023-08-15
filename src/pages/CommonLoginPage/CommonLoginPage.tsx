@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'components/common';
-import { AuthInputBox } from 'components/common';
-import { AuthLogoBox } from 'components/common';
-import { AuthErrorMsg } from 'components/common/AuthErrorMsg/AuthErrorMsg';
+import { AuthInputBox, AuthLogoBox, AuthErrorMsg } from 'components/common';
 import { CommonLayout } from 'components/layout';
 import { login } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';

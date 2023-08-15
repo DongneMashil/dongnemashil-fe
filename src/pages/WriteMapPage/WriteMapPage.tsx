@@ -13,8 +13,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { addressSelector } from 'recoil/address/addressSelector';
 import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
-import { BackButton } from 'components/common/BackButton/BackButton';
-
+import { BackButton } from 'components/common';
 
 export const WriteMapPage = () => {
   const addressData = useRecoilValue(addressSelector);
