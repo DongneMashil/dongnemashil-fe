@@ -1,5 +1,10 @@
 import { useInfiniteQuery, QueryFunctionContext } from '@tanstack/react-query';
 import { axiosInstance } from './api';
+import { useRecoilValue } from 'recoil';
+import {
+  selectedTagSelector,
+  sortTypeSelector,
+} from 'recoil/reviewsQuery/reviewsQuery';
 
 export interface ReviewsAndPageable {
   content: ReviewsList[];
@@ -44,8 +49,6 @@ export interface Pageable {
 }
 
 interface PaginationParams {
-  type: string;
-  tag?: string | null;
   q?: string | null;
 }
 
@@ -55,7 +58,9 @@ const reviewKeys = {
   // list: (type: string) => [...reviewKeys.lists(), { type }] as const,
 };
 
-export const useFetchReviews = ({ type, tag }: PaginationParams) => {
+export const useFetchReviews = () => {
+  const tag = useRecoilValue(selectedTagSelector);
+  const type = useRecoilValue(sortTypeSelector);
   return useInfiniteQuery(
     reviewKeys.lists(),
     ({ pageParam = 1 }: QueryFunctionContext) =>
@@ -69,7 +74,9 @@ export const useFetchReviews = ({ type, tag }: PaginationParams) => {
   );
 };
 
-export const useFetchSearchReviews = ({ type, tag, q }: PaginationParams) => {
+export const useFetchSearchReviews = ({ q }: PaginationParams) => {
+  const tag = useRecoilValue(selectedTagSelector);
+  const type = useRecoilValue(sortTypeSelector);
   return useInfiniteQuery(
     reviewKeys.lists(),
     ({ pageParam = 1 }: QueryFunctionContext) =>

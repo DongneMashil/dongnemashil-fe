@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { useRecoilState } from 'recoil';
+import {
+  selectedTagsState,
+  sortTypeState,
+} from 'recoil/reviewsQuery/reviewsQuery';
+
 import { CommonLayout, FixFooter, NavBar } from 'components/layout';
 import { useFetchSearchReviews } from 'api/reviewsApi';
 // import { SearchResultMapPage } from 'pages/SearchResultMapPage/SearchResultMapPage';
@@ -11,18 +17,13 @@ export const SearchResultPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const q = queryParams.get('q');
-  console.log(q);
   // const [isMapOpen, setIsMapOpen] = useState(false);
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [type, setType] = useState('likes');
-  const tag = selectedTags.length > 0 ? selectedTags.join(',') : null;
+  const [selectedTags, setSelectedTags] = useRecoilState(selectedTagsState);
+  const [type, setType] = useRecoilState(sortTypeState);
+
   const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
-    useFetchSearchReviews({
-      type,
-      tag,
-      q,
-    });
+    useFetchSearchReviews({ q });
 
   const reviews = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data.content) : []),
@@ -34,7 +35,7 @@ export const SearchResultPage = () => {
 
   useEffect(() => {
     refetch();
-  }, [type, tag]);
+  }, [type, selectedTags]);
 
   const onClickSort = (type: string) => {
     if (type === 'likes' || type === 'recent') {
