@@ -9,9 +9,11 @@ export const StCenterBtnWrapper = styled.div`
   transform: translateX(-50%);
 `;
 
-export const StRightBtnWrapper = styled.div`
+export const StRightBtnWrapper = styled.div<{
+  type: 'write' | 'goTop';
+}>`
   position: absolute;
-  bottom: 76px;
+  bottom: ${(props) => (props.type === 'write' ? '76px' : '69px')};
   right: 14px;
 
   display: flex;

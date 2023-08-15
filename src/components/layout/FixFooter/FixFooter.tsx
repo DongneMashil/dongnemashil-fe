@@ -11,7 +11,7 @@ import {
 
 export interface FixFooterProps {
   centerButtons?: 'map';
-  rightButtons?: 'write' | 'goTop';
+  rightButtons: 'write' | 'goTop';
 }
 
 export const FixFooter = ({ centerButtons, rightButtons }: FixFooterProps) => {
@@ -63,13 +63,14 @@ export const FixFooter = ({ centerButtons, rightButtons }: FixFooterProps) => {
       </>
     ),
   };
+  console.log(rightButtons);
 
   return (
     <StFixFooter>
       <StCenterBtnWrapper>
         {centerButtons && centerWrapper[centerButtons]}
       </StCenterBtnWrapper>
-      <StRightBtnWrapper>
+      <StRightBtnWrapper type={rightButtons}>
         {rightButtons && rightWrapper[rightButtons]}
       </StRightBtnWrapper>
     </StFixFooter>
