@@ -91,7 +91,7 @@ export const DetailPage = () => {
               btnRight={'map'}
               onClickRight={() => setIsMapOpen(true)}
             >
-              {data && <StNavTitle>{data.address}</StNavTitle>}
+              {data && <StNavTitle>{data.roadName}</StNavTitle>}
             </NavBar>
           }
           footer={
