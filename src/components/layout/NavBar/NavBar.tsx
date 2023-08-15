@@ -96,9 +96,13 @@ export const NavBar = ({
         완료
       </Button>
     ),
-    mypage: (
+    mypage: userData ? (
       <Button type={'icon'} url={'/mypage'}>
         <img src={fileUrl || noUser} alt="프로필 이미지" />
+      </Button>
+    ) : (
+      <Button type={'onlyText'} url={'/login'}>
+        로그인
       </Button>
     ),
     submit: (
