@@ -21,9 +21,6 @@ export const HomePage = () => {
     [data]
   );
 
-  console.log(isFetching);
-  console.log(hasNextPage);
-
   useEffect(() => {
     refetch();
   }, [type, selectedTags]);
