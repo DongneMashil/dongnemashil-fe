@@ -87,7 +87,7 @@ export const DetailPage = () => {
         <CommonLayout
           header={
             <NavBar
-              btnLeft={'logo'}
+              btnLeft={'back'}
               btnRight={'map'}
               onClickRight={() => setIsMapOpen(true)}
             >
