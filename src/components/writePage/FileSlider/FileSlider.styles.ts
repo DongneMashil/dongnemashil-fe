@@ -75,3 +75,12 @@ export const StCoverImageButton = styled.button<{ isActive: boolean }>`
     opacity: 1;
   }
 `;
+
+export const StDelete = styled.button`
+  position: absolute;
+  top: 0.8rem;
+  left: 0.9rem;
+  background: none;
+  color: #fff;
+  font-size: 1.2rem;
+`

@@ -127,6 +127,10 @@ export const WritePage = () => {
     );
   };
 
+  const onDeleteImage = (targetFile: File) => {
+    setMediaFiles((prev) => prev.filter((file) => file.file !== targetFile));
+  };
+
   const handleTagChange = (tags: string[]) => {
     setSelectedTags(tags);
   };
@@ -269,6 +273,7 @@ export const WritePage = () => {
               isCoverImage={determineIsCoverImage}
               setCoverImage={setCoverImage}
               reviewData={reviewData}
+              onDeleteImage={onDeleteImage}
             />
             <StHiddenButton
               ref={fileInputRef}

@@ -7,6 +7,7 @@ import {
   StImage,
   StImageContainer,
   StVideo,
+  StDelete,
 } from './FileSlider.styles';
 import { ReactComponent as FileUpload } from 'assets/icons/FileUpload.svg';
 import { ReviewData } from 'pages';
@@ -19,6 +20,7 @@ interface ImageSliderProps {
   onSelectedCoverImage?: (file: File) => void;
   isCoverImage: (file: File) => boolean;
   setCoverImage: (file: File) => void;
+  onDeleteImage: (file: File) => void;
   files: { type: 'image' | 'video'; file: File }[];
   reviewData?: ReviewData;
 }
@@ -31,6 +33,7 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   setCoverImage,
   files,
   reviewData,
+  onDeleteImage,
 }) => {
   const onImageClick = (image: File) => {
     onSelectedCoverImage && onSelectedCoverImage(image);
@@ -38,6 +41,10 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
 
   const onCoverButtonClick = (image: File) => {
     setCoverImage(image);
+  };
+
+  const onImageDelete = (file: File) => {
+    onDeleteImage(file);
   };
 
   console.log(typeof reviewData?.subImgUrl);
@@ -63,6 +70,7 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
           ) : (
             <StVideo src={URL.createObjectURL(file.file)} controls />
           )}
+          <StDelete onClick={() => onImageDelete(file.file)}>x</StDelete>
         </StImageContainer>
       ))}
 
