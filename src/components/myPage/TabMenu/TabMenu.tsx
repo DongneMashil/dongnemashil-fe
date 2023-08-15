@@ -89,7 +89,7 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
                   >
                     <img src={item.imgUrl} alt="img" />
                     <div className="contentWrapper">
-                      <div className="title">{item.address}</div>
+                      <div className="title">{item.roadName}</div>
                       {selectedTab === 'reviews' && (
                         <div className="date">
                           {timeFormatWithoutTime(item.createdAt)}

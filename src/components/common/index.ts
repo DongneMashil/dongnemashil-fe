@@ -14,3 +14,4 @@ export * from './Map/Map';
 export * from './Modal/ModalPotal/ModalPotal';
 export * from './Modal/MyFavoriteTags/MyFavoriteTags';
 export * from './ToggleTag/ToggleTag';
+export * from './VideoPlayer/VideoPlayer';
