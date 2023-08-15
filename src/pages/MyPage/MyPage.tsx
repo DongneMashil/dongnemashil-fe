@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLogout, useVerifyUser } from 'hooks';
 import { MyProfile, getMyProfile } from 'api/mypageApi';
 import { userProfileSelector } from 'recoil/userExample';
-import { Footer, TabMenu, UserInfo } from 'components/common/myPage';
+import { Footer, TabMenu, UserInfo } from 'components/myPage';
 import { CommonLayout, NavBar } from 'components/layout';
 import noUser from 'assets/images/NoUser.gif';
 import { ReactComponent as LogoutIcon } from 'assets/icons/Logout.svg';

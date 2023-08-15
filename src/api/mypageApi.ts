@@ -26,7 +26,7 @@ export type Review = {
   nickname: string;
   userprofileImgUrl: string | null;
   imgUrl: string | null;
-  address: string;
+  roadName: string;
   createdAt: string;
   reviewId: number;
 };
