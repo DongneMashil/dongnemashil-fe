@@ -1,7 +1,7 @@
 import { useInfiniteQuery, QueryFunctionContext } from '@tanstack/react-query';
 import { axiosInstance } from './api';
 
-export interface ResponseData {
+export interface ReviewsAndPageable {
   content: ReviewsList[];
   pageable: Pageable;
   first: boolean;
@@ -15,6 +15,8 @@ export interface ResponseData {
   };
   numberOfElements: number;
   empty: boolean;
+  totalElements?: number;
+  totalPages?: number;
 }
 
 export interface ReviewsList {
@@ -25,6 +27,7 @@ export interface ReviewsList {
   createdAt: string;
   likeCnt: number;
   likebool: boolean;
+  address?: string;
 }
 
 export interface Pageable {
@@ -42,7 +45,8 @@ export interface Pageable {
 
 interface PaginationParams {
   type: string;
-  tag: string | null;
+  tag?: string | null;
+  q?: string | null;
 }
 
 const reviewKeys = {
@@ -55,8 +59,22 @@ export const useFetchReviews = ({ type, tag }: PaginationParams) => {
   return useInfiniteQuery(
     reviewKeys.lists(),
     ({ pageParam = 1 }: QueryFunctionContext) =>
-      axiosInstance.get<ResponseData>('/reviews', {
+      axiosInstance.get<ReviewsAndPageable>('/reviews', {
         params: { type, page: pageParam, tag },
+      }),
+    {
+      getNextPageParam: ({ data: { last, number } }) =>
+        last ? undefined : number + 2,
+    }
+  );
+};
+
+export const useFetchSearchReviews = ({ type, tag, q }: PaginationParams) => {
+  return useInfiniteQuery(
+    reviewKeys.lists(),
+    ({ pageParam = 1 }: QueryFunctionContext) =>
+      axiosInstance.get<ReviewsAndPageable>('/search', {
+        params: { type, page: pageParam, tag, q },
       }),
     {
       getNextPageParam: ({ data: { last, number } }) =>

@@ -4,7 +4,7 @@ import { getReviewDetail, ReviewDetailResponse } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
-import { FooterSpacer, Tag } from 'components/common';
+import { FooterSpacer, Tag, VideoPlayer } from 'components/common';
 import {
   StCreatedTime,
   StDetailPageContainer,
@@ -13,6 +13,7 @@ import {
   StDetailTitle,
   StNavTitle,
   StTagWrapper,
+  StVideoPlayerBox,
 } from './DetailPage.styles';
 import noImage from 'assets/images/NoImage.png';
 import noUser from 'assets/images/NoUser.gif';
@@ -91,7 +92,7 @@ export const DetailPage = () => {
               btnRight={'map'}
               onClickRight={() => setIsMapOpen(true)}
             >
-              {data && <StNavTitle>{data.address}</StNavTitle>}
+              {data && <StNavTitle>{data.roadName}</StNavTitle>}
             </NavBar>
           }
           footer={
@@ -119,6 +120,12 @@ export const DetailPage = () => {
                   <img className="detailimg" src={data.mainImgUrl || noImage} />
                   {data.subImgUrl.map((img, index) =>
                     img !== '' ? <img key={index} src={img} /> : null
+                  )}
+
+                  {data.videoUrl && (
+                    <StVideoPlayerBox>
+                      <VideoPlayer videoUrl={data.videoUrl} />
+                    </StVideoPlayerBox>
                   )}
 
                   <p ref={contentRef}>{data.content}</p>

@@ -87,3 +87,8 @@ export const StDetailPageContent = styled.div`
     line-height: 1.5;
   }
 `;
+
+export const StVideoPlayerBox = styled.div`
+  width: 100%;
+  height: 100%;
+`;

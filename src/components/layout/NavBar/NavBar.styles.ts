@@ -17,18 +17,23 @@ export const StNavBar = styled.div<NavBarProps>`
     display: flex;
     gap: 20px;
     flex: 1;
+  }
+`;
 
-    &:nth-child(2) {
-      justify-content: center;
+export const StCenterWrapper = styled.div`
+  justify-content: center;
 
-      h1 {
-        font-size: 18px;
-        font-weight: 700;
-      }
-    }
+  h1 {
+    font-size: 18px;
+    font-weight: 700;
 
-    &:nth-child(3) {
-      justify-content: right;
+    svg {
+      margin-right: 4px;
+      transform: translateY(2px);
     }
   }
+`;
+
+export const StRighttWrapper = styled.div`
+  justify-content: right;
 `;

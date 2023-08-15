@@ -9,11 +9,17 @@ export const StSearchHeader = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
+  position: relative;
   & > div {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 7px;
+  }
+  & > button {
+    position: absolute;
+    top: 52px;
+    left: 24px;
   }
 `;
 

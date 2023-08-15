@@ -1,4 +1,4 @@
-import { OurTownButton, WriteButton } from 'components/common/SpecialButtons';
+import { OurTownButton, WriteButton } from 'components/common';
 import React from 'react';
 
 import { styled } from 'styled-components';

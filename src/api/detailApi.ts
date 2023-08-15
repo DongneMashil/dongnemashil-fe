@@ -13,6 +13,7 @@ export type ReviewDetailResponse = {
   content: string;
   profileImgUrl: string | null;
   address: string;
+  roadName: string;
   title: string;
   mainImgUrl: string | null;
   subImgUrl: string[];
