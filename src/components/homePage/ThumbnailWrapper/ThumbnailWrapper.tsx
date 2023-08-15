@@ -12,23 +12,19 @@ import { Button } from 'components/common';
 export const ThumbnailWrapper = ({
   tag,
   isSearch,
+  q,
 }: {
   tag: string | null;
   isSearch: boolean;
+  q?: string | null;
 }) => {
   const [type, setType] = useState('likes');
-
   const fetchApi = isSearch ? useFetchSearchReviews : useFetchReviews;
   const { data, hasNextPage, isFetching, fetchNextPage, refetch } = fetchApi({
     type,
     tag,
+    q,
   });
-
-  // const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
-  //   useFetchReviews({
-  //     type,
-  //     tag,
-  //   });
 
   console.log(type, data?.pages[0].data.content);
 

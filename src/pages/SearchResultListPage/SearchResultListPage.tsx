@@ -5,8 +5,14 @@ import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
 import { useVerifyUser } from 'hooks';
 import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
+import { useLocation } from 'react-router-dom';
+import { ReactComponent as Search } from 'assets/icons/Search.svg';
 
 export const SearchResultListPage = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const q = queryParams.get('q');
+
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const handleTagChange = (tags: string[]) => {
@@ -27,12 +33,11 @@ export const SearchResultListPage = () => {
     <CommonLayout
       header={
         <>
-          <NavBar
-            btnLeft={'logo'}
-            btnSecondRight={'search'}
-            btnRight={'mypage'}
-          >
-            <h1>서울 전체</h1>
+          <NavBar btnLeft={'logo'} btnRight={'mypage'}>
+            <h1>
+              <Search width="18" height="18" />
+              {q}
+            </h1>
           </NavBar>
         </>
       }
@@ -43,6 +48,7 @@ export const SearchResultListPage = () => {
       <ThumbnailWrapper
         tag={selectedTags.length > 0 ? selectedTags.join(',') : null}
         isSearch={true}
+        q={q}
       />
     </CommonLayout>
   );
