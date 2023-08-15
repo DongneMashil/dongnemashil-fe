@@ -6,12 +6,13 @@ import {
 } from 'recoil/reviewsQuery/reviewsQuery';
 
 import { CommonLayout, FixFooter, NavBar } from 'components/layout';
-import { useFetchSearchReviews } from 'api/reviewsApi';
+import { useFetchReviews } from 'api/reviewsApi';
 // import { SearchResultMapPage } from 'pages/SearchResultMapPage/SearchResultMapPage';
 import { SearchResultListPage } from 'pages/SearchResultListPage/SearchResultListPage';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import { useLocation } from 'react-router-dom';
 import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
+import { useScrollToTop } from 'hooks/useScrollToTop';
 
 export const SearchResultPage = () => {
   const location = useLocation();
@@ -23,7 +24,7 @@ export const SearchResultPage = () => {
   const [type, setType] = useRecoilState(sortTypeState);
 
   const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
-    useFetchSearchReviews({ q });
+    useFetchReviews({ q });
 
   const reviews = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data.content) : []),
@@ -46,10 +47,11 @@ export const SearchResultPage = () => {
   const handleTagChange = (tags: string[]) => {
     setSelectedTags(tags);
   };
-
   // const onClickMapOpen = () => {
   //   setIsMapOpen(true);
   // };
+
+  const { scrollToTop } = useScrollToTop();
 
   return (
     <CommonLayout
@@ -72,7 +74,6 @@ export const SearchResultPage = () => {
       }
     >
       <ToggleTagButton onTagChange={handleTagChange} />
-
       <SearchResultListPage
         type={type}
         reviews={reviews}
@@ -81,6 +82,9 @@ export const SearchResultPage = () => {
         fetchNextPage={fetchNextPage}
         onClickSort={onClickSort}
       />
+      <button id="scroll-to-top-button" onClick={scrollToTop}>
+        Scroll to Top
+      </button>
       {/* {isMapOpen && <SearchResultMapPage reviewList={reviews} />} */}
     </CommonLayout>
   );
