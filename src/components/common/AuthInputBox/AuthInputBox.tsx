@@ -31,7 +31,7 @@ export const AuthInputBox = ({
         disabled={disabled}
       />
       {onClick && (
-        <Button type="onlytext" onClick={onClick}>
+        <Button type="onlyText" onClick={onClick}>
           {btnText}
         </Button>
       )}

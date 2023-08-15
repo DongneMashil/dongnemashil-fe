@@ -55,11 +55,11 @@ export const Footer = ({
           <CommentIcon className="CommentIcon" /> {commentCount}
         </StComment>
         {isCommentOpen ? (
-          <Button type={'onlytext'} onClick={() => setIsCommentOpen(false)}>
+          <Button type={'onlyText'} onClick={() => setIsCommentOpen(false)}>
             <Close />
           </Button>
         ) : (
-          <Button type={'onlytext'} onClick={onClick}>
+          <Button type={'onlyText'} onClick={onClick}>
             <ContentIcon /> 본문으로
           </Button>
         )}
