@@ -11,6 +11,9 @@ export const getExtensionName = (mimeType: string): string => {
     'image/svg+xml': '.svg',
     'image/heif': '.heif',
     'image/heic': '.heic',
+    'image/avif': '.avif',
+    'image/apng': '.apng',
+    'image/flif': '.flif',
   };
 
   return extensions[mimeType] || ''; // MIME 타입에 해당하는 확장자가 없으면 빈 문자열 반환
