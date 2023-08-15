@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import { Map } from 'components/common';
 import { ReviewResultsProps } from 'pages/SearchResultPage/SearchResultPage';
 import { Button, BackButton } from 'components/common';
