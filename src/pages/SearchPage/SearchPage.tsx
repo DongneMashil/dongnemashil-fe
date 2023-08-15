@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from 'components/common';
+import { Button, HeaderText } from 'components/common';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import { ReactComponent as BackButton } from 'assets/icons/ChevronLeft.svg';
 import { StSearchInput, StSearchHeader } from './SearchPage.styles';
-import { HeaderText } from 'components/common/HeaderText/HeaderText';
 import { CommonLayout } from 'components/layout';
 
 export const SearchPage = () => {

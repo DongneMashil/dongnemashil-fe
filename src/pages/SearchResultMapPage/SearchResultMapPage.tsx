@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import Map from 'components/common/Map/Map';
+import { Map } from 'components/common';
 import { ReviewResultsProps } from 'pages/SearchResultPage/SearchResultPage';
-import { Button } from 'components/common';
+import { Button, BackButton } from 'components/common';
 import Marker from 'assets/icons/Marker.png';
 import MarkerSelected from 'assets/icons/MarkerSelected.png';
 import { StResultMapContainer } from './SearchResultMapPage.styles';
@@ -120,6 +120,7 @@ export const SearchResultMapPage = ({
   return (
     <StResultMapContainer>
       <Map width="100%" height="100%" initMap={initMap} />
+      <BackButton />
       <Button
         type="circleFill"
         onClick={() => {

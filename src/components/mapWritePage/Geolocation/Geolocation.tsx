@@ -1,4 +1,4 @@
-import Map from 'components/common/Map/Map';
+import { Map } from 'components/common';
 import React, { useEffect, useRef } from 'react';
 import Marker from 'assets/icons/Marker.png';
 

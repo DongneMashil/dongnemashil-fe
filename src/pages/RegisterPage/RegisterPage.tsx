@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { AxiosError } from 'axios';
-import { AuthInputBox } from 'components/common/AuthInputBox/AuthInputBox';
-import { Button } from 'components/common';
+import {
+  Button,
+  HeaderText,
+  AuthLogoBox,
+  AuthInputBox,
+  AuthErrorMsg,
+} from 'components/common';
 import { register, confirmId, confirmNickname } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
 import { useVerifyUser } from 'hooks';
 import { useNavigate } from 'react-router-dom';
-import { HeaderText } from 'components/common/HeaderText/HeaderText';
-import { AuthLogoBox } from 'components/common';
 import { CommonLayout } from 'components/layout';
 import {
   StLoginContainer,
@@ -16,7 +19,6 @@ import {
   StInputLabel,
   StButtonWrapper,
 } from './Registerpage.styles';
-import { AuthErrorMsg } from 'components/common/AuthErrorMsg/AuthErrorMsg';
 
 interface registerValues {
   email: string;

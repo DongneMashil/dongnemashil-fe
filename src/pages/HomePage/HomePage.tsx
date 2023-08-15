@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CommonLayout, FixFooter, NavBar } from 'components/layout';
 import { ThumbnailWrapper } from 'components/homePage';
-import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
+import { ToggleTagButton } from 'components/common';
 import { useVerifyUser } from 'hooks';
 import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
