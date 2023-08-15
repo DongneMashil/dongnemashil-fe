@@ -5,7 +5,7 @@ import Marker from 'assets/icons/Marker.png';
 import MarkerSelected from 'assets/icons/MarkerSelected.png';
 import {
   StResultMapContainer,
-  StCurPosButton,
+  // StCurPosButton,
 } from './SearchResultMapPage.styles';
 //import { Button } from 'components/common';
 
@@ -16,6 +16,7 @@ export const SearchResultMapPage = ({
 }) => {
   console.log('reviewList ', reviewList);
 
+  let mapInstance: kakao.maps.Map | null = null;
   const markerImage = new kakao.maps.MarkerImage(
     Marker,
     new kakao.maps.Size(21, 28)
@@ -25,9 +26,30 @@ export const SearchResultMapPage = ({
     new kakao.maps.Size(36, 48)
   );
 
+  const moveToCurrentLocation = (map: kakao.maps.Map) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const location = new kakao.maps.LatLng(
+            pos.coords.latitude,
+            pos.coords.longitude
+          );
+          map.panTo(location);
+        },
+        () => {
+          const location = new kakao.maps.LatLng(37.545043, 127.039245);
+          map.panTo(location);
+        }
+      );
+    }
+  };
+
   const initMap = (map: kakao.maps.Map) => {
     let selectedMarker: kakao.maps.Marker | null = null;
     let selectedOverlay: kakao.maps.CustomOverlay | null = null;
+
+    mapInstance = map;
+    console.log('mapInstance ', mapInstance);
 
     // 마커 및 오버레이 세팅
     reviewList.map((data: ReviewResultsProps) => {
@@ -94,19 +116,29 @@ export const SearchResultMapPage = ({
       });
     });
   };
+
   return (
     <StResultMapContainer>
       <Map width="100%" height="100%" initMap={initMap} />
-      <StCurPosButton
-        type="borderround"
-        $width="50px"
-        $height="50px"
+      <button
+        style={{
+          width: '50px',
+          height: '50px',
+          position: 'absolute',
+          bottom: '20px',
+          right: '20px',
+          zIndex: '1000',
+        }}
         onClick={() => {
-          console.log('click!');
+          if (mapInstance) {
+            moveToCurrentLocation(mapInstance);
+          } else {
+            console.log('no map instance found');
+          }
         }}
       >
         현위치
-      </StCurPosButton>
+      </button>
     </StResultMapContainer>
   );
 };
