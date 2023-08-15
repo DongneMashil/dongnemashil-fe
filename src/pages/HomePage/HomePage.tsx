@@ -1,26 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { CommonLayout, FixFooter, NavBar } from 'components/layout';
 import { ThumbnailWrapper } from 'components/homePage';
-import { ToggleTagButton } from 'components/common';
-import { useVerifyUser } from 'hooks';
-import { useRecoilValue } from 'recoil';
-import { userProfileSelector } from 'recoil/userExample';
+import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
+import { useFetchReviews } from 'api/reviewsApi';
 
 export const HomePage = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [type, setType] = useState('likes');
+  const tag = selectedTags.length > 0 ? selectedTags.join(',') : null;
+  const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
+    useFetchReviews({
+      type,
+      tag,
+    });
+
+  const reviews = useMemo(
+    () => (data ? data.pages.flatMap(({ data }) => data.content) : []),
+    [data]
+  );
+
+  console.log(isFetching);
+  console.log(hasNextPage);
+
+  useEffect(() => {
+    refetch();
+  }, [type, tag]);
+
+  const onClickSort = (type: string) => {
+    if (type === 'likes' || type === 'recent') {
+      setType(type);
+    }
+  };
 
   const handleTagChange = (tags: string[]) => {
     setSelectedTags(tags);
   };
-  const userState = useRecoilValue(userProfileSelector);
-  const { data } = useVerifyUser(true);
-
-  useEffect(() => {
-    console.log('current user state: ', userState);
-    if (data) {
-      console.log('useVerifyUser data: ', data);
-    }
-  }, [userState]);
   console.log(selectedTags);
 
   return (
@@ -40,7 +54,12 @@ export const HomePage = () => {
     >
       <ToggleTagButton onTagChange={handleTagChange} />
       <ThumbnailWrapper
-        tag={selectedTags.length > 0 ? selectedTags.join(',') : null}
+        type={type}
+        reviews={reviews}
+        hasNextPage={hasNextPage}
+        isFetching={isFetching}
+        fetchNextPage={fetchNextPage}
+        onClickSort={onClickSort}
       />
     </CommonLayout>
   );

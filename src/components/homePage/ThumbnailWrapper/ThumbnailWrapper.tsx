@@ -1,34 +1,33 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
+import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import { Thumbnail } from '../Thumbnail/Thumbnail';
 import {
   StSort,
   StTarget,
   StThumbnailWrapper,
 } from './ThumbnailWrapper.styles';
-import { useFetchReviews } from 'api/reviewsApi';
 import { useIntersect } from 'hooks/useIntersect';
 import { Button } from 'components/common';
+import { ReviewsList } from 'api/reviewsApi';
 
-export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
-  const [type, setType] = useState('likes');
+export interface ReviewsProps {
+  type: string;
+  reviews: ReviewsList[];
+  hasNextPage?: boolean;
+  isFetching: boolean;
+  fetchNextPage: UseInfiniteQueryResult['fetchNextPage'];
+  onClickSort: (type: string) => void;
+}
 
-  console.log(tag);
-
-  const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
-    useFetchReviews({
-      type,
-      tag,
-    });
-
-  console.log(type, data?.pages[0].data.content);
-
-  const reviews = useMemo(
-    () => (data ? data.pages.flatMap(({ data }) => data.content) : []),
-    [data]
-  );
-
-  console.log(isFetching);
-  console.log(hasNextPage);
+export const ThumbnailWrapper = ({
+  type,
+  reviews,
+  hasNextPage,
+  isFetching,
+  fetchNextPage,
+  onClickSort,
+}: ReviewsProps) => {
+  console.log(type);
 
   const ref = useIntersect(
     (entry, observer) => {
@@ -41,16 +40,6 @@ export const ThumbnailWrapper = ({ tag }: { tag: string | null }) => {
       threshold: 0.1,
     }
   );
-
-  useEffect(() => {
-    refetch();
-  }, [type, tag]);
-
-  const onClickSort = (type: string) => {
-    if (type === 'likes' || type === 'recent') {
-      setType(type);
-    }
-  };
 
   return (
     <StThumbnailWrapper>
