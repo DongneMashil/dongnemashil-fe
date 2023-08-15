@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Map } from 'components/common';
 import { ReviewResultsProps } from 'pages/SearchResultPage/SearchResultPage';
 import { Button, BackButton } from 'components/common';
@@ -13,6 +14,7 @@ export const SearchResultMapPage = ({
 }) => {
   console.log('reviewList ', reviewList);
 
+  //const navigate = useNavigate();
   const mapInstance = useRef<kakao.maps.Map | null>(null);
   const markerImage = new kakao.maps.MarkerImage(
     Marker,
@@ -113,6 +115,11 @@ export const SearchResultMapPage = ({
       });
     });
   };
+
+  const onBackHandler = () => {
+    console.log('onBackHandler');
+  };
+
   useEffect(() => {
     console.log('map Instance (useEffect) ', mapInstance);
   });
@@ -120,7 +127,7 @@ export const SearchResultMapPage = ({
   return (
     <StResultMapContainer>
       <Map width="100%" height="100%" initMap={initMap} />
-      <BackButton />
+      <BackButton onClick={onBackHandler} />
       <Button
         type="circleFill"
         onClick={() => {
