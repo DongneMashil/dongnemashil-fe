@@ -14,6 +14,7 @@ import { userProfileSelector } from 'recoil/userExample';
 import { queryClient } from 'queries/queryClient';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
+import { useIntersect } from 'hooks/useIntersect';
 
 interface CommentsProps {
   reviewId: string;
@@ -32,7 +33,7 @@ export const Comments = ({
     throw new Error('Review ID is missing');
   }
   const latestCommentRef = useRef(null);
-  const loader = useRef(null);
+  // const loader = useRef(null);
   const useInfinityScroll = () => {
     const fetchComment = async ({ pageParam = 1 }) => {
       const response = await getComment(reviewId, pageParam);
@@ -62,31 +63,19 @@ export const Comments = ({
   const { data, fetchNextPage, hasNextPage, isLoading, isFetching } =
     useInfinityScroll();
 
-  const handleLoadMore = (info: IntersectionObserverEntry[]) => {
-    console.log(info); //이벤트 정보 출력
-    const target = info[0];
-    if (target.isIntersecting && !isLoading) {
+  // useIntersect 콜백함수
+  const onIntersectCallback = () => {
+    if (!isLoading) {
       fetchNextPage();
     }
   };
-  useEffect(() => {
-    // Intersection Observer를 설정
-    const options = {
-      root: null, // viewport를 기준으로 함
-      rootMargin: '0px', //감지위치
-      threshold: 0.1, // target이 viewport의 100% 경계선을 넘어가면 콜백 실행
-    };
 
-    const observer = new IntersectionObserver(handleLoadMore, options);
-    if (loader.current) {
-      observer.observe(loader.current);
-    }
-    return () => {
-      if (loader.current) {
-        observer.unobserve(loader.current);
-      }
-    };
-  }, [isLoading, hasNextPage]);
+  // 커스텀훅 사용
+  const loaderRef = useIntersect(onIntersectCallback, {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1,
+  });
 
   useEffect(() => {
     if (commentAddListener) {
@@ -199,7 +188,7 @@ export const Comments = ({
 
           {hasNextPage && (
             <>
-              <SkeletonUI ref={loader} width="100%" height="80px" />
+              <SkeletonUI ref={loaderRef} width="100%" height="80px" />
               <SkeletonUI width="100%" height="80px" />
               <SkeletonUI width="100%" height="80px" />
               <SkeletonUI width="100%" height="80px" />

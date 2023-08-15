@@ -1,10 +1,12 @@
 import Map from 'components/common/Map/Map';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Marker from 'assets/icons/Marker.png';
 
 interface IProps {
+  selectedAddress?: string;
   onMarkerClick?: () => void;
   onAddressUpdate?: (address: string) => void;
+  disableCurrentLocation?: boolean;
 }
 
 interface IMarkerOptions {
@@ -15,28 +17,73 @@ interface IMarkerOptions {
 }
 
 export const Geolocation: React.FC<IProps> = ({
+  selectedAddress,
   onMarkerClick,
   onAddressUpdate,
+  disableCurrentLocation = false,
 }) => {
+  let mapInstance: kakao.maps.Map | null = null;
+  const currentMarker = useRef<kakao.maps.Marker | null>(null);
+
   const initMap = (map: kakao.maps.Map) => {
+    mapInstance = map;
+
+    if (!disableCurrentLocation) {
+      getCurrentLocation(map, onMarkerClick);
+    } else if (selectedAddress) {
+      moveToAddressLocation(map, selectedAddress);
+    } else {
+      const defaultPosition = new kakao.maps.LatLng(37.545043, 127.039245);
+      displayMarker(map, defaultPosition, onMarkerClick);
+    }
+  };
+
+  useEffect(() => {
+    if (mapInstance) {
+      if (!disableCurrentLocation) {
+        getCurrentLocation(mapInstance, onMarkerClick);
+      } else if (selectedAddress) {
+        moveToAddressLocation(mapInstance, selectedAddress);
+      } else {
+        const defaultPosition = new kakao.maps.LatLng(37.545043, 127.039245);
+        displayMarker(mapInstance, defaultPosition, onMarkerClick);
+      }
+    }
+  }, [selectedAddress, disableCurrentLocation]);
+
+  const getCurrentLocation = (map: kakao.maps.Map, onClick?: () => void) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
           const locPosition = new kakao.maps.LatLng(lat, lon);
-
-          displayMarker(map, locPosition, onMarkerClick);
+          displayMarker(map, locPosition, onClick);
         },
         () => {
           const locPosition = new kakao.maps.LatLng(37.545043, 127.039245);
-          displayMarker(map, locPosition, onMarkerClick);
+          displayMarker(map, locPosition, onClick);
         }
       );
     } else {
       const locPosition = new kakao.maps.LatLng(37.545043, 127.039245);
-      displayMarker(map, locPosition, onMarkerClick);
+      displayMarker(map, locPosition, onClick);
     }
+  };
+
+  const moveToAddressLocation = (map: kakao.maps.Map, address: string) => {
+    new kakao.maps.services.Geocoder().addressSearch(
+      address,
+      (result, status) => {
+        if (status === kakao.maps.services.Status.OK) {
+          const locPosition = new kakao.maps.LatLng(
+            parseFloat(result[0].y),
+            parseFloat(result[0].x)
+          );
+          displayMarker(map, locPosition, onMarkerClick);
+        }
+      }
+    );
   };
 
   const displayMarker = (
@@ -44,10 +91,12 @@ export const Geolocation: React.FC<IProps> = ({
     locPosition: kakao.maps.LatLng,
     onClick?: () => void
   ) => {
+    if (currentMarker.current) {
+      currentMarker.current.setMap(null);
+    }
+
     const svgMarkerImageSrc = Marker;
-
     const markerSize = new kakao.maps.Size(36, 48);
-
     const markerImage = new kakao.maps.MarkerImage(
       svgMarkerImageSrc,
       markerSize
@@ -61,6 +110,8 @@ export const Geolocation: React.FC<IProps> = ({
     };
 
     const marker = new kakao.maps.Marker(markerOptions);
+
+    currentMarker.current = marker;
 
     const updateAddressFromPosition = (position: kakao.maps.LatLng) => {
       new kakao.maps.services.Geocoder().coord2Address(

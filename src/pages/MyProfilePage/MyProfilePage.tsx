@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { MyProfile, getMyProfile, postProfile } from 'api/mypageApi';
 import { CommonLayout, NavBar } from 'components/layout';
 import { useVerifyUser } from 'hooks';
@@ -8,18 +8,26 @@ import { userProfileSelector } from 'recoil/userExample';
 import { styled } from 'styled-components';
 import noUser from 'assets/images/NoUser.gif';
 import imageCompression from 'browser-image-compression';
-import { Button, Input } from 'components/common';
+import { AuthInputBox } from 'components/common';
+import { AuthErrorMsg } from 'components/common/AuthErrorMsg/AuthErrorMsg';
+import { confirmNickname } from 'api/loginApi';
+
 export const MyProfilePage = () => {
   const userState = useRecoilValue(userProfileSelector);
   const { data: userData } = useVerifyUser(true);
-
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const fileUpload = useRef();
+
   const [postData, setPostData] = useState<{
     nickname?: string;
-    imgUrl?: File;
-  }>({});
-  // const [input, setInput] = useState({});
+    imgUrl?: File | null;
+    validation: { isValid: boolean; isVerified: boolean; msg: string };
+  }>({
+    nickname: '',
+    imgUrl: null,
+    validation: { isValid: true, isVerified: false, msg: '' },
+  });
+
   useEffect(() => {
     console.log('current user state: ', userState);
     if (userData) {
@@ -84,7 +92,7 @@ export const MyProfilePage = () => {
 
     try {
       const response = await postProfile({
-        imgUrl: postData.imgUrl as File,
+        imgUrl: (postData.imgUrl as File) || null,
         nickname: postData.nickname || '',
       });
       console.log('👁️' + JSON.stringify(response));
@@ -92,11 +100,62 @@ export const MyProfilePage = () => {
     } catch (error) {
       console.error('😀' + error);
     }
-    console.log(`PostPage🐼/onSubmitHandler/${JSON.stringify(postData)}`);
+    console.log(`프로필Page🐼/onSubmitHandler/${JSON.stringify(postData)}`);
+  };
+
+  const { mutate: confirmNicknameMutate } = useMutation(confirmNickname, {
+    onSuccess: () => {
+      const newData = {
+        ...postData,
+        validation: {
+          msg: `*사용가능한 닉네임 입니다.`,
+          isValid: true,
+          isVerified: true,
+        },
+      };
+      setPostData(newData);
+
+      console.log(`confirm id success`, newData);
+    },
+    onError: (err: Error) => {
+      console.log('confirmIdMutate error', err);
+      const newData = {
+        ...postData,
+        validation: {
+          msg: '*' + err.message,
+          isValid: false,
+          isVerified: false,
+        },
+      };
+      setPostData(newData);
+      console.log(`닉네임 중복확인 실패`, newData);
+    },
+  });
+
+  const onDuplicateCheck = async () => {
+    if (!postData.nickname) {
+      window.alert('닉네임을 입력한 뒤 실행해주세요.');
+    } else if (userData?.nickname === postData.nickname) {
+      window.alert('변경된 닉네임이 없습니다.');
+    } else if (postData.nickname) {
+      await confirmNicknameMutate(postData.nickname);
+    }
   };
 
   return (
-    <CommonLayout header={<NavBar>회원정보수정</NavBar>} backgroundColor="#fff">
+    <CommonLayout
+      header={
+        <NavBar
+          btnLeft="back"
+          btnRight="submit"
+          onClickSubmit={onSubmitHandler}
+          onClickActive={postData.imgUrl !== null}
+        >
+          회원정보수정
+        </NavBar>
+      }
+      backgroundColor="#fff"
+    >
       <StMyProfileContainer>
         <StProfileImage>
           <img src={fileUrl || noUser} alt="프로필 이미지" />
@@ -113,16 +172,22 @@ export const MyProfilePage = () => {
         </StProfileImage>
         <StNickNameTitle>닉네임</StNickNameTitle>
         <StNickNameWrapper>
-          <Input
+          <AuthInputBox
             type="text"
-            placeholder="닉네임"
-            value={postData.nickname}
-            onChange={onChangeValue}
             name="nickname"
+            id="nickname"
+            value={postData.nickname}
+            placeholder="닉네임"
+            onChange={onChangeValue}
+            onClick={onDuplicateCheck}
+            btnText="중복 확인"
           />
-          <Button type="normal">중복확인</Button>
+          <div className="error">
+            <AuthErrorMsg isValid={postData.validation.isValid}>
+              {postData.validation.msg}
+            </AuthErrorMsg>
+          </div>
         </StNickNameWrapper>
-        <Button onClick={onSubmitHandler}>제출</Button>
       </StMyProfileContainer>
     </CommonLayout>
   );
@@ -136,16 +201,23 @@ const StNickNameTitle = styled.div`
 `;
 
 const StNickNameWrapper = styled.div`
+  margin: 0 1rem 1rem 1rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin-top: 40px;
+  gap: 0.5rem;
+
   width: 100%;
+
+  .error {
+    margin-left: 0.3rem;
+    margin-right: auto;
+  }
 `;
 const StMyProfileContainer = styled.div`
   width: 100%;
-
+  padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

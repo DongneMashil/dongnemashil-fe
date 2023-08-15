@@ -8,7 +8,7 @@ export const StContentContainer = styled.div`
 `;
 
 export const StTagContainer = styled.div`
-  width: 24.4rem;
+  width: 100%;
   height: 8.69rem;
   border-radius: 0.875rem;
   background: #fff;
@@ -48,16 +48,20 @@ export const StHiddenButton = styled.input`
 `;
 
 export const StContentBox = styled.textarea`
-  width: 22rem;
+  width: 90%;
   height: 17rem;
   margin: 2rem auto;
   resize: none;
   padding: 0.45rem;
   border: none;
+  &:focus {
+    outline: 1px solid #9a7b9a;
+    border-radius: 1rem;
+  }
 `;
 
 export const StTitle = styled.input`
-  width: 22rem;
+  width: 90%;
   height: 3.7525rem;
   padding-left: 0.3rem;
   border: none;
@@ -68,10 +72,11 @@ export const StTitle = styled.input`
   font-weight: 400;
   line-height: normal;
   padding-top: 1.25rem;
+  outline: none;
 `;
 
 export const StFormWrapper = styled.div`
-  width: 24.4rem;
+  width: 100%;
   margin-top: 0.75rem;
   background-color: #fff;
   border-top-left-radius: 0.875rem;

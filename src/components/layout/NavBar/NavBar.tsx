@@ -3,20 +3,22 @@ import { MyProfile, getMyProfile } from 'api/mypageApi';
 
 import { Button } from 'components/common';
 import React, { useState } from 'react';
-import { StNavBar } from './NavBar.styles';
+import { StCenterWrapper, StNavBar, StRighttWrapper } from './NavBar.styles';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import noUser from 'assets/images/NoUser.gif';
 import { useVerifyUser } from 'hooks';
+import { ReactComponent as ChevronLeft } from 'assets/icons/ChevronLeft.svg';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
-  btnLeft?: 'logo' | 'back' | 'cancel' | 'backfunction';
+  btnLeft?: 'logo' | 'back' | 'cancel' | 'closeModal';
   btnSecondRight?: 'search' | null;
   btnRight?: 'done' | 'mypage' | 'submit' | 'map' | null;
   onClickSubmit?: () => void;
   onClickRight?: () => void;
   onClickLeft?: () => void;
+  onClickActive?: boolean;
 }
 
 export const NavBar = ({
@@ -27,6 +29,7 @@ export const NavBar = ({
   onClickSubmit,
   onClickRight,
   onClickLeft,
+  onClickActive = true,
 }: NavBarProps) => {
   const { data: userData } = useVerifyUser(true);
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
@@ -53,12 +56,12 @@ export const NavBar = ({
 
   const leftButtons = {
     back: (
-      <Button type={'icon'} onClick={goBack}>
-        ⬅️
+      <Button type={'iconLeft'} onClick={goBack}>
+        <ChevronLeft />
       </Button>
     ),
     cancel: (
-      <Button type={'onlytext'} url={'/'}>
+      <Button type={'onlyText'} url={'/'}>
         취소
       </Button>
     ),
@@ -67,9 +70,9 @@ export const NavBar = ({
         🏃🏻‍♀️
       </Button>
     ),
-    backfunction: (
-      <Button type={'onlytext'} onClick={onClickLeft}>
-        {'<'}
+    closeModal: (
+      <Button type={'iconLeft'} onClick={onClickLeft}>
+        <ChevronLeft />
       </Button>
     ),
   };
@@ -84,7 +87,12 @@ export const NavBar = ({
 
   const rightButtons = {
     done: (
-      <Button type={'onlytext'} url={'/'}>
+      <Button
+        type="confirm"
+        inputType="button"
+        onClick={onClickRight}
+        $active={onClickActive}
+      >
         완료
       </Button>
     ),
@@ -94,12 +102,12 @@ export const NavBar = ({
       </Button>
     ),
     submit: (
-      <Button type={'normal'} onClick={onClickSubmit}>
-        Submit
+      <Button type={'confirm'} onClick={onClickSubmit} $active={onClickActive}>
+        완료
       </Button>
     ),
     map: (
-      <Button type={'onlytext'} onClick={onClickRight}>
+      <Button type={'onlyText'} onClick={onClickRight}>
         지도보기 {'>'}
       </Button>
     ),
@@ -108,11 +116,11 @@ export const NavBar = ({
   return (
     <StNavBar>
       <div>{leftButtons[btnLeft]}</div>
-      {children ? <div>{children}</div> : null}
-      <div>
+      {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
+      <StRighttWrapper>
         {btnSecondRight ? secondRightButtons[btnSecondRight] : null}
         {btnRight ? rightButtons[btnRight] : null}
-      </div>
+      </StRighttWrapper>
     </StNavBar>
   );
 };

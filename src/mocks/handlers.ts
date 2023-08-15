@@ -2,6 +2,7 @@ import { ReviewsList } from 'api/reviewsApi';
 import noUser from 'assets/images/nouser.gif';
 import { rest } from 'msw';
 import { reviewDetaiCommentHandler } from './reviewDetail';
+import { mockMyCommentsHandler } from './myPage';
 
 export interface PaginationResponse<T> {
   contents: T[];
@@ -51,4 +52,5 @@ export const handlers = [
   }),
   reviewDetaiCommentHandler, //태현 test용
   // reviewDetailHandler, //태현 test용
+  mockMyCommentsHandler,
 ];

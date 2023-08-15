@@ -7,10 +7,15 @@ export interface ButtonProps {
   type?:
     | 'icon'
     | 'normal'
-    | 'borderround'
-    | 'circlefill'
-    | 'onlytext'
-    | 'onlytexttoggle';
+    | 'borderRound'
+    | 'circleFill'
+    | 'onlyText'
+    | 'onlyTextToggle'
+    | 'authKakao'
+    | 'authNormal'
+    | 'authOutline'
+    | 'iconLeft'
+    | 'confirm';
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   url?: string;
   inputType?: 'button' | 'submit';
@@ -33,7 +38,7 @@ export const Button = ({
   $height,
   $round,
   $stroke,
-  $active,
+  $active = true,
 }: ButtonProps) => {
   const navigate = useNavigate();
 
@@ -51,7 +56,7 @@ export const Button = ({
     <StSubmitButton
       type="submit"
       className={type}
-      onClick={handleButtonClick}
+      onClick={$active ? handleButtonClick : () => {}}
       value={value}
     />
   ) : (

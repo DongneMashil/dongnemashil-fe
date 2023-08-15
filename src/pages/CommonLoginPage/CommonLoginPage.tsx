@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
-import { Input, Button } from 'components/common';
+import { Button } from 'components/common';
+import { AuthInputBox } from 'components/common';
+import { AuthLogoBox } from 'components/common';
+import { AuthErrorMsg } from 'components/common/AuthErrorMsg/AuthErrorMsg';
 import { CommonLayout } from 'components/layout';
 import { login } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { useVerifyUser } from 'hooks';
-import { StCommonLoginLayout } from './CommonLoginPage.styles';
+import {
+  StCommonLoginLayout,
+  StLoginErrorMsgBox,
+  StLoginButtonWrapper,
+} from './CommonLoginPage.styles';
 
 interface CommonLoginProps {
   id: string;
@@ -15,14 +22,16 @@ interface CommonLoginProps {
 export const CommonLoginPage = () => {
   const navigate = useNavigate();
   const [shouldVerify, setShouldVerify] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const { isSuccess } = useVerifyUser(shouldVerify);
   const { mutate } = useMutation(login, {
     onSuccess: () => {
       console.log('Common Login Success');
       setShouldVerify(true);
     },
-    onError: (err) => {
+    onError: (err: Error) => {
       console.log('Common Login Error:', err);
+      setErrorMsg(err.message);
     },
   });
 
@@ -54,27 +63,39 @@ export const CommonLoginPage = () => {
     });
   }
   console.log('loginValues', loginValues);
+  console.log('errmsg', errorMsg);
   return (
     <CommonLayout>
       <StCommonLoginLayout>
-        <h3>회원 아이디로 로그인</h3>
-        <h4>아이디</h4>
-        <Input
+        <AuthLogoBox align="center" />
+        <AuthInputBox
           type="email"
           name="id"
           id="id"
           value={loginValues.id}
           onChange={onChangeHandler}
+          placeholder="아이디"
         />
-        <h4>password</h4>
-        <Input
+        <AuthInputBox
           type="password"
           name="password"
           id="password"
           value={loginValues.password}
           onChange={onChangeHandler}
+          placeholder="비밀번호"
         />
-        <Button onClick={onSubmitHandler}>로그인</Button>
+        <StLoginErrorMsgBox>
+          {errorMsg && <AuthErrorMsg isValid={false}>{errorMsg}</AuthErrorMsg>}
+        </StLoginErrorMsgBox>
+        <StLoginButtonWrapper>
+          <Button
+            type="authNormal"
+            onClick={onSubmitHandler}
+            $active={loginValues.id !== '' && loginValues.password !== ''}
+          >
+            로그인
+          </Button>
+        </StLoginButtonWrapper>
       </StCommonLoginLayout>
     </CommonLayout>
   );

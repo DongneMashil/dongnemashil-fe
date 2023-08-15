@@ -67,14 +67,14 @@ export const ThumbnailWrapper = ({
       <StSort>
         <Button
           onClick={() => onClickSort('likes')}
-          type="onlytexttoggle"
+          type="onlyTextToggle"
           $active={type === 'likes'}
         >
           인기순
         </Button>
         <Button
           onClick={() => onClickSort('recent')}
-          type="onlytexttoggle"
+          type="onlyTextToggle"
           $active={type === 'recent'}
         >
           최신순

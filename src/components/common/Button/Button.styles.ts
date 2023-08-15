@@ -1,5 +1,5 @@
-import { theme } from 'style/theme';
 import styled from 'styled-components';
+import { theme } from 'style/theme';
 
 export const StButton = styled.button<{
   $width?: string;
@@ -31,7 +31,7 @@ export const StButton = styled.button<{
     padding: 0 1rem;
   }
 
-  &.borderround {
+  &.borderRound {
     width: ${(props) => props.$width};
     height: ${(props) => props.$height};
     border-radius: ${(props) => props.$round};
@@ -46,7 +46,7 @@ export const StButton = styled.button<{
     }
   }
 
-  &.circlefill {
+  &.circleFill {
     width: ${(props) => props.$width};
     height: ${(props) => props.$height};
     border-radius: 50%;
@@ -60,13 +60,13 @@ export const StButton = styled.button<{
     line-height: normal;
   }
 
-  &.onlytext {
+  &.onlyText {
     text-align: center;
     font-size: 0.875rem;
     gap: 0.5rem;
   }
 
-  &.onlytexttoggle {
+  &.onlyTextToggle {
     text-align: center;
     font-size: 0.875rem;
     color: ${(props) =>
@@ -74,14 +74,57 @@ export const StButton = styled.button<{
     font-weight: 400;
   }
 
+  &.iconLeft {
+    margin-left: 0.5rem;
+  }
+
+  &.authNormal {
+    ${theme.authButton}
+    background-color: ${(props) =>
+      props.$active ? theme.mainColor : '#cec7ce'};
+    pointer-events: ${(props) => (props.$active ? 'auto' : 'none')};
+    color: #ffffff;
+  }
+
+  &.authOutline {
+    ${theme.authButton}
+    background-color: #ffffff;
+    color: ${theme.mainColor};
+    border: 1px solid ${theme.mainColor};
+  }
+  &.confirm {
+    color: ${(props) => (props.$active ? 'var(--main, #9a7b9a)' : '#A2A2A2')};
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-right: 0.5rem;
+  }
+
   & img {
     width: 26px;
     height: 26px;
     border-radius: 50%;
   }
+
+  &.authKakao {
+    ${theme.authButton}
+    background-color: #f6e24b;
+    color: ${theme.mainTextColor};
+
+    & > svg {
+      position: absolute;
+      left: 22px;
+      top: calc(50% - 11.5px);
+    }
+  }
 `;
 
-export const StSubmitButton = styled.input`
+export const StSubmitButton = styled.input<{
+  $active?: boolean;
+}>`
   width: 100%;
   background: none;
   display: flex;
@@ -105,10 +148,19 @@ export const StSubmitButton = styled.input`
     padding: 0 1rem;
   }
 
-  &.circle {
+  &.confirm {
+    //확인버튼중에 submit 필요한 경우
+    color: ${(props) => (props.$active ? 'var(--main, #9a7b9a)' : '#A2A2A2')};
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-right: 0.5rem;
   }
 
-  &.onlytext {
+  &.onlyText {
     text-align: center;
     font-size: 0.875rem;
     gap: 0.5rem;
