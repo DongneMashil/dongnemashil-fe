@@ -7,3 +7,4 @@ export * from './SpecialButtons';
 export * from './SkeletonUI/SkeletonUI';
 export * from './AuthInputBox/AuthInputBox';
 export * from './AuthLogoBox/AuthLogoBox';
+export * from './VideoPlayer/VideoPlayer';
