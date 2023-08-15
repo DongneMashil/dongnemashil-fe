@@ -4,11 +4,12 @@ import {
   StCoverImageButton,
   StSlideContainer,
   StPlusButton,
-  StyledImage,
-  StyledImageContainer,
-  StyledVideo,
+  StImage,
+  StImageContainer,
+  StVideo,
 } from './FileSlider.styles';
 import { ReactComponent as FileUpload } from 'assets/icons/FileUpload.svg';
+import { ReviewData } from 'pages';
 
 interface ImageSliderProps {
   images: File[];
@@ -19,6 +20,7 @@ interface ImageSliderProps {
   isCoverImage: (file: File) => boolean;
   setCoverImage: (file: File) => void;
   files: { type: 'image' | 'video'; file: File }[];
+  reviewData?: ReviewData;
 }
 
 export const FileSlider: React.FC<ImageSliderProps> = ({
@@ -28,6 +30,7 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   isCoverImage,
   setCoverImage,
   files,
+  reviewData,
 }) => {
   const onImageClick = (image: File) => {
     onSelectedCoverImage && onSelectedCoverImage(image);
@@ -37,29 +40,54 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
     setCoverImage(image);
   };
 
+  console.log(typeof reviewData?.subImgUrl);
+
   return (
     <StSlideContainer>
       {files.map((file, index) => (
-        <StyledImageContainer key={index}>
+        <StImageContainer key={index}>
           {file.type === 'image' ? (
             <>
-              <StyledImage
-                src={URL.createObjectURL(images[index])}
+              <StImage
+                src={URL.createObjectURL(file.file)}
                 alt={`Upload Preview ${index}`}
-                onClick={() => onImageClick(images[index])}
+                onClick={() => onImageClick(file.file)}
               />
               <StCoverImageButton
-                isActive={isCoverImage(images[index])}
-                onClick={() => onCoverButtonClick(images[index])}
+                isActive={isCoverImage(file.file)}
+                onClick={() => onCoverButtonClick(file.file)}
               >
                 대표
               </StCoverImageButton>
             </>
           ) : (
-            <StyledVideo src={URL.createObjectURL(images[index])} controls />
+            <StVideo src={URL.createObjectURL(file.file)} controls />
           )}
-        </StyledImageContainer>
+        </StImageContainer>
       ))}
+
+      {reviewData?.mainImgUrl && (
+        <StImageContainer>
+          <StImage
+            src={reviewData.mainImgUrl}
+            alt="Main Review Image"
+            onClick={() =>
+              onImageClick(reviewData.mainImgUrl as unknown as File)
+            }
+          />
+          <StCoverImageButton
+            isActive={isCoverImage(reviewData.mainImgUrl as unknown as File)}
+            onClick={() =>
+              onCoverButtonClick(reviewData.mainImgUrl as unknown as File)
+            }
+          >
+            대표
+          </StCoverImageButton>
+        </StImageContainer>
+      )}
+
+      {reviewData?.videoUrl && <StVideo src={reviewData.videoUrl} controls />}
+
       <StCenteredBox>
         <StPlusButton onClick={onAddImage}>
           <FileUpload />

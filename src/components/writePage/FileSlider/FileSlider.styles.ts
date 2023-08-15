@@ -40,20 +40,20 @@ export const StPlusButton = styled.div`
   }
 `;
 
-export const StyledImage = styled.img`
+export const StImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
   margin: 0.5rem 0;
 `;
 
-export const StyledVideo = styled.video`
+export const StVideo = styled.video`
   width: 100%;
   height: 100%;
   margin-bottom: 0.5rem 0;
 `;
 
-export const StyledImageContainer = styled.div`
+export const StImageContainer = styled.div`
   position: relative;
   width: 90%;
   height: 100%;

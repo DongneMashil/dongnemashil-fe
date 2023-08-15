@@ -27,17 +27,33 @@ interface FormValues {
   content: string;
 }
 
+export interface ReviewData {
+  id: number;
+  tag: { id: number; name: string }[];
+  address: string;
+  content: string;
+  title: string;
+  videoUrl: string | null;
+  roadName: string;
+  mainImgUrl: string;
+  subImgUrl: string[];
+}
+
 export const WritePage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const reviewData = location.state?.review as ReviewData | undefined;
   const [formValues, setFormValues] = useState<FormValues>({
-    title: '',
-    content: '',
+    title: reviewData?.title || '',
+    content: reviewData?.content || '',
   });
   const [currentPage, setCurrentPage] = useState(0);
   const [mediaFiles, setMediaFiles] = useState<
     { type: 'image' | 'video'; file: File; isCover: boolean }[]
   >([]);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    reviewData?.tag?.map((t) => t.name) || []
+  );
 
   const addressData = useRecoilValue(addressSelector);
 
@@ -45,10 +61,6 @@ export const WritePage = () => {
 
   const { isLoading, isError, isSuccess } = useVerifyUser(true);
   const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
-
-  const location = useLocation();
-  const reviewData = location.state?.review;
-  console.log(reviewData);
 
   const onInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -256,6 +268,7 @@ export const WritePage = () => {
               onSelectedCoverImage={setCoverImage}
               isCoverImage={determineIsCoverImage}
               setCoverImage={setCoverImage}
+              reviewData={reviewData}
             />
             <StHiddenButton
               ref={fileInputRef}
