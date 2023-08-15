@@ -10,6 +10,8 @@ import noUser from 'assets/images/NoUser.gif';
 import imageCompression from 'browser-image-compression';
 import { AuthInputBox, AuthErrorMsg } from 'components/common';
 import { confirmNickname } from 'api/loginApi';
+// import axios from 'axios';
+import { getExtensionName } from 'components/myProfilePage';
 
 export const MyProfilePage = () => {
   const userState = useRecoilValue(userProfileSelector);
@@ -38,10 +40,39 @@ export const MyProfilePage = () => {
     queryKey: ['myPage', userData?.nickname],
     queryFn: () => getMyProfile(),
     // enabled: !!userData?.nickname,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       console.log(data);
       setFileUrl(data.profileImgUrl);
-      setPostData((prev) => ({ ...prev, nickname: data.nickname }));
+      const response = await fetch(data.profileImgUrl!, {
+        method: 'GET',
+        redirect: 'follow',
+      });
+      console.log(JSON.stringify(response) + '🐠');
+      console.log(`Response OK? ${response.ok}`);
+      console.log(`Response Status: ${response.status}`);
+      const responseText = await response.text();
+      console.log(`Response Text: ${responseText}`);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      console.log(blobUrl + '🦋');
+
+      const img = document.createElement('img');
+      img.src = blobUrl;
+      document.body.appendChild(img);
+      const reader = new FileReader();
+      reader.onload = function () {
+        console.log(reader.result); // Blob 또는 File의 내용
+      };
+      reader.readAsText(blob); // 또는 readAsDataURL(blob)로 Base6
+      const extension = getExtensionName(blob.type);
+      const finalFilename = 'prevImage' + extension; //파일 이름 설정
+      const prevImage = new File([blob], finalFilename, { type: blob.type });
+      console.log(JSON.stringify(prevImage) + '🐬');
+      setPostData((prev) => ({
+        ...prev,
+        imgUrl: prevImage,
+        nickname: data.nickname,
+      }));
     },
     onError: (error) => {
       console.log('🔴' + error);
@@ -67,13 +98,6 @@ export const MyProfilePage = () => {
     } catch (error) {
       console.error(error);
     }
-
-    // 압축되지 않은 원본 이미지를 사용하도록 코드를 추가합니다.
-    //   if (imageFile) {
-    //     const imgUrl: string = URL.createObjectURL(imageFile);
-    //     setFileUrl(imgUrl);
-    //     setPostData((prev) => ({ ...prev, imgUrl: imageFile }));
-    //   }
   };
 
   const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,8 +109,24 @@ export const MyProfilePage = () => {
     console.log('👦🏾' + JSON.stringify(postData));
 
     if (!postData.imgUrl) {
-      alert('이미지를 업로드해주세요.');
+      alert('프로필 사진을 등록해주세요.');
       return;
+      // // 이미지가 없을 경우 기존 이미지를 그대로 사용합니다.
+      // // const response = await axios.get(fileUrl!, { responseType: 'blob' });
+      // // const blob = response.data;
+      // const response = await fetch(fileUrl!, {
+      //   method: 'GET',
+      //   redirect: 'follow',
+      //   mode: 'no-cors',
+      // });
+      // const blob = await response.blob();
+      // const extension = getExtensionName(blob.type);
+      // const finalFilename = 'prevImage' + extension; //파일 이름 설정
+      // const prevImage = new File([blob], finalFilename, { type: blob.type });
+      // setPostData((prev) => ({
+      //   ...prev,
+      //   imgUrl: prevImage,
+      // }));
     }
 
     try {
