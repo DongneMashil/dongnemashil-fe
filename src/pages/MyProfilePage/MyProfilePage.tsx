@@ -5,15 +5,19 @@ import { useVerifyUser } from 'hooks';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
-import { styled } from 'styled-components';
 import noUser from 'assets/images/NoUser.gif';
 import imageCompression from 'browser-image-compression';
 import { AuthInputBox, AuthErrorMsg } from 'components/common';
 import { confirmNickname } from 'api/loginApi';
-// import axios from 'axios';
 import { getExtensionName } from 'components/myProfilePage';
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from 'queries/queryClient';
+import {
+  StMyProfileContainer,
+  StNickNameTitle,
+  StNickNameWrapper,
+  StProfileImage,
+} from './MyProfilePage.styles';
 
 export const MyProfilePage = () => {
   const { data: userData } = useVerifyUser(true);
@@ -127,7 +131,7 @@ export const MyProfilePage = () => {
       alert('성공적으로 등록되었습니다.');
       queryClient.invalidateQueries(['myPage']);
       setUserState((prev) => ({ ...prev, nickname: postData.nickname }));
-      navigate('/mypage');
+      navigate('/');
     } catch (error) {
       console.error('😀' + error);
     }
@@ -223,69 +227,3 @@ export const MyProfilePage = () => {
     </CommonLayout>
   );
 };
-
-const StNickNameTitle = styled.div`
-  margin-top: 40px;
-  width: 100%;
-  color: var(--strokepurple, #9a7b9a);
-  font-family: Pretendard;
-`;
-
-const StNickNameWrapper = styled.div`
-  margin: 0 1rem 1rem 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-
-  width: 100%;
-
-  .error {
-    margin-left: 0.3rem;
-    margin-right: auto;
-  }
-`;
-const StMyProfileContainer = styled.div`
-  width: 100%;
-  padding: 0 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-`;
-const StProfileImage = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-top: 40px;
-
-  img {
-    width: 84px;
-    height: 84px;
-    border-radius: 50px;
-    object-fit: cover;
-  }
-  label {
-    color: var(--strokepurple, #9a7b9a);
-    text-align: center;
-    font-family: Pretendard;
-    font-size: 1rem;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    cursor: pointer;
-    height: 40px;
-  }
-
-  input[type='file'] {
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
-  }
-`;
