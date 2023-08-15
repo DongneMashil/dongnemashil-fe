@@ -23,7 +23,7 @@ export const FixFooter = ({
   const centerWrapper = {
     map: (
       <Button
-        onClick={() => onClickCenter}
+        onClick={onClickCenter}
         type="borderRound"
         $width={'90px'}
         $height={'27px'}

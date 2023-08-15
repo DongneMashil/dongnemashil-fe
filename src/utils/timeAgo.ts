@@ -8,7 +8,9 @@ const timeAgo = (timeString: string): string => {
   const daysDiff = hoursDiff / 24;
   let displayTime: string;
 
-  if (secondsDiff < 60) {
+  if (secondsDiff < 20) {
+    displayTime = `방금 전`;
+  } else if (secondsDiff < 60) {
     displayTime = `${Math.round(secondsDiff)}초 전`;
   } else if (minutesDiff < 60) {
     displayTime = `${Math.round(minutesDiff)}분 전`;

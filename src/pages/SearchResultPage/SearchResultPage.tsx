@@ -1,13 +1,12 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import {
   selectedTagsState,
   sortTypeState,
 } from 'recoil/reviewsQuery/reviewsQuery';
-
 import { CommonLayout, FixFooter, NavBar } from 'components/layout';
 import { useFetchReviews } from 'api/reviewsApi';
-// import { SearchResultMapPage } from 'pages/SearchResultMapPage/SearchResultMapPage';
+import { SearchResultMapPage } from 'pages/SearchResultMapPage/SearchResultMapPage';
 import { SearchResultListPage } from 'pages/SearchResultListPage/SearchResultListPage';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import { useLocation } from 'react-router-dom';
@@ -18,7 +17,7 @@ export const SearchResultPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const q = queryParams.get('q');
-  // const [isMapOpen, setIsMapOpen] = useState(false);
+  const [isMapOpen, setIsMapOpen] = useState<boolean>(false);
 
   const [selectedTags, setSelectedTags] = useRecoilState(selectedTagsState);
   const [type, setType] = useRecoilState(sortTypeState);
@@ -43,6 +42,8 @@ export const SearchResultPage = () => {
 
   useEffect(() => {
     refetch();
+    console.log('data ', data);
+    console.log('isMapOpen ', isMapOpen);
   }, [type, selectedTags]);
 
   const onClickSort = (type: string) => {
@@ -54,9 +55,10 @@ export const SearchResultPage = () => {
   const handleTagChange = (tags: string[]) => {
     setSelectedTags(tags);
   };
-  // const onClickMapOpen = () => {
-  //   setIsMapOpen(true);
-  // };
+
+  const toggleMapOpen = () => {
+    setIsMapOpen(!isMapOpen);
+  };
 
   const { scrollToTop } = useScrollToTop();
 
@@ -76,7 +78,7 @@ export const SearchResultPage = () => {
         <FixFooter
           centerButtons={'map'}
           rightButtons={'goTop'}
-          // onClickCenter={onClickMapOpen}
+          onClickCenter={toggleMapOpen}
         />
       }
     >
@@ -93,7 +95,9 @@ export const SearchResultPage = () => {
       <button id="scroll-to-top-button" onClick={scrollToTop}>
         Scroll to Top
       </button>
-      {/* {isMapOpen && <SearchResultMapPage reviewList={reviews} />} */}
+      {isMapOpen && (
+        <SearchResultMapPage reviewList={reviews} onToggle={toggleMapOpen} />
+      )}
     </CommonLayout>
   );
 };
