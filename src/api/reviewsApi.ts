@@ -55,13 +55,14 @@ interface PaginationParams {
 const reviewKeys = {
   all: ['responseData'] as const,
   lists: () => [...reviewKeys.all, 'list'] as const,
+  // list: (type: string) => [...reviewKeys.lists(), { type }] as const,
 };
 
 export const useFetchReviews = ({ q }: PaginationParams = {}) => {
   const tag = useRecoilValue(selectedTagSelector);
   const type = useRecoilValue(sortTypeSelector);
 
-  const queryKey = q ? reviewKeys.lists() : reviewKeys.all;
+  const queryKey = reviewKeys.all;
 
   const queryFn = ({ pageParam = 1 }: QueryFunctionContext) =>
     axiosInstance.get<ReviewsAndPageable>(q ? '/search' : '/reviews', {
