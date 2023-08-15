@@ -70,8 +70,7 @@ export const DetailPage = () => {
     if (!data) {
       return;
     }
-    navigate(`/write/${data.id}`, { state: { review: data } });
-    console.log(data);
+    navigate(`/write/${data.id}`);
   };
 
   return (

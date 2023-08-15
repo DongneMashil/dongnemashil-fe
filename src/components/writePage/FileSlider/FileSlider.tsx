@@ -74,27 +74,39 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
         </StImageContainer>
       ))}
 
-      {reviewData?.mainImgUrl && (
+      {reviewData && (
         <StImageContainer>
-          <StImage
-            src={reviewData.mainImgUrl}
-            alt="Main Review Image"
+          {reviewData.mainImgUrl && (
+            <StImage
+              src={reviewData.mainImgUrl}
+              alt="Main Review Image"
+              onClick={() =>
+                onImageClick(reviewData.mainImgUrl as unknown as File)
+              }
+            />
+          )}
+          {reviewData.mainImgUrl && (
+            <StCoverImageButton
+              isActive={isCoverImage(reviewData.mainImgUrl as unknown as File)}
+              onClick={() =>
+                onCoverButtonClick(reviewData.mainImgUrl as unknown as File)
+              }
+            >
+              대표
+            </StCoverImageButton>
+          )}
+          {reviewData.videoUrl && (
+            <StVideo src={reviewData.videoUrl} controls />
+          )}
+          <StDelete
             onClick={() =>
-              onImageClick(reviewData.mainImgUrl as unknown as File)
-            }
-          />
-          <StCoverImageButton
-            isActive={isCoverImage(reviewData.mainImgUrl as unknown as File)}
-            onClick={() =>
-              onCoverButtonClick(reviewData.mainImgUrl as unknown as File)
+              onDeleteImage(reviewData.mainImgUrl as unknown as File)
             }
           >
-            대표
-          </StCoverImageButton>
+            x
+          </StDelete>
         </StImageContainer>
       )}
-
-      {reviewData?.videoUrl && <StVideo src={reviewData.videoUrl} controls />}
 
       <StCenteredBox>
         <StPlusButton onClick={onAddImage}>
