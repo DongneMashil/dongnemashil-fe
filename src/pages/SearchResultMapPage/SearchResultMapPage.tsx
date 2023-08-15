@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Map from 'components/common/Map/Map';
 import { ReviewResultsProps } from 'pages/SearchResultPage/SearchResultPage';
+import { Button } from 'components/common';
 import Marker from 'assets/icons/Marker.png';
 import MarkerSelected from 'assets/icons/MarkerSelected.png';
 import { StResultMapContainer } from './SearchResultMapPage.styles';
@@ -119,15 +120,8 @@ export const SearchResultMapPage = ({
   return (
     <StResultMapContainer>
       <Map width="100%" height="100%" initMap={initMap} />
-      <button
-        style={{
-          width: '50px',
-          height: '50px',
-          position: 'absolute',
-          bottom: '20px',
-          right: '20px',
-          zIndex: '1000',
-        }}
+      <Button
+        type="circleFill"
         onClick={() => {
           if (mapInstance.current) {
             moveToCurrentLocation(mapInstance.current);
@@ -137,7 +131,7 @@ export const SearchResultMapPage = ({
         }}
       >
         현위치
-      </button>
+      </Button>
     </StResultMapContainer>
   );
 };
