@@ -8,8 +8,7 @@ import { userProfileSelector } from 'recoil/userExample';
 import { styled } from 'styled-components';
 import noUser from 'assets/images/NoUser.gif';
 import imageCompression from 'browser-image-compression';
-import { AuthInputBox } from 'components/common';
-import { AuthErrorMsg } from 'components/common/AuthErrorMsg/AuthErrorMsg';
+import { AuthInputBox, AuthErrorMsg } from 'components/common';
 import { confirmNickname } from 'api/loginApi';
 
 export const MyProfilePage = () => {

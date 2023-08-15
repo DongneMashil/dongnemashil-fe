@@ -15,7 +15,7 @@ interface MapProps {
   initMap?: (map: kakao.maps.Map) => void;
 }
 
-const Map = ({ width, height, initMap }: MapProps) => {
+export const Map = ({ width, height, initMap }: MapProps) => {
   useEffect(() => {
     const container = document.getElementById('map');
     const options = {
@@ -31,5 +31,3 @@ const Map = ({ width, height, initMap }: MapProps) => {
 
   return <div id="map" style={{ width, height }}></div>;
 };
-
-export default Map;
