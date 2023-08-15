@@ -1,4 +1,4 @@
-import { WriteButton } from 'components/common/SpecialButtons';
+import { WriteButton } from 'components/common';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 

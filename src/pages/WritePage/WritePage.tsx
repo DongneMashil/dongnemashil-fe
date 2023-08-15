@@ -15,7 +15,7 @@ import { FileSlider } from 'components/writePage';
 import { useMutation } from '@tanstack/react-query';
 import { submitReview } from 'api/reviews';
 import { useNavigate } from 'react-router-dom';
-import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
+import { ToggleTagButton } from 'components/common';
 import { useVerifyUser } from 'hooks';
 import { useRecoilValue } from 'recoil';
 import { userIsLoggedInSelector } from 'recoil/userExample';

@@ -26,6 +26,11 @@ export const StCenterWrapper = styled.div`
   h1 {
     font-size: 18px;
     font-weight: 700;
+
+    svg {
+      margin-right: 4px;
+      transform: translateY(2px);
+    }
   }
 `;
 
