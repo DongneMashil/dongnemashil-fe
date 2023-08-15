@@ -13,11 +13,27 @@ export const StTarget = styled.div`
   height: 1px;
 `;
 
+export const StTopWrapper = styled.div`
+  display: flex;
+  padding-top: 16px;
+  padding-left: 9px;
+
+  & span {
+    font-size: 0.875rem;
+    color: ${theme.lightGrayColor};
+    flex: 1;
+
+    & strong {
+      font-weight: 600;
+    }
+  }
+`;
+
 export const StSort = styled.div`
   display: flex;
   align-items: center;
   justify-content: right;
-  padding-top: 16px;
+  flex: 1;
   color: ${theme.lightGrayColor};
 
   & button:nth-child(2):before {

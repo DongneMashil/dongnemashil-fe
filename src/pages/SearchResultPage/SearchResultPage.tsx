@@ -31,6 +31,13 @@ export const SearchResultPage = () => {
     [data]
   );
 
+  const totalElements = useMemo(
+    () => (data ? data.pages[0].data.totalElements : 0),
+    [data]
+  );
+
+  console.log(data, totalElements);
+
   console.log(isFetching);
   console.log(hasNextPage);
 
@@ -81,6 +88,7 @@ export const SearchResultPage = () => {
         isFetching={isFetching}
         fetchNextPage={fetchNextPage}
         onClickSort={onClickSort}
+        totalElements={totalElements}
       />
       <button id="scroll-to-top-button" onClick={scrollToTop}>
         Scroll to Top
