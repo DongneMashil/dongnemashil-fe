@@ -47,19 +47,36 @@ export const ToggleTagButton: React.FC<ToggleTagButtonProps> = ({
     setTags(updatedTags);
     onTagChange?.(updatedTags.filter((t) => t.isSelected).map((t) => t.label));
   };
+
   const sortedTags = [...tags].sort(
     (a, b) => (b.isSelected ? 1 : -1) - (a.isSelected ? 1 : -1)
   );
+
+  const firstRowTags = sortedTags.slice(0, Math.ceil(sortedTags.length / 2));
+  const secondRowTags = sortedTags.slice(Math.ceil(sortedTags.length / 2));
+
   return (
     <StTagWrapper>
-      {sortedTags.map((tag) => (
-        <Tag
-          key={tag.id}
-          text={tag.label}
-          isSelected={tag.isSelected}
-          onClick={() => toggleTag(tag)}
-        />
-      ))}
+      <div>
+        {firstRowTags.map((tag) => (
+          <Tag
+            key={tag.id}
+            text={tag.label}
+            isSelected={tag.isSelected}
+            onClick={() => toggleTag(tag)}
+          />
+        ))}
+      </div>
+      <div>
+        {secondRowTags.map((tag) => (
+          <Tag
+            key={tag.id}
+            text={tag.label}
+            isSelected={tag.isSelected}
+            onClick={() => toggleTag(tag)}
+          />
+        ))}
+      </div>
     </StTagWrapper>
   );
 };

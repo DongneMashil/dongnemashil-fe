@@ -7,10 +7,10 @@ export interface ButtonProps {
   type?:
     | 'icon'
     | 'normal'
-    | 'borderround'
-    | 'circlefill'
-    | 'onlytext'
-    | 'onlytexttoggle'
+    | 'borderRound'
+    | 'circleFill'
+    | 'onlyText'
+    | 'onlyTextToggle'
     | 'authKakao'
     | 'authNormal'
     | 'authOutline'
@@ -62,7 +62,7 @@ export const Button = ({
   ) : (
     <StButton
       className={type}
-      onClick={$active ? handleButtonClick : () => {}}
+      onClick={handleButtonClick}
       $width={$width}
       $height={$height}
       $round={$round}
