@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   StCurrentAddress,
   StCurrentAddressWrapper,
@@ -12,8 +12,8 @@ import {
 } from './WritePage.styles';
 import { CommonLayout, NavBar } from 'components/layout';
 import { FileSlider } from 'components/writePage';
-import { useMutation } from '@tanstack/react-query';
-import { submitReview } from 'api/reviews';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getReview, submitReview } from 'api/reviews';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ToggleTagButton } from 'components/common';
 import { useVerifyUser } from 'hooks';
@@ -27,40 +27,38 @@ interface FormValues {
   content: string;
 }
 
-export interface ReviewData {
-  id: number;
-  tag: { id: number; name: string }[];
-  address: string;
-  content: string;
-  title: string;
-  videoUrl: string | null;
-  roadName: string;
-  mainImgUrl: string;
-  subImgUrl: string[];
-}
-
 export const WritePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const reviewData = location.state?.review as ReviewData | undefined;
-  const [formValues, setFormValues] = useState<FormValues>({
-    title: reviewData?.title || '',
-    content: reviewData?.content || '',
+  const reviewId = location.state?.reviewId;
+  const [formValues, setFormValues] = useState({
+    title: '',
+    content: '',
   });
   const [currentPage, setCurrentPage] = useState(0);
   const [mediaFiles, setMediaFiles] = useState<
     { type: 'image' | 'video'; file: File; isCover: boolean }[]
   >([]);
-  const [selectedTags, setSelectedTags] = useState<string[]>(
-    reviewData?.tag?.map((t) => t.name) || []
-  );
-
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const addressData = useRecoilValue(addressSelector);
-
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { isLoading, isError, isSuccess } = useVerifyUser(true);
   const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
+
+  const { data: reviewData } = useQuery(['review', reviewId], () =>
+    getReview(reviewId)
+  );
+
+  useEffect(() => {
+    if (reviewData) {
+      setFormValues({
+        title: reviewData.title,
+        content: reviewData.content,
+      });
+      setSelectedTags(reviewData.tag.map((t) => t.name));
+    }
+  }, [reviewData]);
 
   const onInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -272,7 +270,6 @@ export const WritePage = () => {
               onSelectedCoverImage={setCoverImage}
               isCoverImage={determineIsCoverImage}
               setCoverImage={setCoverImage}
-              reviewData={reviewData}
               onDeleteImage={onDeleteImage}
             />
             <StHiddenButton

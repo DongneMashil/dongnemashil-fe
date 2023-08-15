@@ -1,6 +1,18 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { axiosInstance } from './api';
 
+interface ReviewData {
+  id: number;
+  address: string;
+  content: string;
+  mainImgUrl: string;
+  roadName: string;
+  subImgUrl: string[];
+  tag: { id: number; name: string }[];
+  title: string;
+  videoUrl: string | null;
+}
+
 export const submitReview = async (data: globalThis.FormData) => {
   try {
     const response: AxiosResponse<{ id: number }> = await axiosInstance.post(
@@ -52,8 +64,26 @@ export const updateReview = async (
         throw new Error('로그인이 필요한 기능입니다.');
       } else if (e.response?.status === 403) {
         throw new Error('작성자가 아닙니다.');
+      } else {
+        throw new Error(e.response?.data?.errorMessage || e.message);
+      }
+    }
+    throw e;
+  }
+};
+
+export const getReview = async (reviewId: number) => {
+  try {
+    const response: AxiosResponse<ReviewData> = await axiosInstance.get(
+      `/reviews/${reviewId}`
+    );
+    return response.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      if (e.response?.status === 400) {
+        throw new Error('범위를 벗어난 페이지 요청입니다.');
       } else if (e.response?.status === 404) {
-        throw new Error('리뷰가 존재하지 않습니다.');
+        throw new Error('페이지가 존재하지 않습니다.');
       } else {
         throw new Error(e.response?.data?.errorMessage || e.message);
       }

@@ -10,7 +10,6 @@ import {
   StDelete,
 } from './FileSlider.styles';
 import { ReactComponent as FileUpload } from 'assets/icons/FileUpload.svg';
-import { ReviewData } from 'pages';
 
 interface ImageSliderProps {
   images: File[];
@@ -22,7 +21,6 @@ interface ImageSliderProps {
   setCoverImage: (file: File) => void;
   onDeleteImage: (file: File) => void;
   files: { type: 'image' | 'video'; file: File }[];
-  reviewData?: ReviewData;
 }
 
 export const FileSlider: React.FC<ImageSliderProps> = ({
@@ -32,7 +30,6 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   isCoverImage,
   setCoverImage,
   files,
-  reviewData,
   onDeleteImage,
 }) => {
   const onImageClick = (image: File) => {
@@ -46,8 +43,6 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   const onImageDelete = (file: File) => {
     onDeleteImage(file);
   };
-
-  console.log(typeof reviewData?.subImgUrl);
 
   return (
     <StSlideContainer>
@@ -73,41 +68,6 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
           <StDelete onClick={() => onImageDelete(file.file)}>x</StDelete>
         </StImageContainer>
       ))}
-
-      {reviewData && (
-        <StImageContainer>
-          {reviewData.mainImgUrl && (
-            <StImage
-              src={reviewData.mainImgUrl}
-              alt="Main Review Image"
-              onClick={() =>
-                onImageClick(reviewData.mainImgUrl as unknown as File)
-              }
-            />
-          )}
-          {reviewData.mainImgUrl && (
-            <StCoverImageButton
-              isActive={isCoverImage(reviewData.mainImgUrl as unknown as File)}
-              onClick={() =>
-                onCoverButtonClick(reviewData.mainImgUrl as unknown as File)
-              }
-            >
-              대표
-            </StCoverImageButton>
-          )}
-          {reviewData.videoUrl && (
-            <StVideo src={reviewData.videoUrl} controls />
-          )}
-          <StDelete
-            onClick={() =>
-              onDeleteImage(reviewData.mainImgUrl as unknown as File)
-            }
-          >
-            x
-          </StDelete>
-        </StImageContainer>
-      )}
-
       <StCenteredBox>
         <StPlusButton onClick={onAddImage}>
           <FileUpload />
