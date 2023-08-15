@@ -34,12 +34,12 @@ export const SearchResultListPage = () => {
           >
             <h1>서울 전체</h1>
           </NavBar>
-          <ToggleTagButton onTagChange={handleTagChange} />
         </>
       }
-      headerHeight={'150px'}
+      footer={<FixFooter centerButtons={'map'} rightButtons={'goTop'} />}
     >
-      <FixFooter centerButtons={'map'} rightButtons={'goTop'} />
+      <ToggleTagButton onTagChange={handleTagChange} />
+
       <ThumbnailWrapper
         tag={selectedTags.length > 0 ? selectedTags.join(',') : null}
         isSearch={true}

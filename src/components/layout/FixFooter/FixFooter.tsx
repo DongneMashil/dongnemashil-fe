@@ -50,11 +50,17 @@ export const FixFooter = ({ centerButtons, rightButtons }: FixFooterProps) => {
       </>
     ),
     goTop: (
-      <Button type="circleFill" $width={'57px'} $height={'57px'}>
-        우리
-        <br />
-        동네
-      </Button>
+      <>
+        <Button
+          type="borderRound"
+          $width={'48px'}
+          $height={'48px'}
+          $round={'50%'}
+          $stroke={'1px'}
+        >
+          <ChevronTop />
+        </Button>
+      </>
     ),
   };
 
