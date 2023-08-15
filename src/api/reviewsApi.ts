@@ -55,37 +55,21 @@ interface PaginationParams {
 const reviewKeys = {
   all: ['responseData'] as const,
   lists: () => [...reviewKeys.all, 'list'] as const,
-  // list: (type: string) => [...reviewKeys.lists(), { type }] as const,
 };
 
-export const useFetchReviews = () => {
+export const useFetchReviews = ({ q }: PaginationParams = {}) => {
   const tag = useRecoilValue(selectedTagSelector);
   const type = useRecoilValue(sortTypeSelector);
-  return useInfiniteQuery(
-    reviewKeys.lists(),
-    ({ pageParam = 1 }: QueryFunctionContext) =>
-      axiosInstance.get<ReviewsAndPageable>('/reviews', {
-        params: { type, page: pageParam, tag },
-      }),
-    {
-      getNextPageParam: ({ data: { last, number } }) =>
-        last ? undefined : number + 2,
-    }
-  );
-};
 
-export const useFetchSearchReviews = ({ q }: PaginationParams) => {
-  const tag = useRecoilValue(selectedTagSelector);
-  const type = useRecoilValue(sortTypeSelector);
-  return useInfiniteQuery(
-    reviewKeys.lists(),
-    ({ pageParam = 1 }: QueryFunctionContext) =>
-      axiosInstance.get<ReviewsAndPageable>('/search', {
-        params: { type, page: pageParam, tag, q },
-      }),
-    {
-      getNextPageParam: ({ data: { last, number } }) =>
-        last ? undefined : number + 2,
-    }
-  );
+  const queryKey = q ? reviewKeys.lists() : reviewKeys.all;
+
+  const queryFn = ({ pageParam = 1 }: QueryFunctionContext) =>
+    axiosInstance.get<ReviewsAndPageable>(q ? '/search' : '/reviews', {
+      params: { type, page: pageParam, tag, q },
+    });
+
+  return useInfiniteQuery(queryKey, queryFn, {
+    getNextPageParam: ({ data: { last, number } }) =>
+      last ? undefined : number + 2,
+  });
 };
