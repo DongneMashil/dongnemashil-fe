@@ -15,7 +15,7 @@ export const SearchPage = () => {
   const onSubmitHandler = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();
     console.log('onSubmitHandler');
-    navigate(`/search/result-list?q=${value}`);
+    navigate(`/search/result?q=${value}`);
   };
   return (
     <CommonLayout backgroundColor="#ffffff">
