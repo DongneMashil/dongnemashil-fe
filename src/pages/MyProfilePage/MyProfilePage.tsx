@@ -3,7 +3,7 @@ import { MyProfile, getMyProfile, postProfile } from 'api/mypageApi';
 import { CommonLayout, NavBar } from 'components/layout';
 import { useVerifyUser } from 'hooks';
 import React, { useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import { styled } from 'styled-components';
 import noUser from 'assets/images/NoUser.gif';
@@ -12,13 +12,15 @@ import { AuthInputBox, AuthErrorMsg } from 'components/common';
 import { confirmNickname } from 'api/loginApi';
 // import axios from 'axios';
 import { getExtensionName } from 'components/myProfilePage';
+import { useNavigate } from 'react-router-dom';
+import { queryClient } from 'queries/queryClient';
 
 export const MyProfilePage = () => {
-  const userState = useRecoilValue(userProfileSelector);
   const { data: userData } = useVerifyUser(true);
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const fileUpload = useRef();
-
+  const navigate = useNavigate();
+  const [userState, setUserState] = useRecoilState(userProfileSelector);
   const [postData, setPostData] = useState<{
     nickname?: string;
     imgUrl?: File | null;
@@ -123,6 +125,9 @@ export const MyProfilePage = () => {
       });
       console.log('👁️' + JSON.stringify(response));
       alert('성공적으로 등록되었습니다.');
+      queryClient.invalidateQueries(['myPage']);
+      setUserState((prev) => ({ ...prev, nickname: postData.nickname }));
+      navigate('/mypage');
     } catch (error) {
       console.error('😀' + error);
     }
