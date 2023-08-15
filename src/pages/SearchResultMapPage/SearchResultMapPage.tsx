@@ -1,13 +1,9 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Map from 'components/common/Map/Map';
 import { ReviewResultsProps } from 'pages/SearchResultPage/SearchResultPage';
 import Marker from 'assets/icons/Marker.png';
 import MarkerSelected from 'assets/icons/MarkerSelected.png';
-import {
-  StResultMapContainer,
-  // StCurPosButton,
-} from './SearchResultMapPage.styles';
-//import { Button } from 'components/common';
+import { StResultMapContainer } from './SearchResultMapPage.styles';
 
 export const SearchResultMapPage = ({
   reviewList,
@@ -16,7 +12,7 @@ export const SearchResultMapPage = ({
 }) => {
   console.log('reviewList ', reviewList);
 
-  let mapInstance: kakao.maps.Map | null = null;
+  const mapInstance = useRef<kakao.maps.Map | null>(null);
   const markerImage = new kakao.maps.MarkerImage(
     Marker,
     new kakao.maps.Size(21, 28)
@@ -48,7 +44,7 @@ export const SearchResultMapPage = ({
     let selectedMarker: kakao.maps.Marker | null = null;
     let selectedOverlay: kakao.maps.CustomOverlay | null = null;
 
-    mapInstance = map;
+    mapInstance.current = map;
     console.log('mapInstance ', mapInstance);
 
     // 마커 및 오버레이 세팅
@@ -116,6 +112,9 @@ export const SearchResultMapPage = ({
       });
     });
   };
+  useEffect(() => {
+    console.log('map Instance (useEffect) ', mapInstance);
+  });
 
   return (
     <StResultMapContainer>
@@ -130,8 +129,8 @@ export const SearchResultMapPage = ({
           zIndex: '1000',
         }}
         onClick={() => {
-          if (mapInstance) {
-            moveToCurrentLocation(mapInstance);
+          if (mapInstance.current) {
+            moveToCurrentLocation(mapInstance.current);
           } else {
             console.log('no map instance found');
           }
