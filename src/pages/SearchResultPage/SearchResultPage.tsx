@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { CommonLayout, FixFooter, NavBar } from 'components/layout';
 import { useFetchSearchReviews } from 'api/reviewsApi';
-// import { SearchResultMapPage } from 'pages/SearchResultMapPage/SearchResultMapPage';
+import { SearchResultMapPage } from 'pages/SearchResultMapPage/SearchResultMapPage';
 import { SearchResultListPage } from 'pages/SearchResultListPage/SearchResultListPage';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import { useLocation } from 'react-router-dom';
@@ -12,7 +12,7 @@ export const SearchResultPage = () => {
   const queryParams = new URLSearchParams(location.search);
   const q = queryParams.get('q');
   console.log(q);
-  // const [isMapOpen, setIsMapOpen] = useState(false);
+  const [isMapOpen, setIsMapOpen] = useState<boolean>(false);
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [type, setType] = useState('likes');
@@ -34,6 +34,8 @@ export const SearchResultPage = () => {
 
   useEffect(() => {
     refetch();
+    console.log('data ', data);
+    console.log('isMapOpen ', isMapOpen);
   }, [type, tag]);
 
   const onClickSort = (type: string) => {
@@ -46,9 +48,9 @@ export const SearchResultPage = () => {
     setSelectedTags(tags);
   };
 
-  // const onClickMapOpen = () => {
-  //   setIsMapOpen(true);
-  // };
+  const toggleMapOpen = () => {
+    setIsMapOpen(!isMapOpen);
+  };
 
   return (
     <CommonLayout
@@ -66,7 +68,7 @@ export const SearchResultPage = () => {
         <FixFooter
           centerButtons={'map'}
           rightButtons={'goTop'}
-          // onClickCenter={onClickMapOpen}
+          onClickCenter={toggleMapOpen}
         />
       }
     >
@@ -80,7 +82,9 @@ export const SearchResultPage = () => {
         fetchNextPage={fetchNextPage}
         onClickSort={onClickSort}
       />
-      {/* {isMapOpen && <SearchResultMapPage reviewList={reviews} />} */}
+      {isMapOpen && (
+        <SearchResultMapPage reviewList={reviews} onToggle={toggleMapOpen} />
+      )}
     </CommonLayout>
   );
 };

@@ -3,8 +3,10 @@ import styled from 'styled-components';
 export const StResultMapContainer = styled.div`
   width: 100%;
   height: 100%;
-  position: relative;
-
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
   & button {
     position: absolute;
     z-index: 1000;
@@ -21,7 +23,7 @@ export const StResultMapContainer = styled.div`
     &:last-of-type {
       width: 50px;
       height: 50px;
-      bottom: 20px;
+      bottom: 50px;
       right: 20px;
     }
   }
