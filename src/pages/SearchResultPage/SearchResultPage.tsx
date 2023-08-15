@@ -12,7 +12,7 @@ export const SearchResultPage = () => {
   const queryParams = new URLSearchParams(location.search);
   const q = queryParams.get('q');
   console.log(q);
-  // const [isMapOpen] = useState(false);
+  // const [isMapOpen, setIsMapOpen] = useState(false);
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [type, setType] = useState('likes');
@@ -46,6 +46,10 @@ export const SearchResultPage = () => {
     setSelectedTags(tags);
   };
 
+  // const onClickMapOpen = () => {
+  //   setIsMapOpen(true);
+  // };
+
   return (
     <CommonLayout
       header={
@@ -58,7 +62,13 @@ export const SearchResultPage = () => {
           </NavBar>
         </>
       }
-      footer={<FixFooter centerButtons={'map'} rightButtons={'goTop'} />}
+      footer={
+        <FixFooter
+          centerButtons={'map'}
+          rightButtons={'goTop'}
+          // onClickCenter={onClickMapOpen}
+        />
+      }
     >
       <ToggleTagButton onTagChange={handleTagChange} />
 

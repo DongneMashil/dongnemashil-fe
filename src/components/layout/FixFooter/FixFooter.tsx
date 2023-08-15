@@ -12,12 +12,18 @@ import {
 export interface FixFooterProps {
   centerButtons?: 'map';
   rightButtons: 'write' | 'goTop';
+  onClickCenter?: () => void;
 }
 
-export const FixFooter = ({ centerButtons, rightButtons }: FixFooterProps) => {
+export const FixFooter = ({
+  centerButtons,
+  rightButtons,
+  onClickCenter,
+}: FixFooterProps) => {
   const centerWrapper = {
     map: (
       <Button
+        onClick={() => onClickCenter}
         type="borderRound"
         $width={'90px'}
         $height={'27px'}
