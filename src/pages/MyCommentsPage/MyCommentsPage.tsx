@@ -3,8 +3,6 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import { Comment, GetMyCommentResponse, getMyComments } from 'api/mypageApi';
-// import { useInfiniteQuery } from '@tanstack/react-query';
-// import { useIntersect } from 'hooks/useIntersect';
 import { ReactComponent as ChevronRight } from 'assets/icons/ChevronRight.svg';
 import { ReactComponent as CommentS } from 'assets/icons/CommentS.svg';
 import {
@@ -17,51 +15,12 @@ import { useInfinityScroll } from 'hooks';
 export const MyCommentsPage = () => {
   const userState = useRecoilValue(userProfileSelector);
 
-  const { data, hasNextPage, loaderRef } =
+  const { data, hasNextPage, loaderRef, isLoading } =
     useInfinityScroll<GetMyCommentResponse>({
-      getAPI: getMyComments,
+      getAPI: (params) => getMyComments(params?.page),
       queryKey: ['myComment', userState.nickName],
     });
 
-  // const useInfinityScroll = () => {
-  //   const fetchComment = async ({ pageParam = 1 }) => {
-  //     const response = await getMyComments(pageParam);
-
-  //     console.log(JSON.stringify(response));
-  //     return {
-  //       ...response,
-  //       isLast: response.last,
-  //       nextPage: pageParam + 1,
-  //     };
-  //   };
-
-  //   const query = useInfiniteQuery(
-  //     ['myComment', userState.nickName],
-  //     fetchComment,
-  //     {
-  //       getNextPageParam: (currentPage) => {
-  //         if (!currentPage.isLast) return currentPage.nextPage;
-  //         return undefined;
-  //       },
-  //     }
-  //   );
-  //   return query;
-  // };
-  // const { data, fetchNextPage, hasNextPage, isLoading } = useInfinityScroll();
-
-  // // useIntersect 콜백함수 (무한스크롤)
-  // const onIntersectCallback = () => {
-  //   if (!isLoading) {
-  //     fetchNextPage();
-  //   }
-  // };
-
-  // // 커스텀훅 사용
-  // const loaderRef = useIntersect(onIntersectCallback, {
-  //   root: null,
-  //   rootMargin: '0px',
-  //   threshold: 0.1,
-  // });
   return (
     <CommonLayout header={<NavBar btnLeft="back" />} backgroundColor="#f5f5f5">
       {data ? (
@@ -84,13 +43,15 @@ export const MyCommentsPage = () => {
               </StButton>
             ))
           )}
+        {isLoading && <div>로딩중...</div>}
+        {hasNextPage ? (
+          <>
+            <div style={{ height: '300px' }} ref={loaderRef} />
+          </>
+        ) : (
+          <div>마지막 댓글입니다.</div>
+        )}
       </StMyCommentContainer>
-
-      {hasNextPage && (
-        <>
-          <div ref={loaderRef} />
-        </>
-      )}
     </CommonLayout>
   );
 };

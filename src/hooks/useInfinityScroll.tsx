@@ -25,7 +25,12 @@ export const useInfinityScroll = <T extends { last: boolean }>({
   ): Promise<T & { nextPage: number }> => {
     const { q, page } = context.pageParam || { page: 1 };
     setParamQ(q);
-    const response = await getAPI({ page, q });
+    const params: ApiParams = { page };
+    if (q) {
+      params.q = q;
+    }
+
+    const response = await getAPI(params);
 
     console.log(JSON.stringify(response));
 
