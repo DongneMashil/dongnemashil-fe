@@ -1,68 +1,67 @@
 import { CommonLayout, NavBar } from 'components/layout';
 import React from 'react';
-import { styled } from 'styled-components';
-
 import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
-import { Comment, getMyComments } from 'api/mypageApi';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { useIntersect } from 'hooks/useIntersect';
+import { Comment, GetMyCommentResponse, getMyComments } from 'api/mypageApi';
+// import { useInfiniteQuery } from '@tanstack/react-query';
+// import { useIntersect } from 'hooks/useIntersect';
 import { ReactComponent as ChevronRight } from 'assets/icons/ChevronRight.svg';
 import { ReactComponent as CommentS } from 'assets/icons/CommentS.svg';
+import {
+  StButton,
+  StMyCommentContainer,
+  StMyCommentCounter,
+} from './MyCommentsPage.styles';
+import { useInfinityScroll } from 'hooks';
 
 export const MyCommentsPage = () => {
   const userState = useRecoilValue(userProfileSelector);
-  // const { data } = useQuery<GetMyCommentResponse, Error>({
-  //   queryKey: ['mycomments', userState.nickName],
-  //   queryFn: () => getMyComments(),
-  //   enabled: userState.isLoggedIn,
-  //   onSuccess: (data: GetMyCommentResponse) => {
-  //     console.log('🇨🇦' + data);
-  //   },
-  //   onError: (error: Error) => {
-  //     console.log('🎁' + error);
-  //   },
+
+  const { data, hasNextPage, loaderRef } =
+    useInfinityScroll<GetMyCommentResponse>({
+      getAPI: getMyComments,
+      queryKey: ['myComment', userState.nickName],
+    });
+
+  // const useInfinityScroll = () => {
+  //   const fetchComment = async ({ pageParam = 1 }) => {
+  //     const response = await getMyComments(pageParam);
+
+  //     console.log(JSON.stringify(response));
+  //     return {
+  //       ...response,
+  //       isLast: response.last,
+  //       nextPage: pageParam + 1,
+  //     };
+  //   };
+
+  //   const query = useInfiniteQuery(
+  //     ['myComment', userState.nickName],
+  //     fetchComment,
+  //     {
+  //       getNextPageParam: (currentPage) => {
+  //         if (!currentPage.isLast) return currentPage.nextPage;
+  //         return undefined;
+  //       },
+  //     }
+  //   );
+  //   return query;
+  // };
+  // const { data, fetchNextPage, hasNextPage, isLoading } = useInfinityScroll();
+
+  // // useIntersect 콜백함수 (무한스크롤)
+  // const onIntersectCallback = () => {
+  //   if (!isLoading) {
+  //     fetchNextPage();
+  //   }
+  // };
+
+  // // 커스텀훅 사용
+  // const loaderRef = useIntersect(onIntersectCallback, {
+  //   root: null,
+  //   rootMargin: '0px',
+  //   threshold: 0.1,
   // });
-
-  const useInfinityScroll = () => {
-    const fetchComment = async ({ pageParam = 1 }) => {
-      const response = await getMyComments(pageParam);
-
-      console.log(JSON.stringify(response));
-      return {
-        ...response,
-        isLast: response.last,
-        nextPage: pageParam + 1,
-      };
-    };
-
-    const query = useInfiniteQuery(
-      ['myComment', userState.nickName],
-      fetchComment,
-      {
-        getNextPageParam: (currentPage) => {
-          if (!currentPage.isLast) return currentPage.nextPage;
-          return undefined;
-        },
-      }
-    );
-    return query;
-  };
-  const { data, fetchNextPage, hasNextPage, isLoading } = useInfinityScroll();
-
-  // useIntersect 콜백함수
-  const onIntersectCallback = () => {
-    if (!isLoading) {
-      fetchNextPage();
-    }
-  };
-
-  // 커스텀훅 사용
-  const loaderRef = useIntersect(onIntersectCallback, {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1,
-  });
   return (
     <CommonLayout header={<NavBar btnLeft="back" />} backgroundColor="#f5f5f5">
       {data ? (
@@ -95,50 +94,3 @@ export const MyCommentsPage = () => {
     </CommonLayout>
   );
 };
-
-const StMyCommentCounter = styled.div`
-  color: rgb(131, 131, 131);
-  font-family: Pretendard;
-  font-size: 0.875rem;
-
-  font-weight: 600;
-
-  margin: 1rem;
-`;
-
-const StButton = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  cursor: pointer;
-  width: 100%;
-  border-bottom: 1px solid rgb(226, 226, 226);
-  padding: 0.7rem 1.5rem;
-  img {
-    aspect-ratio: 1 / 1;
-    margin-right: 0.2rem;
-    margin-left: auto;
-    width: 4.375rem;
-    height: 4.375rem;
-    border-radius: 0.5625rem;
-  }
-  .CommentS {
-    width: 0.8125rem;
-    height: 0.82806rem;
-    flex-shrink: 0;
-  }
-  .ChevronRight {
-    width: 0.47606rem;
-    height: 1.0625rem;
-    flex-shrink: 0;
-  }
-`;
-
-const StMyCommentContainer = styled.div`
-  ${(props) => props.theme.floatingBox}
-  padding: 0rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
