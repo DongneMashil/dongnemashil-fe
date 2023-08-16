@@ -19,8 +19,10 @@ interface ImageSliderProps {
   onSelectedCoverImage?: (file: File) => void;
   isCoverImage: (file: File) => boolean;
   setCoverImage: (file: File) => void;
-  onDeleteImage: (file: File) => void;
   files: { type: 'image' | 'video'; file: File }[];
+  onDeleteImage: (file: File) => void;
+  previewFiles: { type: 'image' | 'video'; file: File }[];
+  previewImages: File[];
 }
 
 export const FileSlider: React.FC<ImageSliderProps> = ({
@@ -31,6 +33,8 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   setCoverImage,
   files,
   onDeleteImage,
+  previewFiles,
+  previewImages,
 }) => {
   const onImageClick = (image: File) => {
     onSelectedCoverImage && onSelectedCoverImage(image);
@@ -51,27 +55,46 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
           {file.type === 'image' ? (
             <>
               <StImage
-                src={URL.createObjectURL(file.file)}
+                src={URL.createObjectURL(images[index])}
                 alt={`Upload Preview ${index}`}
-                onClick={() => onImageClick(file.file)}
+                onClick={() => onImageClick(images[index])}
               />
               <StCoverImageButton
-                isActive={isCoverImage(file.file)}
-                onClick={() => onCoverButtonClick(file.file)}
+                isActive={isCoverImage(images[index])}
+                onClick={() => onCoverButtonClick(images[index])}
               >
                 대표
               </StCoverImageButton>
             </>
           ) : (
-            <StVideo src={URL.createObjectURL(file.file)} controls />
+            <StVideo src={URL.createObjectURL(images[index])} controls />
           )}
           <StDelete onClick={() => onImageDelete(file.file)}>x</StDelete>
         </StImageContainer>
       ))}
+      {previewFiles &&
+        previewFiles.map((previewFile, index) => (
+          <StImageContainer key={index}>
+            {previewFile.type === 'image' ? (
+              <>
+                <StImage
+                  src={URL.createObjectURL(previewFile.file)}
+                  alt={`Preview ${index}`}
+                  onClick={() => onImageClick(previewFile.file)}
+                />
+              </>
+            ) : (
+              <StVideo src={URL.createObjectURL(previewFile.file)} controls />
+            )}
+            <StDelete onClick={() => onImageDelete(previewFile.file)}>
+              x
+            </StDelete>
+          </StImageContainer>
+        ))}
       <StCenteredBox>
         <StPlusButton onClick={onAddImage}>
           <FileUpload />
-          <p>{`${images.length} / 5`}</p>
+          <p>{`${images.length + previewImages.length} / 5`}</p>
         </StPlusButton>
       </StCenteredBox>
     </StSlideContainer>

@@ -46,6 +46,10 @@ export const WritePage = () => {
   const { isLoading, isError, isSuccess } = useVerifyUser(true);
   const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
 
+  const [previewFiles, setPreviewFiles] = useState<
+    { type: 'image' | 'video'; file: File; isCover: boolean }[]
+  >([]);
+
   const { data: reviewData } = useQuery(['review', reviewId], () =>
     getReview(reviewId)
   );
@@ -57,6 +61,56 @@ export const WritePage = () => {
         content: reviewData.content,
       });
       setSelectedTags(reviewData.tag.map((t) => t.name));
+
+      const fetchMediaFiles = async () => {
+        try {
+          const mainImgBlob = await fetch(reviewData.mainImgUrl).then(
+            (response) => response.blob()
+          );
+          const subImgBlobs = await Promise.all(
+            reviewData.subImgUrl.map((url) =>
+              fetch(url).then((response) => response.blob())
+            )
+          );
+          let videoBlob = null;
+          if (reviewData.videoUrl) {
+            videoBlob = await fetch(reviewData.videoUrl).then((response) =>
+              response.blob()
+            );
+          }
+
+          const blobToMediaFile = (
+            blob: Blob,
+            type: 'image' | 'video',
+            isCover: boolean
+          ) => {
+            const fileName = type === 'image' ? 'image.jpg' : 'video.mp4';
+            const file = new File([blob], fileName, { type });
+
+            return {
+              type,
+              file,
+              isCover,
+            };
+          };
+
+          const mediaFilesData = [
+            blobToMediaFile(mainImgBlob, 'image', true),
+            ...subImgBlobs.map((blob) => blobToMediaFile(blob, 'image', false)),
+            videoBlob ? blobToMediaFile(videoBlob, 'video', false) : null,
+          ].filter(Boolean) as {
+            type: 'image' | 'video';
+            file: File;
+            isCover: boolean;
+          }[];
+
+          setPreviewFiles(mediaFilesData);
+        } catch (error) {
+          console.error('Error fetching and converting media files:', error);
+        }
+      };
+
+      fetchMediaFiles();
     }
   }, [reviewData]);
 
@@ -99,6 +153,12 @@ export const WritePage = () => {
       const fileType: 'image' | 'video' = file.type.startsWith('image/')
         ? 'image'
         : 'video';
+
+      setPreviewFiles((prev) => [
+        ...prev,
+        { type: fileType, file, isCover: false },
+      ]);
+
       setMediaFiles((prev) => {
         const updatedFiles = [
           ...prev,
@@ -127,6 +187,7 @@ export const WritePage = () => {
 
   const onDeleteImage = (targetFile: File) => {
     setMediaFiles((prev) => prev.filter((file) => file.file !== targetFile));
+    setPreviewFiles((prev) => prev.filter((file) => file.type !== 'image'));
   };
 
   const handleTagChange = (tags: string[]) => {
@@ -271,6 +332,8 @@ export const WritePage = () => {
               isCoverImage={determineIsCoverImage}
               setCoverImage={setCoverImage}
               onDeleteImage={onDeleteImage}
+              previewFiles = {previewFiles}
+              previewImages = {previewFiles.map((file) => file.file)}
             />
             <StHiddenButton
               ref={fileInputRef}
