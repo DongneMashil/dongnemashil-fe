@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Router from 'routes/Router';
 import GlobalStyle from 'style/GlobalStyle';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -7,8 +7,13 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'style/theme';
+import VConsole from 'vconsole';
 
 function App() {
+  useEffect(() => {
+    const vconsole = new VConsole({ theme: 'dark' });
+    console.log('vconsole', vconsole);
+  }, []);
   return (
     <>
       <QueryClientProvider client={queryClient}>
