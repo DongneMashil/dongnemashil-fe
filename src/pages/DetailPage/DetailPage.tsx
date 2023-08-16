@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getReviewDetail, ReviewDetailResponse } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
-import { FooterSpacer, Tag, VideoPlayer } from 'components/common';
+import { FooterSpacer, Modal, Tag, VideoPlayer } from 'components/common';
 import {
   StCreatedTime,
   StDetailPageContainer,
@@ -68,7 +68,7 @@ export const DetailPage = () => {
       });
     }
   };
-
+  const [isModalWindowOpen, setIsModalWindowOpen] = useState(false);
   return (
     <>
       {isMapOpen ? (
@@ -113,6 +113,15 @@ export const DetailPage = () => {
           backgroundColor="#FFF"
         >
           <StDetailPageContainer>
+            <Modal
+              isOpen={isModalWindowOpen}
+              onSubmitText="서브밋버튼"
+              title="제목 제목"
+              firstLine="첫번째줄 첫번째줄 첫번째줄"
+              secondLine="두번째줄 두번째줄 두번째줄?"
+              onSubmitHandler={() => alert('submit')}
+              onCloseHandler={() => setIsModalWindowOpen(false)}
+            />
             {data && (
               <>
                 <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>

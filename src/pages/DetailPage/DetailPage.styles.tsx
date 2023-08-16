@@ -77,6 +77,7 @@ export const StDetailPageContent = styled.div`
   .detailimg {
     width: 100%;
     object-fit: contain;
+    z-index: 1;
   }
   p {
     margin: 1rem 0.5rem 1rem 0.5rem;
