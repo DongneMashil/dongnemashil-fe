@@ -36,7 +36,10 @@ export const Comments = ({
   // const loader = useRef(null);
   const useInfinityScroll = () => {
     const fetchComment = async ({ pageParam = 1 }) => {
-      const response = await getComment(reviewId, pageParam);
+      const response = await getComment({
+        detailId: reviewId,
+        page: pageParam,
+      });
       setCommentCount(Number(response.totalElements)); // Recoil 상태 업데이트
 
       console.log(JSON.stringify(response));

@@ -1,34 +1,65 @@
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
 import { useIntersect } from './useIntersect';
-import { useState } from 'react';
 
-interface ApiParams {
+export interface ApiParams {
   q?: string;
-  page: number;
+  type?: string;
+  tag?: string;
+  page?: number;
+  detailId?: string | number;
 }
 
 interface UseInfinityScrollProps<T> {
-  getAPI: (params?: ApiParams) => Promise<T>;
+  getAPI: (params: ApiParams) => Promise<T>;
   queryKey?: string[];
   qValue?: string;
+  typeValue?: string;
+  detailIdValue?: string | number;
+  tagValue?: string;
+  pageValue?: number;
 }
 
 export const useInfinityScroll = <T extends { last: boolean }>({
   getAPI,
   queryKey = [],
   qValue = undefined,
+  typeValue = undefined,
+  detailIdValue = undefined,
+  tagValue = undefined,
+  pageValue = 1,
 }: UseInfinityScrollProps<T>) => {
-  const [paramQ, setParamQ] = useState<string | undefined>(qValue);
-
   const fetchItems = async (
     context: QueryFunctionContext<string[], ApiParams>
   ): Promise<T & { nextPage: number }> => {
-    const { q, page } = context.pageParam || { page: 1 };
-    setParamQ(q);
-    const params: ApiParams = { page };
-    if (q) {
-      params.q = q;
-    }
+    const { q, page, type, detailId, tag } = context.pageParam || {
+      page: pageValue,
+      q: qValue,
+      type: typeValue,
+      detailId: detailIdValue,
+      tag: tagValue,
+    };
+    console.log(
+      '🐶useInfinityScrollValues:',
+      'q: ',
+      q,
+      'page: ',
+      page,
+      'type: ',
+      type,
+      'detailId: ',
+      detailId,
+      'tag: ',
+      tag
+    );
+
+    // 기본적으로 page만 설정
+    const params: ApiParams = {
+      page,
+      q,
+      type,
+      detailId,
+      tag,
+    };
 
     const response = await getAPI(params);
 
@@ -36,7 +67,7 @@ export const useInfinityScroll = <T extends { last: boolean }>({
 
     return {
       ...response,
-      nextPage: page + 1,
+      nextPage: page! + 1,
     };
   };
 
@@ -49,7 +80,7 @@ export const useInfinityScroll = <T extends { last: boolean }>({
         if (!fetchResponse.last)
           return {
             page: fetchResponse.nextPage,
-            q: paramQ,
+            q: qValue,
           };
         return undefined;
       },

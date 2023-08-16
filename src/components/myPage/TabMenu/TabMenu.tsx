@@ -20,8 +20,9 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
   //무한스크롤 커스텀훅
   const { data, hasNextPage, loaderRef, isLoading } =
     useInfinityScroll<GetMyReviewsResponse>({
-      getAPI: (params) => getMyReviews(selectedTab, params?.page),
+      getAPI: getMyReviews,
       queryKey: ['myPage', nickName!, selectedTab],
+      qValue: selectedTab,
     });
 
   return (

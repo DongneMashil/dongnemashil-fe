@@ -1,5 +1,6 @@
 import { AxiosResponse, AxiosError } from 'axios';
 import { axiosInstance } from './api';
+import { ApiParams } from 'hooks';
 // import { axiosInstance } from './api';
 
 // const baseUrl = process.env.REACT_APP_SERVER_API_URL;
@@ -82,10 +83,11 @@ type GetCommentResponse = {
   totalPages: number;
   totalElements: number;
 };
+
 export const getComment = async (
-  detailId: string, // 수정된 부분
-  page?: number
+  params: ApiParams
 ): Promise<GetCommentResponse> => {
+  const { detailId, page } = params;
   try {
     const response: AxiosResponse<GetCommentResponse> = await axiosInstance.get(
       `/reviews/${detailId}/comments`,
