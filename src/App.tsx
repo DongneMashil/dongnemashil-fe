@@ -11,7 +11,7 @@ import VConsole from 'vconsole';
 
 function App() {
   useEffect(() => {
-    const vconsole = new VConsole({ theme: 'dark' });
+    const vconsole = new VConsole({ theme: 'light' });
     console.log('vconsole', vconsole);
   }, []);
   return (
