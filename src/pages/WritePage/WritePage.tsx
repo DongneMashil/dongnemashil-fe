@@ -46,14 +46,9 @@ export const WritePage = () => {
   const { isLoading, isError, isSuccess } = useVerifyUser(true);
   const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
 
-  const [previewFiles, setPreviewFiles] = useState<
-    { type: 'image' | 'video'; file: File; isCover: boolean }[]
-  >([]);
-
   const { data: reviewData } = useQuery(['review', reviewId], () =>
     getReview(reviewId)
   );
-
   useEffect(() => {
     if (reviewData) {
       setFormValues({
@@ -67,11 +62,29 @@ export const WritePage = () => {
           const mainImgBlob = await fetch(reviewData.mainImgUrl).then(
             (response) => response.blob()
           );
-          const subImgBlobs = await Promise.all(
-            reviewData.subImgUrl.map((url) =>
-              fetch(url).then((response) => response.blob())
-            )
-          );
+
+          const subImgPromises = reviewData.subImgUrl.map(async (url) => {
+            if (url.trim() === '') {
+              return null;
+            }
+            try {
+              const response = await fetch(url);
+              if (response.ok) {
+                const blob = await response.blob();
+                return blob; // Valid blob
+              } else {
+                console.error('Error fetching sub image:', response.statusText);
+                return null;
+              }
+            } catch (error) {
+              console.error('Error fetching sub image:', error);
+              return null;
+            }
+          });
+
+          const subImgBlobs = await Promise.all(subImgPromises);
+          const validSubImgBlobs = subImgBlobs.filter((blob) => blob !== null);
+
           let videoBlob = null;
           if (reviewData.videoUrl) {
             videoBlob = await fetch(reviewData.videoUrl).then((response) =>
@@ -80,10 +93,14 @@ export const WritePage = () => {
           }
 
           const blobToMediaFile = (
-            blob: Blob,
+            blob: Blob | null,
             type: 'image' | 'video',
             isCover: boolean
           ) => {
+            if (blob === null) {
+              return null;
+            }
+
             const fileName = type === 'image' ? 'image.jpg' : 'video.mp4';
             const file = new File([blob], fileName, { type });
 
@@ -96,15 +113,16 @@ export const WritePage = () => {
 
           const mediaFilesData = [
             blobToMediaFile(mainImgBlob, 'image', true),
-            ...subImgBlobs.map((blob) => blobToMediaFile(blob, 'image', false)),
+            ...validSubImgBlobs.map((blob) =>
+              blobToMediaFile(blob, 'image', false)
+            ),
             videoBlob ? blobToMediaFile(videoBlob, 'video', false) : null,
           ].filter(Boolean) as {
             type: 'image' | 'video';
             file: File;
             isCover: boolean;
           }[];
-
-          setPreviewFiles(mediaFilesData);
+          setMediaFiles(mediaFilesData);
         } catch (error) {
           console.error('Error fetching and converting media files:', error);
         }
@@ -148,17 +166,11 @@ export const WritePage = () => {
       alert('동영상은 한개만 가능합니다.😱');
       return;
     }
-
+    
     validFiles.forEach((file) => {
       const fileType: 'image' | 'video' = file.type.startsWith('image/')
         ? 'image'
         : 'video';
-
-      setPreviewFiles((prev) => [
-        ...prev,
-        { type: fileType, file, isCover: false },
-      ]);
-
       setMediaFiles((prev) => {
         const updatedFiles = [
           ...prev,
@@ -187,7 +199,6 @@ export const WritePage = () => {
 
   const onDeleteImage = (targetFile: File) => {
     setMediaFiles((prev) => prev.filter((file) => file.file !== targetFile));
-    setPreviewFiles((prev) => prev.filter((file) => file.type !== 'image'));
   };
 
   const handleTagChange = (tags: string[]) => {
@@ -332,8 +343,6 @@ export const WritePage = () => {
               isCoverImage={determineIsCoverImage}
               setCoverImage={setCoverImage}
               onDeleteImage={onDeleteImage}
-              previewFiles = {previewFiles}
-              previewImages = {previewFiles.map((file) => file.file)}
             />
             <StHiddenButton
               ref={fileInputRef}

@@ -21,8 +21,6 @@ interface ImageSliderProps {
   setCoverImage: (file: File) => void;
   files: { type: 'image' | 'video'; file: File }[];
   onDeleteImage: (file: File) => void;
-  previewFiles: { type: 'image' | 'video'; file: File }[];
-  previewImages: File[];
 }
 
 export const FileSlider: React.FC<ImageSliderProps> = ({
@@ -33,8 +31,6 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   setCoverImage,
   files,
   onDeleteImage,
-  previewFiles,
-  previewImages,
 }) => {
   const onImageClick = (image: File) => {
     onSelectedCoverImage && onSelectedCoverImage(image);
@@ -72,29 +68,10 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
           <StDelete onClick={() => onImageDelete(file.file)}>x</StDelete>
         </StImageContainer>
       ))}
-      {previewFiles &&
-        previewFiles.map((previewFile, index) => (
-          <StImageContainer key={index}>
-            {previewFile.type === 'image' ? (
-              <>
-                <StImage
-                  src={URL.createObjectURL(previewFile.file)}
-                  alt={`Preview ${index}`}
-                  onClick={() => onImageClick(previewFile.file)}
-                />
-              </>
-            ) : (
-              <StVideo src={URL.createObjectURL(previewFile.file)} controls />
-            )}
-            <StDelete onClick={() => onImageDelete(previewFile.file)}>
-              x
-            </StDelete>
-          </StImageContainer>
-        ))}
       <StCenteredBox>
         <StPlusButton onClick={onAddImage}>
           <FileUpload />
-          <p>{`${images.length + previewImages.length} / 5`}</p>
+          <p>{`${images.length} / 5`}</p>
         </StPlusButton>
       </StCenteredBox>
     </StSlideContainer>

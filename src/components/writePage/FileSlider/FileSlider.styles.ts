@@ -60,13 +60,19 @@ export const StImageContainer = styled.div`
 `;
 
 export const StCoverImageButton = styled.button<{ isActive: boolean }>`
+  width: 2.88rem;
+  height: 1.5rem;
   position: absolute;
-  top: 0.8rem;
-  right: 0.9rem;
-  background: ${(props) => (props.isActive ? 'green' : 'grey')};
+  top: 0.87rem;
+  right: 0.69rem;
+  background: ${(props) =>
+    props.isActive ? 'rgba(0, 0, 0, 0.40);' : 'rgba(160, 160, 160, 0.5)'};
   color: white;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 600;
   border: none;
-  border-radius: 4px;
+  border-radius: 0.5rem;
   padding: 5px 10px;
   cursor: pointer;
   opacity: 0.8;
@@ -83,4 +89,4 @@ export const StDelete = styled.button`
   background: none;
   color: #fff;
   font-size: 1.2rem;
-`
+`;
