@@ -96,3 +96,7 @@ export const StCounter = styled.div`
 
   font-weight: 600;
 `;
+
+export const StRefBox = styled.div`
+  height: 200px;
+`;

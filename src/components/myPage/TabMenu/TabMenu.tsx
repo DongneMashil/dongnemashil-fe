@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { TabButton } from '../TabButton/TabButton';
-import { getMyReviews } from 'api/mypageApi';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { GetMyReviewsResponse, getMyReviews } from 'api/mypageApi';
 import { useNavigate } from 'react-router-dom';
 import {
   StCounter,
+  StRefBox,
   StReviewBox,
   StTabButtonBox,
   StTabButtonWrapper,
@@ -12,50 +12,18 @@ import {
   StTabContentBox,
 } from './TabMenu.styles';
 import { timeFormatWithoutTime } from 'utils';
-import { useIntersect } from 'hooks/useIntersect';
+import { useInfinityScroll } from 'hooks';
 export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
   const [selectedTab, setSelectedTab] = useState('reviews');
   const navigate = useNavigate();
 
-  const useInfinityScroll = () => {
-    const fetchComment = async ({ pageParam = 1 }) => {
-      const response = await getMyReviews(selectedTab, pageParam);
+  //무한스크롤 커스텀훅
+  const { data, hasNextPage, loaderRef, isLoading } =
+    useInfinityScroll<GetMyReviewsResponse>({
+      getAPI: (params) => getMyReviews(selectedTab, params?.page),
+      queryKey: ['myPage', nickName!, selectedTab],
+    });
 
-      console.log(JSON.stringify(response));
-      return {
-        ...response,
-        isLast: response.last,
-        nextPage: pageParam + 1,
-      };
-    };
-
-    const query = useInfiniteQuery(
-      ['myPage', nickName, selectedTab],
-      fetchComment,
-      {
-        getNextPageParam: (currentPage) => {
-          if (!currentPage.isLast) return currentPage.nextPage;
-          return undefined;
-        },
-      }
-    );
-    return query;
-  };
-  const { data, fetchNextPage, hasNextPage, isLoading } = useInfinityScroll();
-
-  // useIntersect 콜백함수
-  const onIntersectCallback = () => {
-    if (!isLoading) {
-      fetchNextPage();
-    }
-  };
-
-  // 커스텀훅 사용
-  const loaderRef = useIntersect(onIntersectCallback, {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1,
-  });
   return (
     <StTabContainer>
       <StTabButtonWrapper>
@@ -98,9 +66,10 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
                     </div>
                     {hasNextPage && (
                       <>
-                        <div ref={loaderRef} />
+                        <StRefBox ref={loaderRef} />
                       </>
                     )}
+                    {isLoading && <div>로딩중...</div>}
                   </StReviewBox>
                 )
             )
