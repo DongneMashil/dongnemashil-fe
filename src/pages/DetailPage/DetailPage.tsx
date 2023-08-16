@@ -27,8 +27,20 @@ import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 export const DetailPage = () => {
   const [isMapOpen, setIsMapOpen] = React.useState(false);
   const setCommentCount = useSetRecoilState(commentCountAtom);
-  const userState = useRecoilValue(userProfileSelector);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const defaultAddress = '서울특별시 마포구 와우산로 94'; //정보가 없을시 기본 주소
+
+  //리뷰 아이디 없이 접근시 홈으로 이동
+  const { reviewId } = useParams<{ reviewId: string }>();
+  if (!reviewId) {
+    alert('리뷰 아이디가 없습니다.');
+    window.location.href = '/';
+    throw new Error('Review ID is missing');
+  }
+
+  //유저정보조회 및 업데이트
   const { data: userData } = useVerifyUser(true);
+  const userState = useRecoilValue(userProfileSelector); //업데이트 후 조회
   useEffect(() => {
     console.log('current user state: ', userState);
     if (userData) {
@@ -36,23 +48,18 @@ export const DetailPage = () => {
     }
   }, [userState]);
 
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  const { reviewId } = useParams<{ reviewId: string }>();
-  if (!reviewId) {
-    throw new Error('Review ID is missing');
-  }
-
+  //리뷰 상세 조회
   const { data } = useQuery<ReviewDetailResponse, Error>({
     queryKey: ['reviewDetail', reviewId],
     queryFn: () => getReviewDetail(reviewId),
     enabled: !!reviewId,
     onSuccess: (data) => {
       console.log(data);
-      setCommentCount(data.commentCnt); // Recoil 상태에 댓글 개수를 설정
+      setCommentCount(data.commentCnt); // Recoil 댓글 개수를 설정
     },
   });
 
+  //content로 이동하기 버튼
   const handleGotoContent = () => {
     if (contentRef.current) {
       contentRef.current.scrollIntoView({
@@ -62,7 +69,6 @@ export const DetailPage = () => {
     }
   };
 
-  const defaultAddress = '서울특별시 마포구 와우산로 94';
   return (
     <>
       {isMapOpen ? (

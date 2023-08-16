@@ -13,12 +13,12 @@ import { ReactComponent as CommentIcon } from 'assets/icons/CommentL.svg';
 import { StButton, StMyPageContainer } from './Mypage.styles';
 export const MyPage = () => {
   const navigate = useNavigate();
-  const userState = useRecoilValue(userProfileSelector);
-  const { data: userData } = useVerifyUser(true);
-
   const [shouldLogout, setShouldLogout] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  //유저정보 조회 및 업데이트
+  const { data: userData } = useVerifyUser(true);
+  const userState = useRecoilValue(userProfileSelector);
   useEffect(() => {
     console.log('current user state: ', userState);
     if (userData) {
@@ -26,15 +26,21 @@ export const MyPage = () => {
     }
   }, [userState]);
 
+  //로그아웃
   const onLogoutHandler = useCallback(() => {
     setShouldLogout(true);
   }, []);
-
   const { isError } = useLogout(shouldLogout);
   if (isError) {
     console.log('로그아웃 실패');
   }
 
+  //프로필 수정 이동
+  const navigateToProfileHandler = () => {
+    navigate('/mypage/profile');
+  };
+
+  //내 정보 조회
   const { data } = useQuery<MyProfile, Error>({
     queryKey: ['myPage', userData?.nickname],
     queryFn: () => getMyProfile(),
@@ -45,10 +51,6 @@ export const MyPage = () => {
       console.log('🔴' + error);
     },
   });
-
-  const navigateToProfileHandler = () => {
-    navigate('/mypage/profile');
-  };
 
   return (
     <CommonLayout

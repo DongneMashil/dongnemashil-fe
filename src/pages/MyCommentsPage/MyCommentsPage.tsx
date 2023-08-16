@@ -15,6 +15,7 @@ import { useInfinityScroll } from 'hooks';
 export const MyCommentsPage = () => {
   const userState = useRecoilValue(userProfileSelector);
 
+  //useInfinityScroll 커스텀훅 사용
   const { data, hasNextPage, loaderRef, isLoading } =
     useInfinityScroll<GetMyCommentResponse>({
       getAPI: (params) => getMyComments(params?.page),
