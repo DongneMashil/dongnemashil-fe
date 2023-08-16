@@ -5,6 +5,7 @@ import {
   StSort,
   StTarget,
   StThumbnailWrapper,
+  StTopWrapper,
 } from './ThumbnailWrapper.styles';
 import { useIntersect } from 'hooks/useIntersect';
 import { Button } from 'components/common';
@@ -17,6 +18,7 @@ export interface ReviewsProps {
   isFetching: boolean;
   fetchNextPage: UseInfiniteQueryResult['fetchNextPage'];
   onClickSort: (type: string) => void;
+  totalElements?: number | null;
 }
 
 export const ThumbnailWrapper = ({
@@ -26,6 +28,7 @@ export const ThumbnailWrapper = ({
   isFetching,
   fetchNextPage,
   onClickSort,
+  totalElements,
 }: ReviewsProps) => {
   console.log(type);
 
@@ -43,23 +46,29 @@ export const ThumbnailWrapper = ({
 
   return (
     <StThumbnailWrapper>
-      <StSort>
-        <Button
-          onClick={() => onClickSort('likes')}
-          type="onlyTextToggle"
-          $active={type === 'likes'}
-        >
-          인기순
-        </Button>
-        <Button
-          onClick={() => onClickSort('recent')}
-          type="onlyTextToggle"
-          $active={type === 'recent'}
-        >
-          최신순
-        </Button>
-      </StSort>
-
+      <StTopWrapper>
+        {totalElements && (
+          <span>
+            <strong>{totalElements}</strong> 개
+          </span>
+        )}
+        <StSort>
+          <Button
+            onClick={() => onClickSort('likes')}
+            type="onlyTextToggle"
+            $active={type === 'likes'}
+          >
+            인기순
+          </Button>
+          <Button
+            onClick={() => onClickSort('recent')}
+            type="onlyTextToggle"
+            $active={type === 'recent'}
+          >
+            최신순
+          </Button>
+        </StSort>
+      </StTopWrapper>
       {reviews?.map((review) => (
         <Thumbnail
           key={review.id}
