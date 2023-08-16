@@ -76,8 +76,7 @@ export const StDetailPageContent = styled.div`
   gap: 0.3rem;
   .detailimg {
     width: 100%;
-    height: 300px;
-    object-fit: cover;
+    object-fit: contain;
   }
   p {
     margin: 1rem 0.5rem 1rem 0.5rem;

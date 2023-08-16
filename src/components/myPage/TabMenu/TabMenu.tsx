@@ -65,18 +65,19 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
                         </div>
                       )}
                     </div>
-                    {hasNextPage && (
-                      <>
-                        <StRefBox ref={loaderRef} />
-                      </>
-                    )}
+
                     {isLoading && <div>로딩중...</div>}
                   </StReviewBox>
                 )
             )
           )
         ) : (
-          <div>👀 데이터가 없습니다!</div>
+          <div>👀 게시글이 없습니다!</div>
+        )}{' '}
+        {hasNextPage && (
+          <>
+            <StRefBox ref={loaderRef} />
+          </>
         )}
       </StTabContentBox>
     </StTabContainer>
