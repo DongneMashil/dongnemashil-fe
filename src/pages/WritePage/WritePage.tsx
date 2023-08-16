@@ -13,7 +13,7 @@ import {
 import { CommonLayout, NavBar } from 'components/layout';
 import { FileSlider } from 'components/writePage';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getReview, submitReview } from 'api/reviews';
+import { getReview, submitReview, updateReview } from 'api/reviews';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ToggleTagButton } from 'components/common';
 import { useVerifyUser } from 'hooks';
@@ -46,9 +46,14 @@ export const WritePage = () => {
   const { isLoading, isError, isSuccess } = useVerifyUser(true);
   const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
 
+  const updateMutation = useMutation((formData: FormData) =>
+    updateReview(reviewId, formData)
+  );
+
   const { data: reviewData } = useQuery(['review', reviewId], () =>
     getReview(reviewId)
   );
+
   useEffect(() => {
     if (reviewData) {
       setFormValues({
@@ -71,7 +76,7 @@ export const WritePage = () => {
               const response = await fetch(url);
               if (response.ok) {
                 const blob = await response.blob();
-                return blob; // Valid blob
+                return blob;
               } else {
                 console.error('Error fetching sub image:', response.statusText);
                 return null;
@@ -166,7 +171,7 @@ export const WritePage = () => {
       alert('동영상은 한개만 가능합니다.😱');
       return;
     }
-    
+
     validFiles.forEach((file) => {
       const fileType: 'image' | 'video' = file.type.startsWith('image/')
         ? 'image'
@@ -265,21 +270,39 @@ export const WritePage = () => {
       }
     });
 
-    mutation.mutate(formData, {
-      onSuccess: (response) => {
-        console.log('등록성공', response);
-        navigate(`/review/${response.id}`);
-      },
-      onError: (error: unknown) => {
-        if (typeof error === 'string') {
-          console.log('실패', error);
-        } else if (error instanceof Error) {
-          console.log('실패', error.message);
-        } else {
-          console.log('실패', error);
-        }
-      },
-    });
+    if (reviewId) {
+      updateMutation.mutate(formData, {
+        onSuccess: (response) => {
+          console.log('수정 성공', response);
+          navigate(`/review/${response.id}`);
+        },
+        onError: (error: unknown) => {
+          if (typeof error === 'string') {
+            console.log('수정 실패', error);
+          } else if (error instanceof Error) {
+            console.log('수정 실패', error.message);
+          } else {
+            console.log('수정 실패', error);
+          }
+        },
+      });
+    } else {
+      mutation.mutate(formData, {
+        onSuccess: (response) => {
+          console.log('등록성공', response);
+          navigate(`/review/${response.id}`);
+        },
+        onError: (error: unknown) => {
+          if (typeof error === 'string') {
+            console.log('실패', error);
+          } else if (error instanceof Error) {
+            console.log('실패', error.message);
+          } else {
+            console.log('실패', error);
+          }
+        },
+      });
+    }
   };
 
   const determineIsCoverImage = (targetFile: File) => {

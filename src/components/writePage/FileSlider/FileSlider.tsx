@@ -10,6 +10,7 @@ import {
   StDelete,
 } from './FileSlider.styles';
 import { ReactComponent as FileUpload } from 'assets/icons/FileUpload.svg';
+import { ReactComponent as TrashCan } from 'assets/icons/TrashCan.svg';
 
 interface ImageSliderProps {
   images: File[];
@@ -65,7 +66,9 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
           ) : (
             <StVideo src={URL.createObjectURL(images[index])} controls />
           )}
-          <StDelete onClick={() => onImageDelete(file.file)}>x</StDelete>
+          <StDelete onClick={() => onImageDelete(file.file)}>
+            <TrashCan />
+          </StDelete>
         </StImageContainer>
       ))}
       <StCenteredBox>
