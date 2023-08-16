@@ -104,22 +104,6 @@ export const MyProfilePage = () => {
     if (!postData.imgUrl) {
       alert('프로필 사진을 등록해주세요.');
       return;
-      // // 이미지가 없을 경우 기존 이미지를 그대로 사용합니다.
-      // // const response = await axios.get(fileUrl!, { responseType: 'blob' });
-      // // const blob = response.data;
-      // const response = await fetch(fileUrl!, {
-      //   method: 'GET',
-      //   redirect: 'follow',
-      //   mode: 'no-cors',
-      // });
-      // const blob = await response.blob();
-      // const extension = getExtensionName(blob.type);
-      // const finalFilename = 'prevImage' + extension; //파일 이름 설정
-      // const prevImage = new File([blob], finalFilename, { type: blob.type });
-      // setPostData((prev) => ({
-      //   ...prev,
-      //   imgUrl: prevImage,
-      // }));
     }
 
     try {
