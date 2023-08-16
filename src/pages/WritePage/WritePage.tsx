@@ -2,16 +2,11 @@ import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   StCurrentAddress,
   StCurrentAddressWrapper,
-  StContentBox,
   StContentContainer,
-  StHiddenButton,
-  StTitle,
   StTotalTag,
   StTagContainer,
-  StFormWrapper,
 } from './WritePage.styles';
 import { CommonLayout, NavBar } from 'components/layout';
-import { FileSlider } from 'components/writePage';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getReview, submitReview, updateReview } from 'api/reviews';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -21,6 +16,7 @@ import { useRecoilValue } from 'recoil';
 import { userIsLoggedInSelector } from 'recoil/userExample';
 import { addressSelector } from 'recoil/address/addressSelector';
 import { ReactComponent as PurpleMarker } from 'assets/icons/PurpleMarker.svg';
+import { ReviewForm } from 'components/writePage';
 
 interface FormValues {
   title: string;
@@ -348,39 +344,19 @@ export const WritePage = () => {
             </StCurrentAddressWrapper>
             <ToggleTagButton onTagChange={handleTagChange} />
           </StTagContainer>
-          <StFormWrapper>
-            <StTitle
-              type="text"
-              name="title"
-              value={formValues.title}
-              onChange={onInputChange}
-              placeholder="제목"
-            />
-            <FileSlider
-              files={mediaFiles}
-              images={mediaFiles.map((file) => file.file)}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              onAddImage={onButtonClick}
-              onSelectedCoverImage={setCoverImage}
-              isCoverImage={determineIsCoverImage}
-              setCoverImage={setCoverImage}
-              onDeleteImage={onDeleteImage}
-            />
-            <StHiddenButton
-              ref={fileInputRef}
-              type="file"
-              accept="image/*, video/*"
-              multiple
-              onChange={onFileChange}
-            />
-            <StContentBox
-              name="content"
-              value={formValues.content}
-              onChange={onInputChange}
-              placeholder="산책은 어땠나요?"
-            />
-          </StFormWrapper>
+          <ReviewForm
+            formValues={formValues}
+            onInputChange={onInputChange}
+            mediaFiles={mediaFiles}
+            onFileChange={onFileChange}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            onAddImage={onButtonClick}
+            setCoverImage={setCoverImage}
+            onDeleteImage={onDeleteImage}
+            determineIsCoverImage={determineIsCoverImage}
+            fileInputRef={fileInputRef}
+          />
         </StContentContainer>
       </CommonLayout>
     </>
