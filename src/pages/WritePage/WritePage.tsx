@@ -1,22 +1,15 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import {
-  StCurrentAddress,
-  StCurrentAddressWrapper,
-  StContentContainer,
-  StTotalTag,
-  StTagContainer,
-} from './WritePage.styles';
+import { StContentContainer } from './WritePage.styles';
 import { CommonLayout, NavBar } from 'components/layout';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getReview, submitReview, updateReview } from 'api/reviews';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ToggleTagButton } from 'components/common';
 import { useVerifyUser } from 'hooks';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userIsLoggedInSelector } from 'recoil/userExample';
 import { addressSelector } from 'recoil/address/addressSelector';
-import { ReactComponent as PurpleMarker } from 'assets/icons/PurpleMarker.svg';
-import { ReviewForm } from 'components/writePage';
+import { ReviewForm, TagContainer } from 'components/writePage';
+import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
 
 interface FormValues {
   title: string;
@@ -37,6 +30,7 @@ export const WritePage = () => {
   >([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const addressData = useRecoilValue(addressSelector);
+  const setAddress = useSetRecoilState(selectedAddressAtom);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { isLoading, isError, isSuccess } = useVerifyUser(true);
@@ -57,6 +51,7 @@ export const WritePage = () => {
         content: reviewData.content,
       });
       setSelectedTags(reviewData.tag.map((t) => t.name));
+      setAddress(reviewData.address);
 
       const fetchMediaFiles = async () => {
         try {
@@ -334,16 +329,12 @@ export const WritePage = () => {
         }
       >
         <StContentContainer>
-          <StTagContainer>
-            <StCurrentAddressWrapper>
-              <div onClick={onGoToWriteMapPageHandler}>
-                <PurpleMarker />
-                <StCurrentAddress>{addressData.roadName}</StCurrentAddress>
-              </div>
-              <StTotalTag>{selectedTags.length}개 선택</StTotalTag>
-            </StCurrentAddressWrapper>
-            <ToggleTagButton onTagChange={handleTagChange} />
-          </StTagContainer>
+          <TagContainer
+            selectedTags={selectedTags}
+            handleTagChange={handleTagChange}
+            addressData={addressData}
+            onGoToWriteMapPageHandler={onGoToWriteMapPageHandler}
+          />
           <ReviewForm
             formValues={formValues}
             onInputChange={onInputChange}
