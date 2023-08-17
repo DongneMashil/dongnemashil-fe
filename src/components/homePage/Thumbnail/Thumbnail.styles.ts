@@ -1,7 +1,7 @@
 import { theme } from 'style/theme';
 import styled, { css } from 'styled-components';
 
-export const StThumbnail = styled.div`
+export const StThumbnail = styled.li`
   display: flex;
   flex-direction: column;
 

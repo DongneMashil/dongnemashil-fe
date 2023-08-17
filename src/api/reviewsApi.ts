@@ -1,5 +1,10 @@
 import { useInfiniteQuery, QueryFunctionContext } from '@tanstack/react-query';
 import { axiosInstance } from './api';
+import { useRecoilValue } from 'recoil';
+import {
+  selectedTagSelector,
+  sortTypeSelector,
+} from 'recoil/reviewsQuery/reviewsQuery';
 
 export interface ReviewsAndPageable {
   content: ReviewsList[];
@@ -44,8 +49,6 @@ export interface Pageable {
 }
 
 interface PaginationParams {
-  type: string;
-  tag?: string | null;
   q?: string | null;
 }
 
@@ -55,30 +58,19 @@ const reviewKeys = {
   // list: (type: string) => [...reviewKeys.lists(), { type }] as const,
 };
 
-export const useFetchReviews = ({ type, tag }: PaginationParams) => {
-  return useInfiniteQuery(
-    reviewKeys.lists(),
-    ({ pageParam = 1 }: QueryFunctionContext) =>
-      axiosInstance.get<ReviewsAndPageable>('/reviews', {
-        params: { type, page: pageParam, tag },
-      }),
-    {
-      getNextPageParam: ({ data: { last, number } }) =>
-        last ? undefined : number + 2,
-    }
-  );
-};
+export const useFetchReviews = ({ q }: PaginationParams = {}) => {
+  const tag = useRecoilValue(selectedTagSelector);
+  const type = useRecoilValue(sortTypeSelector);
 
-export const useFetchSearchReviews = ({ type, tag, q }: PaginationParams) => {
-  return useInfiniteQuery(
-    reviewKeys.lists(),
-    ({ pageParam = 1 }: QueryFunctionContext) =>
-      axiosInstance.get<ReviewsAndPageable>('/search', {
-        params: { type, page: pageParam, tag, q },
-      }),
-    {
-      getNextPageParam: ({ data: { last, number } }) =>
-        last ? undefined : number + 2,
-    }
-  );
+  const queryKey = reviewKeys.all;
+
+  const queryFn = ({ pageParam = 1 }: QueryFunctionContext) =>
+    axiosInstance.get<ReviewsAndPageable>(q ? '/search' : '/reviews', {
+      params: { type, page: pageParam, tag, q },
+    });
+
+  return useInfiniteQuery(queryKey, queryFn, {
+    getNextPageParam: ({ data: { last, number } }) =>
+      last ? undefined : number + 2,
+  });
 };

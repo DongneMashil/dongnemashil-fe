@@ -3,22 +3,28 @@ import { MyProfile, getMyProfile, postProfile } from 'api/mypageApi';
 import { CommonLayout, NavBar } from 'components/layout';
 import { useVerifyUser } from 'hooks';
 import React, { useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
-import { styled } from 'styled-components';
 import noUser from 'assets/images/NoUser.gif';
 import imageCompression from 'browser-image-compression';
 import { AuthInputBox, AuthErrorMsg } from 'components/common';
 import { confirmNickname } from 'api/loginApi';
-// import axios from 'axios';
 import { getExtensionName } from 'components/myProfilePage';
+import { useNavigate } from 'react-router-dom';
+import { queryClient } from 'queries/queryClient';
+import {
+  StMyProfileContainer,
+  StNickNameTitle,
+  StNickNameWrapper,
+  StProfileImage,
+} from './MyProfilePage.styles';
 
 export const MyProfilePage = () => {
-  const userState = useRecoilValue(userProfileSelector);
   const { data: userData } = useVerifyUser(true);
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const fileUpload = useRef();
-
+  const navigate = useNavigate();
+  const [userState, setUserState] = useRecoilState(userProfileSelector);
   const [postData, setPostData] = useState<{
     nickname?: string;
     imgUrl?: File | null;
@@ -50,24 +56,11 @@ export const MyProfilePage = () => {
       console.log(JSON.stringify(response) + '🐠');
       console.log(`Response OK? ${response.ok}`);
       console.log(`Response Status: ${response.status}`);
-      const responseText = await response.text();
-      console.log(`Response Text: ${responseText}`);
-      const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      console.log(blobUrl + '🦋');
 
-      const img = document.createElement('img');
-      img.src = blobUrl;
-      document.body.appendChild(img);
-      const reader = new FileReader();
-      reader.onload = function () {
-        console.log(reader.result); // Blob 또는 File의 내용
-      };
-      reader.readAsText(blob); // 또는 readAsDataURL(blob)로 Base6
-      const extension = getExtensionName(blob.type);
-      const finalFilename = 'prevImage' + extension; //파일 이름 설정
+      const blob = await response.blob();
+      const extension = getExtensionName(data.profileImgUrl!);
+      const finalFilename = 'prev.' + extension; //파일 이름 설정
       const prevImage = new File([blob], finalFilename, { type: blob.type });
-      console.log(JSON.stringify(prevImage) + '🐬');
       setPostData((prev) => ({
         ...prev,
         imgUrl: prevImage,
@@ -136,6 +129,9 @@ export const MyProfilePage = () => {
       });
       console.log('👁️' + JSON.stringify(response));
       alert('성공적으로 등록되었습니다.');
+      queryClient.invalidateQueries(['myPage']);
+      setUserState((prev) => ({ ...prev, nickname: postData.nickname }));
+      navigate('/');
     } catch (error) {
       console.error('😀' + error);
     }
@@ -231,69 +227,3 @@ export const MyProfilePage = () => {
     </CommonLayout>
   );
 };
-
-const StNickNameTitle = styled.div`
-  margin-top: 40px;
-  width: 100%;
-  color: var(--strokepurple, #9a7b9a);
-  font-family: Pretendard;
-`;
-
-const StNickNameWrapper = styled.div`
-  margin: 0 1rem 1rem 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-
-  width: 100%;
-
-  .error {
-    margin-left: 0.3rem;
-    margin-right: auto;
-  }
-`;
-const StMyProfileContainer = styled.div`
-  width: 100%;
-  padding: 0 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-`;
-const StProfileImage = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-top: 40px;
-
-  img {
-    width: 84px;
-    height: 84px;
-    border-radius: 50px;
-    object-fit: cover;
-  }
-  label {
-    color: var(--strokepurple, #9a7b9a);
-    text-align: center;
-    font-family: Pretendard;
-    font-size: 1rem;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    cursor: pointer;
-    height: 40px;
-  }
-
-  input[type='file'] {
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
-  }
-`;

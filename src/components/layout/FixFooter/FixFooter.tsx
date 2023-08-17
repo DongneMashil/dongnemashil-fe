@@ -23,7 +23,7 @@ export const FixFooter = ({
   const centerWrapper = {
     map: (
       <Button
-        onClick={() => onClickCenter}
+        onClick={onClickCenter}
         type="borderRound"
         $width={'90px'}
         $height={'27px'}
@@ -45,6 +45,7 @@ export const FixFooter = ({
           동네
         </Button>
         <Button
+          url="/write"
           type="borderRound"
           $width={'70px'}
           $height={'70px'}
@@ -58,6 +59,7 @@ export const FixFooter = ({
     goTop: (
       <>
         <Button
+          // onClick={scrollToTop}
           type="borderRound"
           $width={'48px'}
           $height={'48px'}

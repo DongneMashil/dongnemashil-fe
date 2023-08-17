@@ -1,40 +1,50 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import {
+  selectedTagsState,
+  sortTypeState,
+} from 'recoil/reviewsQuery/reviewsQuery';
 import { CommonLayout, FixFooter, NavBar } from 'components/layout';
-import { useFetchSearchReviews } from 'api/reviewsApi';
-// import { SearchResultMapPage } from 'pages/SearchResultMapPage/SearchResultMapPage';
+import { useFetchReviews } from 'api/reviewsApi';
+import { SearchResultMapPage } from 'pages/SearchResultMapPage/SearchResultMapPage';
 import { SearchResultListPage } from 'pages/SearchResultListPage/SearchResultListPage';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import { useLocation } from 'react-router-dom';
 import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
+import { useScrollToTop } from 'hooks/useScrollToTop';
 
 export const SearchResultPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const q = queryParams.get('q');
-  console.log(q);
-  // const [isMapOpen, setIsMapOpen] = useState(false);
+  const [isMapOpen, setIsMapOpen] = useState<boolean>(false);
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [type, setType] = useState('likes');
-  const tag = selectedTags.length > 0 ? selectedTags.join(',') : null;
+  const [selectedTags, setSelectedTags] = useRecoilState(selectedTagsState);
+  const [type, setType] = useRecoilState(sortTypeState);
+
   const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
-    useFetchSearchReviews({
-      type,
-      tag,
-      q,
-    });
+    useFetchReviews({ q });
 
   const reviews = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data.content) : []),
     [data]
   );
 
+  const totalElements = useMemo(
+    () => (data ? data.pages[0].data.totalElements : 0),
+    [data]
+  );
+
+  console.log(data, totalElements);
+
   console.log(isFetching);
   console.log(hasNextPage);
 
   useEffect(() => {
     refetch();
-  }, [type, tag]);
+    console.log('data ', data);
+    console.log('isMapOpen ', isMapOpen);
+  }, [type, selectedTags]);
 
   const onClickSort = (type: string) => {
     if (type === 'likes' || type === 'recent') {
@@ -46,9 +56,11 @@ export const SearchResultPage = () => {
     setSelectedTags(tags);
   };
 
-  // const onClickMapOpen = () => {
-  //   setIsMapOpen(true);
-  // };
+  const toggleMapOpen = () => {
+    setIsMapOpen(!isMapOpen);
+  };
+
+  const { scrollToTop } = useScrollToTop();
 
   return (
     <CommonLayout
@@ -66,12 +78,11 @@ export const SearchResultPage = () => {
         <FixFooter
           centerButtons={'map'}
           rightButtons={'goTop'}
-          // onClickCenter={onClickMapOpen}
+          onClickCenter={toggleMapOpen}
         />
       }
     >
       <ToggleTagButton onTagChange={handleTagChange} />
-
       <SearchResultListPage
         type={type}
         reviews={reviews}
@@ -79,8 +90,14 @@ export const SearchResultPage = () => {
         isFetching={isFetching}
         fetchNextPage={fetchNextPage}
         onClickSort={onClickSort}
+        totalElements={totalElements}
       />
-      {/* {isMapOpen && <SearchResultMapPage reviewList={reviews} />} */}
+      <button id="scroll-to-top-button" onClick={scrollToTop}>
+        Scroll to Top
+      </button>
+      {isMapOpen && (
+        <SearchResultMapPage reviewList={reviews} onToggle={toggleMapOpen} />
+      )}
     </CommonLayout>
   );
 };
