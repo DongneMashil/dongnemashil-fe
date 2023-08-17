@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { MyProfile, getMyProfile } from 'api/mypageApi';
 
 import { Button } from 'components/common';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StCenterWrapper, StNavBar, StRighttWrapper } from './NavBar.styles';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
@@ -33,6 +33,31 @@ export const NavBar = ({
 }: NavBarProps) => {
   const { data: userData } = useVerifyUser(true);
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
+  const [prevScrollY, setPrevScrollY] = useState<number>(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      console.log(currentScrollY, prevScrollY);
+
+      if (currentScrollY > prevScrollY) {
+        setScrollDirection('down');
+      } else {
+        setScrollDirection('up');
+      }
+
+      setPrevScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollY]);
+
+  const isNavBarVisible = scrollDirection === 'up' || window.scrollY <= 1;
 
   const { data } = useQuery<MyProfile, Error>({
     queryKey: ['myPage', userData?.nickname],
@@ -118,7 +143,11 @@ export const NavBar = ({
   };
 
   return (
-    <StNavBar>
+    <StNavBar
+      style={{
+        transform: isNavBarVisible ? 'translateY(0)' : 'translateY(-100%)',
+      }}
+    >
       <div>{leftButtons[btnLeft]}</div>
       {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
       <StRighttWrapper>

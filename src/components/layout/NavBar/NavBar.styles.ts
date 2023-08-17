@@ -3,6 +3,9 @@ import { NavBarProps } from './NavBar';
 import { theme } from 'style/theme';
 
 export const StNavBar = styled.div<NavBarProps>`
+  position: fixed;
+  top: 0;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
