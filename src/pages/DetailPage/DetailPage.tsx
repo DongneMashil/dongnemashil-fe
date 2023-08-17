@@ -4,7 +4,7 @@ import { getReviewDetail, ReviewDetailResponse } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
-import { FooterSpacer, Modal, Tag } from 'components/common';
+import { Button, FooterSpacer, Modal, Tag } from 'components/common';
 import {
   StCreatedTime,
   StDetailPageContainer,
@@ -23,6 +23,8 @@ import { userProfileSelector } from 'recoil/userExample';
 import { useVerifyUser } from 'hooks';
 import { DetailMap } from 'components/detailPage';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
+import { ReactComponent as Trash } from 'assets/icons/Trash.svg';
+import { ReactComponent as Edit } from 'assets/icons/Edit.svg';
 
 export const DetailPage = () => {
   const [isMapOpen, setIsMapOpen] = React.useState(false);
@@ -68,7 +70,7 @@ export const DetailPage = () => {
       });
     }
   };
-  const [isModalWindowOpen, setIsModalWindowOpen] = useState(false);
+  const [isDeleteDetailModalOpen, setIsDeleteDetailModalOpen] = useState(false);
   return (
     <>
       {isMapOpen ? (
@@ -113,21 +115,29 @@ export const DetailPage = () => {
           backgroundColor="#FFF"
         >
           <StDetailPageContainer>
-            <Modal
-              isOpen={isModalWindowOpen}
-              onSubmitText="서브밋버튼"
-              title="제목 제목"
-              firstLine="첫번째줄 첫번째줄 첫번째줄"
-              secondLine="두번째줄 두번째줄 두번째줄?"
-              onSubmitHandler={() => alert('submit')}
-              onCloseHandler={() => setIsModalWindowOpen(false)}
-            />
             {data && (
               <>
                 <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>
                 <StDetailPageHeader>
                   <img src={data.profileImgUrl || noUser} />
                   <span className="nickname">{data.nickname}</span>
+                  {userData?.nickname === data.nickname && (
+                    <>
+                      <Button
+                        type="circle"
+                        onClick={() => alert('수정하기 연결중')}
+                      >
+                        <Edit className="edit" />
+                      </Button>
+                      <Button
+                        type="circle"
+                        onClick={() => setIsDeleteDetailModalOpen(true)}
+                      >
+                        <Trash />
+                      </Button>
+                    </>
+                  )}
+
                   <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
                 </StDetailPageHeader>
                 <StDetailPageContent>
@@ -159,6 +169,15 @@ export const DetailPage = () => {
                     ))}
                   </StTagWrapper>
                   <FooterSpacer />
+                  <Modal
+                    isOpen={isDeleteDetailModalOpen}
+                    onSubmitText="삭제"
+                    title="삭제"
+                    firstLine="삭제된 글은 복구할 수 없습니다."
+                    secondLine="삭제하시겠습니까?"
+                    onSubmitHandler={() => alert('submit')}
+                    onCloseHandler={() => setIsDeleteDetailModalOpen(false)}
+                  />
                 </StDetailPageContent>
               </>
             )}

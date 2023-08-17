@@ -59,7 +59,12 @@ export const StButton = styled.button<{
     font-size: 0.875rem;
     line-height: normal;
   }
-
+  &.circle {
+    width: 2.125rem;
+    height: 2.125rem;
+    border-radius: 50%;
+    border: 1px solid #b3a6b3;
+  }
   &.onlyText {
     text-align: center;
     font-size: 0.875rem;
