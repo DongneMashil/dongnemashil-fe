@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TabButton } from '../TabButton/TabButton';
-import { GetMyReviewsResponse, getMyReviews } from 'api/mypageApi';
+import { getMyReviews } from 'api/mypageApi';
 import { useNavigate } from 'react-router-dom';
 import {
   StCounter,
@@ -12,19 +12,50 @@ import {
   StTabContentBox,
 } from './TabMenu.styles';
 import { timeFormatWithoutTime } from 'utils';
-import { useInfinityScroll } from 'hooks';
+import { useIntersect } from 'hooks/useIntersect';
+import { useInfiniteQuery } from '@tanstack/react-query';
 export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
   const [selectedTab, setSelectedTab] = useState('reviews');
   const navigate = useNavigate();
 
-  //무한스크롤 커스텀훅
-  const { data, hasNextPage, loaderRef, isLoading } =
-    useInfinityScroll<GetMyReviewsResponse>({
-      getAPI: getMyReviews,
-      queryKey: ['myPage', nickName!, selectedTab],
-      qValue: selectedTab,
-    });
+  const useInfinityScroll = () => {
+    const fetchItems = async ({ pageParam = 1 }) => {
+      const response = await getMyReviews(selectedTab, pageParam);
+      console.log(JSON.stringify(response));
+      return {
+        ...response,
+        isLast: response.last,
+        nextPage: pageParam + 1,
+      };
+    };
 
+    const query = useInfiniteQuery(
+      ['myPage', nickName, selectedTab],
+      fetchItems,
+      {
+        getNextPageParam: (currentPage) => {
+          if (!currentPage.isLast) return currentPage.nextPage;
+          return undefined;
+        },
+      }
+    );
+    return query;
+  };
+  const { data, fetchNextPage, hasNextPage, isLoading } = useInfinityScroll();
+
+  // useIntersect 콜백함수
+  const onIntersectCallback = () => {
+    if (!isLoading) {
+      fetchNextPage();
+    }
+  };
+
+  // 커스텀훅 사용
+  const loaderRef = useIntersect(onIntersectCallback, {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1,
+  });
   return (
     <StTabContainer>
       <StTabButtonWrapper>

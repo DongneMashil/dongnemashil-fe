@@ -7,7 +7,7 @@ import { useRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import noUser from 'assets/images/NoUser.gif';
 import imageCompression from 'browser-image-compression';
-import { AuthInputBox, AuthErrorMsg } from 'components/common';
+import { AuthInputBox, AuthErrorMsg, Modal } from 'components/common';
 import { confirmNickname } from 'api/loginApi';
 import { getExtensionName } from 'components/myProfilePage';
 import { useNavigate } from 'react-router-dom';
@@ -18,11 +18,13 @@ import {
   StNickNameWrapper,
   StProfileImage,
 } from './MyProfilePage.styles';
+import axios from 'axios';
 
 export const MyProfilePage = () => {
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const fileUpload = useRef();
   const navigate = useNavigate();
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false); //닉네임 중복확인 실패시 모달창
   const [postData, setPostData] = useState<{
     nickname?: string;
     imgUrl?: File | null;
@@ -36,37 +38,40 @@ export const MyProfilePage = () => {
   //유저정보 조회 및 업데이트
   const { data: userData } = useVerifyUser(true);
   const [userState, setUserState] = useRecoilState(userProfileSelector);
+  // const [isAxiosErrorModalOpen, setIsAxiosErrorModalOpen] = useState(false); //사진 초기 다운로드 실패시 모달창
   useEffect(() => {
     console.log('current user state: ', userState);
     if (userData) {
       console.log('useVerifyUser data: ', userData);
     }
   }, [userState]);
-
-  //유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
+  // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
   useQuery<MyProfile, Error>({
     queryKey: ['myPage', userData?.nickname],
     queryFn: () => getMyProfile(),
-    // enabled: !!userData?.nickname,
     onSuccess: async (data) => {
       console.log(data);
       setFileUrl(data.profileImgUrl);
-      const response = await fetch(data.profileImgUrl!, {
-        method: 'GET',
-        redirect: 'follow',
-      });
-      console.log(`Response OK? ${response.ok}`);
-      console.log(`Response Status: ${response.status}`);
 
-      const blob = await response.blob();
-      const extension = getExtensionName(data.profileImgUrl!);
-      const finalFilename = 'prev.' + extension; //파일 이름 설정
-      const prevImage = new File([blob], finalFilename, { type: blob.type });
-      setPostData((prev) => ({
-        ...prev,
-        imgUrl: prevImage, //기존 이미지 파일
-        nickname: data.nickname, // 기존 닉네임
-      }));
+      try {
+        const response = await axios.get(data.profileImgUrl!, {
+          responseType: 'blob',
+        });
+        console.log(`Response Status: ${response.status}`);
+
+        const blob = response.data;
+        const extension = getExtensionName(data.profileImgUrl!);
+        const finalFilename = 'prev.' + extension;
+        const prevImage = new File([blob], finalFilename, { type: blob.type });
+        setPostData((prev) => ({
+          ...prev,
+          imgUrl: prevImage,
+          nickname: data.nickname,
+        }));
+      } catch (error) {
+        console.error('Error fetching the image:', error);
+        // setIsAxiosErrorModalOpen(true);
+      }
     },
     onError: (error) => {
       console.log('🔴' + error);
@@ -101,8 +106,11 @@ export const MyProfilePage = () => {
 
   const onSubmitHandler = async () => {
     console.log('👦🏾' + JSON.stringify(postData));
-    if (!postData.imgUrl) {
-      alert('프로필 사진을 등록해주세요.');
+    if (
+      postData.imgUrl === fileUrl &&
+      postData.nickname === userData?.nickname
+    ) {
+      alert('변경된 정보가 없습니다.');
       return;
     }
     try {
@@ -204,6 +212,18 @@ export const MyProfilePage = () => {
             <AuthErrorMsg isValid={postData.validation.isValid}>
               {postData.validation.msg}
             </AuthErrorMsg>
+            <Modal
+              isOpen={isErrorModalOpen}
+              title="완료"
+              firstLine="삭제가 완료되었습니다."
+              onCloseHandler={() => setIsErrorModalOpen(false)}
+            />
+            {/* <Modal
+              isOpen={isAxiosErrorModalOpen}
+              title="주의"
+              firstLine="수정시 사진 파일을 다시 업로드해주세요!"
+              onCloseHandler={() => setIsAxiosErrorModalOpen(false)}
+            /> */}
           </div>
         </StNickNameWrapper>
       </StMyProfileContainer>

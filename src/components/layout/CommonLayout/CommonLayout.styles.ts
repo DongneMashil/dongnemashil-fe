@@ -35,6 +35,8 @@ export const StLayoutSection = styled.div<{
   &::-webkit-scrollbar {
     display: none;
   }
+
+  overscroll-behavior-y: none; //아이폰 바운싱 효과 막음
 `;
 
 export const StSlidingHeader = styled.div<{ $isShow: boolean }>`

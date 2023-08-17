@@ -5,8 +5,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useLogout, useVerifyUser } from 'hooks';
 import { MyProfile, getMyProfile } from 'api/mypageApi';
 import { userProfileSelector } from 'recoil/userExample';
-import { Footer, TabMenu, UserInfo } from 'components/myPage';
-import { CommonLayout, NavBar } from 'components/layout';
+import { TabMenu, UserInfo } from 'components/myPage';
+import { CommonLayout, FixFooter, NavBar } from 'components/layout';
 import noUser from 'assets/images/NoUser.gif';
 import { ReactComponent as LogoutIcon } from 'assets/icons/Logout.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/CommentL.svg';
@@ -67,7 +67,12 @@ export const MyPage = () => {
           <NavBar btnLeft="logo" btnRight="mypage"></NavBar>
         )
       }
-      footer={<Footer />}
+      footer={
+        <FixFooter
+          onClickRight={() => navigate('/write')}
+          rightButtons="write"
+        />
+      }
       hideHeader={false}
       backgroundColor="#f5f5f5"
     >

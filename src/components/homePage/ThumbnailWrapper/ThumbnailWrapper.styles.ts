@@ -39,16 +39,14 @@ export const StSort = styled.div`
   justify-content: right;
   flex: 1;
   color: ${theme.lightGrayColor};
+`;
 
-  & button:nth-child(2):before {
-    align-self: center;
-    background: #ebebeb;
-    content: '';
-    height: 10px;
-    margin-left: 8.5px;
-    margin-right: 8.5px;
-    width: 1px;
-  }
+export const StLine = styled.div`
+  background: ${theme.whiteGrayColor};
+  height: 10px;
+  margin-left: 8.5px;
+  margin-right: 8.5px;
+  width: 1px;
 `;
 
 export const StNoReviews = styled.div`

@@ -30,6 +30,7 @@ const Router = () => {
         <Route path="/review/:reviewId" element={<DetailPage />} />
         <Route path="/writemap" element={<WriteMapPage />} />
         <Route path="/writemap/search" element={<WriteMapSearchPage />} />
+        <Route path="/write/:id" element={<WritePage />} />
         <Route
           path="/mypage"
           element={<ProtectedRoute element={<MyPage />} />}
