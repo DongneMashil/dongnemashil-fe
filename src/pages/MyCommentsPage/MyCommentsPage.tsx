@@ -11,10 +11,11 @@ import {
   StMyCommentCounter,
 } from './MyCommentsPage.styles';
 import { useInfinityScroll } from 'hooks';
+import { useNavigate } from 'react-router-dom';
 
 export const MyCommentsPage = () => {
   const userState = useRecoilValue(userProfileSelector);
-
+  const navigate = useNavigate();
   //useInfinityScroll 커스텀훅 사용
   const { data, hasNextPage, loaderRef, isLoading } =
     useInfinityScroll<GetMyCommentResponse>({
@@ -35,8 +36,10 @@ export const MyCommentsPage = () => {
         {data &&
           data.pages.map((page) =>
             page.content.map((item: Comment, index: number) => (
-              <StButton key={index}>
-                {' '}
+              <StButton
+                key={index}
+                onClick={() => navigate(`/review/${item.id}`)}
+              >
                 <CommentS className="CommentS" />
                 <p className="comment">{item.comment}</p>
                 <img src={item.profileImgUrl || ''} />
