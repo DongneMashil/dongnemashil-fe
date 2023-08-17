@@ -1,9 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import {
+  selectedTagsState,
+  sortTypeState,
+} from 'recoil/reviewsQuery/reviewsQuery';
 import { CommonLayout, FixFooter, NavBar } from 'components/layout';
-import { useFetchSearchReviews } from 'api/reviewsApi';
+import { useFetchReviews } from 'api/reviewsApi';
 import { SearchResultMapPage } from 'pages/SearchResultMapPage/SearchResultMapPage';
 import { SearchResultListPage } from 'pages/SearchResultListPage/SearchResultListPage';
-import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import { useLocation } from 'react-router-dom';
 import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
 
@@ -11,23 +15,25 @@ export const SearchResultPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const q = queryParams.get('q');
-  console.log(q);
   const [isMapOpen, setIsMapOpen] = useState<boolean>(false);
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [type, setType] = useState('likes');
-  const tag = selectedTags.length > 0 ? selectedTags.join(',') : null;
+  const [selectedTags, setSelectedTags] = useRecoilState(selectedTagsState);
+  const [type, setType] = useRecoilState(sortTypeState);
+
   const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
-    useFetchSearchReviews({
-      type,
-      tag,
-      q,
-    });
+    useFetchReviews({ q });
 
   const reviews = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data.content) : []),
     [data]
   );
+
+  const totalElements = useMemo(
+    () => (data ? data.pages[0].data.totalElements : 0),
+    [data]
+  );
+
+  console.log(data, totalElements);
 
   console.log(isFetching);
   console.log(hasNextPage);
@@ -36,7 +42,7 @@ export const SearchResultPage = () => {
     refetch();
     console.log('data ', data);
     console.log('isMapOpen ', isMapOpen);
-  }, [type, tag]);
+  }, [type, selectedTags]);
 
   const onClickSort = (type: string) => {
     if (type === 'likes' || type === 'recent') {
@@ -52,15 +58,43 @@ export const SearchResultPage = () => {
     setIsMapOpen(!isMapOpen);
   };
 
+  const scrollToTopRef = useRef<HTMLDivElement>(null);
+
+  const handleGotoTop = () => {
+    if (scrollToTopRef.current) {
+      scrollToTopRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
+  console.log(scrollToTopRef);
+
+  // const handleGotoTop = () => {
+  //   window.scrollTo({
+  //     top: 0,
+  //     behavior: 'smooth',
+  //   });
+  // };
+
+  // const handleGotoTop = () => {
+  //   window.scrollBy({
+  //     top: -300,
+  //     behavior: 'smooth',
+  //   });
+  // };
+
   return (
     <CommonLayout
+      scrollToTopRef={scrollToTopRef}
       header={
         <>
-          <NavBar btnLeft={'logo'} btnRight={'mypage'}>
-            <h1>
-              <Search width="18" height="18" />
-              {q}
-            </h1>
+          <NavBar
+            btnLeft={'logo'}
+            btnSecondRight={'search'}
+            btnRight={'mypage'}
+          >
+            <h1>{q}</h1>
           </NavBar>
         </>
       }
@@ -69,11 +103,11 @@ export const SearchResultPage = () => {
           centerButtons={'map'}
           rightButtons={'goTop'}
           onClickCenter={toggleMapOpen}
+          onClickRight={handleGotoTop}
         />
       }
     >
       <ToggleTagButton onTagChange={handleTagChange} />
-
       <SearchResultListPage
         type={type}
         reviews={reviews}
@@ -81,6 +115,7 @@ export const SearchResultPage = () => {
         isFetching={isFetching}
         fetchNextPage={fetchNextPage}
         onClickSort={onClickSort}
+        totalElements={totalElements}
       />
       {isMapOpen && (
         <SearchResultMapPage reviewList={reviews} onToggle={toggleMapOpen} />

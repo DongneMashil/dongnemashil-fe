@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { TabButton } from '../TabButton/TabButton';
 import { getMyReviews } from 'api/mypageApi';
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import {
   StCounter,
+  StRefBox,
   StReviewBox,
   StTabButtonBox,
   StTabButtonWrapper,
@@ -13,14 +13,14 @@ import {
 } from './TabMenu.styles';
 import { timeFormatWithoutTime } from 'utils';
 import { useIntersect } from 'hooks/useIntersect';
+import { useInfiniteQuery } from '@tanstack/react-query';
 export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
   const [selectedTab, setSelectedTab] = useState('reviews');
   const navigate = useNavigate();
 
   const useInfinityScroll = () => {
-    const fetchComment = async ({ pageParam = 1 }) => {
+    const fetchItems = async ({ pageParam = 1 }) => {
       const response = await getMyReviews(selectedTab, pageParam);
-
       console.log(JSON.stringify(response));
       return {
         ...response,
@@ -31,7 +31,7 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
 
     const query = useInfiniteQuery(
       ['myPage', nickName, selectedTab],
-      fetchComment,
+      fetchItems,
       {
         getNextPageParam: (currentPage) => {
           if (!currentPage.isLast) return currentPage.nextPage;
@@ -96,17 +96,19 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
                         </div>
                       )}
                     </div>
-                    {hasNextPage && (
-                      <>
-                        <div ref={loaderRef} />
-                      </>
-                    )}
+
+                    {isLoading && <div>로딩중...</div>}
                   </StReviewBox>
                 )
             )
           )
         ) : (
-          <div>👀 데이터가 없습니다!</div>
+          <div>👀 게시글이 없습니다!</div>
+        )}{' '}
+        {hasNextPage && (
+          <>
+            <StRefBox ref={loaderRef} />
+          </>
         )}
       </StTabContentBox>
     </StTabContainer>

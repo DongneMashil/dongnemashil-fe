@@ -18,4 +18,5 @@ export const StFooterContatiner = styled.footer<{ $isCommentShow: boolean }>`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  border-top: 0.6px solid #e2e2e2;
 `;

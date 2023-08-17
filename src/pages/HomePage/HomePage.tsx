@@ -1,30 +1,29 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import {
+  selectedTagsState,
+  sortTypeState,
+} from 'recoil/reviewsQuery/reviewsQuery';
 import { CommonLayout, FixFooter, NavBar } from 'components/layout';
 import { ThumbnailWrapper } from 'components/homePage';
 import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
 import { useFetchReviews } from 'api/reviewsApi';
 
 export const HomePage = () => {
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [type, setType] = useState('likes');
-  const tag = selectedTags.length > 0 ? selectedTags.join(',') : null;
+  const [selectedTags, setSelectedTags] = useRecoilState(selectedTagsState);
+  const [type, setType] = useRecoilState(sortTypeState);
+
   const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
-    useFetchReviews({
-      type,
-      tag,
-    });
+    useFetchReviews();
 
   const reviews = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data.content) : []),
     [data]
   );
 
-  console.log(isFetching);
-  console.log(hasNextPage);
-
   useEffect(() => {
     refetch();
-  }, [type, tag]);
+  }, [type, selectedTags]);
 
   const onClickSort = (type: string) => {
     if (type === 'likes' || type === 'recent') {
@@ -36,6 +35,7 @@ export const HomePage = () => {
     setSelectedTags(tags);
   };
   console.log(selectedTags);
+  console.log(hasNextPage, isFetching);
 
   return (
     <CommonLayout

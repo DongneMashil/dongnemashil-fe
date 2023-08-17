@@ -8,6 +8,7 @@ export const StLayoutOuter = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
 `;
 
 export const StLayoutBody = styled.div`
@@ -34,6 +35,8 @@ export const StLayoutSection = styled.div<{
   &::-webkit-scrollbar {
     display: none;
   }
+
+  overscroll-behavior-y: none; //아이폰 바운싱 효과 막음
 `;
 
 export const StSlidingHeader = styled.div<{ $isShow: boolean }>`
@@ -46,4 +49,13 @@ export const StSlidingHeader = styled.div<{ $isShow: boolean }>`
   // @media (max-height: 850px) {
   //   transform: translateY(${(props) => (props.$isShow ? '0' : '-50px')});
   // } //overflow문제로 모바일에서만 적용함 // 문제가 있어서 일단 지움 2023.8.14
+`;
+
+export const StModalPotal = styled.div`
+  position: absolute;
+  // width: 100vw;
+  // max-width: 390px; // 최대 너비 -> 추후 반응형 적용
+  // height: 100vh;
+  // max-height: 850px; // 최대 높이 -> 추후 반응형 적용
+  z-index: 1000;
 `;

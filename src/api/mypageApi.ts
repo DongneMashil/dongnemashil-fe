@@ -61,7 +61,7 @@ export type GetMyReviewsResponse = {
 };
 
 export const getMyReviews = async (
-  type: string,
+  q?: string,
   page?: number
 ): Promise<GetMyReviewsResponse> => {
   // 내 게시글과 내 좋아요 글 조회
@@ -69,7 +69,7 @@ export const getMyReviews = async (
     const response: AxiosResponse<GetMyReviewsResponse> =
       await axiosInstance.get(`/mypage/list`, {
         params: {
-          q: type,
+          q,
           page,
         },
       });
@@ -89,6 +89,7 @@ export type Comment = {
   comment: string;
   createdAt: string;
   modifiedAt: string;
+  reviewId: number;
 };
 
 export type GetMyCommentResponse = {
@@ -119,6 +120,7 @@ export type GetMyCommentResponse = {
   totalPages: number;
   totalElements: number;
 };
+
 export const getMyComments = async (
   page?: number
 ): Promise<GetMyCommentResponse> => {

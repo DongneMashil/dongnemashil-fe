@@ -4,7 +4,6 @@ import { Button, Input } from 'components/common';
 import { queryClient } from 'queries/queryClient';
 import React, { useState } from 'react';
 import { StFooterContatiner, StFooterWrapper } from './CommentInput.styles';
-
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
@@ -19,11 +18,15 @@ export const CommentInput = ({
 }: FooterProps) => {
   const [comment, setComment] = useState('');
   const setCommentAddListener = useSetRecoilState(commentAddListenerAtom);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const userState = useRecoilValue(userProfileSelector);
+
+  // 댓글 등록 함수
   const commentMutation = useMutation(
     (newComment: string) => postComment(reviewId, newComment),
     {
-      onSuccess: (data) => {
-        console.log(data);
+      onSuccess: () => {
         setComment('');
         queryClient.invalidateQueries(['comment', reviewId]);
         setCommentAddListener(true); // 댓글 추가된것을 감지 -> 스크롤 이벤트
@@ -36,29 +39,27 @@ export const CommentInput = ({
     }
   );
 
+  // 댓글 입력
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
   };
-  // useQuery(['comment', reviewId], () => postComment(reviewId, comment), {
-  //   enabled: isCommentPost,
-  //   onSuccess: (data) => {
-  //     console.log(data);
-  //     setComment('');
-  //     setIsCommentPost(false);
-  //   },
-  //   onError: (err) => {
-  //     console.log(err);
-  //     setComment('');
-  //     setIsCommentPost(false);
-  //     alert('댓글 등록에 실패했습니다.');
-  //   },
-  // });
+
+  // 댓글 등록
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(comment);
+    if (isSubmitting || !comment) {
+      console.log('🟥댓글은 1초에 1개만 등록 가능합니다.');
+      return;
+    }
+
+    setIsSubmitting(true);
     commentMutation.mutate(comment);
+
+    setTimeout(() => {
+      setIsSubmitting(false);
+    }, 1000);
   };
-  const userState = useRecoilValue(userProfileSelector);
+
   return (
     <StFooterContatiner $isCommentShow={$isCommentShow}>
       <StFooterWrapper onSubmit={onSubmitHandler}>
@@ -70,16 +71,27 @@ export const CommentInput = ({
               onChange={onChangeHandler}
               value={comment}
             />
-            <Button inputType="submit" type={'normal'} value="등록" />
+            <Button
+              inputType="submit"
+              type={'authOutline'}
+              value="등록"
+              $height="2.5rem"
+            />
           </>
         ) : (
           <>
             {' '}
             <Input
+              type=""
               placeholder="로그인 후 댓글 입력이 가능합니다."
               disabled={true}
             />
-            <Button inputType="button" type={'normal'} url="/login">
+            <Button
+              inputType="button"
+              type={'authOutline'}
+              url="/login"
+              $height="2.5rem"
+            >
               로그인
             </Button>
           </>

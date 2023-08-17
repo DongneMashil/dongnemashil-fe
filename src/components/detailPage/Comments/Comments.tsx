@@ -15,6 +15,7 @@ import { queryClient } from 'queries/queryClient';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
 import { useIntersect } from 'hooks/useIntersect';
+import { Modal } from 'components/common';
 
 interface CommentsProps {
   reviewId: string;
@@ -29,17 +30,18 @@ export const Comments = ({
   const [commentAddListener, setCommentAddListener] = useRecoilState(
     commentAddListenerAtom
   );
-  if (!reviewId) {
-    throw new Error('Review ID is missing');
-  }
+  const [isDeleteCommentModalOpen, setIsDeleteCommentModalOpen] =
+    useState(false);
   const latestCommentRef = useRef(null);
   // const loader = useRef(null);
   const useInfinityScroll = () => {
     const fetchComment = async ({ pageParam = 1 }) => {
-      const response = await getComment(reviewId, pageParam);
+      const response = await getComment({
+        detailId: reviewId,
+        page: pageParam,
+      });
       setCommentCount(Number(response.totalElements)); // Recoil 상태 업데이트
 
-      console.log(JSON.stringify(response));
       return {
         result: response.content,
         nextPage: pageParam + 1,
@@ -144,41 +146,72 @@ export const Comments = ({
                     />
                     <div className="nickname">{comment.nickname}</div>
                     <div className="date">{timeAgo(comment.createdAt)}</div>
+                    {userState.nickName === comment.nickname && (
+                      <>
+                        {isEdit.state && isEdit.id === comment.id ? (
+                          <>
+                            {/* <button className="left" onClick={onEditEndHandler}>
+                              취소
+                            </button>
+                            <div className="divider">|</div> */}
+                            <button
+                              className="center"
+                              onClick={onEditSubmitHandler}
+                            >
+                              수정 완료
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              className="left"
+                              disabled={isEdit.state}
+                              onClick={() =>
+                                onEditCommentHandler(
+                                  comment.id,
+                                  comment.comment
+                                )
+                              }
+                            >
+                              수정
+                            </button>
+                            <div className="divider">|</div>
+                            <button
+                              className="right"
+                              disabled={isEdit.state}
+                              onClick={() => setIsDeleteCommentModalOpen(true)}
+                            >
+                              삭제
+                            </button>
+                            <Modal
+                              isOpen={isDeleteCommentModalOpen}
+                              onSubmitText="삭제"
+                              title="삭제"
+                              firstLine="삭제된 댓글은 복구할 수 없습니다."
+                              secondLine="삭제하시겠습니까?"
+                              onSubmitHandler={() => {
+                                onDeleteCommentHandler(comment.id);
+                                setIsDeleteCommentModalOpen(false);
+                              }}
+                              onCloseHandler={() =>
+                                setIsDeleteCommentModalOpen(false)
+                              }
+                            />
+                          </>
+                        )}
+                      </>
+                    )}
                   </section>
-                  <div className="content">{comment.comment}</div>
-                  {userState.nickName === comment.nickname && (
-                    <>
-                      {isEdit.state && isEdit.id === comment.id ? (
-                        <>
-                          <input
-                            type="text"
-                            value={isEdit.comment}
-                            onChange={onChangeCommentHandler}
-                          />
-                          <button onClick={onEditEndHandler}>수정취소</button>
-                          <button onClick={onEditSubmitHandler}>
-                            수정완료
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            disabled={isEdit.state}
-                            onClick={() => onDeleteCommentHandler(comment.id)}
-                          >
-                            삭제
-                          </button>
-                          <button
-                            disabled={isEdit.state}
-                            onClick={() =>
-                              onEditCommentHandler(comment.id, comment.comment)
-                            }
-                          >
-                            수정
-                          </button>
-                        </>
-                      )}
-                    </>
+                  {userState.nickName === comment.nickname &&
+                  isEdit.state &&
+                  isEdit.id === comment.id ? (
+                    <input
+                      type="text"
+                      value={isEdit.comment}
+                      onChange={onChangeCommentHandler}
+                    />
+                  ) : (
+                    <div className="content">{comment.comment}</div>
                   )}
                 </StDetailPageCommentItem>
               );

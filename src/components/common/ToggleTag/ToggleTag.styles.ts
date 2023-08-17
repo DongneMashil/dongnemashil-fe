@@ -17,6 +17,10 @@ export const StTagWrapper = styled.ul`
   div {
     display: flex;
 
+    li:last-child {
+      margin-right: 0;
+    }
+
     &:nth-child(1) {
       margin-bottom: 12px;
     }

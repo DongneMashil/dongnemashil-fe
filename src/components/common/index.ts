@@ -11,7 +11,7 @@ export * from './AuthInputBox/AuthInputBox';
 export * from './AuthLogoBox/AuthLogoBox';
 export * from './BackButton/BackButton';
 export * from './Map/Map';
-export * from './Modal/ModalPotal/ModalPotal';
-export * from './Modal/MyFavoriteTags/MyFavoriteTags';
+
+export * from './Modal/Modal';
 export * from './ToggleTag/ToggleTag';
 export * from './VideoPlayer/VideoPlayer';
