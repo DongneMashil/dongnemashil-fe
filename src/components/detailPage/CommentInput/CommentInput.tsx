@@ -18,14 +18,15 @@ export const CommentInput = ({
 }: FooterProps) => {
   const [comment, setComment] = useState('');
   const setCommentAddListener = useSetRecoilState(commentAddListenerAtom);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const userState = useRecoilValue(userProfileSelector);
 
   // 댓글 등록 함수
   const commentMutation = useMutation(
     (newComment: string) => postComment(reviewId, newComment),
     {
-      onSuccess: (data) => {
-        console.log(data);
+      onSuccess: () => {
         setComment('');
         queryClient.invalidateQueries(['comment', reviewId]);
         setCommentAddListener(true); // 댓글 추가된것을 감지 -> 스크롤 이벤트
@@ -46,8 +47,17 @@ export const CommentInput = ({
   // 댓글 등록
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(comment);
+    if (isSubmitting || !comment) {
+      console.log('🟥댓글은 1초에 1개만 등록 가능합니다.');
+      return;
+    }
+
+    setIsSubmitting(true);
     commentMutation.mutate(comment);
+
+    setTimeout(() => {
+      setIsSubmitting(false);
+    }, 1000);
   };
 
   return (
