@@ -42,7 +42,6 @@ export const Comments = ({
       });
       setCommentCount(Number(response.totalElements)); // Recoil 상태 업데이트
 
-      console.log(JSON.stringify(response));
       return {
         result: response.content,
         nextPage: pageParam + 1,
