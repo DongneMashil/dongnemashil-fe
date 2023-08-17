@@ -45,7 +45,7 @@ export const FixFooter = ({
           동네
         </Button>
         <Button
-          url="/write"
+          url="/writemap"
           type="borderRound"
           $width={'70px'}
           $height={'70px'}

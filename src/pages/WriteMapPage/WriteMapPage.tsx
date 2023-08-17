@@ -25,11 +25,7 @@ export const WriteMapPage = () => {
   const disableCurrentLocation = location.state?.fromSearch || false;
 
   const onGoWritePageHandler = () => {
-    if (addressData.fullAddress.includes('서울')) {
-      navigate('/write');
-    } else {
-      alert('서울특별시만 가능합니다😱');
-    }
+    navigate('/write');
   };
 
   const onGoWriteMapSearchPageHandler = () => {

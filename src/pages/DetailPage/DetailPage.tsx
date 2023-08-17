@@ -1,7 +1,11 @@
-import React, { useEffect, useRef } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getReviewDetail, ReviewDetailResponse } from 'api/detailApi';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  deleteReviewDetail,
+  getReviewDetail,
+  ReviewDetailResponse,
+} from 'api/detailApi';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
 import { Button, FooterSpacer, Modal, Tag } from 'components/common';
@@ -91,10 +95,6 @@ export const DetailPage = () => {
     }
   };
 
-  const defaultAddress = '서울특별시 마포구 와우산로 94';
-
-  const navigate = useNavigate();
-
   const onEditClickHandler = () => {
     if (!data) {
       return;
@@ -148,17 +148,13 @@ export const DetailPage = () => {
           <StDetailPageContainer>
             {data && (
               <>
-                <button onClick={onEditClickHandler}>수정하기</button>
                 <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>
                 <StDetailPageHeader>
                   <img src={data.profileImgUrl || noUser} />
                   <span className="nickname">{data.nickname}</span>
                   {userData?.nickname === data.nickname && (
                     <>
-                      <Button
-                        type="circle"
-                        onClick={() => alert('수정하기 연결중')}
-                      >
+                      <Button type="circle" onClick={onEditClickHandler}>
                         <Edit className="edit" />
                       </Button>
                       <Button
