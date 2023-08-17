@@ -70,18 +70,22 @@ export const ThumbnailWrapper = ({
           </Button>
         </StSort>
       </StTopWrapper>
-      {reviews?.map((review) => (
-        <Thumbnail
-          key={review.id}
-          id={review.id}
-          roadName={review.roadName}
-          mainImgUrl={review.mainImgUrl}
-          profileImgUrl={review.profileImgUrl}
-          createdAt={review.createdAt}
-          likeCnt={review.likeCnt}
-          likebool={review.likebool}
-        />
-      ))}
+      {!isFetching && reviews.length === 0 ? (
+        <StNoReviews>검색된 글이 없습니다.</StNoReviews>
+      ) : (
+        reviews?.map((review) => (
+          <Thumbnail
+            key={review.id}
+            id={review.id}
+            roadName={review.roadName}
+            mainImgUrl={review.mainImgUrl}
+            profileImgUrl={review.profileImgUrl}
+            createdAt={review.createdAt}
+            likeCnt={review.likeCnt}
+            likebool={review.likebool}
+          />
+        ))
+      )}
       {isFetching && (
         <StNoReviews>
           <StLoadingSpinner />
