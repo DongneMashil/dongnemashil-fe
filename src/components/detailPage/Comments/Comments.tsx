@@ -190,9 +190,10 @@ export const Comments = ({
                               title="삭제"
                               firstLine="삭제된 댓글은 복구할 수 없습니다."
                               secondLine="삭제하시겠습니까?"
-                              onSubmitHandler={() =>
-                                onDeleteCommentHandler(comment.id)
-                              }
+                              onSubmitHandler={() => {
+                                onDeleteCommentHandler(comment.id);
+                                setIsDeleteCommentModalOpen(false);
+                              }}
                               onCloseHandler={() =>
                                 setIsDeleteCommentModalOpen(false)
                               }
