@@ -1,5 +1,3 @@
-// Map.tsx
-
 import { useEffect } from 'react';
 import React from 'react';
 interface DetailMapProps {
@@ -42,13 +40,13 @@ interface RoadAddress {
 interface KakaoSearchResult {
   address_name: string;
   address_type: 'REGION' | 'ROAD' | 'REGION_ADDR' | 'ROAD_ADDR';
-  x: string; // 'x'와 'y'의 타입이 문자열이라고 에러 메시지에 명시되어 있습니다.
+  x: string;
   y: string;
   address: Address;
   road_address: RoadAddress;
 }
 
-type KakaoSearchStatus = 'OK' | 'ZERO_RESULT' | 'ERROR'; // 카카오 맵 API의 응답 상태에 따라 이 값을 조절할 수 있습니다.
+type KakaoSearchStatus = 'OK' | 'ZERO_RESULT' | 'ERROR';
 export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
   const setMapCenterByAddress = async (
     address: string,
@@ -92,22 +90,3 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
 
   return <div id="map" style={{ width, height }}></div>;
 };
-
-//   // 사용하는 곳
-//   const YourComponent = () => {
-//     const data = {
-//       address: "서울특별시 종로구 사직로 161",  // 예시 주소
-//     };
-
-//     return (
-//       <CommonLayout backgroundColor="#FFF">
-//         <Map
-//           height='100%'
-//           width='100%'
-//           initMap={(map, setMapCenterByAddress) => {
-//             setMapCenterByAddress(data.address, map);
-//           }}
-//         />
-//       </CommonLayout>
-//     );
-//   };
