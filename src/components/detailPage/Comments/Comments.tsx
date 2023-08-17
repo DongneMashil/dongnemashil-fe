@@ -147,41 +147,58 @@ export const Comments = ({
                     />
                     <div className="nickname">{comment.nickname}</div>
                     <div className="date">{timeAgo(comment.createdAt)}</div>
+                    {userState.nickName === comment.nickname && (
+                      <>
+                        {isEdit.state && isEdit.id === comment.id ? (
+                          <>
+                            {/* <button className="left" onClick={onEditEndHandler}>
+                              취소
+                            </button>
+                            <div className="divider">|</div> */}
+                            <button
+                              className="center"
+                              onClick={onEditSubmitHandler}
+                            >
+                              수정 완료
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              className="left"
+                              disabled={isEdit.state}
+                              onClick={() =>
+                                onEditCommentHandler(
+                                  comment.id,
+                                  comment.comment
+                                )
+                              }
+                            >
+                              수정
+                            </button>
+                            <div className="divider">|</div>
+                            <button
+                              className="right"
+                              disabled={isEdit.state}
+                              onClick={() => onDeleteCommentHandler(comment.id)}
+                            >
+                              삭제
+                            </button>
+                          </>
+                        )}
+                      </>
+                    )}
                   </section>
-                  <div className="content">{comment.comment}</div>
-                  {userState.nickName === comment.nickname && (
-                    <>
-                      {isEdit.state && isEdit.id === comment.id ? (
-                        <>
-                          <input
-                            type="text"
-                            value={isEdit.comment}
-                            onChange={onChangeCommentHandler}
-                          />
-                          <button onClick={onEditEndHandler}>수정취소</button>
-                          <button onClick={onEditSubmitHandler}>
-                            수정완료
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <button
-                            disabled={isEdit.state}
-                            onClick={() => onDeleteCommentHandler(comment.id)}
-                          >
-                            삭제
-                          </button>
-                          <button
-                            disabled={isEdit.state}
-                            onClick={() =>
-                              onEditCommentHandler(comment.id, comment.comment)
-                            }
-                          >
-                            수정
-                          </button>
-                        </>
-                      )}
-                    </>
+                  {userState.nickName === comment.nickname &&
+                  isEdit.state &&
+                  isEdit.id === comment.id ? (
+                    <input
+                      type="text"
+                      value={isEdit.comment}
+                      onChange={onChangeCommentHandler}
+                    />
+                  ) : (
+                    <div className="content">{comment.comment}</div>
                   )}
                 </StDetailPageCommentItem>
               );
