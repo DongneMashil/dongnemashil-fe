@@ -46,6 +46,19 @@ export const getReviewDetail = async (
   }
 };
 
+export const deleteReviewDetail = async (detailId: undefined | string) => {
+  // 상세페이지 조회
+  try {
+    const response = await axiosInstance.delete(`/reviews/${detailId}`);
+    return response.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
+  }
+};
+
 export type Comment = {
   id: number;
   nickname: string;

@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getReviewDetail, ReviewDetailResponse } from 'api/detailApi';
-import { useParams } from 'react-router-dom';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  deleteReviewDetail,
+  getReviewDetail,
+  ReviewDetailResponse,
+} from 'api/detailApi';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
 import { Button, FooterSpacer, Modal, Tag } from 'components/common';
@@ -27,9 +31,13 @@ import { ReactComponent as Trash } from 'assets/icons/Trash.svg';
 import { ReactComponent as Edit } from 'assets/icons/Edit.svg';
 
 export const DetailPage = () => {
-  const [isMapOpen, setIsMapOpen] = React.useState(false);
+  const [isMapOpen, setIsMapOpen] = useState(false);
+  const [isDeleteDetailModalOpen, setIsDeleteDetailModalOpen] = useState(false);
+  const [isDeleteCompleteModalOpen, setIsDeleteCompleteModalOpen] =
+    useState(false);
   const setCommentCount = useSetRecoilState(commentCountAtom);
   const contentRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const defaultAddress = '서울특별시 마포구 와우산로 94'; //정보가 없을시 기본 주소
 
   //리뷰 아이디 없이 접근시 홈으로 이동
@@ -61,6 +69,22 @@ export const DetailPage = () => {
     },
   });
 
+  //
+  const deleteDetail = useMutation({
+    mutationFn: () => deleteReviewDetail(reviewId),
+    onSuccess: () => {
+      setIsDeleteCompleteModalOpen(true);
+    },
+    onError: (error) => {
+      console.log(error);
+      setIsDeleteDetailModalOpen(false);
+      alert('삭제에 실패했습니다.');
+    },
+  });
+  const handleDeleteDetail = () => {
+    deleteDetail.mutate();
+  };
+
   //content로 이동하기 버튼
   const handleGotoContent = () => {
     if (contentRef.current) {
@@ -70,7 +94,7 @@ export const DetailPage = () => {
       });
     }
   };
-  const [isDeleteDetailModalOpen, setIsDeleteDetailModalOpen] = useState(false);
+
   return (
     <>
       {isMapOpen ? (
@@ -175,8 +199,15 @@ export const DetailPage = () => {
                     title="삭제"
                     firstLine="삭제된 글은 복구할 수 없습니다."
                     secondLine="삭제하시겠습니까?"
-                    onSubmitHandler={() => alert('submit')}
+                    onSubmitHandler={() => handleDeleteDetail()}
                     onCloseHandler={() => setIsDeleteDetailModalOpen(false)}
+                  />
+                  <Modal
+                    isOpen={isDeleteCompleteModalOpen}
+                    title="삭제"
+                    firstLine="삭제된 글은 복구할 수 없습니다."
+                    secondLine="삭제하시겠습니까?"
+                    onCloseHandler={() => navigate('/')}
                   />
                 </StDetailPageContent>
               </>
