@@ -2,6 +2,7 @@ import React from 'react';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import { Thumbnail } from '../Thumbnail/Thumbnail';
 import {
+  StLine,
   StNoReviews,
   StSort,
   StTarget,
@@ -63,6 +64,7 @@ export const ThumbnailWrapper = ({
           >
             인기순
           </Button>
+          <StLine />
           <Button
             onClick={() => onClickSort('recent')}
             type="onlyTextToggle"
