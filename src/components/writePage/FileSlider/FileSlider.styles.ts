@@ -40,38 +40,54 @@ export const StPlusButton = styled.div`
   }
 `;
 
-export const StyledImage = styled.img`
+export const StImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
   margin: 0.5rem 0;
 `;
 
-export const StyledVideo = styled.video`
+export const StVideo = styled.video`
   width: 100%;
   height: 100%;
   margin-bottom: 0.5rem 0;
 `;
 
-export const StyledImageContainer = styled.div`
+export const StImageContainer = styled.div`
   position: relative;
   width: 90%;
   height: 100%;
 `;
 
 export const StCoverImageButton = styled.button<{ isActive: boolean }>`
+  width: 2.4rem;
+  height: 2.4rem;
   position: absolute;
-  top: 0.8rem;
-  right: 0.9rem;
-  background: ${(props) => (props.isActive ? 'green' : 'grey')};
+  top: 0.69rem;
+  left: 0.69rem;
+  background: ${(props) =>
+    props.isActive ? '#9A7B9A' : 'rgba(154, 123, 154, 0.35)'};
   color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 5px 10px;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 600;
+  border: ${(props) => (props.isActive ? 'none' : '1.5px solid white')};
+  border-radius: 100%;
   cursor: pointer;
   opacity: 0.8;
 
   &:hover {
     opacity: 1;
   }
+`;
+
+export const StDelete = styled.button`
+  width: 2.4rem;
+  height: 2.4rem;
+  position: absolute;
+  top: 0.69rem;
+  right: 0.75rem;
+  background-color: rgba(154, 123, 154, 0.35);
+  border-radius: 100%;
+  border: 1.5px solid white;
 `;

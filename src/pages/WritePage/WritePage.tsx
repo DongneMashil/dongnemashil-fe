@@ -1,26 +1,15 @@
-import React, { ChangeEvent, useRef, useState } from 'react';
-import {
-  StCurrentAddress,
-  StCurrentAddressWrapper,
-  StContentBox,
-  StContentContainer,
-  StHiddenButton,
-  StTitle,
-  StTotalTag,
-  StTagContainer,
-  StFormWrapper,
-} from './WritePage.styles';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { StContentContainer } from './WritePage.styles';
 import { CommonLayout, NavBar } from 'components/layout';
-import { FileSlider } from 'components/writePage';
-import { useMutation } from '@tanstack/react-query';
-import { submitReview } from 'api/reviews';
-import { useNavigate } from 'react-router-dom';
-import { ToggleTagButton } from 'components/common';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getReview, submitReview, updateReview } from 'api/reviews';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useVerifyUser } from 'hooks';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userIsLoggedInSelector } from 'recoil/userExample';
 import { addressSelector } from 'recoil/address/addressSelector';
-import { ReactComponent as PurpleMarker } from 'assets/icons/PurpleMarker.svg';
+import { ReviewForm, TagContainer } from 'components/writePage';
+import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
 
 interface FormValues {
   title: string;
@@ -29,7 +18,9 @@ interface FormValues {
 
 export const WritePage = () => {
   const navigate = useNavigate();
-  const [formValues, setFormValues] = useState<FormValues>({
+  const location = useLocation();
+  const reviewId = location.state?.reviewId;
+  const [formValues, setFormValues] = useState({
     title: '',
     content: '',
   });
@@ -38,13 +29,104 @@ export const WritePage = () => {
     { type: 'image' | 'video'; file: File; isCover: boolean }[]
   >([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-
   const addressData = useRecoilValue(addressSelector);
-
+  const setAddress = useSetRecoilState(selectedAddressAtom);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { isLoading, isError, isSuccess } = useVerifyUser(true);
   const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
+
+  const updateMutation = useMutation((formData: FormData) =>
+    updateReview(reviewId, formData)
+  );
+
+  const { data: reviewData } = useQuery(['review', reviewId], () =>
+    getReview(reviewId)
+  );
+
+  useEffect(() => {
+    if (reviewData) {
+      setFormValues({
+        title: reviewData.title,
+        content: reviewData.content,
+      });
+      setSelectedTags(reviewData.tag.map((t) => t.name));
+      setAddress(reviewData.address);
+
+      const fetchMediaFiles = async () => {
+        try {
+          const mainImgBlob = await fetch(reviewData.mainImgUrl).then(
+            (response) => response.blob()
+          );
+
+          const subImgPromises = reviewData.subImgUrl.map(async (url) => {
+            if (url.trim() === '') {
+              return null;
+            }
+            try {
+              const response = await fetch(url);
+              if (response.ok) {
+                const blob = await response.blob();
+                return blob;
+              } else {
+                console.error('Error fetching sub image:', response.statusText);
+                return null;
+              }
+            } catch (error) {
+              console.error('Error fetching sub image:', error);
+              return null;
+            }
+          });
+
+          const subImgBlobs = await Promise.all(subImgPromises);
+          const validSubImgBlobs = subImgBlobs.filter((blob) => blob !== null);
+
+          let videoBlob = null;
+          if (reviewData.videoUrl) {
+            videoBlob = await fetch(reviewData.videoUrl).then((response) =>
+              response.blob()
+            );
+          }
+
+          const blobToMediaFile = (
+            blob: Blob | null,
+            type: 'image' | 'video',
+            isCover: boolean
+          ) => {
+            if (blob === null) {
+              return null;
+            }
+
+            const fileName = type === 'image' ? 'image.jpg' : 'video.mp4';
+            const file = new File([blob], fileName, { type });
+
+            return {
+              type,
+              file,
+              isCover,
+            };
+          };
+
+          const mediaFilesData = [
+            blobToMediaFile(mainImgBlob, 'image', true),
+            ...validSubImgBlobs.map((blob) =>
+              blobToMediaFile(blob, 'image', false)
+            ),
+            videoBlob ? blobToMediaFile(videoBlob, 'video', false) : null,
+          ].filter(Boolean) as {
+            type: 'image' | 'video';
+            file: File;
+            isCover: boolean;
+          }[];
+          setMediaFiles(mediaFilesData);
+        } catch (error) {
+          console.error('Error fetching and converting media files:', error);
+        }
+      };
+
+      fetchMediaFiles();
+    }
+  }, [reviewData]);
 
   const onInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -111,6 +193,10 @@ export const WritePage = () => {
     );
   };
 
+  const onDeleteImage = (targetFile: File) => {
+    setMediaFiles((prev) => prev.filter((file) => file.file !== targetFile));
+  };
+
   const handleTagChange = (tags: string[]) => {
     setSelectedTags(tags);
   };
@@ -175,21 +261,39 @@ export const WritePage = () => {
       }
     });
 
-    mutation.mutate(formData, {
-      onSuccess: (response) => {
-        console.log('등록성공', response);
-        navigate(`/review/${response.id}`);
-      },
-      onError: (error: unknown) => {
-        if (typeof error === 'string') {
-          console.log('실패', error);
-        } else if (error instanceof Error) {
-          console.log('실패', error.message);
-        } else {
-          console.log('실패', error);
-        }
-      },
-    });
+    if (reviewId) {
+      updateMutation.mutate(formData, {
+        onSuccess: (response) => {
+          console.log('수정 성공', response);
+          navigate(`/review/${response.id}`);
+        },
+        onError: (error: unknown) => {
+          if (typeof error === 'string') {
+            console.log('수정 실패', error);
+          } else if (error instanceof Error) {
+            console.log('수정 실패', error.message);
+          } else {
+            console.log('수정 실패', error);
+          }
+        },
+      });
+    } else {
+      mutation.mutate(formData, {
+        onSuccess: (response) => {
+          console.log('등록성공', response);
+          navigate(`/review/${response.id}`);
+        },
+        onError: (error: unknown) => {
+          if (typeof error === 'string') {
+            console.log('실패', error);
+          } else if (error instanceof Error) {
+            console.log('실패', error.message);
+          } else {
+            console.log('실패', error);
+          }
+        },
+      });
+    }
   };
 
   const determineIsCoverImage = (targetFile: File) => {
@@ -225,48 +329,25 @@ export const WritePage = () => {
         }
       >
         <StContentContainer>
-          <StTagContainer>
-            <StCurrentAddressWrapper>
-              <div onClick={onGoToWriteMapPageHandler}>
-                <PurpleMarker />
-                <StCurrentAddress>{addressData.roadName}</StCurrentAddress>
-              </div>
-              <StTotalTag>{selectedTags.length}개 선택</StTotalTag>
-            </StCurrentAddressWrapper>
-            <ToggleTagButton onTagChange={handleTagChange} />
-          </StTagContainer>
-          <StFormWrapper>
-            <StTitle
-              type="text"
-              name="title"
-              value={formValues.title}
-              onChange={onInputChange}
-              placeholder="제목"
-            />
-            <FileSlider
-              files={mediaFiles}
-              images={mediaFiles.map((file) => file.file)}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              onAddImage={onButtonClick}
-              onSelectedCoverImage={setCoverImage}
-              isCoverImage={determineIsCoverImage}
-              setCoverImage={setCoverImage}
-            />
-            <StHiddenButton
-              ref={fileInputRef}
-              type="file"
-              accept="image/*, video/*"
-              multiple
-              onChange={onFileChange}
-            />
-            <StContentBox
-              name="content"
-              value={formValues.content}
-              onChange={onInputChange}
-              placeholder="산책은 어땠나요?"
-            />
-          </StFormWrapper>
+          <TagContainer
+            selectedTags={selectedTags}
+            handleTagChange={handleTagChange}
+            addressData={addressData}
+            onGoToWriteMapPageHandler={onGoToWriteMapPageHandler}
+          />
+          <ReviewForm
+            formValues={formValues}
+            onInputChange={onInputChange}
+            mediaFiles={mediaFiles}
+            onFileChange={onFileChange}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            onAddImage={onButtonClick}
+            setCoverImage={setCoverImage}
+            onDeleteImage={onDeleteImage}
+            determineIsCoverImage={determineIsCoverImage}
+            fileInputRef={fileInputRef}
+          />
         </StContentContainer>
       </CommonLayout>
     </>

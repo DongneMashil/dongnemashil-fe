@@ -4,11 +4,13 @@ import {
   StCoverImageButton,
   StSlideContainer,
   StPlusButton,
-  StyledImage,
-  StyledImageContainer,
-  StyledVideo,
+  StImage,
+  StImageContainer,
+  StVideo,
+  StDelete,
 } from './FileSlider.styles';
 import { ReactComponent as FileUpload } from 'assets/icons/FileUpload.svg';
+import { ReactComponent as TrashCan } from 'assets/icons/TrashCan.svg';
 
 interface ImageSliderProps {
   images: File[];
@@ -19,6 +21,7 @@ interface ImageSliderProps {
   isCoverImage: (file: File) => boolean;
   setCoverImage: (file: File) => void;
   files: { type: 'image' | 'video'; file: File }[];
+  onDeleteImage: (file: File) => void;
 }
 
 export const FileSlider: React.FC<ImageSliderProps> = ({
@@ -28,6 +31,7 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   isCoverImage,
   setCoverImage,
   files,
+  onDeleteImage,
 }) => {
   const onImageClick = (image: File) => {
     onSelectedCoverImage && onSelectedCoverImage(image);
@@ -37,13 +41,17 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
     setCoverImage(image);
   };
 
+  const onImageDelete = (file: File) => {
+    onDeleteImage(file);
+  };
+
   return (
     <StSlideContainer>
       {files.map((file, index) => (
-        <StyledImageContainer key={index}>
+        <StImageContainer key={index}>
           {file.type === 'image' ? (
             <>
-              <StyledImage
+              <StImage
                 src={URL.createObjectURL(images[index])}
                 alt={`Upload Preview ${index}`}
                 onClick={() => onImageClick(images[index])}
@@ -56,9 +64,12 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
               </StCoverImageButton>
             </>
           ) : (
-            <StyledVideo src={URL.createObjectURL(images[index])} controls />
+            <StVideo src={URL.createObjectURL(images[index])} controls />
           )}
-        </StyledImageContainer>
+          <StDelete onClick={() => onImageDelete(file.file)}>
+            <TrashCan />
+          </StDelete>
+        </StImageContainer>
       ))}
       <StCenteredBox>
         <StPlusButton onClick={onAddImage}>
