@@ -5,12 +5,13 @@ export const StInput = styled.input`
   height: 2.5rem;
   outline: none;
   font-size: 16px;
-  padding: 0 10px;
-  border-radius: 0.875rem;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 10px;
+  border-radius: 2rem;
+  padding-left: 1.2rem;
+  border: 1px solid var(--inputboxstroke, #bfbfbf);
   background: #f6f6f6;
   box-sizing: border-box;
   &::placeholder {
-    color: #ccc;
+    color: var(--inputplaceholder, #616161);
   }
 `;

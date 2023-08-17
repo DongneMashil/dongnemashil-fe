@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import {
   selectedTagsState,
@@ -8,10 +8,8 @@ import { CommonLayout, FixFooter, NavBar } from 'components/layout';
 import { useFetchReviews } from 'api/reviewsApi';
 import { SearchResultMapPage } from 'pages/SearchResultMapPage/SearchResultMapPage';
 import { SearchResultListPage } from 'pages/SearchResultListPage/SearchResultListPage';
-import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import { useLocation } from 'react-router-dom';
 import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
-import { useScrollToTop } from 'hooks/useScrollToTop';
 
 export const SearchResultPage = () => {
   const location = useLocation();
@@ -60,17 +58,43 @@ export const SearchResultPage = () => {
     setIsMapOpen(!isMapOpen);
   };
 
-  const { scrollToTop } = useScrollToTop();
+  const scrollToTopRef = useRef<HTMLDivElement>(null);
+
+  const handleGotoTop = () => {
+    if (scrollToTopRef.current) {
+      scrollToTopRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
+  console.log(scrollToTopRef);
+
+  // const handleGotoTop = () => {
+  //   window.scrollTo({
+  //     top: 0,
+  //     behavior: 'smooth',
+  //   });
+  // };
+
+  // const handleGotoTop = () => {
+  //   window.scrollBy({
+  //     top: -300,
+  //     behavior: 'smooth',
+  //   });
+  // };
 
   return (
     <CommonLayout
+      scrollToTopRef={scrollToTopRef}
       header={
         <>
-          <NavBar btnLeft={'logo'} btnRight={'mypage'}>
-            <h1>
-              <Search width="18" height="18" />
-              {q}
-            </h1>
+          <NavBar
+            btnLeft={'logo'}
+            btnSecondRight={'search'}
+            btnRight={'mypage'}
+          >
+            <h1>{q}</h1>
           </NavBar>
         </>
       }
@@ -79,6 +103,7 @@ export const SearchResultPage = () => {
           centerButtons={'map'}
           rightButtons={'goTop'}
           onClickCenter={toggleMapOpen}
+          onClickRight={handleGotoTop}
         />
       }
     >
@@ -92,9 +117,6 @@ export const SearchResultPage = () => {
         onClickSort={onClickSort}
         totalElements={totalElements}
       />
-      <button id="scroll-to-top-button" onClick={scrollToTop}>
-        Scroll to Top
-      </button>
       {isMapOpen && (
         <SearchResultMapPage reviewList={reviews} onToggle={toggleMapOpen} />
       )}

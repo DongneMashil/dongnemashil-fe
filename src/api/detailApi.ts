@@ -1,5 +1,6 @@
 import { AxiosResponse, AxiosError } from 'axios';
 import { axiosInstance } from './api';
+import { ApiParams } from 'hooks';
 // import { axiosInstance } from './api';
 
 // const baseUrl = process.env.REACT_APP_SERVER_API_URL;
@@ -36,6 +37,19 @@ export const getReviewDetail = async (
   try {
     const response: AxiosResponse<ReviewDetailResponse> =
       await axiosInstance.get(`/reviews/${detailId}`);
+    return response.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
+  }
+};
+
+export const deleteReviewDetail = async (detailId: undefined | string) => {
+  // 상세페이지 조회
+  try {
+    const response = await axiosInstance.delete(`/reviews/${detailId}`);
     return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
@@ -82,10 +96,11 @@ type GetCommentResponse = {
   totalPages: number;
   totalElements: number;
 };
+
 export const getComment = async (
-  detailId: string, // 수정된 부분
-  page?: number
+  params: ApiParams
 ): Promise<GetCommentResponse> => {
+  const { detailId, page } = params;
   try {
     const response: AxiosResponse<GetCommentResponse> = await axiosInstance.get(
       `/reviews/${detailId}/comments`,

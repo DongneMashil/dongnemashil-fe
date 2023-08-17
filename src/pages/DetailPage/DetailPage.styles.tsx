@@ -42,8 +42,8 @@ export const StDetailPageHeader = styled.div`
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #e5e5e5;
   margin: 1rem 0;
+  gap: 0.5rem;
   .nickname {
-    margin-left: 0.5rem;
     margin-right: auto;
     color: var(--textcolor, #333);
     font-family: Pretendard;
@@ -55,6 +55,9 @@ export const StDetailPageHeader = styled.div`
     height: 30px;
     border-radius: 50%;
   }
+  .edit {
+    margin-left: 4px;
+  }
 `;
 
 export const StCreatedTime = styled.div`
@@ -65,7 +68,6 @@ export const StCreatedTime = styled.div`
   font-weight: 500;
   line-height: normal;
   margin-top: 0.5rem;
-  margin-left: 0.5rem;
 `;
 
 export const StDetailPageContent = styled.div`
@@ -76,8 +78,8 @@ export const StDetailPageContent = styled.div`
   gap: 0.3rem;
   .detailimg {
     width: 100%;
-    height: 300px;
-    object-fit: cover;
+    object-fit: contain;
+    // z-index: 1;
   }
   p {
     margin: 1rem 0.5rem 1rem 0.5rem;

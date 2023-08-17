@@ -13,12 +13,14 @@ export interface FixFooterProps {
   centerButtons?: 'map';
   rightButtons: 'write' | 'goTop';
   onClickCenter?: () => void;
+  onClickRight?: () => void;
 }
 
 export const FixFooter = ({
   centerButtons,
   rightButtons,
   onClickCenter,
+  onClickRight,
 }: FixFooterProps) => {
   const centerWrapper = {
     map: (
@@ -39,11 +41,11 @@ export const FixFooter = ({
   const rightWrapper = {
     write: (
       <>
-        <Button type="circleFill" $width={'57px'} $height={'57px'}>
+        {/* <Button type="circleFill" $width={'57px'} $height={'57px'}>
           우리
           <br />
           동네
-        </Button>
+        </Button> */}
         <Button
           url="/write"
           type="borderRound"
@@ -59,7 +61,7 @@ export const FixFooter = ({
     goTop: (
       <>
         <Button
-          // onClick={scrollToTop}
+          onClick={onClickRight}
           type="borderRound"
           $width={'48px'}
           $height={'48px'}

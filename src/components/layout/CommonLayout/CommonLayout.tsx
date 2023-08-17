@@ -3,9 +3,11 @@ import {
   StLayoutBody,
   StLayoutOuter,
   StLayoutSection,
+  StModalPotal,
   StSlidingHeader,
 } from './CommonLayout.styles';
 import { FloatingFooter } from './components/FloatingFooter/FloatingFooter';
+import { StTarget } from 'components/homePage/ThumbnailWrapper/ThumbnailWrapper.styles';
 
 interface CommonLayoutProps {
   children: React.ReactNode;
@@ -15,6 +17,7 @@ interface CommonLayoutProps {
   footerHeight?: number;
   hideHeader?: boolean;
   backgroundColor?: string;
+  scrollToTopRef?: React.RefObject<HTMLDivElement>;
 }
 
 /**
@@ -33,10 +36,11 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
   headerHeight = '50px',
   hideHeader = true,
   backgroundColor = '#F7F7F7',
+  scrollToTopRef,
 }) => {
   const [isShow, setIsShow] = React.useState(true);
   const [prevPosition, setPrevPosition] = React.useState(0);
-
+  console.log(scrollToTopRef);
   const scrollRef = React.useRef<HTMLDivElement>(null);
   headerHeight = header ? headerHeight : '0px';
   useEffect(() => {
@@ -65,12 +69,14 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
   return (
     <StLayoutOuter>
       <StLayoutBody>
+        <StModalPotal id="modal"></StModalPotal>
         {header && <StSlidingHeader $isShow={isShow}>{header}</StSlidingHeader>}
         <StLayoutSection
           ref={scrollRef}
           $headerHeight={headerHeight}
           $backgroundColor={backgroundColor}
         >
+          <StTarget ref={scrollToTopRef} />
           {children}
         </StLayoutSection>
         {footer && <FloatingFooter>{footer}</FloatingFooter>}

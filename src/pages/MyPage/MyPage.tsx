@@ -11,14 +11,16 @@ import noUser from 'assets/images/NoUser.gif';
 import { ReactComponent as LogoutIcon } from 'assets/icons/Logout.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/CommentL.svg';
 import { StButton, StMyPageContainer } from './Mypage.styles';
+import { Modal } from 'components/common';
 export const MyPage = () => {
   const navigate = useNavigate();
-  const userState = useRecoilValue(userProfileSelector);
-  const { data: userData } = useVerifyUser(true);
-
   const [shouldLogout, setShouldLogout] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
+  //유저정보 조회 및 업데이트
+  const { data: userData } = useVerifyUser(true);
+  const userState = useRecoilValue(userProfileSelector);
   useEffect(() => {
     console.log('current user state: ', userState);
     if (userData) {
@@ -26,15 +28,21 @@ export const MyPage = () => {
     }
   }, [userState]);
 
+  //로그아웃
   const onLogoutHandler = useCallback(() => {
     setShouldLogout(true);
   }, []);
-
   const { isError } = useLogout(shouldLogout);
   if (isError) {
     console.log('로그아웃 실패');
   }
 
+  //프로필 수정 이동
+  const navigateToProfileHandler = () => {
+    navigate('/mypage/profile');
+  };
+
+  //내 정보 조회
   const { data } = useQuery<MyProfile, Error>({
     queryKey: ['myPage', userData?.nickname],
     queryFn: () => getMyProfile(),
@@ -45,10 +53,6 @@ export const MyPage = () => {
       console.log('🔴' + error);
     },
   });
-
-  const navigateToProfileHandler = () => {
-    navigate('/mypage/profile');
-  };
 
   return (
     <CommonLayout
@@ -80,10 +84,18 @@ export const MyPage = () => {
               <div className="title">프로필 수정</div>
             </StButton>
             <p className="category">설정</p>
-            <StButton onClick={onLogoutHandler}>
+            <StButton onClick={() => setIsLogoutModalOpen(true)}>
               <LogoutIcon />
               <div className="title">로그아웃</div>
             </StButton>
+            <Modal
+              isOpen={isLogoutModalOpen}
+              onSubmitText="확인"
+              title="로그아웃"
+              firstLine="로그아웃 하시겠습니까?"
+              onSubmitHandler={() => onLogoutHandler()}
+              onCloseHandler={() => setIsLogoutModalOpen(false)}
+            />
           </>
         ) : (
           <>
