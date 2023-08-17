@@ -50,3 +50,11 @@ export const StSort = styled.div`
     width: 1px;
   }
 `;
+
+export const StNoReviews = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30vh;
+  margin-bottom: 41vh;
+`;

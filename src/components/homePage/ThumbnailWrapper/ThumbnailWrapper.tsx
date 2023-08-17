@@ -2,6 +2,7 @@ import React from 'react';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import { Thumbnail } from '../Thumbnail/Thumbnail';
 import {
+  StNoReviews,
   StSort,
   StTarget,
   StThumbnailWrapper,
@@ -10,6 +11,7 @@ import {
 import { useIntersect } from 'hooks/useIntersect';
 import { Button } from 'components/common';
 import { ReviewsList } from 'api/reviewsApi';
+import { StLoadingSpinner } from 'components/common/LoadingSpinner/LoadingSpinner.styles';
 
 export interface ReviewsProps {
   type: string;
@@ -47,11 +49,12 @@ export const ThumbnailWrapper = ({
   return (
     <StThumbnailWrapper>
       <StTopWrapper>
-        {totalElements && (
+        {totalElements && totalElements !== 0 ? (
           <span>
             <strong>{totalElements}</strong> 개
           </span>
-        )}
+        ) : null}
+
         <StSort>
           <Button
             onClick={() => onClickSort('likes')}
@@ -69,19 +72,27 @@ export const ThumbnailWrapper = ({
           </Button>
         </StSort>
       </StTopWrapper>
-      {reviews?.map((review) => (
-        <Thumbnail
-          key={review.id}
-          id={review.id}
-          roadName={review.roadName}
-          mainImgUrl={review.mainImgUrl}
-          profileImgUrl={review.profileImgUrl}
-          createdAt={review.createdAt}
-          likeCnt={review.likeCnt}
-          likebool={review.likebool}
-        />
-      ))}
-      {isFetching && <div>Loading...</div>}
+      {!isFetching && reviews.length === 0 ? (
+        <StNoReviews>검색된 글이 없습니다.</StNoReviews>
+      ) : (
+        reviews?.map((review) => (
+          <Thumbnail
+            key={review.id}
+            id={review.id}
+            roadName={review.roadName}
+            mainImgUrl={review.mainImgUrl}
+            profileImgUrl={review.profileImgUrl}
+            createdAt={review.createdAt}
+            likeCnt={review.likeCnt}
+            likebool={review.likebool}
+          />
+        ))
+      )}
+      {isFetching && (
+        <StNoReviews>
+          <StLoadingSpinner />
+        </StNoReviews>
+      )}
       <StTarget ref={ref} />
     </StThumbnailWrapper>
   );
