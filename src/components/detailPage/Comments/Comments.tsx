@@ -15,6 +15,7 @@ import { queryClient } from 'queries/queryClient';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
 import { useIntersect } from 'hooks/useIntersect';
+import { Modal } from 'components/common';
 
 interface CommentsProps {
   reviewId: string;
@@ -29,9 +30,8 @@ export const Comments = ({
   const [commentAddListener, setCommentAddListener] = useRecoilState(
     commentAddListenerAtom
   );
-  if (!reviewId) {
-    throw new Error('Review ID is missing');
-  }
+  const [isDeleteCommentModalOpen, setIsDeleteCommentModalOpen] =
+    useState(false);
   const latestCommentRef = useRef(null);
   // const loader = useRef(null);
   const useInfinityScroll = () => {
@@ -180,10 +180,23 @@ export const Comments = ({
                             <button
                               className="right"
                               disabled={isEdit.state}
-                              onClick={() => onDeleteCommentHandler(comment.id)}
+                              onClick={() => setIsDeleteCommentModalOpen(true)}
                             >
                               삭제
                             </button>
+                            <Modal
+                              isOpen={isDeleteCommentModalOpen}
+                              onSubmitText="삭제"
+                              title="삭제"
+                              firstLine="삭제된 글은 복구할 수 없습니다."
+                              secondLine="삭제하시겠습니까?"
+                              onSubmitHandler={() =>
+                                onDeleteCommentHandler(comment.id)
+                              }
+                              onCloseHandler={() =>
+                                setIsDeleteCommentModalOpen(false)
+                              }
+                            />
                           </>
                         )}
                       </>
