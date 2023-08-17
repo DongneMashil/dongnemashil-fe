@@ -124,6 +124,10 @@ export const StButton = styled.button<{
 
 export const StSubmitButton = styled.input<{
   $active?: boolean;
+  $width?: string;
+  $height?: string;
+  $stroke?: string;
+  $round?: string;
 }>`
   width: 100%;
   background: none;
@@ -133,6 +137,13 @@ export const StSubmitButton = styled.input<{
   cursor: pointer;
   &.icon {
     font-size: 20px;
+  }
+
+  &.authOutline {
+    ${theme.authButton}
+    background-color: #ffffff;
+    color: ${theme.mainColor};
+    border: 1px solid ${theme.mainColor};
   }
 
   &.normal {

@@ -4,7 +4,7 @@ import { getReviewDetail, ReviewDetailResponse } from 'api/detailApi';
 import { useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
-import { FooterSpacer, Modal, Tag, VideoPlayer } from 'components/common';
+import { FooterSpacer, Modal, Tag } from 'components/common';
 import {
   StCreatedTime,
   StDetailPageContainer,
@@ -138,7 +138,13 @@ export const DetailPage = () => {
 
                   {data.videoUrl && (
                     <StVideoPlayerBox>
-                      <VideoPlayer videoUrl={data.videoUrl} />
+                      {/* <VideoPlayer videoUrl={data.videoUrl} /> */}
+                      <video
+                        controls
+                        width={'100%'}
+                        height={'100%'}
+                        src={data.videoUrl}
+                      />
                     </StVideoPlayerBox>
                   )}
 
