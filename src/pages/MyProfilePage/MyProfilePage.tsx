@@ -20,11 +20,9 @@ import {
 } from './MyProfilePage.styles';
 
 export const MyProfilePage = () => {
-  const { data: userData } = useVerifyUser(true);
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const fileUpload = useRef();
   const navigate = useNavigate();
-  const [userState, setUserState] = useRecoilState(userProfileSelector);
   const [postData, setPostData] = useState<{
     nickname?: string;
     imgUrl?: File | null;
@@ -35,6 +33,9 @@ export const MyProfilePage = () => {
     validation: { isValid: true, isVerified: false, msg: '' },
   });
 
+  //유저정보 조회 및 업데이트
+  const { data: userData } = useVerifyUser(true);
+  const [userState, setUserState] = useRecoilState(userProfileSelector);
   useEffect(() => {
     console.log('current user state: ', userState);
     if (userData) {
@@ -42,7 +43,8 @@ export const MyProfilePage = () => {
     }
   }, [userState]);
 
-  const { data } = useQuery<MyProfile, Error>({
+  //유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
+  useQuery<MyProfile, Error>({
     queryKey: ['myPage', userData?.nickname],
     queryFn: () => getMyProfile(),
     // enabled: !!userData?.nickname,
@@ -53,7 +55,6 @@ export const MyProfilePage = () => {
         method: 'GET',
         redirect: 'follow',
       });
-      console.log(JSON.stringify(response) + '🐠');
       console.log(`Response OK? ${response.ok}`);
       console.log(`Response Status: ${response.status}`);
 
@@ -63,22 +64,22 @@ export const MyProfilePage = () => {
       const prevImage = new File([blob], finalFilename, { type: blob.type });
       setPostData((prev) => ({
         ...prev,
-        imgUrl: prevImage,
-        nickname: data.nickname,
+        imgUrl: prevImage, //기존 이미지 파일
+        nickname: data.nickname, // 기존 닉네임
       }));
     },
     onError: (error) => {
       console.log('🔴' + error);
     },
   });
-  console.log(data);
+
   // ⬇️ 이미지 압축 옵션
   const options = {
     maxSizeMB: 0.8,
     maxWidthOrHeight: 500,
     useWebWorker: true,
   };
-  //⬇️ 이미지 압축
+  //⬇️ 이미지 압축 (fileUrl -> imgUrl)
   const onChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const imageFile = e.target.files?.[0];
     if (!imageFile) return;
@@ -93,39 +94,21 @@ export const MyProfilePage = () => {
     }
   };
 
-  const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPostData({ ...postData, [name]: value });
   };
 
   const onSubmitHandler = async () => {
     console.log('👦🏾' + JSON.stringify(postData));
-
     if (!postData.imgUrl) {
       alert('프로필 사진을 등록해주세요.');
       return;
-      // // 이미지가 없을 경우 기존 이미지를 그대로 사용합니다.
-      // // const response = await axios.get(fileUrl!, { responseType: 'blob' });
-      // // const blob = response.data;
-      // const response = await fetch(fileUrl!, {
-      //   method: 'GET',
-      //   redirect: 'follow',
-      //   mode: 'no-cors',
-      // });
-      // const blob = await response.blob();
-      // const extension = getExtensionName(blob.type);
-      // const finalFilename = 'prevImage' + extension; //파일 이름 설정
-      // const prevImage = new File([blob], finalFilename, { type: blob.type });
-      // setPostData((prev) => ({
-      //   ...prev,
-      //   imgUrl: prevImage,
-      // }));
     }
-
     try {
       const response = await postProfile({
-        imgUrl: (postData.imgUrl as File) || null,
-        nickname: postData.nickname || '',
+        imgUrl: (postData.imgUrl as File)!, // 무조건 들어감
+        nickname: postData.nickname!, // 무조건 들어감
       });
       console.log('👁️' + JSON.stringify(response));
       alert('성공적으로 등록되었습니다.');
@@ -135,21 +118,20 @@ export const MyProfilePage = () => {
     } catch (error) {
       console.error('😀' + error);
     }
-    console.log(`프로필Page🐼/onSubmitHandler/${JSON.stringify(postData)}`);
   };
 
+  //닉네임 중복확인 함수
   const { mutate: confirmNicknameMutate } = useMutation(confirmNickname, {
     onSuccess: () => {
       const newData = {
         ...postData,
         validation: {
           msg: `*사용가능한 닉네임 입니다.`,
-          isValid: true,
-          isVerified: true,
+          isValid: true, // 닉네임 유효 여부 (기존 닉네임 유지 or 변경후 성공시 true)
+          isVerified: true, // 닉네임 중복확인 여부 (변경후 성공시 true)
         },
       };
-      setPostData(newData);
-
+      setPostData(newData); //닉네임 중복확인 성공여부 상태 업데이트
       console.log(`confirm id success`, newData);
     },
     onError: (err: Error) => {
@@ -167,13 +149,14 @@ export const MyProfilePage = () => {
     },
   });
 
-  const onDuplicateCheck = async () => {
+  //닉네임 중복확인 버튼 클릭
+  const onDuplicateCheckHandler = async () => {
     if (!postData.nickname) {
       window.alert('닉네임을 입력한 뒤 실행해주세요.');
     } else if (userData?.nickname === postData.nickname) {
       window.alert('변경된 닉네임이 없습니다.');
     } else if (postData.nickname) {
-      await confirmNicknameMutate(postData.nickname);
+      confirmNicknameMutate(postData.nickname);
     }
   };
 
@@ -213,8 +196,8 @@ export const MyProfilePage = () => {
             id="nickname"
             value={postData.nickname}
             placeholder="닉네임"
-            onChange={onChangeValue}
-            onClick={onDuplicateCheck}
+            onChange={onChangeValueHandler}
+            onClick={onDuplicateCheckHandler}
             btnText="중복 확인"
           />
           <div className="error">
