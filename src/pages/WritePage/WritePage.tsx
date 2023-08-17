@@ -39,6 +39,8 @@ export const WritePage = () => {
   const setAddress = useSetRecoilState(selectedAddressAtom);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const mutation = useMutation(submitReview);
+
   const { isLoading, isError, isSuccess } = useVerifyUser(true);
   const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
 
@@ -49,7 +51,7 @@ export const WritePage = () => {
   const { data: reviewData } = useQuery(['review', reviewId], () =>
     getReview(reviewId)
   );
-  
+
   useEffect(() => {
     if (reviewData) {
       setFormValues({
@@ -58,7 +60,7 @@ export const WritePage = () => {
       });
       setSelectedTags(reviewData.tag.map((t) => t.name));
       setAddress(reviewData.address);
-  
+
       const urlToMediaFile = (
         url: string,
         type: 'image' | 'video',
@@ -70,7 +72,7 @@ export const WritePage = () => {
           isCover,
         };
       };
-  
+
       const mediaFilesData = [
         urlToMediaFile(reviewData.mainImgUrl, 'image', true),
         ...reviewData.subImgUrl
@@ -84,11 +86,10 @@ export const WritePage = () => {
         file: string;
         isCover: boolean;
       }[];
-  
+
       setMediaFiles(mediaFilesData);
     }
   }, [reviewData]);
-  
 
   const onInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -162,8 +163,6 @@ export const WritePage = () => {
   const handleTagChange = (tags: string[]) => {
     setSelectedTags(tags);
   };
-
-  const mutation = useMutation(submitReview);
 
   const onButtonClick = () => {
     fileInputRef.current?.click();
@@ -292,7 +291,11 @@ export const WritePage = () => {
   }
 
   const onGoToWriteMapPageHandler = () => {
-    navigate('/writemap');
+    if (reviewId) {
+      navigate('/writemap', { state: { reviewId: reviewId } });
+    } else {
+      navigate('/writemap');
+    }
   };
 
   return (
