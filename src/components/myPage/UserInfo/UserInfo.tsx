@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import noUser from 'assets/images/NoUser.gif';
 import { ReactComponent as ChevronRight } from 'assets/icons/ChevronRight.svg';
 import { StToProfileButton, StUserInfoContainer } from './UserInfo.styles';
@@ -14,10 +14,6 @@ export const UserInfo = ({
   email = 'userId',
   setIsModalOpen,
 }: UserInfoProps) => {
-  useEffect(() => {
-    console.log(profileImgUrl + '프로필 이미지');
-  }, [profileImgUrl]);
-
   return (
     <StUserInfoContainer>
       <div className="profile">

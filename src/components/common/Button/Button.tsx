@@ -15,7 +15,8 @@ export interface ButtonProps {
     | 'authNormal'
     | 'authOutline'
     | 'iconLeft'
-    | 'confirm';
+    | 'confirm'
+    | 'circle';
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   url?: string;
   inputType?: 'button' | 'submit';
@@ -58,6 +59,11 @@ export const Button = ({
       className={type}
       onClick={$active ? handleButtonClick : () => {}}
       value={value}
+      $width={$width}
+      $height={$height}
+      $round={$round}
+      $stroke={$stroke}
+      $active={$active}
     />
   ) : (
     <StButton

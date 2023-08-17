@@ -1,5 +1,6 @@
 import { AxiosResponse, AxiosError } from 'axios';
 import { axiosInstance } from './api';
+import { ApiParams } from 'hooks';
 
 export type MyProfile = {
   email: string;
@@ -60,16 +61,20 @@ export type GetMyReviewsResponse = {
   totalPages: number;
 };
 
+// interface GetMyReviewsParams {
+//   type: string;
+//   page?: number;
+// }
 export const getMyReviews = async (
-  type: string,
-  page?: number
+  params: ApiParams
 ): Promise<GetMyReviewsResponse> => {
+  const { q, page } = params;
   // 내 게시글과 내 좋아요 글 조회
   try {
     const response: AxiosResponse<GetMyReviewsResponse> =
       await axiosInstance.get(`/mypage/list`, {
         params: {
-          q: type,
+          q,
           page,
         },
       });

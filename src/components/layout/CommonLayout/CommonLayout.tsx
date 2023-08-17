@@ -3,6 +3,7 @@ import {
   StLayoutBody,
   StLayoutOuter,
   StLayoutSection,
+  StModalPotal,
   StSlidingHeader,
 } from './CommonLayout.styles';
 import { FloatingFooter } from './components/FloatingFooter/FloatingFooter';
@@ -68,6 +69,7 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
   return (
     <StLayoutOuter>
       <StLayoutBody>
+        <StModalPotal id="modal"></StModalPotal>
         {header && <StSlidingHeader $isShow={isShow}>{header}</StSlidingHeader>}
         <StLayoutSection
           ref={scrollRef}

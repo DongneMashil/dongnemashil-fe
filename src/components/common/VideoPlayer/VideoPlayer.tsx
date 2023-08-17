@@ -34,7 +34,7 @@ export const VideoPlayer = ({ videoUrl }: { videoUrl: string }) => {
         url={videoUrl}
         onProgress={({ playedSeconds }) => setPlayedSeconds(playedSeconds)}
         onSeek={setPlayedSeconds}
-        onDuration={setDurationSeconds} // This is called when the player has the duration
+        onDuration={setDurationSeconds}
         width="100%"
         height="100%"
       />
