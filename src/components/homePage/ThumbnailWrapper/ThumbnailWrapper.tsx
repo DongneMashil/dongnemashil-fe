@@ -49,11 +49,10 @@ export const ThumbnailWrapper = ({
   return (
     <StThumbnailWrapper>
       <StTopWrapper>
-        {totalElements && (
-          <span>
-            <strong>{totalElements}</strong> 개
-          </span>
-        )}
+        <span>
+          <strong>{totalElements || 0}</strong> 개
+        </span>
+
         <StSort>
           <Button
             onClick={() => onClickSort('likes')}
