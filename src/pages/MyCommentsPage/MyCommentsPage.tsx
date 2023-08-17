@@ -38,7 +38,7 @@ export const MyCommentsPage = () => {
             page.content.map((item: Comment, index: number) => (
               <StButton
                 key={index}
-                onClick={() => navigate(`/review/${item.id}`)}
+                onClick={() => navigate(`/review/${item.reviewId}`)}
               >
                 <CommentS className="CommentS" />
                 <p className="comment">{item.comment}</p>

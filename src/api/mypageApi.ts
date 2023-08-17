@@ -94,6 +94,7 @@ export type Comment = {
   comment: string;
   createdAt: string;
   modifiedAt: string;
+  reviewId: number;
 };
 
 export type GetMyCommentResponse = {
