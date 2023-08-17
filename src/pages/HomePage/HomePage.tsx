@@ -35,6 +35,7 @@ export const HomePage = () => {
     setSelectedTags(tags);
   };
   console.log(selectedTags);
+  console.log(hasNextPage, isFetching);
 
   return (
     <CommonLayout
