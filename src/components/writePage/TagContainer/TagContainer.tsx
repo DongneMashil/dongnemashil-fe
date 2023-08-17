@@ -1,5 +1,9 @@
 import React from 'react';
-import { StCurrentAddressWrapper, StTagContainer, StTotalTag } from './TagContainer.styles';
+import {
+  StCurrentAddressWrapper,
+  StTagContainer,
+  StTotalTag,
+} from './TagContainer.styles';
 import { StCurrentAddress } from 'pages/WritePage/WritePage.styles';
 import { ToggleTagButton } from 'components/common';
 import { ReactComponent as PurpleMarker } from 'assets/icons/PurpleMarker.svg';
@@ -26,7 +30,11 @@ export const TagContainer: React.FC<TagProps> = ({
         </div>
         <StTotalTag>{selectedTags.length}개 선택</StTotalTag>
       </StCurrentAddressWrapper>
-      <ToggleTagButton onTagChange={handleTagChange} />
+      <ToggleTagButton
+        isWritePage={true}
+        onTagChange={handleTagChange}
+        initialSelectedTags={selectedTags}
+      />
     </StTagContainer>
   );
-}
+};
