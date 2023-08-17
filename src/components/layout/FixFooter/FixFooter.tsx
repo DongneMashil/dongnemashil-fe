@@ -41,11 +41,11 @@ export const FixFooter = ({
   const rightWrapper = {
     write: (
       <>
-        <Button type="circleFill" $width={'57px'} $height={'57px'}>
+        {/* <Button type="circleFill" $width={'57px'} $height={'57px'}>
           우리
           <br />
           동네
-        </Button>
+        </Button> */}
         <Button
           url="/write"
           type="borderRound"
