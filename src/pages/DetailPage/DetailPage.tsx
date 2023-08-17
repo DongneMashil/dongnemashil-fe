@@ -95,6 +95,13 @@ export const DetailPage = () => {
     }
   };
 
+  const onEditClickHandler = () => {
+    if (!data) {
+      return;
+    }
+    navigate(`/write/${data.id}`, { state: { reviewId: data.id } });
+  };
+
   return (
     <>
       {isMapOpen ? (
@@ -147,10 +154,7 @@ export const DetailPage = () => {
                   <span className="nickname">{data.nickname}</span>
                   {userData?.nickname === data.nickname && (
                     <>
-                      <Button
-                        type="circle"
-                        onClick={() => alert('수정하기 연결중')}
-                      >
+                      <Button type="circle" onClick={onEditClickHandler}>
                         <Edit className="edit" />
                       </Button>
                       <Button
