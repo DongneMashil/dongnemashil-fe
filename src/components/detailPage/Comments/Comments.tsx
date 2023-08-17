@@ -188,7 +188,7 @@ export const Comments = ({
                               isOpen={isDeleteCommentModalOpen}
                               onSubmitText="삭제"
                               title="삭제"
-                              firstLine="삭제된 글은 복구할 수 없습니다."
+                              firstLine="삭제된 댓글은 복구할 수 없습니다."
                               secondLine="삭제하시겠습니까?"
                               onSubmitHandler={() =>
                                 onDeleteCommentHandler(comment.id)

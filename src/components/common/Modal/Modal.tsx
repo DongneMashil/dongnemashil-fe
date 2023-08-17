@@ -82,7 +82,7 @@ const StModalContentWrapper = styled.div`
   justify-content: center;
   align-items: center;
   gap: 0.625rem;
-  margin-top: 1.75rem;
+  height: 100%;
   width: 70%;
 
   padding: 0 0.625rem;
@@ -132,18 +132,18 @@ const StModalButtonWrpper = styled.div`
   }
   .right {
     width: 30rem;
-    height: 100%;
+    height: 3.75rem;
     right: 0;
     background-color: var(--unpressedtag, #ede1ed);
   }
   .left {
     width: 100%;
-    height: 100%;
+    height: 3.75rem;
     background-color: #d8d8d8;
   }
   .center {
     width: 100%;
-    height: 100%;
+    height: 3.75rem;
     background-color: var(--unpressedtag, #ede1ed);
   }
 `;

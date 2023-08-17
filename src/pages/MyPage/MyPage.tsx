@@ -11,10 +11,12 @@ import noUser from 'assets/images/NoUser.gif';
 import { ReactComponent as LogoutIcon } from 'assets/icons/Logout.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/CommentL.svg';
 import { StButton, StMyPageContainer } from './Mypage.styles';
+import { Modal } from 'components/common';
 export const MyPage = () => {
   const navigate = useNavigate();
   const [shouldLogout, setShouldLogout] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   //유저정보 조회 및 업데이트
   const { data: userData } = useVerifyUser(true);
@@ -82,10 +84,18 @@ export const MyPage = () => {
               <div className="title">프로필 수정</div>
             </StButton>
             <p className="category">설정</p>
-            <StButton onClick={onLogoutHandler}>
+            <StButton onClick={() => setIsLogoutModalOpen(true)}>
               <LogoutIcon />
               <div className="title">로그아웃</div>
             </StButton>
+            <Modal
+              isOpen={isLogoutModalOpen}
+              onSubmitText="확인"
+              title="로그아웃"
+              firstLine="로그아웃 하시겠습니까?"
+              onSubmitHandler={() => onLogoutHandler()}
+              onCloseHandler={() => setIsLogoutModalOpen(false)}
+            />
           </>
         ) : (
           <>

@@ -204,9 +204,8 @@ export const DetailPage = () => {
                   />
                   <Modal
                     isOpen={isDeleteCompleteModalOpen}
-                    title="삭제"
-                    firstLine="삭제된 글은 복구할 수 없습니다."
-                    secondLine="삭제하시겠습니까?"
+                    title="완료"
+                    firstLine="삭제가 완료되었습니다."
                     onCloseHandler={() => navigate('/')}
                   />
                 </StDetailPageContent>
