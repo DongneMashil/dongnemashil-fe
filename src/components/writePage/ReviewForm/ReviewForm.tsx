@@ -6,6 +6,7 @@ import {
   StFormWrapper,
 } from './ReviewForm.styles';
 import { FileSlider } from '../FileSlider/FileSlider';
+import { MediaFile, MediaFileType } from 'pages';
 
 interface ReviewFormProps {
   formValues: {
@@ -15,14 +16,14 @@ interface ReviewFormProps {
   onInputChange: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
-  mediaFiles: { type: 'image' | 'video'; file: File; isCover: boolean }[];
+  mediaFiles: MediaFile[];
   onFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   onAddImage: () => void;
-  setCoverImage: (targetFile: File) => void;
-  onDeleteImage: (targetFile: File) => void;
-  determineIsCoverImage: (targetFile: File) => boolean;
+  setCoverImage: (targetFile: MediaFileType) => void;
+  onDeleteImage: (targetFile: MediaFileType) => void;
+  determineIsCoverImage: (targetFile: MediaFileType) => boolean;
   fileInputRef: RefObject<HTMLInputElement>;
 }
 

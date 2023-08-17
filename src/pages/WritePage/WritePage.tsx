@@ -16,6 +16,14 @@ interface FormValues {
   content: string;
 }
 
+export type MediaFileType = File | string;
+
+export interface MediaFile {
+  type: 'image' | 'video';
+  file: MediaFileType;
+  isCover: boolean;
+}
+
 export const WritePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,9 +33,7 @@ export const WritePage = () => {
     content: '',
   });
   const [currentPage, setCurrentPage] = useState(0);
-  const [mediaFiles, setMediaFiles] = useState<
-    { type: 'image' | 'video'; file: File; isCover: boolean }[]
-  >([]);
+  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const addressData = useRecoilValue(addressSelector);
   const setAddress = useSetRecoilState(selectedAddressAtom);
@@ -58,7 +64,6 @@ export const WritePage = () => {
           const mainImgBlob = await fetch(reviewData.mainImgUrl).then(
             (response) => response.blob()
           );
-
           const subImgPromises = reviewData.subImgUrl.map(async (url) => {
             if (url.trim() === '') {
               return null;
@@ -183,7 +188,7 @@ export const WritePage = () => {
     });
   };
 
-  const setCoverImage = (targetFile: File) => {
+  const setCoverImage = (targetFile: MediaFileType) => {
     setMediaFiles((prev) =>
       prev.map((file) =>
         file.file === targetFile
@@ -193,7 +198,7 @@ export const WritePage = () => {
     );
   };
 
-  const onDeleteImage = (targetFile: File) => {
+  const onDeleteImage = (targetFile: MediaFileType) => {
     setMediaFiles((prev) => prev.filter((file) => file.file !== targetFile));
   };
 
@@ -296,7 +301,7 @@ export const WritePage = () => {
     }
   };
 
-  const determineIsCoverImage = (targetFile: File) => {
+  const determineIsCoverImage = (targetFile: MediaFileType) => {
     const file = mediaFiles.find((file) => file.file === targetFile);
     return file ? file.isCover : false;
   };

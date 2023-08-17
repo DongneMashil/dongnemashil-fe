@@ -148,6 +148,7 @@ export const DetailPage = () => {
           <StDetailPageContainer>
             {data && (
               <>
+                <button onClick={onEditClickHandler}>임시</button>
                 <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>
                 <StDetailPageHeader>
                   <img src={data.profileImgUrl || noUser} />
