@@ -11,6 +11,7 @@ import {
 import { useIntersect } from 'hooks/useIntersect';
 import { Button } from 'components/common';
 import { ReviewsList } from 'api/reviewsApi';
+import { StLoadingSpinner } from 'components/common/LoadingSpinner/LoadingSpinner.styles';
 
 export interface ReviewsProps {
   type: string;
@@ -70,23 +71,23 @@ export const ThumbnailWrapper = ({
           </Button>
         </StSort>
       </StTopWrapper>
-      {reviews.length ? (
-        reviews.map((review) => (
-          <Thumbnail
-            key={review.id}
-            id={review.id}
-            roadName={review.roadName}
-            mainImgUrl={review.mainImgUrl}
-            profileImgUrl={review.profileImgUrl}
-            createdAt={review.createdAt}
-            likeCnt={review.likeCnt}
-            likebool={review.likebool}
-          />
-        ))
-      ) : (
-        <StNoReviews>검색된 글이 없습니다.</StNoReviews>
+      {reviews?.map((review) => (
+        <Thumbnail
+          key={review.id}
+          id={review.id}
+          roadName={review.roadName}
+          mainImgUrl={review.mainImgUrl}
+          profileImgUrl={review.profileImgUrl}
+          createdAt={review.createdAt}
+          likeCnt={review.likeCnt}
+          likebool={review.likebool}
+        />
+      ))}
+      {isFetching && (
+        <StNoReviews>
+          <StLoadingSpinner />
+        </StNoReviews>
       )}
-      {isFetching && <StNoReviews>Loading...</StNoReviews>}
       <StTarget ref={ref} />
     </StThumbnailWrapper>
   );
