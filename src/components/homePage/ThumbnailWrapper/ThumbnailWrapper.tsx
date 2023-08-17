@@ -2,6 +2,7 @@ import React from 'react';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import { Thumbnail } from '../Thumbnail/Thumbnail';
 import {
+  StNoReviews,
   StSort,
   StTarget,
   StThumbnailWrapper,
@@ -69,19 +70,23 @@ export const ThumbnailWrapper = ({
           </Button>
         </StSort>
       </StTopWrapper>
-      {reviews?.map((review) => (
-        <Thumbnail
-          key={review.id}
-          id={review.id}
-          roadName={review.roadName}
-          mainImgUrl={review.mainImgUrl}
-          profileImgUrl={review.profileImgUrl}
-          createdAt={review.createdAt}
-          likeCnt={review.likeCnt}
-          likebool={review.likebool}
-        />
-      ))}
-      {isFetching && <div>Loading...</div>}
+      {reviews.length ? (
+        reviews.map((review) => (
+          <Thumbnail
+            key={review.id}
+            id={review.id}
+            roadName={review.roadName}
+            mainImgUrl={review.mainImgUrl}
+            profileImgUrl={review.profileImgUrl}
+            createdAt={review.createdAt}
+            likeCnt={review.likeCnt}
+            likebool={review.likebool}
+          />
+        ))
+      ) : (
+        <StNoReviews>검색된 글이 없습니다.</StNoReviews>
+      )}
+      {isFetching && <StNoReviews>Loading...</StNoReviews>}
       <StTarget ref={ref} />
     </StThumbnailWrapper>
   );
