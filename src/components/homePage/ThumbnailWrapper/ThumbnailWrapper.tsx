@@ -49,9 +49,11 @@ export const ThumbnailWrapper = ({
   return (
     <StThumbnailWrapper>
       <StTopWrapper>
-        <span>
-          <strong>{totalElements || 0}</strong> 개
-        </span>
+        {totalElements && totalElements !== 0 ? (
+          <span>
+            <strong>{totalElements}</strong> 개
+          </span>
+        ) : null}
 
         <StSort>
           <Button
