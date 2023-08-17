@@ -1,11 +1,6 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { axiosInstance } from './api';
 
-// interface FileData {
-//   type: 'image' | 'video';
-//   url: string;
-// }
-
 interface ReviewData {
   id: number;
   address: string;
