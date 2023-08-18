@@ -58,31 +58,12 @@ export const SearchResultPage = () => {
     setIsMapOpen(!isMapOpen);
   };
 
-  // const scrollToTopRef = useRef<HTMLDivElement>(null);
-
-  // const handleGotoTop = () => {
-  //   if (scrollToTopRef.current) {
-  //     scrollToTopRef.current.scrollIntoView({
-  //       behavior: 'smooth',
-  //       block: 'start',
-  //     });
-  //   }
-  // };
-  // console.log(scrollToTopRef);
-
   const handleGotoTop = () => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
   };
-
-  // const handleGotoTop = () => {
-  //   window.scrollBy({
-  //     top: -300,
-  //     behavior: 'smooth',
-  //   });
-  // };
 
   return (
     <>
