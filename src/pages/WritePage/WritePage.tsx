@@ -243,10 +243,10 @@ export const WritePage = () => {
           const imageBlob = await response.blob();
           const finalFileName = getExtensionName(coverImage.file);
           const imageMimeType = getImageMimeType(finalFileName);
-          const imageFile = new File([imageBlob], finalFileName, {
+          const imageFile = new File([imageBlob], `image.${finalFileName}`, {
             type: imageMimeType,
           });
-          formData.append('mainImgUrl', imageFile, finalFileName);
+          formData.append('mainImgUrl', imageFile);
         } else {
           formData.append('mainImgUrl', coverImage.file);
         }
@@ -266,7 +266,7 @@ export const WritePage = () => {
             file.type === 'image'
               ? getImageMimeType(finalFileName)
               : getVideoMimeType(finalFileName);
-          const fileObject = new File([blob], finalFileName, {
+          const fileObject = new File([blob], `file.${finalFileName}`, {
             type: fileMimeType,
           });
 
