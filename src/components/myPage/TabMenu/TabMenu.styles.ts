@@ -4,8 +4,11 @@ export const StReviewBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
   margin-bottom: 1rem;
+  padding-top: 0.5rem;
   gap: 0.8rem;
+
   cursor: pointer;
 
   img {
@@ -17,9 +20,10 @@ export const StReviewBox = styled.div`
   .contentWrapper {
     display: flex;
     flex-direction: column;
-    width: 100%;
     justify-content: space-between;
     align-items: flex-start;
+
+    width: 100%;
     padding: 0.1rem 0.6rem;
     gap: 0.3rem;
     .title {
@@ -40,9 +44,9 @@ export const StReviewBox = styled.div`
   }
 `;
 
-export const StTabContentBox = styled.div`
+export const StTabContentBox = styled.div<{ $empty?: boolean }>`
   width: 100%;
-
+  min-height: 50vh;
   background-color: #fff;
   padding: 10px;
 
@@ -57,7 +61,7 @@ export const StTabContentBox = styled.div`
   gap: 10px;
 
   @media (min-width: 300px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(${({ $empty }) => ($empty ? `1` : `2`)}, 1fr);
   }
 
   img {
@@ -86,7 +90,7 @@ export const StTabButtonWrapper = styled.div`
 export const StTabButtonBox = styled.div`
   display: flex;
 `;
-export const StCounter = styled.div`
+export const StText = styled.div`
   display: flex;
   align-items: center;
 
@@ -97,6 +101,12 @@ export const StCounter = styled.div`
   font-weight: 600;
 `;
 
+export const StEmptyBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
 export const StRefBox = styled.div`
   height: 200px;
 `;

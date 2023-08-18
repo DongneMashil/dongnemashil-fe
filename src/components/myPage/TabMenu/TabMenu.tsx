@@ -3,13 +3,14 @@ import { TabButton } from '../TabButton/TabButton';
 import { getMyReviews } from 'api/mypageApi';
 import { useNavigate } from 'react-router-dom';
 import {
-  StCounter,
+  StText,
   StRefBox,
   StReviewBox,
   StTabButtonBox,
   StTabButtonWrapper,
   StTabContainer,
   StTabContentBox,
+  StEmptyBox,
 } from './TabMenu.styles';
 import { timeFormatWithoutTime } from 'utils';
 import { useIntersect } from 'hooks/useIntersect';
@@ -59,9 +60,7 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
   return (
     <StTabContainer>
       <StTabButtonWrapper>
-        <StCounter>
-          {data ? data.pages[0].totalElements : '0'}개의 게시물
-        </StCounter>
+        <StText>{data ? data.pages[0].totalElements : '0'}개의 게시물</StText>
         <StTabButtonBox>
           <TabButton
             selected={selectedTab === 'reviews'}
@@ -77,7 +76,7 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
           </TabButton>
         </StTabButtonBox>
       </StTabButtonWrapper>
-      <StTabContentBox>
+      <StTabContentBox $empty={!data}>
         {data ? (
           data.pages.map((page) =>
             page.content.map(
@@ -103,8 +102,10 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
             )
           )
         ) : (
-          <div>👀 게시글이 없습니다!</div>
-        )}{' '}
+          <StEmptyBox>
+            <StText>👀 게시글이 없습니다!</StText>
+          </StEmptyBox>
+        )}
         {hasNextPage && (
           <>
             <StRefBox ref={loaderRef} />
