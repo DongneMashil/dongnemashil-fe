@@ -10,7 +10,7 @@ import { userIsLoggedInSelector } from 'recoil/userExample';
 import { addressSelector } from 'recoil/address/addressSelector';
 import { ReviewForm, TagContainer } from 'components/writePage';
 import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
-import axios from 'axios';
+import { getExtensionName } from 'components/myProfilePage';
 
 interface FormValues {
   title: string;
@@ -169,18 +169,30 @@ export const WritePage = () => {
     fileInputRef.current?.click();
   };
 
-  function getExtensionFromMimeType(mimeType: string) {
-    switch (mimeType) {
-      case 'image/jpeg':
-        return 'jpg';
-      case 'image/png':
-        return 'png';
-      case 'video/mp4':
-        return 'mp4';
+  const getImageMimeType = (extension: string): string => {
+    switch (extension.toLowerCase()) {
+      case 'jpeg':
+      case 'jpg':
+        return 'image/jpeg';
+      case 'png':
+        return 'image/png';
+      case 'gif':
+        return 'image/gif';
       default:
-        return '';
+        return 'image/jpeg'; // 기본값
     }
-  }
+  };
+
+  const getVideoMimeType = (extension: string): string => {
+    switch (extension.toLowerCase()) {
+      case 'mp4':
+        return 'video/mp4';
+      case 'mov':
+        return 'video/mov';
+      default:
+        return 'video/mp4'; // 기본값
+    }
+  };
 
   const onSubmithandler = async () => {
     if (formValues.title.trim() === '') {
@@ -224,22 +236,22 @@ export const WritePage = () => {
     const coverImage = mediaFiles.find(
       (file) => file.isCover && file.type === 'image'
     );
-
     try {
       if (coverImage) {
         if (typeof coverImage.file === 'string') {
-          const response = await axios.get(coverImage.file, {
-            responseType: 'blob',
+          const response = await fetch(coverImage.file);
+          if (!response.ok) {
+            throw new Error(
+              `Failed to fetch cover image: ${response.statusText}`
+            );
+          }
+          const imageBlob = await response.blob();
+          const finalFileName = getExtensionName(coverImage.file);
+          const imageMimeType = getImageMimeType(finalFileName);
+          const imageFile = new File([imageBlob], finalFileName, {
+            type: imageMimeType,
           });
-          const imageBlob = response.data;
-          const imageExtension = getExtensionFromMimeType(
-            response.headers['content-type']
-          );
-          formData.append(
-            'maㅇinImgUrl',
-            imageBlob,
-            `mainImage.${imageExtension}`
-          );
+          formData.append('mainImgUrl', imageFile, finalFileName);
         } else {
           formData.append('mainImgUrl', coverImage.file);
         }
@@ -247,20 +259,26 @@ export const WritePage = () => {
 
       for (const file of mediaFiles) {
         if (typeof file.file === 'string') {
-          const response = await axios.get(file.file, { responseType: 'blob' });
-          const blob = response.data;
-          const fileExtension = getExtensionFromMimeType(
-            response.headers['content-type']
-          );
-          const fileName =
+          const response = await fetch(file.file);
+          if (!response.ok) {
+            throw new Error(
+              `Failed to fetch cover image: ${response.statusText}`
+            );
+          }
+          const blob = await response.blob();
+          const finalFileName = getExtensionName(file.file);
+          const fileMimeType =
             file.type === 'image'
-              ? `subImage.${fileExtension}`
-              : `video.${fileExtension}`;
+              ? getImageMimeType(finalFileName)
+              : getVideoMimeType(finalFileName);
+          const fileObject = new File([blob], finalFileName, {
+            type: fileMimeType,
+          });
 
           if (file.type === 'image' && !file.isCover) {
-            formData.append('subImgUrl', blob, fileName);
+            formData.append('subImgUrl', fileObject, finalFileName);
           } else if (file.type === 'video') {
-            formData.append('videoUrl', blob, fileName);
+            formData.append('videoUrl', fileObject, finalFileName);
           }
         } else {
           if (file.type === 'image' && !file.isCover) {
