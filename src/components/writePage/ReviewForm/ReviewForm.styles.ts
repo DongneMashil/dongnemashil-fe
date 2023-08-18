@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 export const StHiddenButton = styled.input`
   display: none;
@@ -11,6 +11,7 @@ export const StContentBox = styled.textarea`
   resize: none;
   padding: 0.45rem;
   border: none;
+  font-family: Pretendard;
   &:focus {
     outline: 1px solid #9a7b9a;
     border-radius: 1rem;
@@ -30,6 +31,7 @@ export const StTitle = styled.input`
   line-height: normal;
   padding-top: 1.25rem;
   outline: none;
+  font-family: Pretendard;
 `;
 
 export const StFormWrapper = styled.div`
