@@ -4,9 +4,9 @@ import { styled } from 'styled-components';
 export const StThumbnailWrapper = styled.ul`
   width: 100%;
   padding: 0 15px;
-  border-radius: 14px;
+  border-radius: 14px 14px 0 0;
   background-color: ${theme.whiteColor};
-  box-shadow: 0px -2px 10px 0px rgba(0, 0, 0, 0.06);
+  box-shadow: 0px -6px 6px 0px rgba(0, 0, 0, 0.03);
 
   & li:nth-last-child(2) {
     border-bottom: 0px;
