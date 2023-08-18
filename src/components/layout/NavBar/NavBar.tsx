@@ -57,9 +57,13 @@ export const NavBar = ({
   const location = useLocation();
 
   const goBack = () => {
-    location.pathname === '/write'
-      ? navigate(-2)
-      : location.state && location.state.from === '/write'
+    const prevPath = window.history.state?.prevPath;
+    console.log(prevPath);
+    location.pathname === '/write' && prevPath === '/write/search'
+      ? navigate(-4)
+      : navigate(-2);
+
+    location.state && location.state.from === '/write'
       ? navigate('/')
       : navigate(-1);
   };
