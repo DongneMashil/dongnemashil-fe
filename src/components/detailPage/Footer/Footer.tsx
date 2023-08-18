@@ -45,7 +45,7 @@ export const Footer = ({
     }
   }, [isCommentOpen]);
 
-  const { isLiked, likeCnt, toggleLikeHandler, canClick } = useLike({
+  const { isLiked, likeCnt, toggleLikeHandler } = useLike({
     reviewId,
     initialIsLiked,
     initialLikeCnt,
@@ -54,7 +54,7 @@ export const Footer = ({
   return (
     <StFooterContatiner $isCommentOpen={isCommentOpen}>
       <StFooterButtonWrapper>
-        <StLike onClick={() => canClick && toggleLikeHandler()}>
+        <StLike onClick={() => toggleLikeHandler()}>
           {isLiked ? <FilledHeart /> : <Heart />}
           {likeCnt}
         </StLike>
