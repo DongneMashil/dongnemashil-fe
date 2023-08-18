@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StButton, StSubmitButton } from './Button.styles';
 import { useNavigate } from 'react-router-dom';
+import { Modal } from 'components/common';
 
 export interface ButtonProps {
   children?: React.ReactNode;
@@ -26,6 +27,11 @@ export interface ButtonProps {
   $round?: string;
   $stroke?: string;
   $active?: boolean;
+  modal?: {
+    title?: string;
+    firstLine?: string;
+    secondLine?: string;
+  };
 }
 
 export const Button = ({
@@ -34,14 +40,19 @@ export const Button = ({
   onClick,
   url,
   inputType = 'button',
-  value,
   $width,
   $height,
   $round,
   $stroke,
   $active = true,
+  modal: {
+    title: modalTitle = '',
+    firstLine: modalFirstLine = '',
+    secondLine: modalSecondLine = '',
+  } = {},
 }: ButtonProps) => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleButtonClick = (e: React.MouseEvent<HTMLElement>) => {
     if (inputType === 'button') {
@@ -54,17 +65,23 @@ export const Button = ({
   };
 
   return inputType === 'submit' ? (
-    <StSubmitButton
-      type="submit"
-      className={type}
-      onClick={$active ? handleButtonClick : () => {}}
-      value={value}
-      $width={$width}
-      $height={$height}
-      $round={$round}
-      $stroke={$stroke}
-      $active={$active}
-    />
+    <>
+      <Modal
+        isOpen={isModalOpen}
+        onCloseHandler={() => setIsModalOpen(false)}
+        title={modalTitle}
+        firstLine={modalFirstLine}
+        secondLine={modalSecondLine || undefined}
+      />
+      <StSubmitButton
+        type="submit"
+        className={type}
+        onClick={$active ? handleButtonClick : () => setIsModalOpen(true)}
+        $active={$active}
+      >
+        {children}
+      </StSubmitButton>
+    </>
   ) : (
     <StButton
       className={type}

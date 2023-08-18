@@ -127,45 +127,16 @@ export const StButton = styled.button<{
   }
 `;
 
-export const StSubmitButton = styled.input<{
+export const StSubmitButton = styled.button<{
   $active?: boolean;
-  $width?: string;
-  $height?: string;
-  $stroke?: string;
-  $round?: string;
 }>`
-  width: 100%;
   background: none;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   cursor: pointer;
-  &.icon {
-    font-size: 20px;
-  }
-
-  &.authOutline {
-    ${theme.authButton}
-    background-color: #ffffff;
-    color: ${theme.mainColor};
-    border: 1px solid ${theme.mainColor};
-  }
-
-  &.normal {
-    height: 2.5rem;
-    border-radius: 0.875rem;
-    border: 2px solid var(--textcolor, #373737);
-    background: rgba(227, 227, 227, 0.75);
-
-    text-align: center;
-    font-size: 1rem;
-    font-weight: 700;
-    white-space: nowrap;
-    padding: 0 1rem;
-  }
 
   &.confirm {
-    //확인버튼중에 submit 필요한 경우
     color: ${(props) => (props.$active ? 'var(--main, #9a7b9a)' : '#A2A2A2')};
     text-align: center;
     font-family: Pretendard;
@@ -174,11 +145,5 @@ export const StSubmitButton = styled.input<{
     font-weight: 700;
     line-height: normal;
     margin-right: 0.5rem;
-  }
-
-  &.onlyText {
-    text-align: center;
-    font-size: 0.875rem;
-    gap: 0.5rem;
   }
 `;
