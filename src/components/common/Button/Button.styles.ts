@@ -98,6 +98,13 @@ export const StButton = styled.button<{
     color: ${theme.mainColor};
     border: 1px solid ${theme.mainColor};
   }
+  &.commentInput {
+    ${theme.authButton}
+    height: 2.5rem;
+    background-color: #ffffff;
+    color: ${theme.mainColor};
+    border: 1px solid ${theme.mainColor};
+  }
   &.confirm {
     color: ${(props) => (props.$active ? 'var(--main, #9a7b9a)' : '#A2A2A2')};
     text-align: center;
@@ -133,7 +140,7 @@ export const StSubmitButton = styled.button<{
 }>`
   background: none;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   cursor: pointer;
 
@@ -146,5 +153,17 @@ export const StSubmitButton = styled.button<{
     font-weight: 700;
     line-height: normal;
     margin-right: 0.5rem;
+  }
+  &.commentInput {
+    width: 100%;
+    font-size: 1rem;
+    border: 0;
+    box-sizing: border-box;
+    font-weight: 700;
+    border-radius: 20px;
+    height: 2.5rem;
+    background-color: #ffffff;
+    color: ${theme.mainColor};
+    border: 1px solid ${theme.mainColor};
   }
 `;

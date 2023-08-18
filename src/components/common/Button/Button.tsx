@@ -17,7 +17,8 @@ export interface ButtonProps {
     | 'authOutline'
     | 'iconLeft'
     | 'confirm'
-    | 'circle';
+    | 'circle'
+    | 'commentInput';
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   url?: string;
   inputType?: 'button' | 'submit';
