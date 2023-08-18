@@ -1,12 +1,5 @@
 import { AxiosResponse, AxiosError } from 'axios';
 import { axiosInstance } from './api';
-import { ApiParams } from 'hooks';
-// import { axiosInstance } from './api';
-
-// const baseUrl = process.env.REACT_APP_SERVER_API_URL;
-// export const tempInstance: AxiosInstance = axios.create({
-//   baseURL: baseUrl,
-// });
 
 export type ReviewDetailResponse = {
   id: number;
@@ -96,9 +89,13 @@ type GetCommentResponse = {
   totalPages: number;
   totalElements: number;
 };
+export interface GetCommentParams {
+  detailId: string | number;
+  page?: number;
+}
 
 export const getComment = async (
-  params: ApiParams
+  params: GetCommentParams
 ): Promise<GetCommentResponse> => {
   const { detailId, page } = params;
   try {
