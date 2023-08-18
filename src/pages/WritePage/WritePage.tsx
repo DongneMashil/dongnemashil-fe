@@ -10,6 +10,7 @@ import { userIsLoggedInSelector } from 'recoil/userExample';
 import { addressSelector } from 'recoil/address/addressSelector';
 import { ReviewForm, TagContainer } from 'components/writePage';
 import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
+import axios from 'axios';
 
 interface FormValues {
   title: string;
@@ -168,6 +169,19 @@ export const WritePage = () => {
     fileInputRef.current?.click();
   };
 
+  function getExtensionFromMimeType(mimeType: string) {
+    switch (mimeType) {
+      case 'image/jpeg':
+        return 'jpg';
+      case 'image/png':
+        return 'png';
+      case 'video/mp4':
+        return 'mp4';
+      default:
+        return '';
+    }
+  }
+
   const onSubmithandler = async () => {
     if (formValues.title.trim() === '') {
       alert('제목을 입력해주세요.');
@@ -210,36 +224,57 @@ export const WritePage = () => {
     const coverImage = mediaFiles.find(
       (file) => file.isCover && file.type === 'image'
     );
-    if (coverImage) {
-      if (typeof coverImage.file === 'string') {
-        const response = await fetch(coverImage.file);
-        const imageBlob = await response.blob();
-        formData.append('mainImgUrl', imageBlob);
-      } else {
-        formData.append('mainImgUrl', coverImage.file);
-      }
-    }
 
-    for (const file of mediaFiles) {
-      if (typeof file.file === 'string') {
-        const response = await fetch(file.file);
-        const blob = await response.blob();
-        const fileName = file.type === 'image' ? 'image.jpg' : 'video.mp4';
-        const newFile = new File([blob], fileName, { type: file.type });
-
-        if (file.type === 'image' && !file.isCover) {
-          formData.append('subImgUrl', newFile);
-        } else if (file.type === 'video') {
-          formData.append('videoUrl', newFile);
-        }
-      } else {
-        if (file.type === 'image' && !file.isCover) {
-          formData.append('subImgUrl', file.file);
-        } else if (file.type === 'video') {
-          formData.append('videoUrl', file.file);
+    try {
+      if (coverImage) {
+        if (typeof coverImage.file === 'string') {
+          const response = await axios.get(coverImage.file, {
+            responseType: 'blob',
+          });
+          const imageBlob = response.data;
+          const imageExtension = getExtensionFromMimeType(
+            response.headers['content-type']
+          );
+          formData.append(
+            'maㅇinImgUrl',
+            imageBlob,
+            `mainImage.${imageExtension}`
+          );
+        } else {
+          formData.append('mainImgUrl', coverImage.file);
         }
       }
+
+      for (const file of mediaFiles) {
+        if (typeof file.file === 'string') {
+          const response = await axios.get(file.file, { responseType: 'blob' });
+          const blob = response.data;
+          const fileExtension = getExtensionFromMimeType(
+            response.headers['content-type']
+          );
+          const fileName =
+            file.type === 'image'
+              ? `subImage.${fileExtension}`
+              : `video.${fileExtension}`;
+
+          if (file.type === 'image' && !file.isCover) {
+            formData.append('subImgUrl', blob, fileName);
+          } else if (file.type === 'video') {
+            formData.append('videoUrl', blob, fileName);
+          }
+        } else {
+          if (file.type === 'image' && !file.isCover) {
+            formData.append('subImgUrl', file.file);
+          } else if (file.type === 'video') {
+            formData.append('videoUrl', file.file);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching the media file:', error);
+      return;
     }
+
     if (reviewId) {
       updateMutation.mutate(formData, {
         onSuccess: (response) => {
