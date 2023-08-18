@@ -9,7 +9,7 @@ import {
   StNavBar,
   StRighttWrapper,
 } from './NavBar.styles';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import noUser from 'assets/images/NoUser.gif';
 import { useVerifyUser } from 'hooks';
@@ -60,9 +60,18 @@ export const NavBar = ({
   console.log(data);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const goBack = () => {
-    navigate(-1);
+    // if (location.state && location.state.prevPath === '/write/search') {
+    //   navigate(-4);
+    // }
+    // if (location.pathname === '/write') {
+    //   navigate(-2);
+    // }
+    location.state && location.state.from === '/write'
+      ? navigate('/')
+      : navigate(-1);
   };
 
   const leftButtons = {
