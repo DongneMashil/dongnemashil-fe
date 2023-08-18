@@ -4,9 +4,7 @@ import { CommonLayout, NavBar } from 'components/layout';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getReview, submitReview, updateReview } from 'api/reviews';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useVerifyUser } from 'hooks';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { userIsLoggedInSelector } from 'recoil/userExample';
 import { addressSelector } from 'recoil/address/addressSelector';
 import { ReviewForm, TagContainer } from 'components/writePage';
 import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
@@ -41,9 +39,6 @@ export const WritePage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const mutation = useMutation(submitReview);
-
-  const { isLoading, isError, isSuccess } = useVerifyUser(true);
-  const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
 
   const updateMutation = useMutation((formData: FormData) =>
     updateReview(reviewId, formData)
@@ -332,16 +327,6 @@ export const WritePage = () => {
     const file = mediaFiles.find((file) => file.file === targetFile);
     return file ? file.isCover : false;
   };
-
-  if (isLoading) {
-    console.log('Loading');
-  }
-  if (isError) {
-    console.log('Error');
-  }
-  if (isSuccess) {
-    console.log('Success, isLoggedIn: ', isLoggedIn);
-  }
 
   const onGoToWriteMapPageHandler = () => {
     if (reviewId) {
