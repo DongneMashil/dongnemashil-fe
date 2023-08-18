@@ -36,7 +36,8 @@ export const StButton = styled.button`
 
 export const StMyPageContainer = styled.div`
   width: 100%;
-  padding: 1rem 0;
+  height: 100%;
+  padding: 1rem 0 0 0;
 
   display: flex;
   flex-direction: column;
