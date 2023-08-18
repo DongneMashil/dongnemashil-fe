@@ -76,7 +76,7 @@ export const Button = ({
       <StSubmitButton
         type="submit"
         className={type}
-        onClick={$active ? handleButtonClick : () => setIsModalOpen(true)}
+        onClick={$active ? onClick : () => setIsModalOpen(true)}
         $active={$active}
       >
         {children}

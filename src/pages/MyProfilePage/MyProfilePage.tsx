@@ -19,26 +19,35 @@ import {
   StProfileImage,
 } from './MyProfilePage.styles';
 import axios from 'axios';
-
 export const MyProfilePage = () => {
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const fileUpload = useRef();
   const navigate = useNavigate();
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false); //닉네임 중복확인 실패시 모달창
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false); //오류시 모달창
   const [postData, setPostData] = useState<{
     nickname?: string;
     imgUrl?: File | null;
-    validation: { isValid: boolean; isVerified: boolean; msg: string };
+    validation: {
+      isValid: boolean;
+      isVerified: boolean;
+      msg: string;
+      alertMsg: string;
+    };
   }>({
     nickname: '',
     imgUrl: null,
-    validation: { isValid: true, isVerified: false, msg: '' },
+    validation: {
+      isValid: true,
+      isVerified: false,
+      msg: '',
+      alertMsg: '닉네임을 중복확인을 해주세요!',
+    },
   });
 
   //유저정보 조회 및 업데이트
   const { data: userData } = useVerifyUser(true);
   const [userState, setUserState] = useRecoilState(userProfileSelector);
-  // const [isAxiosErrorModalOpen, setIsAxiosErrorModalOpen] = useState(false); //사진 초기 다운로드 실패시 모달창
+  const [isAxiosErrorModalOpen, setIsAxiosErrorModalOpen] = useState(false); //사진 초기 다운로드 실패시 모달창
   useEffect(() => {
     console.log('current user state: ', userState);
     if (userData) {
@@ -70,7 +79,7 @@ export const MyProfilePage = () => {
         }));
       } catch (error) {
         console.error('Error fetching the image:', error);
-        // setIsAxiosErrorModalOpen(true);
+        setIsAxiosErrorModalOpen(true);
       }
     },
     onError: (error) => {
@@ -98,19 +107,49 @@ export const MyProfilePage = () => {
       console.error(error);
     }
   };
-
+  //닉네임 입력
   const onChangeValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setPostData({ ...postData, [name]: value });
+    setPostData({
+      ...postData,
+      [name]: value,
+      validation: {
+        ...postData.validation,
+        alertMsg: '닉네임 중복확인을 해주세요!',
+        isVerified: false,
+        isValid: false,
+      },
+    });
   };
 
+  //프로필 업로드
   const onSubmitHandler = async () => {
     console.log('👦🏾' + JSON.stringify(postData));
+    console.log('⚠️👀');
+    //변경내용 없는경우
     if (
       postData.imgUrl === fileUrl &&
       postData.nickname === userData?.nickname
     ) {
-      alert('변경된 정보가 없습니다.');
+      setPostData((prev) => ({
+        ...prev,
+        validation: {
+          ...prev.validation,
+          alertMsg: '변경된 내용이 없습니다.',
+        },
+      }));
+      setIsErrorModalOpen(true);
+      return;
+    } //닉네임 미입력시
+    if (postData.nickname === '') {
+      setPostData((prev) => ({
+        ...prev,
+        validation: {
+          ...prev.validation,
+          alertMsg: '닉네임을 입력해주세요.',
+        },
+      }));
+      setIsErrorModalOpen(true);
       return;
     }
     try {
@@ -125,6 +164,7 @@ export const MyProfilePage = () => {
       navigate('/');
     } catch (error) {
       console.error('😀' + error);
+      alert('프로필 등록에 실패했습니다.');
     }
   };
 
@@ -137,6 +177,7 @@ export const MyProfilePage = () => {
           msg: `*사용가능한 닉네임 입니다.`,
           isValid: true, // 닉네임 유효 여부 (기존 닉네임 유지 or 변경후 성공시 true)
           isVerified: true, // 닉네임 중복확인 여부 (변경후 성공시 true)
+          alertMsg: '사진을 등록해주세요!',
         },
       };
       setPostData(newData); //닉네임 중복확인 성공여부 상태 업데이트
@@ -150,6 +191,7 @@ export const MyProfilePage = () => {
           msg: '*' + err.message,
           isValid: false,
           isVerified: false,
+          alertMsg: '닉네임 중복확인 실패',
         },
       };
       setPostData(newData);
@@ -175,7 +217,13 @@ export const MyProfilePage = () => {
           btnLeft="back"
           btnRight="submit"
           onClickSubmit={onSubmitHandler}
-          onClickActive={postData.imgUrl !== null}
+          onClickActive={
+            postData.imgUrl !== null && postData.validation.isValid
+          }
+          modal={{
+            title: '알림',
+            firstLine: postData.validation.alertMsg,
+          }}
         >
           회원정보수정
         </NavBar>
@@ -214,16 +262,17 @@ export const MyProfilePage = () => {
             </AuthErrorMsg>
             <Modal
               isOpen={isErrorModalOpen}
-              title="완료"
-              firstLine="삭제가 완료되었습니다."
+              title="오류"
+              firstLine={postData.validation.alertMsg}
               onCloseHandler={() => setIsErrorModalOpen(false)}
             />
-            {/* <Modal
+            <Modal
               isOpen={isAxiosErrorModalOpen}
-              title="주의"
-              firstLine="수정시 사진 파일을 다시 업로드해주세요!"
+              title="재 로그인 필요"
+              firstLine="사진 다운로드오류 👀  원인 파악중 "
+              secondLine="분석을 위해 관리자에게 알려주세요!"
               onCloseHandler={() => setIsAxiosErrorModalOpen(false)}
-            /> */}
+            />
           </div>
         </StNickNameWrapper>
       </StMyProfileContainer>
