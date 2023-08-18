@@ -6,6 +6,7 @@ import Marker from 'assets/icons/Marker.png';
 import MarkerSelected from 'assets/icons/MarkerSelected.png';
 import { StResultMapContainer } from './SearchResultMapPage.styles';
 import { ReviewsList } from 'api/reviewsApi';
+import Tooltip from 'assets/images/Tooltip.svg';
 
 export const SearchResultMapPage = ({
   reviewList,
@@ -77,13 +78,13 @@ export const SearchResultMapPage = ({
             // 툴팁 생성
             const overlay = new kakao.maps.CustomOverlay({
               position: coord,
-              content: `<div style="background-color: #eeeeee; padding: 7px;border-radius: 10px;">
+              content: `<div style="background-image: url(${Tooltip}); width: 192px; height: 208px; padding: 10px 14px 34px;">
               <a href="/review/${data.id}">
-            <img src='${data.mainImgUrl}' width="100px" height="100px"/>
+            <img src='${data.mainImgUrl}' width="100%" height="100%" style="border-radius: 12px;"/>
             </a>
           </div>`,
-              xAnchor: 0.475,
-              yAnchor: 1.35,
+              xAnchor: 0.495,
+              yAnchor: 1.22,
               clickable: true,
             });
 
