@@ -46,23 +46,26 @@ export const StReviewBox = styled.div`
 
 export const StTabContentBox = styled.div<{ $empty?: boolean }>`
   width: 100%;
-  min-height: 50vh;
+  height: 100%;
   background-color: #fff;
   padding: 10px;
 
-  margin-bottom: 1rem;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.03);
   border-radius: 0.875rem;
 
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  //   justify-items: center;
-  //   align-items: center;
   gap: 10px;
 
+  ${({ $empty }) =>
+    $empty
+      ? `display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;`
+      : `  display: grid; 
+  grid-template-columns: repeat(1, 1fr);
   @media (min-width: 300px) {
-    grid-template-columns: repeat(${({ $empty }) => ($empty ? `1` : `2`)}, 1fr);
-  }
+    grid-template-columns: repeat(2, 1fr);
+  }`}
 
   img {
     width: 100%;
@@ -84,7 +87,7 @@ export const StTabButtonWrapper = styled.div`
   justify-content: space-between;
 
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 1rem 0 1.5rem;
   margin: 0.5rem;
 `;
 export const StTabButtonBox = styled.div`
@@ -94,18 +97,29 @@ export const StText = styled.div`
   display: flex;
   align-items: center;
 
-  color: rgb(131, 131, 131);
+  color: #6f6f6f;
+  text-align: center;
   font-family: Pretendard;
-  font-size: 0.875rem;
-
-  font-weight: 600;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  span {
+    color: var(--textcolor, #333);
+    font-family: Pretendard;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
 `;
 
 export const StEmptyBox = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  // flex-direction: column;
+  align-items: flex-end;
   justify-content: center;
+  margin-top: 100px;
 `;
 export const StRefBox = styled.div`
   height: 200px;

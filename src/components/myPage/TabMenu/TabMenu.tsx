@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TabButton } from '../TabButton/TabButton';
 import { getMyReviews } from 'api/mypageApi';
 import { useNavigate } from 'react-router-dom';
+import { ReactComponent as ArrowDown } from 'assets/icons/ArrowDown.svg';
 import {
   StText,
   StRefBox,
@@ -60,7 +61,10 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
   return (
     <StTabContainer>
       <StTabButtonWrapper>
-        <StText>{data ? data.pages[0].totalElements : '0'}개의 게시물</StText>
+        <StText>
+          <span>{data ? data.pages[0].totalElements : '0'}</span>&nbsp;개의
+          게시물
+        </StText>
         <StTabButtonBox>
           <TabButton
             selected={selectedTab === 'reviews'}
@@ -103,7 +107,18 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
           )
         ) : (
           <StEmptyBox>
-            <StText>👀 게시글이 없습니다!</StText>
+            {selectedTab === 'reviews' ? (
+              <>
+                <StText>
+                  하단 글쓰기 버튼을 눌러
+                  <br />
+                  오늘의 산책을 기록할 수 있어요
+                </StText>
+                <ArrowDown />
+              </>
+            ) : (
+              <StText>아직 좋아요를 누른 게시물이 없으시네요!</StText>
+            )}
           </StEmptyBox>
         )}
         {hasNextPage && (
