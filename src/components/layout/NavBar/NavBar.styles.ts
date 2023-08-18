@@ -13,15 +13,16 @@ export const StNavBar = styled.div<NavBarProps>`
   border-radius: 0px 0px 14px 14px;
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.06);
 
-  & div {
+  > div {
     display: flex;
-    gap: 20px;
+    gap: 12px;
   }
 `;
 
 export const StCenterWrapper = styled.div`
   justify-content: center;
   flex: 1.5;
+  text-align: center;
 
   h1 {
     font-size: 18px;
