@@ -1,10 +1,30 @@
-import { styled } from 'styled-components';
-import { NavBarProps } from './NavBar';
+import styled, { css } from 'styled-components';
 import { theme } from 'style/theme';
 
-export const StNavBar = styled.div<NavBarProps>`
+const blockHeader = css`
+  transform: translateY(0);
+`;
+
+const fixedHeader = css`
   position: fixed;
   top: 0;
+  transform: translateY(0);
+`;
+
+const hiddenHeader = css`
+  transform: translateY(-100%);
+`;
+
+export const StNavBar = styled.div<{
+  isNavBarVisible: boolean;
+  prevScrollY: number;
+}>`
+  ${(props) =>
+    props.isNavBarVisible === false
+      ? hiddenHeader
+      : props.prevScrollY > 50
+      ? fixedHeader
+      : blockHeader};
   z-index: 100;
   display: flex;
   justify-content: space-between;
@@ -15,6 +35,7 @@ export const StNavBar = styled.div<NavBarProps>`
   background: ${theme.whiteColor};
   border-radius: 0px 0px 14px 14px;
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease-in-out;
 
   & div {
     display: flex;

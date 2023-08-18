@@ -57,7 +57,7 @@ export const NavBar = ({
     };
   }, [prevScrollY]);
 
-  const isNavBarVisible = scrollDirection === 'up' || window.scrollY <= 1;
+  const isNavBarVisible = scrollDirection === 'up' || window.scrollY <= 50;
 
   const { data } = useQuery<MyProfile, Error>({
     queryKey: ['myPage', userData?.nickname],
@@ -143,11 +143,7 @@ export const NavBar = ({
   };
 
   return (
-    <StNavBar
-      style={{
-        transform: isNavBarVisible ? 'translateY(0)' : 'translateY(-100%)',
-      }}
-    >
+    <StNavBar isNavBarVisible={isNavBarVisible} prevScrollY={prevScrollY}>
       <div>{leftButtons[btnLeft]}</div>
       {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
       <StRighttWrapper>
