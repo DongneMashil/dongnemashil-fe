@@ -42,7 +42,6 @@ export const Comments = ({
       });
       setCommentCount(Number(response.totalElements)); // Recoil 상태 업데이트
 
-      console.log(JSON.stringify(response));
       return {
         result: response.content,
         nextPage: pageParam + 1,
@@ -190,9 +189,10 @@ export const Comments = ({
                               title="삭제"
                               firstLine="삭제된 댓글은 복구할 수 없습니다."
                               secondLine="삭제하시겠습니까?"
-                              onSubmitHandler={() =>
-                                onDeleteCommentHandler(comment.id)
-                              }
+                              onSubmitHandler={() => {
+                                onDeleteCommentHandler(comment.id);
+                                setIsDeleteCommentModalOpen(false);
+                              }}
                               onCloseHandler={() =>
                                 setIsDeleteCommentModalOpen(false)
                               }
