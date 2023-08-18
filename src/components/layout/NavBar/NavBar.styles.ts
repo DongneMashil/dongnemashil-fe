@@ -15,7 +15,7 @@ export const StNavBar = styled.div<NavBarProps>`
 
   & div {
     display: flex;
-    gap: 20px;
+    gap: 12px;
   }
 `;
 
