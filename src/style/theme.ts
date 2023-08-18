@@ -1,14 +1,64 @@
+import { css } from 'styled-components';
+
+const colors = {
+  whiteColor: '#ffffff',
+  whiteGrayColor: '#e2e2e2',
+  lightGrayColor: '#8e8e8e',
+  mediumGrayColor: '#878787',
+  darkGrayColor: '#656e75',
+  blackColor: '#000000',
+
+  mainColor: '#9A7B9A',
+  subColor: '#B5A6CA',
+  pointColor: '#886F88',
+
+  mainTextColor: '#333333',
+  titleTextColor: '#060606',
+};
+
 const size = {
   mobile: '375px',
   tablet: '768px',
   desktop: '1000px',
 };
+const maxSizes = {
+  maxWidth: '390px',
+  maxHeight: '850px',
+};
+const authLayout = css`
+  width: 100%;
+  height: 100%;
+  background-color: whiteColor;
+  padding: 43px 26px;
+`;
+
+const authButton = css`
+  width: 100%;
+  height: 44px;
+  font-size: 16px;
+  border: 0;
+  box-sizing: border-box;
+  font-weight: 700;
+  border-radius: 20px;
+  position: relative;
+`;
 
 export const theme = {
+  ...colors,
+  ...maxSizes,
+  authLayout,
+  authButton,
   device: {
     mobile: `(max-width: ${size.mobile})`,
     tablet: `(min-width: ${size.tablet}) and (max-width: ${size.desktop})`,
     desktop: `(min-width: ${size.desktop})`,
+  },
+  floatingBox: {
+    width: '100%',
+    backgroundColor: 'white',
+
+    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+    borderRadius: '0.8rem',
   },
 };
 
