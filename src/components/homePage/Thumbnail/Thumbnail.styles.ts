@@ -31,6 +31,7 @@ export const StThumbnailTitleLeft = styled.div`
 export const StTitleText = styled.div`
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 `;
 
 export const StThumbnailLike = styled.div`
