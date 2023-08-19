@@ -24,6 +24,11 @@ export interface NavBarProps {
   onClickRight?: () => void;
   onClickLeft?: () => void;
   onClickActive?: boolean;
+  modal?: {
+    title?: string;
+    firstLine?: string;
+    secondLine?: string;
+  };
 }
 
 export const NavBar = ({
@@ -35,6 +40,7 @@ export const NavBar = ({
   onClickRight,
   onClickLeft,
   onClickActive = true,
+  modal,
 }: NavBarProps) => {
   const { data: userData } = useVerifyUser(true);
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
@@ -120,7 +126,13 @@ export const NavBar = ({
       </Button>
     ),
     submit: (
-      <Button type={'confirm'} onClick={onClickSubmit} $active={onClickActive}>
+      <Button
+        type={'confirm'}
+        onClick={onClickSubmit}
+        $active={onClickActive}
+        modal={modal}
+        inputType="submit"
+      >
         완료
       </Button>
     ),

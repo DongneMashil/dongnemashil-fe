@@ -29,8 +29,18 @@ const Router = () => {
         <Route path="/login/kakao" element={<KakaoCallbackPage />} />
         <Route path="/review/:reviewId" element={<DetailPage />} />
         <Route path="/writemap" element={<WriteMapPage />} />
-        <Route path="/writemap/search" element={<WriteMapSearchPage />} />
-        <Route path="/write/:id" element={<WritePage />} />
+        <Route
+          path="/writemap"
+          element={<ProtectedRoute element={<WriteMapPage />} />}
+        />
+        <Route
+          path="/writemap/search"
+          element={<ProtectedRoute element={<WriteMapSearchPage />} />}
+        />
+        <Route
+          path="/write/:id"
+          element={<ProtectedRoute element={<WritePage />} />}
+        />
         <Route
           path="/mypage"
           element={<ProtectedRoute element={<MyPage />} />}
@@ -46,7 +56,10 @@ const Router = () => {
         <Route path="/temp/mypage" element={<MyPage />} />
         <Route path="/temp/mypage/profile" element={<MyProfilePage />} />
         <Route path="/temp/mypage/comments" element={<MyCommentsPage />} />
-        <Route path="/write" element={<WritePage />} />
+        <Route
+          path="/write"
+          element={<ProtectedRoute element={<WritePage />} />}
+        />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search/result" element={<SearchResultPage />} />
       </Routes>

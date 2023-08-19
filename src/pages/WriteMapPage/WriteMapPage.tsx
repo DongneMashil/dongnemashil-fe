@@ -21,15 +21,24 @@ export const WriteMapPage = () => {
   const setCurrentAddress = useSetRecoilState(selectedAddressAtom);
   const navigate = useNavigate();
   const location = useLocation();
+  const reviewId = location.state?.reviewId;
 
   const disableCurrentLocation = location.state?.fromSearch || false;
 
   const onGoWritePageHandler = () => {
-    navigate('/write');
+    if (reviewId) {
+      navigate(`/write/${reviewId}`, { state: { reviewId: reviewId } });
+    } else {
+      navigate('/write');
+    }
   };
 
   const onGoWriteMapSearchPageHandler = () => {
-    navigate('/writemap/search');
+    if (reviewId) {
+      navigate('/writemap/search', { state: { reviewId: reviewId } });
+    } else {
+      navigate('/writemap/search');
+    }
   };
 
   const onGoBackHandler = () => {

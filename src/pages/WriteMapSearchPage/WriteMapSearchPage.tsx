@@ -14,7 +14,7 @@ import {
 } from './WriteMapSearchPage.styles';
 import { searchAddress } from 'api/kakaoSearch';
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
 
@@ -32,6 +32,8 @@ export const WriteMapSearchPage = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const setSelectedAddress = useSetRecoilState(selectedAddressAtom);
+  const location = useLocation();
+  const reviewId = location.state?.reviewId;
 
   const {
     data: responseData,
@@ -51,8 +53,15 @@ export const WriteMapSearchPage = () => {
   };
 
   const onSelectAddressHandler = (selectedAddress: string) => {
-    setSelectedAddress(selectedAddress);
-    navigate('/writemap', { state: { fromSearch: true } });
+    if (reviewId) {
+      setSelectedAddress(selectedAddress);
+      navigate('/writemap', {
+        state: { fromSearch: true, reviewId: reviewId },
+      });
+    } else {
+      setSelectedAddress(selectedAddress);
+      navigate('/writemap', { state: { fromSearch: true } });
+    }
   };
 
   const highlightSearchText = (text: string, searchText: string) => {

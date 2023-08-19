@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import { TabButton } from '../TabButton/TabButton';
 import { getMyReviews } from 'api/mypageApi';
 import { useNavigate } from 'react-router-dom';
+import { ReactComponent as ArrowDown } from 'assets/icons/ArrowDown.svg';
 import {
-  StCounter,
+  StText,
   StRefBox,
   StReviewBox,
   StTabButtonBox,
   StTabButtonWrapper,
   StTabContainer,
   StTabContentBox,
+  StEmptyBox,
 } from './TabMenu.styles';
 import { timeFormatWithoutTime } from 'utils';
 import { useIntersect } from 'hooks/useIntersect';
@@ -59,9 +61,10 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
   return (
     <StTabContainer>
       <StTabButtonWrapper>
-        <StCounter>
-          {data ? data.pages[0].totalElements : '0'}개의 게시물
-        </StCounter>
+        <StText>
+          <span>{data ? data.pages[0].totalElements : '0'}</span>&nbsp;개의
+          게시물
+        </StText>
         <StTabButtonBox>
           <TabButton
             selected={selectedTab === 'reviews'}
@@ -77,7 +80,7 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
           </TabButton>
         </StTabButtonBox>
       </StTabButtonWrapper>
-      <StTabContentBox>
+      <StTabContentBox $empty={!data}>
         {data ? (
           data.pages.map((page) =>
             page.content.map(
@@ -103,8 +106,21 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
             )
           )
         ) : (
-          <div>👀 게시글이 없습니다!</div>
-        )}{' '}
+          <StEmptyBox>
+            {selectedTab === 'reviews' ? (
+              <>
+                <StText>
+                  하단 글쓰기 버튼을 눌러
+                  <br />
+                  오늘의 산책을 기록할 수 있어요
+                </StText>
+                <ArrowDown />
+              </>
+            ) : (
+              <StText>아직 좋아요를 누른 게시물이 없으시네요!</StText>
+            )}
+          </StEmptyBox>
+        )}
         {hasNextPage && (
           <>
             <StRefBox ref={loaderRef} />
