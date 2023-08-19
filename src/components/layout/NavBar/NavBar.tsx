@@ -57,15 +57,15 @@ export const NavBar = ({
   const location = useLocation();
 
   const goBack = () => {
-    // if (location.state && location.state.prevPath === '/write/search') {
-    //   navigate(-4);
-    // }
-    // if (location.pathname === '/write') {
-    //   navigate(-2);
-    // }
+    if (location.state && location.state.prevPath === '/write/search') {
+      navigate(-4);
+    }
+    if (location.pathname === '/write') {
+      navigate(-2);
+    }
     location.state && location.state.from === '/write'
       ? navigate('/')
-      : navigate(-1);
+      : navigate(location.state?.from || '/');
   };
 
   const leftButtons = {
