@@ -11,7 +11,8 @@ import {
 } from './FileSlider.styles';
 import { ReactComponent as FileUpload } from 'assets/icons/FileUpload.svg';
 import { ReactComponent as TrashCan } from 'assets/icons/TrashCan.svg';
-import { MediaFile, MediaFileType } from 'pages';
+import { MediaFile, MediaFileType } from 'recoil/mediaFile/mediaFileAtom';
+
 
 interface ImageSliderProps {
   images: MediaFileType[];

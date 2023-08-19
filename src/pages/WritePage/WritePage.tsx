@@ -4,23 +4,17 @@ import { CommonLayout, NavBar } from 'components/layout';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getReview, submitReview, updateReview } from 'api/reviews';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { addressSelector } from 'recoil/address/addressSelector';
 import { ReviewForm, TagContainer } from 'components/writePage';
 import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
 import { getExtensionName } from 'components/myProfilePage';
+import { MediaFileType, mediaFilesAtom } from 'recoil/mediaFile/mediaFileAtom';
+import { getImageMimeType, getVideoMimeType, urlToMediaFile } from 'utils';
 
 interface FormValues {
   title: string;
   content: string;
-}
-
-export type MediaFileType = File | string;
-
-export interface MediaFile {
-  type: 'image' | 'video';
-  file: MediaFileType;
-  isCover: boolean;
 }
 
 export const WritePage = () => {
@@ -32,9 +26,9 @@ export const WritePage = () => {
     content: '',
   });
   const [currentPage, setCurrentPage] = useState(0);
-  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const addressData = useRecoilValue(addressSelector);
+  const [mediaFiles, setMediaFiles] = useRecoilState(mediaFilesAtom);
   const setAddress = useSetRecoilState(selectedAddressAtom);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -56,18 +50,6 @@ export const WritePage = () => {
       });
       setSelectedTags(reviewData.tag.map((t) => t.name));
       setAddress(reviewData.address);
-
-      const urlToMediaFile = (
-        url: string,
-        type: 'image' | 'video',
-        isCover: boolean
-      ) => {
-        return {
-          type,
-          file: url,
-          isCover,
-        };
-      };
 
       const mediaFilesData = [
         urlToMediaFile(reviewData.mainImgUrl, 'image', true),
@@ -162,31 +144,6 @@ export const WritePage = () => {
 
   const onButtonClick = () => {
     fileInputRef.current?.click();
-  };
-
-  const getImageMimeType = (extension: string): string => {
-    switch (extension.toLowerCase()) {
-      case 'jpeg':
-      case 'jpg':
-        return 'image/jpeg';
-      case 'png':
-        return 'image/png';
-      case 'gif':
-        return 'image/gif';
-      default:
-        return 'image/jpeg'; // 기본값
-    }
-  };
-
-  const getVideoMimeType = (extension: string): string => {
-    switch (extension.toLowerCase()) {
-      case 'mp4':
-        return 'video/mp4';
-      case 'mov':
-        return 'video/mov';
-      default:
-        return 'video/mp4'; // 기본값
-    }
   };
 
   const onSubmithandler = async () => {

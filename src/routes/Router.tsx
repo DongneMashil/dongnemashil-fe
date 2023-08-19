@@ -56,10 +56,7 @@ const Router = () => {
         <Route path="/temp/mypage" element={<MyPage />} />
         <Route path="/temp/mypage/profile" element={<MyProfilePage />} />
         <Route path="/temp/mypage/comments" element={<MyCommentsPage />} />
-        <Route
-          path="/write"
-          element={<ProtectedRoute element={<WritePage />} />}
-        />
+        <Route path="/write" element={<WritePage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search/result" element={<SearchResultPage />} />
       </Routes>

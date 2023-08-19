@@ -12,6 +12,7 @@ export const StContentBox = styled.textarea`
   padding: 0.45rem;
   border: none;
   font-family: Pretendard;
+  font-size: 1rem;
   &:focus {
     outline: 1px solid #9a7b9a;
     border-radius: 1rem;
