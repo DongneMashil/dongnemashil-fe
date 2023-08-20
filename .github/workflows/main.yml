@@ -1,9 +1,9 @@
-name: CI Test
+name: Dongnemashil CICD
 on:
   push:
-    branches: ['feat/#94']
-  pull_request:
-    branches: ['feat/#94']
+    branches: ['main', 'feat/#94']
+  #pull_request:
+  #  branches: ['feat/#94']
 
 jobs:
   build:
