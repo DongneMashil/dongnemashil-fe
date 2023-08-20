@@ -22,7 +22,7 @@ jobs:
           echo "REACT_APP_SERVER_API_URL=${{secrets.REACT_APP_SERVER_API_URL}}" >> .env
           echo "REACT_APP_CLIENT_API_URL=${{secrets.REACT_APP_CLIENT_API_URL}}" >> .env 
           echo "REACT_APP_KAKAO_REST_API_KEY=${{secrets.REACT_APP_KAKAO_REST_API_KEY}}" >> .env
-          echo "REACT_APP_SERVER_API_URL=${{secrets.REACT_APP_KAKAO_KEY}}" >> .env
+          echo "REACT_APP_KAKAO_KEY=${{secrets.REACT_APP_KAKAO_KEY}}" >> .env
           cat .env 
           ls -al
       # yarn install
