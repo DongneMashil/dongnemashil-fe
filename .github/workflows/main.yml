@@ -21,7 +21,7 @@ jobs:
         run: |
           echo "REACT_APP_SERVER_API_URL=$REACT_APP_SERVER_API_URL" >> .env
           echo "REACT_APP_CLIENT_API_URL=$REACT_APP_CLIENT_API_URL" >> .env 
-          echo "REACT_APP_KAKAO_REST_API_KEY=REACT_APP_KAKAO_REST_API_KEY" >> .env
+          echo "REACT_APP_KAKAO_REST_API_KEY=$REACT_APP_KAKAO_REST_API_KEY" >> .env
           echo "REACT_APP_SERVER_API_URL=$REACT_APP_KAKAO_KEY" >> .env
         env:
           REACT_APP_SERVER_API_URL: ${{secrets.REACT_APP_SERVER_API_URL}}
