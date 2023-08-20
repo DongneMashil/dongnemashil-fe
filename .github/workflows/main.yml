@@ -34,6 +34,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
       - name: AWS setting profile
-        run: aws s3 sync ./build s3://dongnemashil --profile=${{secrets.AWS_PROFILE_NAME}}
+        run: aws configure --profile ${{secrets.AWS_PROFILE_NAME}}
       - name: Deploy to S3
         run: aws s3 sync ./build s3://dongnemashil --profile=${{secrets.AWS_PROFILE_NAME}}
