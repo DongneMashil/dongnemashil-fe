@@ -1,9 +1,9 @@
 name: CI Test
 on:
   push:
-    branches: ['main']
+    branches: ['feat/#94']
   pull_request:
-    branches: ['main']
+    branches: ['feat/#94']
 
 jobs:
   build:
