@@ -30,8 +30,9 @@ jobs:
       - name: AWS configure credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
+          role-to-assume: ${{ secrets.AWS_ROLE_NAME }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
       - name: Deploy to S3
-        run: aws s3 sync ./build s3://${{secrets.AWS_PROJECT_NAME}} --profile=${{secrets.AWS_PROFILE_NAME}}
+        run: aws s3 sync ./build s3://dongnemashil --profile=${{secrets.AWS_PROFILE_NAME}}
