@@ -41,7 +41,7 @@ export const SearchPage = () => {
         </Button>
         <div>
           <Search width={16} height={16} />
-          <HeaderText type="h1">메롱</HeaderText>
+          <HeaderText type="h1">구를 입력해주세요!</HeaderText>
         </div>
         <StSearchInput
           type="text"
