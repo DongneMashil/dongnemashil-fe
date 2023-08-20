@@ -33,6 +33,5 @@ jobs:
           aws configure set profile.${{secrets.AWS_PROFILE_NAME}}.aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws configure set profile.${{secrets.AWS_PROFILE_NAME}}.region ap-northeast-2
           aws configure set profile.${{secrets.AWS_PROFILE_NAME}}.output json
-      - run: aws s3 ls --profile ${{secrets.AWS_PROFILE_NAME}}
       - name: Deploy to S3
         run: aws s3 sync ./build s3://dongnemashil --profile=${{secrets.AWS_PROFILE_NAME}}
