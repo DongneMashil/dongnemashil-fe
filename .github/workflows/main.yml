@@ -16,20 +16,20 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
+        # 환경변수 설정
+        - name: Setting .env
+        run: |
+            echo "REACT_APP_SERVER_API_URL =$REACT_APP_SERVER_API_URL \n REACT_APP_CLIENT_API_URL =$REACT_APP_CLIENT_API_URL \n REACT_APP_KAKAO_REST_API_KEY =REACT_APP_KAKAO_REST_API_KEY \n REACT_APP_SERVER_API_URL =$REACT_APP_KAKAO_KEY \n" >> .env
+        env:
+            REACT_APP_SERVER_API_URL: ${{secrets.REACT_APP_SERVER_API_URL}}
+            REACT_APP_CLIENT_API_URL: ${{secrets.REACT_APP_CLIENT_API_URL}}
+            REACT_APP_KAKAO_REST_API_KEY: ${{secrets.REACT_APP_KAKAO_REST_API_KEY}}
+            REACT_APP_KAKAO_KEY: ${{secrets.REACT_APP_KAKAO_KEY}}
       # yarn install
       - name: Run install
         uses: borales/actions-yarn@v4.2.0
         with:
           cmd: install # will run `yarn install` command
-      # 환경변수 설정
-      - name: Setting .env
-        run: |
-          echo "REACT_APP_SERVER_API_URL =$REACT_APP_SERVER_API_URL \n REACT_APP_CLIENT_API_URL =$REACT_APP_CLIENT_API_URL \n REACT_APP_KAKAO_REST_API_KEY =REACT_APP_KAKAO_REST_API_KEY \n REACT_APP_SERVER_API_URL =$REACT_APP_KAKAO_KEY \n" >> .env
-        env:
-          REACT_APP_SERVER_API_URL: ${{secrets.REACT_APP_SERVER_API_URL}}
-          REACT_APP_CLIENT_API_URL: ${{secrets.REACT_APP_CLIENT_API_URL}}
-          REACT_APP_KAKAO_REST_API_KEY: ${{secrets.REACT_APP_KAKAO_REST_API_KEY}}
-          REACT_APP_KAKAO_KEY: ${{secrets.REACT_APP_KAKAO_KEY}}
       # yarn build
       - name: Run build
         uses: borales/actions-yarn@v4.2.0
