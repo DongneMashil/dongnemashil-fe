@@ -1,0 +1,30 @@
+name: CI Test
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 코드 작업환경으로 가져오기
+      - uses: actions/checkout@v3
+      # Node 설치
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'npm'
+      # yarn install
+      - name: Run install
+        uses: borales/actions-yarn@v4.2.0
+        with:
+          cmd: install # will run `yarn install` command
+      # yarn build
+      - name: Run build
+        uses: borales/actions-yarn@v4.2.0
+        with:
+          cmd: build
+      # 배포
