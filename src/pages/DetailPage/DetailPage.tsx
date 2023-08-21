@@ -136,7 +136,10 @@ export const DetailPage = () => {
             {data && (
               <>
                 <StDetailPageHeader>
-                  <img src={data.profileImgUrl || noUser} />
+                  <img
+                    src={data.profileImgUrl || noUser}
+                    alt={`${data.nickname}의 프로필사진`}
+                  />
                   <span className="nickname">{data.nickname}</span>
                   <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
                   {userData?.nickname === data.nickname && (
