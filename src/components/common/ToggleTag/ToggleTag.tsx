@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StTagWrapper } from './ToggleTag.styles';
 import * as tagImg from 'assets/tags';
 import { Tag } from '../Tag/Tag'; // make sure the path is correct
+import { useHorizontalDragScroll } from 'hooks';
 
 interface ToggleTagButtonProps {
   onTagChange?: (selectedTags: string[]) => void;
@@ -21,6 +22,8 @@ export const ToggleTagButton: React.FC<ToggleTagButtonProps> = ({
   initialSelectedTags = [],
   isWritePage = false,
 }) => {
+  const wrapperRef = useRef(null);
+  useHorizontalDragScroll(wrapperRef);
   useEffect(() => {
     if (isWritePage) {
       const updatedTags = tags.map((tag) => ({
@@ -70,7 +73,7 @@ export const ToggleTagButton: React.FC<ToggleTagButtonProps> = ({
   const secondRowTags = sortedTags.slice(Math.ceil(sortedTags.length / 2));
 
   return (
-    <StTagWrapper>
+    <StTagWrapper ref={wrapperRef}>
       <div>
         {firstRowTags.map((tag) => (
           <Tag

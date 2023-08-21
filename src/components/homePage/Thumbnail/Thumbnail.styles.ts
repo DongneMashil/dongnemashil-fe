@@ -31,23 +31,7 @@ export const StThumbnailTitleLeft = styled.div`
 export const StTitleText = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const LongerHight = css`
-  position: relative;
-
-  &::after {
-    content: '';
-    display: block;
-    padding-bottom: 100%;
-  }
-
-  & img {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    object-fit: cover;
-  }
+  cursor: pointer;
 `;
 
 export const StThumbnailLike = styled.div`
@@ -63,6 +47,22 @@ export const StThumbnailLike = styled.div`
 
   svg {
     width: 26px;
+  }
+`;
+
+const LongerHight = css`
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    padding-bottom: 100%;
+  }
+
+  & img {
+    width: 100%;
+    position: absolute;
+    transform: translateY(-10%);
   }
 `;
 

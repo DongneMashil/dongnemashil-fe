@@ -4,16 +4,23 @@ import { CommonLayout, NavBar } from 'components/layout';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getReview, submitReview, updateReview } from 'api/reviews';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useVerifyUser } from 'hooks';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { userIsLoggedInSelector } from 'recoil/userExample';
 import { addressSelector } from 'recoil/address/addressSelector';
 import { ReviewForm, TagContainer } from 'components/writePage';
 import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
+import { getExtensionName } from 'components/myProfilePage';
 
 interface FormValues {
   title: string;
   content: string;
+}
+
+export type MediaFileType = File | string;
+
+export interface MediaFile {
+  type: 'image' | 'video';
+  file: MediaFileType;
+  isCover: boolean;
 }
 
 export const WritePage = () => {
@@ -25,16 +32,13 @@ export const WritePage = () => {
     content: '',
   });
   const [currentPage, setCurrentPage] = useState(0);
-  const [mediaFiles, setMediaFiles] = useState<
-    { type: 'image' | 'video'; file: File; isCover: boolean }[]
-  >([]);
+  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const addressData = useRecoilValue(addressSelector);
   const setAddress = useSetRecoilState(selectedAddressAtom);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { isLoading, isError, isSuccess } = useVerifyUser(true);
-  const isLoggedIn = useRecoilValue(userIsLoggedInSelector);
+  const mutation = useMutation(submitReview);
 
   const updateMutation = useMutation((formData: FormData) =>
     updateReview(reviewId, formData)
@@ -53,78 +57,33 @@ export const WritePage = () => {
       setSelectedTags(reviewData.tag.map((t) => t.name));
       setAddress(reviewData.address);
 
-      const fetchMediaFiles = async () => {
-        try {
-          const mainImgBlob = await fetch(reviewData.mainImgUrl).then(
-            (response) => response.blob()
-          );
-
-          const subImgPromises = reviewData.subImgUrl.map(async (url) => {
-            if (url.trim() === '') {
-              return null;
-            }
-            try {
-              const response = await fetch(url);
-              if (response.ok) {
-                const blob = await response.blob();
-                return blob;
-              } else {
-                console.error('Error fetching sub image:', response.statusText);
-                return null;
-              }
-            } catch (error) {
-              console.error('Error fetching sub image:', error);
-              return null;
-            }
-          });
-
-          const subImgBlobs = await Promise.all(subImgPromises);
-          const validSubImgBlobs = subImgBlobs.filter((blob) => blob !== null);
-
-          let videoBlob = null;
-          if (reviewData.videoUrl) {
-            videoBlob = await fetch(reviewData.videoUrl).then((response) =>
-              response.blob()
-            );
-          }
-
-          const blobToMediaFile = (
-            blob: Blob | null,
-            type: 'image' | 'video',
-            isCover: boolean
-          ) => {
-            if (blob === null) {
-              return null;
-            }
-
-            const fileName = type === 'image' ? 'image.jpg' : 'video.mp4';
-            const file = new File([blob], fileName, { type });
-
-            return {
-              type,
-              file,
-              isCover,
-            };
-          };
-
-          const mediaFilesData = [
-            blobToMediaFile(mainImgBlob, 'image', true),
-            ...validSubImgBlobs.map((blob) =>
-              blobToMediaFile(blob, 'image', false)
-            ),
-            videoBlob ? blobToMediaFile(videoBlob, 'video', false) : null,
-          ].filter(Boolean) as {
-            type: 'image' | 'video';
-            file: File;
-            isCover: boolean;
-          }[];
-          setMediaFiles(mediaFilesData);
-        } catch (error) {
-          console.error('Error fetching and converting media files:', error);
-        }
+      const urlToMediaFile = (
+        url: string,
+        type: 'image' | 'video',
+        isCover: boolean
+      ) => {
+        return {
+          type,
+          file: url,
+          isCover,
+        };
       };
 
-      fetchMediaFiles();
+      const mediaFilesData = [
+        urlToMediaFile(reviewData.mainImgUrl, 'image', true),
+        ...reviewData.subImgUrl
+          .filter((url) => url.trim() !== '')
+          .map((url) => urlToMediaFile(url, 'image', false)),
+        reviewData.videoUrl
+          ? urlToMediaFile(reviewData.videoUrl, 'video', false)
+          : null,
+      ].filter(Boolean) as {
+        type: 'image' | 'video';
+        file: string;
+        isCover: boolean;
+      }[];
+
+      setMediaFiles(mediaFilesData);
     }
   }, [reviewData]);
 
@@ -183,7 +142,7 @@ export const WritePage = () => {
     });
   };
 
-  const setCoverImage = (targetFile: File) => {
+  const setCoverImage = (targetFile: MediaFileType) => {
     setMediaFiles((prev) =>
       prev.map((file) =>
         file.file === targetFile
@@ -193,7 +152,7 @@ export const WritePage = () => {
     );
   };
 
-  const onDeleteImage = (targetFile: File) => {
+  const onDeleteImage = (targetFile: MediaFileType) => {
     setMediaFiles((prev) => prev.filter((file) => file.file !== targetFile));
   };
 
@@ -201,10 +160,33 @@ export const WritePage = () => {
     setSelectedTags(tags);
   };
 
-  const mutation = useMutation(submitReview);
-
   const onButtonClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const getImageMimeType = (extension: string): string => {
+    switch (extension.toLowerCase()) {
+      case 'jpeg':
+      case 'jpg':
+        return 'image/jpeg';
+      case 'png':
+        return 'image/png';
+      case 'gif':
+        return 'image/gif';
+      default:
+        return 'image/jpeg'; // 기본값
+    }
+  };
+
+  const getVideoMimeType = (extension: string): string => {
+    switch (extension.toLowerCase()) {
+      case 'mp4':
+        return 'video/mp4';
+      case 'mov':
+        return 'video/mov';
+      default:
+        return 'video/mp4'; // 기본값
+    }
   };
 
   const onSubmithandler = async () => {
@@ -249,17 +231,62 @@ export const WritePage = () => {
     const coverImage = mediaFiles.find(
       (file) => file.isCover && file.type === 'image'
     );
-    if (coverImage) {
-      formData.append('mainImgUrl', coverImage.file);
-    }
-
-    mediaFiles.forEach((file) => {
-      if (file.type === 'image' && !file.isCover) {
-        formData.append('subImgUrl', file.file);
-      } else if (file.type === 'video') {
-        formData.append('videoUrl', file.file);
+    try {
+      if (coverImage) {
+        if (typeof coverImage.file === 'string') {
+          const response = await fetch(coverImage.file);
+          if (!response.ok) {
+            throw new Error(
+              `Failed to fetch cover image: ${response.statusText}`
+            );
+          }
+          const imageBlob = await response.blob();
+          const finalFileName = getExtensionName(coverImage.file);
+          const imageMimeType = getImageMimeType(finalFileName);
+          const imageFile = new File([imageBlob], `image.${finalFileName}`, {
+            type: imageMimeType,
+          });
+          formData.append('mainImgUrl', imageFile);
+        } else {
+          formData.append('mainImgUrl', coverImage.file);
+        }
       }
-    });
+
+      for (const file of mediaFiles) {
+        if (typeof file.file === 'string') {
+          const response = await fetch(file.file);
+          if (!response.ok) {
+            throw new Error(
+              `Failed to fetch cover image: ${response.statusText}`
+            );
+          }
+          const blob = await response.blob();
+          const finalFileName = getExtensionName(file.file);
+          const fileMimeType =
+            file.type === 'image'
+              ? getImageMimeType(finalFileName)
+              : getVideoMimeType(finalFileName);
+          const fileObject = new File([blob], `file.${finalFileName}`, {
+            type: fileMimeType,
+          });
+
+          if (file.type === 'image' && !file.isCover) {
+            formData.append('subImgUrl', fileObject, finalFileName);
+          } else if (file.type === 'video') {
+            formData.append('videoUrl', fileObject, finalFileName);
+          }
+        } else {
+          if (file.type === 'image' && !file.isCover) {
+            formData.append('subImgUrl', file.file);
+          } else if (file.type === 'video') {
+            formData.append('videoUrl', file.file);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching the media file:', error);
+      return;
+    }
 
     if (reviewId) {
       updateMutation.mutate(formData, {
@@ -296,23 +323,17 @@ export const WritePage = () => {
     }
   };
 
-  const determineIsCoverImage = (targetFile: File) => {
+  const determineIsCoverImage = (targetFile: MediaFileType) => {
     const file = mediaFiles.find((file) => file.file === targetFile);
     return file ? file.isCover : false;
   };
 
-  if (isLoading) {
-    console.log('Loading');
-  }
-  if (isError) {
-    console.log('Error');
-  }
-  if (isSuccess) {
-    console.log('Success, isLoggedIn: ', isLoggedIn);
-  }
-
   const onGoToWriteMapPageHandler = () => {
-    navigate('/writemap');
+    if (reviewId) {
+      navigate('/writemap', { state: { reviewId: reviewId } });
+    } else {
+      navigate('/writemap');
+    }
   };
 
   return (

@@ -73,7 +73,6 @@ export const FixFooter = ({
       </>
     ),
   };
-  console.log(rightButtons);
 
   return (
     <StFixFooter>

@@ -1,14 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
 import { MyProfile, getMyProfile } from 'api/mypageApi';
-
 import { Button } from 'components/common';
-import React, { useState, useEffect } from 'react';
-import { StCenterWrapper, StNavBar, StRighttWrapper } from './NavBar.styles';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import {
+  StCenterWrapper,
+  StLeftWrapper,
+  StNavBar,
+  StRighttWrapper,
+} from './NavBar.styles';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import noUser from 'assets/images/NoUser.gif';
 import { useVerifyUser } from 'hooks';
 import { ReactComponent as ChevronLeft } from 'assets/icons/ChevronLeft.svg';
+import { useRecoilState } from 'recoil';
+import { historyStackState } from 'recoil/historyStack/historyStack';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
@@ -19,6 +25,11 @@ export interface NavBarProps {
   onClickRight?: () => void;
   onClickLeft?: () => void;
   onClickActive?: boolean;
+  modal?: {
+    title?: string;
+    firstLine?: string;
+    secondLine?: string;
+  };
 }
 
 export const NavBar = ({
@@ -30,6 +41,7 @@ export const NavBar = ({
   onClickRight,
   onClickLeft,
   onClickActive = true,
+  modal,
 }: NavBarProps) => {
   const { data: userData } = useVerifyUser(true);
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
@@ -74,9 +86,24 @@ export const NavBar = ({
   console.log(data);
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const [historyStack, setHistoryStack] = useRecoilState(historyStackState);
+
+  useEffect(() => {
+    setHistoryStack([location.pathname, ...historyStack]);
+    if (location.pathname === '/') {
+      setHistoryStack([location.pathname]);
+    }
+  }, [location.pathname]);
 
   const goBack = () => {
-    navigate(-1);
+    location.pathname === '/write' && historyStack[1] === '/writemap/search'
+      ? navigate(-4)
+      : location.pathname === '/write'
+      ? navigate(-2)
+      : location.state?.from === '/write'
+      ? navigate('/')
+      : navigate(-1);
   };
 
   const leftButtons = {
@@ -131,7 +158,13 @@ export const NavBar = ({
       </Button>
     ),
     submit: (
-      <Button type={'confirm'} onClick={onClickSubmit} $active={onClickActive}>
+      <Button
+        type={'confirm'}
+        onClick={onClickSubmit}
+        $active={onClickActive}
+        modal={modal}
+        inputType="submit"
+      >
         완료
       </Button>
     ),
@@ -144,7 +177,7 @@ export const NavBar = ({
 
   return (
     <StNavBar isNavBarVisible={isNavBarVisible} prevScrollY={prevScrollY}>
-      <div>{leftButtons[btnLeft]}</div>
+      <StLeftWrapper>{leftButtons[btnLeft]}</StLeftWrapper>
       {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
       <StRighttWrapper>
         {btnSecondRight ? secondRightButtons[btnSecondRight] : null}

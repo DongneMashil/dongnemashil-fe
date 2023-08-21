@@ -71,12 +71,9 @@ export const CommentInput = ({
               onChange={onChangeHandler}
               value={comment}
             />
-            <Button
-              inputType="submit"
-              type={'authOutline'}
-              value="등록"
-              $height="2.5rem"
-            />
+            <Button inputType="submit" type={'commentInput'}>
+              등록
+            </Button>
           </>
         ) : (
           <>
@@ -86,12 +83,7 @@ export const CommentInput = ({
               placeholder="로그인 후 댓글 입력이 가능합니다."
               disabled={true}
             />
-            <Button
-              inputType="button"
-              type={'authOutline'}
-              url="/login"
-              $height="2.5rem"
-            >
+            <Button inputType="button" type={'commentInput'} url="/login">
               로그인
             </Button>
           </>

@@ -37,15 +37,16 @@ export const StNavBar = styled.div<{
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease-in-out;
 
-  & div {
+  > div {
     display: flex;
-    gap: 20px;
-    flex: 1;
+    gap: 12px;
   }
 `;
 
 export const StCenterWrapper = styled.div`
   justify-content: center;
+  flex: 1.5;
+  text-align: center;
 
   h1 {
     font-size: 18px;
@@ -58,6 +59,11 @@ export const StCenterWrapper = styled.div`
   }
 `;
 
+export const StLeftWrapper = styled.div`
+  flex: 0.5;
+`;
+
 export const StRighttWrapper = styled.div`
   justify-content: right;
+  flex: 0.5;
 `;

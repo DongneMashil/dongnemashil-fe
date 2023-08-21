@@ -4,6 +4,12 @@ interface StTagProps {
   $isHoverEnabled?: boolean;
 }
 export const StTagContainer = styled.li<StTagProps>`
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+  /*드래그 방지*/
   display: inline-flex;
   align-items: center;
   justify-content: center;
