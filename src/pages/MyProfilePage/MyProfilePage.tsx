@@ -54,14 +54,13 @@ export const MyProfilePage = () => {
       console.log('useVerifyUser data: ', userData);
     }
   }, [userState]);
+
   // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
   useQuery<MyProfile, Error>({
     queryKey: ['myPage', userData?.nickname],
     queryFn: () => getMyProfile(),
     onSuccess: async (data) => {
-      console.log(data);
       setFileUrl(data.profileImgUrl);
-
       try {
         const response = await axios.get(
           `${data.profileImgUrl!}?timestamp=${Date.now()}`,
@@ -81,6 +80,11 @@ export const MyProfilePage = () => {
           nickname: data.nickname,
         }));
       } catch (error) {
+        setFileUrl(null); //이미지 다운로드 실패시 미리보기 이미지 제거
+        setPostData((prev) => ({
+          ...prev,
+          nickname: data.nickname,
+        }));
         console.error('Error fetching the image:', error);
         setIsAxiosErrorModalOpen(true);
       }
@@ -236,7 +240,13 @@ export const MyProfilePage = () => {
       <StMyProfileContainer>
         <StProfileImage>
           <img src={fileUrl || noUser} alt="프로필 이미지" />
-          <label htmlFor="file" className="pcload">
+          <label
+            htmlFor="file"
+            className="pcload"
+            role="button"
+            tabIndex={0}
+            aria-label="프로필사진 수정하기"
+          >
             사진 수정
           </label>
           <input
@@ -271,9 +281,9 @@ export const MyProfilePage = () => {
             />
             <Modal
               isOpen={isAxiosErrorModalOpen}
-              title="재 로그인 필요"
-              firstLine="사진 다운로드오류 👀  원인 파악중 "
-              secondLine="분석을 위해 관리자에게 알려주세요!"
+              title="오류"
+              firstLine="이미지를 새로 등록해주세요"
+              secondLine="해당 오류 발생시 관리자에게 알려주세요!"
               onCloseHandler={() => setIsAxiosErrorModalOpen(false)}
             />
           </div>

@@ -7,7 +7,7 @@ export const StModalContentWrapper = styled.div`
   align-items: center;
   gap: 0.625rem;
   height: 100%;
-  width: 70%;
+  width: 100%;
 
   padding: 0 0.625rem;
 

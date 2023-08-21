@@ -53,10 +53,13 @@ export const Modal: FC<Props> = ({
               <h1>{title && title}</h1>
               <h2>
                 {firstLine && firstLine}
-                <br />
-                {secondLine && secondLine}
+                {secondLine && (
+                  <>
+                    <br />
+                    {secondLine}
+                  </>
+                )}
               </h2>
-              <h2></h2>
             </StModalContentWrapper>
             <StModalButtonWrpper>
               {onSubmitHandler ? (
