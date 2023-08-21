@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { MyProfile, getMyProfile } from 'api/mypageApi';
-
 import { Button } from 'components/common';
 import React, { useEffect, useState } from 'react';
 import {
@@ -14,6 +13,8 @@ import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import noUser from 'assets/images/NoUser.gif';
 import { useVerifyUser } from 'hooks';
 import { ReactComponent as ChevronLeft } from 'assets/icons/ChevronLeft.svg';
+import { useRecoilState } from 'recoil';
+import { historyStackState } from 'recoil/historyStack/historyStack';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
@@ -61,45 +62,23 @@ export const NavBar = ({
 
   const navigate = useNavigate();
   const location = useLocation();
-  const [historyStack, setHistoryStack] = useState<string[]>([]);
+  const [historyStack, setHistoryStack] = useRecoilState(historyStackState);
 
   useEffect(() => {
-    console.log(location.pathname);
     setHistoryStack([location.pathname, ...historyStack]);
-
-    if (historyStack.length >= 2) {
-      // setHistoryStack(historyStack.slice(0, 1));
-      console.log('업데이트된 히스토리 스택:', [
-        location.pathname,
-        ...historyStack,
-      ]);
-      setHistoryStack([location.pathname, ...historyStack]);
+    if (location.pathname === '/') {
+      setHistoryStack([location.pathname]);
     }
-    console.log(historyStack);
   }, [location.pathname]);
 
-  useEffect(() => {
-    console.log(historyStack);
-  }, [historyStack]);
-
   const goBack = () => {
-    if (historyStack.length > 0) {
-      const prevPrevPath = historyStack[0];
-      // setHistoryStack([location.pathname, ...historyStack]);
-      navigate(prevPrevPath);
-    } else {
-      if (
-        location.pathname === '/write' &&
-        location.state?.prevPath === '/write/search'
-      ) {
-        navigate(-4);
-      } else if (location.pathname === '/write') {
-        navigate(-2);
-      }
-      location.state && location.state.from === '/write'
-        ? navigate('/')
-        : navigate(location.state?.from || '/');
-    }
+    location.pathname === '/write' && historyStack[1] === '/writemap/search'
+      ? navigate(-4)
+      : location.pathname === '/write'
+      ? navigate(-2)
+      : location.state?.from === '/write'
+      ? navigate('/')
+      : navigate(-1);
   };
 
   const leftButtons = {
