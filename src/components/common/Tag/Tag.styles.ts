@@ -3,7 +3,7 @@ interface StTagProps {
   readonly $isSelected: boolean;
   $isHoverEnabled?: boolean;
 }
-export const StTagContainer = styled.li<StTagProps>`
+export const StTagContainer = styled.div<StTagProps>`
   -ms-user-select: none;
   -moz-user-select: -moz-none;
   -webkit-user-select: none;
