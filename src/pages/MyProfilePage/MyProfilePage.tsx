@@ -1,15 +1,14 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { MyProfile, getMyProfile, postProfile } from 'api/mypageApi';
+import { useMutation } from '@tanstack/react-query';
+import { postProfile } from 'api/mypageApi';
 import { CommonLayout, NavBar } from 'components/layout';
-import { useVerifyUser } from 'hooks';
-import React, { useEffect, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useMyProfile, useVerifyUser } from 'hooks';
+import React, { useRef, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import noUser from 'assets/images/NoUser.gif';
 import imageCompression from 'browser-image-compression';
 import { AuthInputBox, AuthErrorMsg, Modal } from 'components/common';
 import { confirmNickname } from 'api/loginApi';
-import { getExtensionName } from 'components/myProfilePage';
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from 'queries/queryClient';
 import {
@@ -18,81 +17,22 @@ import {
   StNickNameWrapper,
   StProfileImage,
 } from './MyProfilePage.styles';
-import axios from 'axios';
+
 export const MyProfilePage = () => {
-  const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const fileUpload = useRef();
   const navigate = useNavigate();
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false); //오류시 모달창
-  const [postData, setPostData] = useState<{
-    nickname?: string;
-    imgUrl?: File | null;
-    validation: {
-      isValid: boolean;
-      isVerified: boolean;
-      msg: string;
-      alertMsg: string;
-    };
-  }>({
-    nickname: '',
-    imgUrl: null,
-    validation: {
-      isValid: true,
-      isVerified: false,
-      msg: '',
-      alertMsg: '닉네임을 중복확인을 해주세요!',
-    },
-  });
+  const [isAxiosErrorModalOpen, setIsAxiosErrorModalOpen] = useState(false); //사진 초기 다운로드 실패시 모달창
 
   //유저정보 조회 및 업데이트
   const { data: userData } = useVerifyUser(true);
-  const [userState, setUserState] = useRecoilState(userProfileSelector);
-  const [isAxiosErrorModalOpen, setIsAxiosErrorModalOpen] = useState(false); //사진 초기 다운로드 실패시 모달창
-  useEffect(() => {
-    console.log('current user state: ', userState);
-    if (userData) {
-      console.log('useVerifyUser data: ', userData);
-    }
-  }, [userState]);
+  const setUserState = useSetRecoilState(userProfileSelector);
 
   // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
-  useQuery<MyProfile, Error>({
-    queryKey: ['myPage', userData?.nickname],
-    queryFn: () => getMyProfile(),
-    onSuccess: async (data) => {
-      setFileUrl(data.profileImgUrl);
-      try {
-        const response = await axios.get(
-          `${data.profileImgUrl!}?timestamp=${Date.now()}`,
-          {
-            responseType: 'blob',
-          }
-        );
-        console.log(`Response Status: ${response.status}`);
-
-        const blob = response.data;
-        const extension = getExtensionName(data.profileImgUrl!);
-        const finalFilename = 'prev.' + extension;
-        const prevImage = new File([blob], finalFilename, { type: blob.type });
-        setPostData((prev) => ({
-          ...prev,
-          imgUrl: prevImage,
-          nickname: data.nickname,
-        }));
-      } catch (error) {
-        setFileUrl(null); //이미지 다운로드 실패시 미리보기 이미지 제거
-        setPostData((prev) => ({
-          ...prev,
-          nickname: data.nickname,
-        }));
-        console.error('Error fetching the image:', error);
-        setIsAxiosErrorModalOpen(true);
-      }
-    },
-    onError: (error) => {
-      console.log('🔴' + error);
-    },
-  });
+  const { fileUrl, setFileUrl, postData, setPostData } = useMyProfile(
+    userData,
+    setIsAxiosErrorModalOpen
+  );
 
   // ⬇️ 이미지 압축 옵션
   const options = {
@@ -109,11 +49,11 @@ export const MyProfilePage = () => {
       const imgUrl = URL.createObjectURL(compressedFile);
       setFileUrl(imgUrl);
       setPostData((prev) => ({ ...prev, imgUrl: imageFile }));
-      console.log(postData + '이미지 압축');
     } catch (error) {
       console.error(error);
     }
   };
+
   //닉네임 입력
   const onChangeValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -132,7 +72,6 @@ export const MyProfilePage = () => {
   //프로필 업로드
   const onSubmitHandler = async () => {
     console.log('👦🏾' + JSON.stringify(postData));
-    console.log('⚠️👀');
     //변경내용 없는경우
     if (
       postData.imgUrl === fileUrl &&
@@ -160,11 +99,10 @@ export const MyProfilePage = () => {
       return;
     }
     try {
-      const response = await postProfile({
-        imgUrl: (postData.imgUrl as File)!, // 무조건 들어감
-        nickname: postData.nickname!, // 무조건 들어감
+      await postProfile({
+        imgUrl: (postData.imgUrl as File)!,
+        nickname: postData.nickname!,
       });
-      console.log('👁️' + JSON.stringify(response));
       alert('성공적으로 등록되었습니다.');
       queryClient.invalidateQueries(['myPage']);
       setUserState((prev) => ({ ...prev, nickname: postData.nickname }));
