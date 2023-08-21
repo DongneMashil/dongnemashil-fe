@@ -51,7 +51,12 @@ export const register = async (data: {
   console.log('요청 데이터: ', data);
   try {
     const response: AxiosResponse = await axiosInstance.post(`/register`, data);
-    console.log('register success', response.data);
+    console.log('register success', response);
+    const accessToken = response.headers['Accesstoken'];
+    const refreshToken = response.headers['Refreshtoken'];
+    console.log('refresh token', refreshToken);
+    console.log('access token', accessToken);
+
     return response.data;
   } catch (e: unknown) {
     console.log(e);
