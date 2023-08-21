@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { MyProfile, getMyProfile } from 'api/mypageApi';
 
 import { Button } from 'components/common';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StCenterWrapper,
   StLeftWrapper,
@@ -61,17 +61,45 @@ export const NavBar = ({
 
   const navigate = useNavigate();
   const location = useLocation();
+  const [historyStack, setHistoryStack] = useState<string[]>([]);
+
+  useEffect(() => {
+    console.log(location.pathname);
+    setHistoryStack([location.pathname, ...historyStack]);
+
+    if (historyStack.length >= 2) {
+      // setHistoryStack(historyStack.slice(0, 1));
+      console.log('업데이트된 히스토리 스택:', [
+        location.pathname,
+        ...historyStack,
+      ]);
+      setHistoryStack([location.pathname, ...historyStack]);
+    }
+    console.log(historyStack);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    console.log(historyStack);
+  }, [historyStack]);
 
   const goBack = () => {
-    if (location.state && location.state.prevPath === '/write/search') {
-      navigate(-4);
+    if (historyStack.length > 0) {
+      const prevPrevPath = historyStack[0];
+      // setHistoryStack([location.pathname, ...historyStack]);
+      navigate(prevPrevPath);
+    } else {
+      if (
+        location.pathname === '/write' &&
+        location.state?.prevPath === '/write/search'
+      ) {
+        navigate(-4);
+      } else if (location.pathname === '/write') {
+        navigate(-2);
+      }
+      location.state && location.state.from === '/write'
+        ? navigate('/')
+        : navigate(location.state?.from || '/');
     }
-    if (location.pathname === '/write') {
-      navigate(-2);
-    }
-    location.state && location.state.from === '/write'
-      ? navigate('/')
-      : navigate(location.state?.from || '/');
   };
 
   const leftButtons = {
