@@ -114,6 +114,7 @@ export const MyPage = () => {
         ) : (
           <>
             <UserInfo
+              aria-label="프로필 메뉴 열기"
               profileImgUrl={data?.profileImgUrl}
               nickName={data?.nickname}
               email={data?.email}

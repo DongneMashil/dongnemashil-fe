@@ -48,6 +48,7 @@ export const FixFooter = ({
           동네
         </Button> */}
         <Button
+          aria-label="글쓰기"
           url="/writemap"
           type="borderRound"
           $width={'70px'}
