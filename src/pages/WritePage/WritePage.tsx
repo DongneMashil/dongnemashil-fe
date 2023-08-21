@@ -191,7 +191,9 @@ export const WritePage = () => {
     try {
       if (coverImage) {
         if (typeof coverImage.file === 'string') {
-          const response = await fetch(coverImage.file);
+          const response = await fetch(
+            `${coverImage.file}?timestamp=${Date.now()}`
+          );
           if (!response.ok) {
             throw new Error(
               `Failed to fetch cover image: ${response.statusText}`
@@ -211,7 +213,7 @@ export const WritePage = () => {
 
       for (const file of mediaFiles) {
         if (typeof file.file === 'string') {
-          const response = await fetch(file.file);
+          const response = await fetch(`${file.file}?timestamp=${Date.now()}`);
           if (!response.ok) {
             throw new Error(
               `Failed to fetch cover image: ${response.statusText}`
