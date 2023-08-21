@@ -28,7 +28,7 @@ export const Thumbnail = ({
 }: ReviewsList) => {
   const navigate = useNavigate();
   const [imgRatio, setImgRatio] = useState<
-    'LongerHeight' | 'LongerWidth' | null
+    'longerHeight' | 'longerWidth' | null
   >(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
@@ -42,9 +42,9 @@ export const Thumbnail = ({
       const imageHeight = imageRef.current.naturalHeight;
 
       if (imageWidth < imageHeight) {
-        setImgRatio('LongerHeight');
+        setImgRatio('longerHeight');
       } else {
-        setImgRatio('LongerWidth');
+        setImgRatio('longerWidth');
       }
     }
   };
