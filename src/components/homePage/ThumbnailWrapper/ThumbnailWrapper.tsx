@@ -33,8 +33,6 @@ export const ThumbnailWrapper = ({
   onClickSort,
   totalElements,
 }: ReviewsProps) => {
-  console.log(type);
-
   const ref = useIntersect(
     (entry, observer) => {
       observer.unobserve(entry.target);

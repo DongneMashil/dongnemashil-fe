@@ -40,7 +40,6 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
 }) => {
   const [isShow, setIsShow] = React.useState(true);
   const [prevPosition, setPrevPosition] = React.useState(0);
-  console.log(scrollToTopRef);
   const scrollRef = React.useRef<HTMLDivElement>(null);
   headerHeight = header ? headerHeight : '0px';
   useEffect(() => {
