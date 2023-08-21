@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   deleteReviewDetail,
@@ -36,7 +36,6 @@ export const DetailPage = () => {
   const [isDeleteCompleteModalOpen, setIsDeleteCompleteModalOpen] =
     useState(false);
   const setCommentCount = useSetRecoilState(commentCountAtom);
-  const contentRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const defaultAddress = '서울특별시 마포구 와우산로 94'; //정보가 없을시 기본 주소
 
@@ -85,16 +84,6 @@ export const DetailPage = () => {
     deleteDetail.mutate();
   };
 
-  //content로 이동하기 버튼
-  const handleGotoContent = () => {
-    if (contentRef.current) {
-      contentRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }
-  };
-
   const onEditClickHandler = () => {
     if (!data) {
       return;
@@ -138,7 +127,6 @@ export const DetailPage = () => {
               <Footer
                 reviewId={reviewId}
                 likeCnt={data.likeCnt}
-                onClick={handleGotoContent}
                 isLiked={data.likebool}
               ></Footer>
             )
@@ -186,7 +174,7 @@ export const DetailPage = () => {
                     </StVideoPlayerBox>
                   )}
 
-                  <p ref={contentRef}>{data.content}</p>
+                  <p>{data.content}</p>
                   <StTagWrapper>
                     {data.tag.map((tag) => (
                       <Tag

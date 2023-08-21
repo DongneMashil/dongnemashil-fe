@@ -1,9 +1,9 @@
 import { Button } from 'components/common';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/CommentS.svg';
-import { ReactComponent as ContentIcon } from 'assets/icons/Content.svg';
+import { ReactComponent as ChevronTop } from 'assets/icons/ChevronTop.svg';
 import { ReactComponent as Close } from 'assets/icons/Close.svg';
 import { Comments } from '../Comments/Comments';
 import { CommentInput } from '../CommentInput/CommentInput';
@@ -21,13 +21,11 @@ import {
 interface FooterProps {
   reviewId: string;
   likeCnt: number;
-  onClick?: () => void;
   isLiked: boolean;
 }
 export const Footer = ({
   reviewId,
   likeCnt: initialLikeCnt,
-  onClick,
   isLiked: initialIsLiked,
 }: FooterProps) => {
   const commentCount = useRecoilValue(commentCountAtom);
@@ -44,6 +42,14 @@ export const Footer = ({
       setIsCommentShow(false);
     }
   }, [isCommentOpen]);
+
+  const onClickHandler = useCallback(() => {
+    if (isCommentOpen) {
+      setIsCommentOpen(false);
+    } else {
+      setIsCommentOpen(true);
+    }
+  }, []);
 
   const { isLiked, likeCnt, toggleLikeHandler } = useLike({
     reviewId,
@@ -66,8 +72,8 @@ export const Footer = ({
             <Close />
           </Button>
         ) : (
-          <Button type={'onlyText'} onClick={onClick}>
-            <ContentIcon /> 본문으로
+          <Button type={'onlyText'} onClick={onClickHandler}>
+            <ChevronTop /> 댓글보기
           </Button>
         )}
       </StFooterButtonWrapper>
