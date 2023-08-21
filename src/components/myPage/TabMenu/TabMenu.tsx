@@ -84,23 +84,29 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
         {data ? (
           data.pages.map((page) =>
             page.content.map(
-              (item, index) =>
+              (item) =>
                 item.imgUrl && (
                   <StReviewBox
-                    key={index}
+                    key={item.reviewId}
                     onClick={() => navigate(`/review/${item.reviewId}`)}
+                    $imgUrl={item.imgUrl}
+                    area-label={`${item.roadName}의 ${item.reviewId}번 리뷰로 이동하기`}
                   >
-                    <img src={item.imgUrl} alt="img" />
+                    <div
+                      className="imgWrapper"
+                      role="img"
+                      aria-label={`${item.roadName}의 ${item.reviewId}번 리뷰 이미지`}
+                    />
                     <div className="contentWrapper">
-                      <div className="title">{item.roadName}</div>
+                      <h2 className="title">{item.roadName}</h2>
                       {selectedTab === 'reviews' && (
-                        <div className="date">
+                        <time className="date">
                           {timeFormatWithoutTime(item.createdAt)}
-                        </div>
+                        </time>
                       )}
                     </div>
 
-                    {isLoading && <div>로딩중...</div>}
+                    {isLoading && <h2>로딩중...</h2>}
                   </StReviewBox>
                 )
             )
@@ -121,11 +127,7 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
             )}
           </StEmptyBox>
         )}
-        {hasNextPage && (
-          <>
-            <StRefBox ref={loaderRef} />
-          </>
-        )}
+        {hasNextPage && <StRefBox ref={loaderRef} />}
       </StTabContentBox>
     </StTabContainer>
   );
