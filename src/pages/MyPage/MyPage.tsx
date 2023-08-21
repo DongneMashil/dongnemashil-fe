@@ -80,16 +80,25 @@ export const MyPage = () => {
         {isModalOpen ? (
           <>
             <p className="category">내 정보</p>
-            <StButton onClick={() => navigate('/mypage/comments')}>
+            <StButton
+              onClick={() => navigate('/mypage/comments')}
+              aria-label="내가 쓴 댓글"
+            >
               <CommentIcon />
               <div className="title">내가 쓴 댓글</div>
             </StButton>
-            <StButton onClick={navigateToProfileHandler}>
+            <StButton
+              onClick={navigateToProfileHandler}
+              aria-label="프로필 수정"
+            >
               <img src={noUser} alt="프로필 이미지" />
               <div className="title">프로필 수정</div>
             </StButton>
             <p className="category">설정</p>
-            <StButton onClick={() => setIsLogoutModalOpen(true)}>
+            <StButton
+              onClick={() => setIsLogoutModalOpen(true)}
+              aria-label="로그아웃"
+            >
               <LogoutIcon />
               <div className="title">로그아웃</div>
             </StButton>
