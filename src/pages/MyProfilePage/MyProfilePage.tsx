@@ -1,12 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { postProfile } from 'api/mypageApi';
 import { CommonLayout, NavBar } from 'components/layout';
-import { useMyProfile, useVerifyUser } from 'hooks';
+import { useMyProfile, useProfileImageUpload, useVerifyUser } from 'hooks';
 import React, { useRef, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import noUser from 'assets/images/NoUser.gif';
-import imageCompression from 'browser-image-compression';
 import { AuthInputBox, AuthErrorMsg, Modal } from 'components/common';
 import { confirmNickname } from 'api/loginApi';
 import { useNavigate } from 'react-router-dom';
@@ -21,9 +20,8 @@ import {
 export const MyProfilePage = () => {
   const fileUpload = useRef();
   const navigate = useNavigate();
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false); //오류시 모달창
-  const [isAxiosErrorModalOpen, setIsAxiosErrorModalOpen] = useState(false); //사진 초기 다운로드 실패시 모달창
-
+  const [errorMsg, setErrorMsg] = useState(''); // 에러 메시지를 저장하는 상태
+  const [doneMsg, setDoneMsg] = useState(''); // 완료 메시지를 저장하는 상태
   //유저정보 조회 및 업데이트
   const { data: userData } = useVerifyUser(true);
   const setUserState = useSetRecoilState(userProfileSelector);
@@ -31,28 +29,15 @@ export const MyProfilePage = () => {
   // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
   const { fileUrl, setFileUrl, postData, setPostData } = useMyProfile(
     userData,
-    setIsAxiosErrorModalOpen
+    setErrorMsg
   );
 
-  // ⬇️ 이미지 압축 옵션
-  const options = {
-    maxSizeMB: 0.8,
-    maxWidthOrHeight: 500,
-    useWebWorker: true,
-  };
-  //⬇️ 이미지 압축 (fileUrl -> imgUrl)
-  const onChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const imageFile = e.target.files?.[0];
-    if (!imageFile) return;
-    try {
-      const compressedFile = await imageCompression(imageFile, options);
-      const imgUrl = URL.createObjectURL(compressedFile);
-      setFileUrl(imgUrl);
-      setPostData((prev) => ({ ...prev, imgUrl: imageFile }));
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //프로필 사진 업로드
+  const { onChangeImage } = useProfileImageUpload(
+    setFileUrl,
+    postData,
+    setPostData
+  );
 
   //닉네임 입력
   const onChangeValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,31 +56,16 @@ export const MyProfilePage = () => {
 
   //프로필 업로드
   const onSubmitHandler = async () => {
-    console.log('👦🏾' + JSON.stringify(postData));
     //변경내용 없는경우
     if (
       postData.imgUrl === fileUrl &&
       postData.nickname === userData?.nickname
     ) {
-      setPostData((prev) => ({
-        ...prev,
-        validation: {
-          ...prev.validation,
-          alertMsg: '변경된 내용이 없습니다.',
-        },
-      }));
-      setIsErrorModalOpen(true);
+      setErrorMsg('변경된 내용이 없습니다.');
       return;
     } //닉네임 미입력시
     if (postData.nickname === '') {
-      setPostData((prev) => ({
-        ...prev,
-        validation: {
-          ...prev.validation,
-          alertMsg: '닉네임을 입력해주세요.',
-        },
-      }));
-      setIsErrorModalOpen(true);
+      setErrorMsg('닉네임을 입력해주세요.');
       return;
     }
     try {
@@ -103,13 +73,12 @@ export const MyProfilePage = () => {
         imgUrl: (postData.imgUrl as File)!,
         nickname: postData.nickname!,
       });
-      alert('성공적으로 등록되었습니다.');
+      setDoneMsg('프로필 등록에 성공했습니다.');
       queryClient.invalidateQueries(['myPage']);
       setUserState((prev) => ({ ...prev, nickname: postData.nickname }));
-      navigate('/');
     } catch (error) {
       console.error('😀' + error);
-      alert('프로필 등록에 실패했습니다.');
+      setErrorMsg(`프로필 등록에 실패했습니다. 오류코드:${error}`);
     }
   };
 
@@ -211,18 +180,19 @@ export const MyProfilePage = () => {
             <AuthErrorMsg isValid={postData.validation.isValid}>
               {postData.validation.msg}
             </AuthErrorMsg>
+
             <Modal
-              isOpen={isErrorModalOpen}
-              title="오류"
-              firstLine={postData.validation.alertMsg}
-              onCloseHandler={() => setIsErrorModalOpen(false)}
+              isOpen={!!errorMsg}
+              title="알림"
+              firstLine={errorMsg}
+              onCloseHandler={() => setErrorMsg('')}
             />
+
             <Modal
-              isOpen={isAxiosErrorModalOpen}
-              title="오류"
-              firstLine="이미지를 새로 등록해주세요"
-              secondLine="해당 오류 발생시 관리자에게 알려주세요!"
-              onCloseHandler={() => setIsAxiosErrorModalOpen(false)}
+              isOpen={!!doneMsg}
+              title="알림"
+              firstLine={doneMsg}
+              onCloseHandler={() => navigate('/mypage')}
             />
           </div>
         </StNickNameWrapper>

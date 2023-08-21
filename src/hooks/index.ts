@@ -4,3 +4,4 @@ export * from './useLike';
 export * from './useIntersect';
 export * from './useHorizontalDragScroll';
 export * from './useMyProfile';
+export * from './useProfileImageUpload';

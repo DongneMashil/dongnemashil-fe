@@ -7,7 +7,7 @@ import { UserStateRes } from 'api/loginApi';
 
 export const useMyProfile = (
   userData: UserStateRes | undefined,
-  setIsAxiosErrorModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setErrorMsg: React.Dispatch<React.SetStateAction<string>>
 ) => {
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const [postData, setPostData] = useState<{
@@ -61,7 +61,9 @@ export const useMyProfile = (
           nickname: data.nickname,
         }));
         console.error('Error fetching the image:', error);
-        setIsAxiosErrorModalOpen(true);
+        setErrorMsg(
+          '프로필 사진을 불러오는데 실패했습니다. 새로 등록하고 관리자에게 문의해주세요.'
+        );
       }
     },
     onError: (error) => {
@@ -74,5 +76,6 @@ export const useMyProfile = (
     setFileUrl,
     postData,
     setPostData,
+    imgFile: postData.imgUrl,
   };
 };
