@@ -5,8 +5,8 @@ const basicNavBar = css`
   border-radius: 0px 0px 14px 14px;
 `;
 
-export const StNavBar = styled.div<{ $type?: 'writePage' }>`
-  ${(props) => (props.$type === 'writePage' ? null : basicNavBar)}
+export const StNavBar = styled.div<{ $isWritePage?: boolean }>`
+  ${(props) => (props.$isWritePage ? null : basicNavBar)}
   display: flex;
   justify-content: space-between;
   align-items: center;
