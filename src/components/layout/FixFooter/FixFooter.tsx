@@ -31,6 +31,7 @@ export const FixFooter = ({
         $height={'27px'}
         $round={'16px'}
         $stroke={'1px'}
+        $shadow={true}
       >
         <PurpleMarker />
         <span>지도 보기</span>
@@ -53,6 +54,7 @@ export const FixFooter = ({
           $height={'70px'}
           $round={'50%'}
           $stroke={'2px'}
+          $shadow={true}
         >
           <Pen />
         </Button>
@@ -67,13 +69,13 @@ export const FixFooter = ({
           $height={'48px'}
           $round={'50%'}
           $stroke={'1px'}
+          $shadow={true}
         >
           <ChevronTop />
         </Button>
       </>
     ),
   };
-  console.log(rightButtons);
 
   return (
     <StFixFooter>

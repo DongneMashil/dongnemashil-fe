@@ -31,6 +31,7 @@ export const StThumbnailTitleLeft = styled.div`
 export const StTitleText = styled.div`
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 `;
 
 export const StThumbnailLike = styled.div`
@@ -49,7 +50,7 @@ export const StThumbnailLike = styled.div`
   }
 `;
 
-const LongerHight = css`
+const longerHight = css`
   position: relative;
 
   &::after {
@@ -65,23 +66,22 @@ const LongerHight = css`
   }
 `;
 
-const LongerWidth = css`
+const longerWidth = css`
   & img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    vertical-align: middle;
   }
 `;
 
 export const StThumnailMain = styled.div<{
-  $imgRatio?: 'LongerHeight' | 'LongerWidth' | null;
+  $imgRatio?: 'longerHeight' | 'longerWidth' | null;
 }>`
   ${(props) =>
-    props.$imgRatio === 'LongerHeight'
-      ? LongerHight
-      : props.$imgRatio === 'LongerWidth'
-      ? LongerWidth
+    props.$imgRatio === 'longerHeight'
+      ? longerHight
+      : props.$imgRatio === 'longerWidth'
+      ? longerWidth
       : null}
 
   width: 100%;

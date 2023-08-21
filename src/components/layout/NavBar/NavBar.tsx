@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { MyProfile, getMyProfile } from 'api/mypageApi';
-
 import { Button } from 'components/common';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StCenterWrapper,
   StLeftWrapper,
@@ -14,6 +13,8 @@ import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import noUser from 'assets/images/NoUser.gif';
 import { useVerifyUser } from 'hooks';
 import { ReactComponent as ChevronLeft } from 'assets/icons/ChevronLeft.svg';
+import { useRecoilState } from 'recoil';
+import { historyStackState } from 'recoil/historyStack/historyStack';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
@@ -29,6 +30,7 @@ export interface NavBarProps {
     firstLine?: string;
     secondLine?: string;
   };
+  $isWritePage?: boolean;
 }
 
 export const NavBar = ({
@@ -41,6 +43,7 @@ export const NavBar = ({
   onClickLeft,
   onClickActive = true,
   modal,
+  $isWritePage = false,
 }: NavBarProps) => {
   const { data: userData } = useVerifyUser(true);
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
@@ -61,15 +64,21 @@ export const NavBar = ({
 
   const navigate = useNavigate();
   const location = useLocation();
+  const [historyStack, setHistoryStack] = useRecoilState(historyStackState);
+
+  useEffect(() => {
+    setHistoryStack([location.pathname, ...historyStack]);
+    if (location.pathname === '/') {
+      setHistoryStack([location.pathname]);
+    }
+  }, [location.pathname]);
 
   const goBack = () => {
-    // if (location.state && location.state.prevPath === '/write/search') {
-    //   navigate(-4);
-    // }
-    // if (location.pathname === '/write') {
-    //   navigate(-2);
-    // }
-    location.state && location.state.from === '/write'
+    location.pathname === '/write' && historyStack[1] === '/writemap/search'
+      ? navigate(-4)
+      : location.pathname === '/write'
+      ? navigate(-2)
+      : location.state?.from === '/write'
       ? navigate('/')
       : navigate(-1);
   };
@@ -121,7 +130,14 @@ export const NavBar = ({
         <img src={fileUrl || noUser} alt="프로필 이미지" />
       </Button>
     ) : (
-      <Button type={'onlyText'} url={'/login'}>
+      <Button
+        type={'borderRound'}
+        $width={'50px'}
+        $height={'22px'}
+        $round={'16px'}
+        $stroke={'1px'}
+        url={'/login'}
+      >
         로그인
       </Button>
     ),
@@ -144,7 +160,7 @@ export const NavBar = ({
   };
 
   return (
-    <StNavBar>
+    <StNavBar $isWritePage={$isWritePage}>
       <StLeftWrapper>{leftButtons[btnLeft]}</StLeftWrapper>
       {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
       <StRighttWrapper>

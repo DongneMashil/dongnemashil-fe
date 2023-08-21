@@ -17,8 +17,6 @@ export const getImageMimeType = (extension: string): string => {
       return 'image/jpeg';
     case 'png':
       return 'image/png';
-    // case 'gif':
-    //   return 'image/gif';
     default:
       return 'image/jpeg'; // 기본값
   }
