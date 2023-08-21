@@ -28,7 +28,7 @@ export const Thumbnail = ({
 }: ReviewsList) => {
   const navigate = useNavigate();
   const [imgRatio, setImgRatio] = useState<
-    'LongerHeight' | 'LongerWidth' | null
+    'longerHeight' | 'longerWidth' | null
   >(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
@@ -42,9 +42,9 @@ export const Thumbnail = ({
       const imageHeight = imageRef.current.naturalHeight;
 
       if (imageWidth < imageHeight) {
-        setImgRatio('LongerHeight');
+        setImgRatio('longerHeight');
       } else {
-        setImgRatio('LongerWidth');
+        setImgRatio('longerWidth');
       }
     }
   };
@@ -65,7 +65,8 @@ export const Thumbnail = ({
       <StThumbnailTitle>
         <StThumbnailTitleLeft>
           <img src={profileImgUrl || noUser} alt="프로필 이미지" />
-          <StTitleText>
+
+          <StTitleText onClick={onClickThumbnail}>
             <Span size={'title'}>
               <strong>{roadName}</strong>
             </Span>

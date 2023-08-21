@@ -34,8 +34,6 @@ export const HomePage = () => {
   const handleTagChange = (tags: string[]) => {
     setSelectedTags(tags);
   };
-  console.log(selectedTags);
-  console.log(hasNextPage, isFetching);
 
   return (
     <CommonLayout

@@ -40,7 +40,6 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
 }) => {
   const [isShow, setIsShow] = React.useState(true);
   const [prevPosition, setPrevPosition] = React.useState(0);
-  console.log(scrollToTopRef);
   const scrollRef = React.useRef<HTMLDivElement>(null);
   headerHeight = header ? headerHeight : '0px';
   useEffect(() => {
@@ -56,7 +55,7 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
         setPrevPosition(scrollTop);
       }
     };
-    if (scrollRef.current && hideHeader) {
+    if (scrollRef.current && hideHeader && location.pathname !== '/write') {
       scrollRef.current.addEventListener('scroll', onScroll);
     }
     return () => {
