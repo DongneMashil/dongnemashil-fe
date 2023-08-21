@@ -55,7 +55,7 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
         setPrevPosition(scrollTop);
       }
     };
-    if (scrollRef.current && hideHeader) {
+    if (scrollRef.current && hideHeader && location.pathname !== '/write') {
       scrollRef.current.addEventListener('scroll', onScroll);
     }
     return () => {

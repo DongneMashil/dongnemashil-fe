@@ -30,6 +30,7 @@ export interface NavBarProps {
     firstLine?: string;
     secondLine?: string;
   };
+  $isWritePage?: boolean;
 }
 
 export const NavBar = ({
@@ -42,6 +43,7 @@ export const NavBar = ({
   onClickLeft,
   onClickActive = true,
   modal,
+  $isWritePage = false,
 }: NavBarProps) => {
   const { data: userData } = useVerifyUser(true);
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
@@ -128,7 +130,14 @@ export const NavBar = ({
         <img src={fileUrl || noUser} alt="프로필 이미지" />
       </Button>
     ) : (
-      <Button type={'onlyText'} url={'/login'}>
+      <Button
+        type={'borderRound'}
+        $width={'50px'}
+        $height={'22px'}
+        $round={'16px'}
+        $stroke={'1px'}
+        url={'/login'}
+      >
         로그인
       </Button>
     ),
@@ -151,7 +160,7 @@ export const NavBar = ({
   };
 
   return (
-    <StNavBar>
+    <StNavBar $isWritePage={$isWritePage}>
       <StLeftWrapper>{leftButtons[btnLeft]}</StLeftWrapper>
       {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
       <StRighttWrapper>
