@@ -15,7 +15,6 @@ interface Props {
   title?: string;
   firstLine?: string;
   secondLine?: string;
-  // children?: React.ReactNode;
 }
 
 export const Modal: FC<Props> = ({
