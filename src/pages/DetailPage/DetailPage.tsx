@@ -8,13 +8,14 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { CommonLayout, NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
-import { Button, FooterSpacer, Modal, Tag } from 'components/common';
+import { FooterSpacer, Modal, Tag } from 'components/common';
 import {
   StCreatedTime,
   StDetailPageContainer,
   StDetailPageContent,
   StDetailPageHeader,
   StDetailTitle,
+  StEditButtonWrapper,
   StNavTitle,
   StTagWrapper,
   StVideoPlayerBox,
@@ -27,8 +28,6 @@ import { userProfileSelector } from 'recoil/userExample';
 import { useVerifyUser } from 'hooks';
 import { DetailMap } from 'components/detailPage';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
-import { ReactComponent as Trash } from 'assets/icons/Trash.svg';
-import { ReactComponent as Edit } from 'assets/icons/Edit.svg';
 
 export const DetailPage = () => {
   const [isMapOpen, setIsMapOpen] = useState(false);
@@ -136,30 +135,40 @@ export const DetailPage = () => {
           <StDetailPageContainer>
             {data && (
               <>
-                <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>
                 <StDetailPageHeader>
                   <img src={data.profileImgUrl || noUser} />
                   <span className="nickname">{data.nickname}</span>
+                  <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
                   {userData?.nickname === data.nickname && (
-                    <>
-                      <Button type="circle" onClick={onEditClickHandler}>
-                        <Edit className="edit" />
-                      </Button>
-                      <Button
-                        type="circle"
+                    <StEditButtonWrapper>
+                      <button className="left" onClick={onEditClickHandler}>
+                        수정
+                      </button>
+                      <div className="divider">|</div>
+                      <button
+                        className="right"
                         onClick={() => setIsDeleteDetailModalOpen(true)}
                       >
-                        <Trash />
-                      </Button>
-                    </>
+                        삭제
+                      </button>
+                    </StEditButtonWrapper>
                   )}
-
-                  <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
                 </StDetailPageHeader>
+                <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>
                 <StDetailPageContent>
-                  <img className="detailimg" src={data.mainImgUrl || noImage} />
+                  <img
+                    className="detailimg"
+                    src={data.mainImgUrl || noImage}
+                    alt={`${data.address}의 메인 사진`}
+                  />
                   {data.subImgUrl.map((img, index) =>
-                    img !== '' ? <img key={index} src={img} /> : null
+                    img !== '' ? (
+                      <img
+                        key={index}
+                        src={img}
+                        alt={`${data.address}의 ${index}번째 서브 사진`}
+                      />
+                    ) : null
                   )}
 
                   {data.videoUrl && (
@@ -170,17 +179,21 @@ export const DetailPage = () => {
                         width={'100%'}
                         height={'100%'}
                         src={data.videoUrl}
+                        aria-label={`${data.address}의 비디오`}
                       />
                     </StVideoPlayerBox>
                   )}
 
-                  <p>{data.content}</p>
+                  <p className="content" aria-label="본문">
+                    {data.content}
+                  </p>
                   <StTagWrapper>
                     {data.tag.map((tag) => (
                       <Tag
                         key={tag.id}
                         text={tag.name}
                         isHoverEnabled={false}
+                        isSelected={true}
                       />
                     ))}
                   </StTagWrapper>

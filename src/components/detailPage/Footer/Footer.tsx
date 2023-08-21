@@ -60,19 +60,31 @@ export const Footer = ({
   return (
     <StFooterContatiner $isCommentOpen={isCommentOpen}>
       <StFooterButtonWrapper>
-        <StLike onClick={() => toggleLikeHandler()}>
+        <StLike onClick={() => toggleLikeHandler()} aria-label="좋아요">
           {isLiked ? <FilledHeart /> : <Heart />}
-          {likeCnt}
+          <p aria-label="좋아요수">{likeCnt}</p>
         </StLike>
-        <StComment onClick={() => setIsCommentOpen(!isCommentOpen)}>
-          <CommentIcon className="CommentIcon" /> {commentCount}
+        <StComment
+          onClick={() => setIsCommentOpen(!isCommentOpen)}
+          aria-label="댓글"
+        >
+          <CommentIcon className="CommentIcon" />{' '}
+          <p aria-label="댓글수">{commentCount}</p>
         </StComment>
         {isCommentOpen ? (
-          <Button type={'onlyText'} onClick={() => setIsCommentOpen(false)}>
+          <Button
+            type={'onlyText'}
+            onClick={() => setIsCommentOpen(false)}
+            aria-label="댓글닫기"
+          >
             <Close />
           </Button>
         ) : (
-          <Button type={'onlyText'} onClick={onClickHandler}>
+          <Button
+            type={'onlyText'}
+            onClick={onClickHandler}
+            aria-label="댓글보기"
+          >
             <ChevronTop /> 댓글보기
           </Button>
         )}
