@@ -63,7 +63,7 @@ export const MyProfilePage = () => {
       setFileUrl(data.profileImgUrl);
 
       try {
-        const response = await axios.get(data.profileImgUrl!, {
+        const response = await axios.get(`${data.profileImgUrl!}?timestamp=2`, {
           responseType: 'blob',
         });
         console.log(`Response Status: ${response.status}`);
