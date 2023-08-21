@@ -344,6 +344,7 @@ export const WritePage = () => {
             btnLeft={'back'}
             btnRight={'submit'}
             onClickSubmit={onSubmithandler}
+            $type="writePage"
           >
             {addressData.roadName}
           </NavBar>

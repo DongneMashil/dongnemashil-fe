@@ -30,6 +30,7 @@ export interface NavBarProps {
     firstLine?: string;
     secondLine?: string;
   };
+  $type?: 'writePage';
 }
 
 export const NavBar = ({
@@ -42,6 +43,7 @@ export const NavBar = ({
   onClickLeft,
   onClickActive = true,
   modal,
+  $type,
 }: NavBarProps) => {
   const { data: userData } = useVerifyUser(true);
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
@@ -151,7 +153,7 @@ export const NavBar = ({
   };
 
   return (
-    <StNavBar>
+    <StNavBar $type={$type}>
       <StLeftWrapper>{leftButtons[btnLeft]}</StLeftWrapper>
       {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
       <StRighttWrapper>
