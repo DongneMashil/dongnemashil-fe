@@ -26,8 +26,8 @@ export const useProfileImageUpload = (
   >
 ) => {
   const options = {
-    maxSizeMB: 0.8,
-    maxWidthOrHeight: 500,
+    maxSizeMB: 0.1,
+    maxWidthOrHeight: 200,
     useWebWorker: true,
   };
 
