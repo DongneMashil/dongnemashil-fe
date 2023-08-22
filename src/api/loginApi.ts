@@ -6,6 +6,17 @@ export interface UserStateRes {
   nickname: string;
 }
 
+const tokenHandler = (accessToken: string, refreshToken?: string) => {
+  // 토큰 로컬 스토리지에 저장
+  window.localStorage.setItem('access_token', accessToken);
+  if (refreshToken) {
+    window.localStorage.setItem('refresh_token', refreshToken);
+  }
+
+  // 새로고침 해도 유지되나?
+  axiosInstance.defaults.headers['Accesstoken'] = accessToken;
+};
+
 /** 카카오 로그인 */
 export const loginKakao = () => {
   const loginURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_CLIENT_API_URL}/login/kakao&response_type=code`;
@@ -18,8 +29,11 @@ export const loginKakaoCallback = async (code: string) => {
   console.log(code);
   await axiosInstance
     .post(`/kakao?code=${code}`)
-    .then((res) => {
-      console.log('카카오 로그인 성공', res.data);
+    .then((response) => {
+      const accessToken = response.headers['Accesstoken'];
+      const refreshToken = response.headers['Refreshtoken'];
+      tokenHandler(accessToken, refreshToken);
+      console.log('카카오 로그인 성공', response.data);
     })
     .catch((err) => {
       console.log('kakao 소셜 로그인 에러 : ', err);
@@ -33,6 +47,13 @@ export const login = async (data: { email: string; password: string }) => {
   try {
     const response: AxiosResponse = await axiosInstance.post(`/login`, data);
     console.log('Login Success, ', response.data);
+
+    // 토큰 가져오기
+    const accessToken = response.headers['Accesstoken'];
+    const refreshToken = response.headers['Refreshtoken'];
+    // 로컬스토리지 저장, 헤더에 세팅
+    tokenHandler(accessToken, refreshToken);
+
     return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
@@ -43,6 +64,9 @@ export const login = async (data: { email: string; password: string }) => {
 };
 
 /** 회원가입 */
+// 회원가입 요청 후
+// then에서 토큰 지정 (로컬스토리지에 저장)
+// catch에서 에러 던지기
 export const register = async (data: {
   email: string;
   nickname: string;
@@ -51,11 +75,9 @@ export const register = async (data: {
   console.log('요청 데이터: ', data);
   try {
     const response: AxiosResponse = await axiosInstance.post(`/register`, data);
-    console.log('register success', response);
     const accessToken = response.headers['Accesstoken'];
     const refreshToken = response.headers['Refreshtoken'];
-    console.log('refresh token', refreshToken);
-    console.log('access token', accessToken);
+    tokenHandler(accessToken, refreshToken);
 
     return response.data;
   } catch (e: unknown) {
@@ -108,23 +130,29 @@ export const confirmNickname = async (nickname: string) => {
 
 /** 로그인 유저 정보 */
 export const verifyUser = () => {
-  return axiosInstance.get(`/accesstoken`).then((res) => {
-    return res.data;
+  return axiosInstance.get(`/accesstoken`).then((response) => {
+    return response.data;
   });
 };
 
 /** refresh token으로 access token 재발급 */
 export const getNewAccessToken = () => {
-  return axiosInstance.get(`/refreshtoken`).then((res) => {
-    console.log('Got new access token', res.data);
-    return res.data;
+  return axiosInstance.get(`/refreshtoken`).then((response) => {
+    // 새로 받은 액세스 토큰 넣어주기
+    const accessToken = response.headers['Accesstoken'];
+    tokenHandler(accessToken);
+
+    console.log('Got new access token', response.data);
+    return response.data;
   });
 };
 
 /** logout */
 export const logout = () => {
-  return axiosInstance.get(`/logout`).then((res) => {
-    console.log('Successfully logged out, ', res.data);
-    return res.data;
+  return axiosInstance.get(`/logout`).then((response) => {
+    window.localStorage.removeItem('access_token');
+    window.localStorage.removeItem('refresh_token');
+    console.log('Successfully logged out, ', response.data);
+    return response.data;
   });
 };

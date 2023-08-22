@@ -14,9 +14,11 @@ axiosInstance.interceptors.response.use(
     return res;
   },
   (err): void => {
-    // console.log('interceptor err ', err);
-    //console.log('interceptor err msg ', err.response.data.message);
+    console.log('interceptor err ', err);
+    console.log('interceptor err msg ', err.response.data.message);
     if (err.response.data.message == '토큰 유효기간 만료.') {
+      const refreshToken = window.localStorage.getItem('refresh_token');
+      axiosInstance.defaults.headers['Refreshtoken'] = refreshToken;
       getNewAccessToken();
     }
     throw err;
