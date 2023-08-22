@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react';
-//import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
 import { Map } from 'components/common';
 import { Button, BackButton } from 'components/common';
 import Marker from 'assets/icons/Marker.png';
@@ -15,9 +14,10 @@ export const SearchResultMapPage = ({
   reviewList: ReviewsList[];
   onToggle: () => void;
 }) => {
-  console.log('reviewList ', reviewList);
-
-  //const navigate = useNavigate();
+  const [initialMapPos, setInitialMapPos] = useState<kakao.maps.LatLng | null>(
+    null
+  );
+  const hasInitialMapPosSet = useRef<boolean>(false);
   const mapInstance = useRef<kakao.maps.Map | null>(null);
   const markerImage = new kakao.maps.MarkerImage(
     Marker,
@@ -36,98 +36,123 @@ export const SearchResultMapPage = ({
             pos.coords.latitude,
             pos.coords.longitude
           );
-          map.panTo(location);
+          setCenter(map, location, true);
         },
         () => {
           const location = new kakao.maps.LatLng(37.545043, 127.039245);
-          map.panTo(location);
+          setCenter(map, location, true);
         }
       );
     }
   };
 
-  const initMap = (map: kakao.maps.Map) => {
+  // 지도 중심 이동
+  const setCenter = (
+    map: kakao.maps.Map,
+    location: kakao.maps.LatLng,
+    isPanTo: boolean = false
+  ) => {
+    isPanTo ? map.panTo(location) : map.setCenter(location);
+  };
+
+  // 주소 -> 좌표
+  const addressSearch = (
+    address: string
+  ): Promise<{
+    x: string;
+    y: string;
+  }> => {
+    return new Promise((resolve, reject) => {
+      const geocoder = new kakao.maps.services.Geocoder();
+      geocoder.addressSearch(address, (result, status) => {
+        if (status === kakao.maps.services.Status.OK) {
+          resolve({ x: result[0].x, y: result[0].y });
+        } else {
+          reject(status);
+        }
+      });
+    });
+  };
+
+  const initMap = async (map: kakao.maps.Map) => {
     let selectedMarker: kakao.maps.Marker | null = null;
     let selectedOverlay: kakao.maps.CustomOverlay | null = null;
 
     mapInstance.current = map;
-    console.log('mapInstance ', mapInstance);
 
     // 마커 및 오버레이 세팅
-    reviewList.map((data: ReviewsList) => {
-      const geocoder = new kakao.maps.services.Geocoder(); // 주소 -> 좌표 변환
+    for (let i = 0; i < reviewList.length; ++i) {
+      const data = reviewList[i];
+      if (data.address) {
+        try {
+          const result = await addressSearch(data.address);
+          const coord = new kakao.maps.LatLng(
+            Number(result.y),
+            Number(result.x)
+          );
+          if (!hasInitialMapPosSet.current) {
+            setInitialMapPos(coord);
+            hasInitialMapPosSet.current = true;
+          }
 
-      // 변환한 좌표가 유효할 경우 마커 및 오버레이 세팅
-      data.address &&
-        geocoder.addressSearch(data.address, (result, status) => {
-          console.log('geocoder ', result);
-          if (status === kakao.maps.services.Status.OK) {
-            // 주소 -> 좌표 변환
-            const coord = new kakao.maps.LatLng(
-              Number(result[0].y),
-              Number(result[0].x)
-            );
+          // 마커 생성
+          const marker = new kakao.maps.Marker({
+            image: markerImage,
+            position: coord,
+          });
+          marker.setMap(map);
 
-            // 마커 생성
-            const marker = new kakao.maps.Marker({
-              image: markerImage,
-              position: coord,
-            });
-            marker.setMap(map); // 마커 맵에 추가
-
-            // 툴팁 생성
-            const overlay = new kakao.maps.CustomOverlay({
-              position: coord,
-              content: `<div style="background-image: url(${Tooltip}); width: 192px; height: 208px; padding: 10px 14px 34px;">
-              <a href="/review/${data.id}">
+          // 툴팁 생성
+          const overlay = new kakao.maps.CustomOverlay({
+            position: coord,
+            content: `<div style="background-image: url(${Tooltip}); width: 192px; height: 208px; padding: 10px 14px 34px;">
+            <a href="/review/${data.id}">
             <img src='${data.mainImgUrl}' width="100%" height="100%" style="border-radius: 12px;"/>
             </a>
-          </div>`,
-              xAnchor: 0.495,
-              yAnchor: 1.22,
-              clickable: true,
-            });
+            </div>`,
+            xAnchor: 0.495,
+            yAnchor: 1.22,
+            clickable: true,
+          });
 
-            kakao.maps.event.addListener(marker, 'click', () => {
-              if (!selectedMarker) {
-                console.log('selected marker is null', selectedMarker);
-                marker.setImage(markerSelectedImage);
-              }
-              if (selectedMarker !== marker) {
-                console.log(
-                  'marker: ',
-                  marker,
-                  'selected marker: ',
-                  selectedMarker
-                );
-                marker.setImage(markerSelectedImage);
-                selectedMarker?.setImage(markerImage);
-                selectedOverlay?.setMap(null);
-              }
-
-              overlay.setMap(map); // 툴팁 열기 이벤트 리스너 추가
-
-              selectedMarker = marker;
-              selectedOverlay = overlay;
-            });
-            kakao.maps.event.addListener(map, 'click', () => {
+          kakao.maps.event.addListener(marker, 'click', () => {
+            if (!selectedMarker) {
+              marker.setImage(markerSelectedImage);
+            }
+            if (selectedMarker !== marker) {
+              marker.setImage(markerSelectedImage);
               selectedMarker?.setImage(markerImage);
-              selectedMarker = null;
-              overlay.setMap(null); // 툴팁 닫기 이벤트 리스너 추가
-            });
-          }
-        });
-    });
+              selectedOverlay?.setMap(null);
+            }
+            overlay.setMap(map); // 툴팁 열기 이벤트 리스너 추가
+            selectedMarker = marker;
+            selectedOverlay = overlay;
+          });
+          kakao.maps.event.addListener(map, 'click', () => {
+            selectedMarker?.setImage(markerImage);
+            selectedMarker = null;
+            overlay.setMap(null); // 툴팁 닫기 이벤트 리스너 추가
+          });
+        } catch (err) {
+          console.error(
+            'Error fetching coordinates for address:',
+            data.address,
+            err
+          );
+        }
+      }
+    }
   };
 
   const onBackHandler = () => {
-    console.log('onBackHandler');
     onToggle();
   };
 
   useEffect(() => {
-    console.log('map Instance (useEffect) ', mapInstance);
-  });
+    if (initialMapPos && mapInstance.current) {
+      setCenter(mapInstance.current, initialMapPos, false); // 첫 번째 마커 좌표로 지도 이동
+    }
+  }, [initialMapPos]);
 
   return (
     <StResultMapContainer>
