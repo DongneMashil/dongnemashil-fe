@@ -3,6 +3,8 @@ import { loginKakaoCallback } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
 import { useVerifyUser } from 'hooks';
 import { useNavigate } from 'react-router-dom';
+import { StLoginContainer } from './KakaoCalbackPage.styles';
+import { CommonLayout } from 'components/layout';
 
 export const KakaoCallbackPage = () => {
   const navigate = useNavigate();
@@ -29,5 +31,11 @@ export const KakaoCallbackPage = () => {
     });
   }
 
-  return <div>카카오 인증중 ...</div>;
+  return (
+    <CommonLayout>
+      <StLoginContainer>
+        <div>카카오 인증중 ...</div>
+      </StLoginContainer>
+    </CommonLayout>
+  );
 };
