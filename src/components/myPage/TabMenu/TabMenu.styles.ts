@@ -1,6 +1,7 @@
 import { styled } from 'styled-components';
 
-export const StReviewBox = styled.div`
+export const StReviewBox = styled.button<{ $imgUrl?: string }>`
+  background: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,15 +9,18 @@ export const StReviewBox = styled.div`
   margin-bottom: 1rem;
   padding-top: 0.5rem;
   gap: 0.8rem;
-
   cursor: pointer;
 
-  img {
+  .imgWrapper {
     width: 100%;
     aspect-ratio: 1/1;
-    object-fit: cover;
+    overflow: hidden;
     border-radius: 0.875rem;
+    background-image: url(${(props) => props.$imgUrl});
+    background-position: center;
+    background-size: cover;
   }
+
   .contentWrapper {
     display: flex;
     flex-direction: column;
@@ -66,13 +70,6 @@ export const StTabContentBox = styled.div<{ $empty?: boolean }>`
   @media (min-width: 300px) {
     grid-template-columns: repeat(2, 1fr);
   }`}
-
-  img {
-    width: 100%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-    border-radius: 0.875rem;
-  }
 `;
 
 export const StTabContainer = styled.div`
@@ -93,7 +90,7 @@ export const StTabButtonWrapper = styled.div`
 export const StTabButtonBox = styled.div`
   display: flex;
 `;
-export const StText = styled.div`
+export const StText = styled.h2`
   display: flex;
   align-items: center;
 

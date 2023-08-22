@@ -23,8 +23,7 @@ export const getMyProfile = async (): Promise<MyProfile> => {
 };
 
 export type Review = {
-  nickname: string;
-  userprofileImgUrl: string | null;
+  userprofileUrl: string | null;
   imgUrl: string | null;
   roadName: string;
   createdAt: string;
