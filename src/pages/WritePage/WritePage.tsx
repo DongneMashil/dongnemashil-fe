@@ -1,17 +1,14 @@
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { StContentContainer } from './WritePage.styles';
 import { CommonLayout, NavBar } from 'components/layout';
-import { useMutation } from '@tanstack/react-query';
-import { submitReview, updateReview } from 'api/reviews';
 import { useNavigate } from 'react-router-dom';
 import {
   ReviewForm,
   TagContainer,
   useWritePageState,
 } from 'components/writePage';
-import { getExtensionName } from 'components/myProfilePage';
 import { MediaFileType } from 'recoil/mediaFile/mediaFileAtom';
-import { getImageMimeType, getVideoMimeType } from 'utils';
+import { useSubmitHandler } from 'components/writePage/hooks/useSubmitHandler';
 
 export const WritePage = () => {
   const navigate = useNavigate();
@@ -27,12 +24,6 @@ export const WritePage = () => {
     setMediaFiles: hooksSetMediaFiles,
     onInputChange,
   } = useWritePageState();
-
-  const mutation = useMutation(submitReview);
-
-  const updateMutation = useMutation((formData: FormData) =>
-    updateReview(reviewId, formData)
-  );
 
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -103,141 +94,13 @@ export const WritePage = () => {
     fileInputRef.current?.click();
   };
 
-  const onSubmithandler = async () => {
-    if (hookFormValues.title.trim() === '') {
-      alert('제목을 입력해주세요.');
-      return;
-    }
-
-    if (hookFormValues.content.trim() === '') {
-      alert('내용을 입력해주세요.');
-      return;
-    }
-
-    if (selectedTags.length === 0) {
-      alert('태그를 최소 하나 선택해주세요.');
-      return;
-    }
-
-    if (hookMediaFiles.length === 0) {
-      alert('최소 하나의 이미지를 선택해야 합니다.');
-      return;
-    }
-    if (!hookMediaFiles.some((file) => file.type === 'image')) {
-      alert('최소 하나의 이미지를 추가해야 합니다.');
-      return;
-    }
-
-    const formData = new FormData();
-    const jsonData = {
-      title: hookFormValues.title,
-      content: hookFormValues.content,
-      address: addressData.fullAddress,
-      roadName: addressData.roadName,
-      tag: selectedTags,
-    };
-
-    const blob = new Blob([JSON.stringify(jsonData)], {
-      type: 'application/json',
-    });
-    formData.append('data', blob);
-
-    const coverImage = hookMediaFiles.find(
-      (file) => file.isCover && file.type === 'image'
-    );
-    try {
-      if (coverImage) {
-        if (typeof coverImage.file === 'string') {
-          const response = await fetch(
-            `${coverImage.file}?timestamp=${Date.now()}`
-          );
-          if (!response.ok) {
-            throw new Error(
-              `Failed to fetch cover image: ${response.statusText}`
-            );
-          }
-          const imageBlob = await response.blob();
-          const finalFileName = getExtensionName(coverImage.file);
-          const imageMimeType = getImageMimeType(finalFileName);
-          const imageFile = new File([imageBlob], `image.${finalFileName}`, {
-            type: imageMimeType,
-          });
-          formData.append('mainImgUrl', imageFile);
-        } else {
-          formData.append('mainImgUrl', coverImage.file);
-        }
-      }
-
-      for (const file of hookMediaFiles) {
-        if (typeof file.file === 'string') {
-          const response = await fetch(`${file.file}?timestamp=${Date.now()}`);
-          if (!response.ok) {
-            throw new Error(
-              `Failed to fetch cover image: ${response.statusText}`
-            );
-          }
-          const blob = await response.blob();
-          const finalFileName = getExtensionName(file.file);
-          const fileMimeType =
-            file.type === 'image'
-              ? getImageMimeType(finalFileName)
-              : getVideoMimeType(finalFileName);
-          const fileObject = new File([blob], `file.${finalFileName}`, {
-            type: fileMimeType,
-          });
-
-          if (file.type === 'image' && !file.isCover) {
-            formData.append('subImgUrl', fileObject, finalFileName);
-          } else if (file.type === 'video') {
-            formData.append('videoUrl', fileObject, finalFileName);
-          }
-        } else {
-          if (file.type === 'image' && !file.isCover) {
-            formData.append('subImgUrl', file.file);
-          } else if (file.type === 'video') {
-            formData.append('videoUrl', file.file);
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching the media file:', error);
-      return;
-    }
-
-    if (reviewId) {
-      updateMutation.mutate(formData, {
-        onSuccess: (response) => {
-          console.log('수정 성공', response);
-          navigate(`/review/${response.id}`);
-        },
-        onError: (error: unknown) => {
-          if (typeof error === 'string') {
-            console.log('수정 실패', error);
-          } else if (error instanceof Error) {
-            console.log('수정 실패', error.message);
-          } else {
-            console.log('수정 실패', error);
-          }
-        },
-      });
-    } else {
-      mutation.mutate(formData, {
-        onSuccess: (response) => {
-          console.log('등록성공', response);
-          navigate(`/review/${response.id}`);
-        },
-        onError: (error: unknown) => {
-          if (typeof error === 'string') {
-            console.log('실패', error);
-          } else if (error instanceof Error) {
-            console.log('실패', error.message);
-          } else {
-            console.log('실패', error);
-          }
-        },
-      });
-    }
-  };
+  const { handleSubmit } = useSubmitHandler({
+    reviewId,
+    formValues: hookFormValues,
+    mediaFiles: hookMediaFiles,
+    selectedTags,
+    addressData,
+  });
 
   const determineIsCoverImage = (targetFile: MediaFileType) => {
     const file = hookMediaFiles.find((file) => file.file === targetFile);
@@ -259,7 +122,7 @@ export const WritePage = () => {
           <NavBar
             btnLeft={'back'}
             btnRight={'submit'}
-            onClickSubmit={onSubmithandler}
+            onClickSubmit={handleSubmit}
             $isWritePage={true}
           >
             {addressData.roadName}
