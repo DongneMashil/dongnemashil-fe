@@ -28,6 +28,7 @@ export interface ButtonProps {
   $round?: string;
   $stroke?: string;
   $active?: boolean;
+  $shadow?: boolean;
   modal?: {
     title?: string;
     firstLine?: string;
@@ -45,6 +46,7 @@ export const Button = ({
   $height,
   $round,
   $stroke,
+  $shadow,
   $active = true,
   modal: {
     title: modalTitle = '',
@@ -91,6 +93,7 @@ export const Button = ({
       $height={$height}
       $round={$round}
       $stroke={$stroke}
+      $shadow={$shadow}
       $active={$active}
     >
       {children}
