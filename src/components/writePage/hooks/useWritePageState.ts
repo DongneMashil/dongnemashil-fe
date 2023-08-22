@@ -26,11 +26,11 @@ export const useWritePageState = () => {
   const addressData = useRecoilValue(addressSelector);
   const [mediaFiles, setMediaFiles] = useRecoilState(mediaFilesAtom);
   const setAddress = useSetRecoilState(selectedAddressAtom);
+  const selectedAddress = useRecoilValue(selectedAddressAtom);
 
   const { data: reviewData } = useQuery(['review', reviewId], () =>
-  getReview(reviewId)
-);
-
+    getReview(reviewId)
+  );
 
   useEffect(() => {
     if (reviewData) {
@@ -58,6 +58,12 @@ export const useWritePageState = () => {
       setMediaFiles(mediaFilesData);
     }
   }, [reviewData]);
+
+  useEffect(() => {
+    if (selectedAddressAtom) {
+      setAddress(selectedAddress);
+    }
+  }, [selectedAddress]);
 
   const onInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
