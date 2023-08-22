@@ -1,16 +1,8 @@
 import { styled } from 'styled-components';
 
-export const StToProfileButton = styled.button`
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #4f4f4f;
-`;
-
-export const StUserInfoContainer = styled.div`
+export const StUserInfoContainer = styled.button`
   ${(props) => props.theme.floatingBox}
+  text-align: left;
   padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
@@ -27,11 +19,8 @@ export const StUserInfoContainer = styled.div`
     }
     .nameWrapper {
       height: 100%;
-
       display: flex;
       flex-direction: column;
-      //   justify-content: center;
-      //   align-items: center;
       gap: 0.2rem;
     }
     .nickname {

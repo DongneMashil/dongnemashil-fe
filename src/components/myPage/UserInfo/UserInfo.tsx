@@ -1,7 +1,7 @@
 import React from 'react';
 import noUser from 'assets/images/NoUser.gif';
 import { ReactComponent as ChevronRight } from 'assets/icons/ChevronRight.svg';
-import { StToProfileButton, StUserInfoContainer } from './UserInfo.styles';
+import { StUserInfoContainer } from './UserInfo.styles';
 interface UserInfoProps {
   profileImgUrl: string | null | undefined;
   nickName?: string;
@@ -15,17 +15,21 @@ export const UserInfo = ({
   setIsModalOpen,
 }: UserInfoProps) => {
   return (
-    <StUserInfoContainer>
+    <StUserInfoContainer
+      aria-label="프로필 메뉴 열기"
+      onClick={() => setIsModalOpen(true)}
+    >
       <div className="profile">
-        <img src={profileImgUrl || noUser} alt="프로필 이미지" />
+        <img
+          src={profileImgUrl || noUser}
+          alt={`${nickName}의 프로필 이미지`}
+        />
         <div className="nameWrapper">
           <div className="nickname">{nickName}</div>
           <div className="userId">{email}</div>
         </div>
       </div>
-      <StToProfileButton className="edit" onClick={() => setIsModalOpen(true)}>
-        <ChevronRight />
-      </StToProfileButton>
+      <ChevronRight aria-hidden="true" className="edit" />
     </StUserInfoContainer>
   );
 };
