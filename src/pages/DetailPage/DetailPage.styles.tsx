@@ -33,18 +33,18 @@ export const StDetailPageContainer = styled.div`
 export const StDetailTitle = styled.h1`
   margin-top: 0.5rem;
   font-size: 2rem;
+  border-bottom: 1px solid #e5e5e5;
+  margin: 1rem 0;
+  padding-bottom: 0.5rem;
 `;
 export const StDetailPageHeader = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e5e5e5;
-  margin: 1rem 0;
+  justify-content: flex-start;
+  margin-top: 0.5rem;
   gap: 0.5rem;
   .nickname {
-    margin-right: auto;
     color: var(--textcolor, #333);
     font-family: Pretendard;
     font-size: 0.875rem;
@@ -55,22 +55,21 @@ export const StDetailPageHeader = styled.div`
     height: 30px;
     border-radius: 50%;
   }
-  .edit {
-    margin-left: 4px;
-  }
 `;
 
 export const StCreatedTime = styled.div`
+  margin-left: 0.5rem;
+  margin-right: auto;
   color: #8e8e8e;
   font-family: Pretendard;
   font-size: 0.875rem;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  margin-top: 0.5rem;
+  // margin-top: 0.5rem;
 `;
 
-export const StDetailPageContent = styled.div`
+export const StDetailPageContent = styled.main`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -81,7 +80,7 @@ export const StDetailPageContent = styled.div`
     object-fit: contain;
     // z-index: 1;
   }
-  p {
+  .content {
     margin: 1rem 0.5rem 1rem 0.5rem;
 
     height: fit-content;
@@ -93,4 +92,35 @@ export const StDetailPageContent = styled.div`
 export const StVideoPlayerBox = styled.div`
   width: 100%;
   height: 100%;
+`;
+
+export const StEditButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  button {
+    color: #8c8c8c;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    background: none;
+  }
+
+  .divider {
+    color: #8c8c8c;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin: 5px;
+  }
+  section {
+    display: flex;
+    align-items: center;
+  }
 `;

@@ -25,6 +25,7 @@ export const FixFooter = ({
   const centerWrapper = {
     map: (
       <Button
+        ariaLabel="지도보기"
         onClick={onClickCenter}
         type="borderRound"
         $width={'90px'}
@@ -48,6 +49,7 @@ export const FixFooter = ({
           동네
         </Button> */}
         <Button
+          ariaLabel="글쓰기"
           url="/writemap"
           type="borderRound"
           $width={'70px'}
@@ -63,6 +65,7 @@ export const FixFooter = ({
     goTop: (
       <>
         <Button
+          ariaLabel="맨 위로"
           onClick={onClickRight}
           type="borderRound"
           $width={'48px'}
