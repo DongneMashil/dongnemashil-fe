@@ -10,6 +10,7 @@ import {
 import Cropper, { ReactCropperElement } from 'react-cropper';
 import { RecoilState, useSetRecoilState } from 'recoil';
 import { cropProfileImageAtom } from 'recoil/cropProfileImage/cropProfileImageAtom';
+import { ReactComponent as ArrowDown } from 'assets/icons/ArrowDown.svg';
 interface Props {
   isOpen: boolean;
   onCloseHandler?: () => void;
@@ -38,23 +39,6 @@ export const CropModal: FC<Props> = ({ isOpen, onCloseHandler }) => {
       reader.readAsDataURL(event.target.files[0]);
     }
   };
-  //   const selectFileHandler = () => {
-  //     const fileInput = document.createElement('input');
-  //     fileInput.type = 'file';
-  //     fileInput.accept = 'image/*';
-  //     fileInput.onchange = onFileChange;
-  //     fileInput.click();
-  //   };
-
-  //   useEffect(() => {
-  //     if (isOpen) {
-  //       const fileInput = document.createElement('input');
-  //       fileInput.type = 'file';
-  //       fileInput.accept = 'image/*';
-  //       fileInput.onchange = onFileChange;
-  //       fileInput.click();
-  //     }
-  //   }, [isOpen]);
   const onFileButtonClick = () => {
     fileInputRef.current?.click();
   };
@@ -76,14 +60,25 @@ export const CropModal: FC<Props> = ({ isOpen, onCloseHandler }) => {
   }, []);
 
   const getCropData = () => {
-    if (typeof cropperRef.current?.cropper !== 'undefined') {
-      setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
+    if (cropperRef.current?.cropper) {
+      const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas();
+      if (croppedCanvas) {
+        setCropData(croppedCanvas.toDataURL());
+      } else {
+        // 이미지가 없을 경우
+        console.warn('Cropped canvas is not available');
+      }
     }
   };
+
   const onClickCloseHandler = () => {
-    getCropData();
+    if (localSrc) {
+      // 이미지가 선택되었는지 확인
+      getCropData();
+    }
     onCloseHandler!();
   };
+
   const setZoomToFit = () => {
     if (cropperRef.current && cropperRef.current.cropper) {
       const cropperInstance = cropperRef.current.cropper;
@@ -101,6 +96,12 @@ export const CropModal: FC<Props> = ({ isOpen, onCloseHandler }) => {
     ? ReactDOM.createPortal(
         <StModalOverlay onClick={onCloseHandler}>
           <StModalWindow onClick={(e) => e.stopPropagation()}>
+            {!localSrc && (
+              <p className="message">
+                <ArrowDown />
+                이미지를 선택해주세요.
+              </p>
+            )}
             <Cropper
               className="cropper"
               ref={cropperRef}

@@ -12,7 +12,7 @@ export const useGetMyProfile = (
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const [postData, setPostData] = useState<{
     nickname?: string;
-    imgUrl?: File | null;
+    imgFile?: File | null;
     validation: {
       isValid: boolean;
       isVerified: boolean;
@@ -21,7 +21,7 @@ export const useGetMyProfile = (
     };
   }>({
     nickname: '',
-    imgUrl: null,
+    imgFile: null,
     validation: {
       isValid: true,
       isVerified: false,
@@ -51,7 +51,7 @@ export const useGetMyProfile = (
         const prevImage = new File([blob], finalFilename, { type: blob.type });
         setPostData((prev) => ({
           ...prev,
-          imgUrl: prevImage,
+          imgFile: prevImage,
           nickname: data.nickname,
         }));
       } catch (error) {
@@ -76,6 +76,5 @@ export const useGetMyProfile = (
     setFileUrl,
     postData,
     setPostData,
-    imgFile: postData.imgUrl,
   };
 };

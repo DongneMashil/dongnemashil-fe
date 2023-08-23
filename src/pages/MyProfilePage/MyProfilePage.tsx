@@ -57,14 +57,6 @@ export const MyProfilePage = () => {
 
   //프로필 업로드
   const onSubmitHandler = async () => {
-    //변경내용 없는경우
-    // if (
-    //   postData.imgUrl === fileUrl &&
-    //   postData.nickname === userData?.nickname
-    // ) {
-    //   setErrorMsg('변경된 내용이 없습니다.');
-    //   return;
-    // }
     //닉네임 미입력시
     if (postData.nickname === '') {
       setErrorMsg('닉네임을 입력해주세요.');
@@ -72,7 +64,7 @@ export const MyProfilePage = () => {
     }
     try {
       await postProfile({
-        imgUrl: (postData.imgUrl as File)!,
+        imgUrl: postData.imgFile!,
         nickname: postData.nickname!,
       });
       setDoneMsg('프로필 등록에 성공했습니다.');
@@ -134,7 +126,7 @@ export const MyProfilePage = () => {
           btnRight="submit"
           onClickSubmit={onSubmitHandler}
           onClickActive={
-            postData.imgUrl !== null && postData.validation.isValid
+            postData.imgFile !== null && postData.validation.isValid
           }
           modal={{
             title: '알림',
@@ -152,22 +144,6 @@ export const MyProfilePage = () => {
           <button className="loadimg" onClick={onClickChangeImageHandler}>
             사진 수정
           </button>
-          {/* <label
-            htmlFor="file"
-            className="pcload"
-            role="button"
-            tabIndex={0}
-            aria-label="프로필사진 수정하기"
-          >
-            사진 수정
-          </label>
-          <input
-            type="file"
-            id="file"
-            accept="image/*"
-            onChange={onChangeImage}
-            ref={fileUpload.current}
-          /> */}
         </StProfileImage>
         <StNickNameTitle>닉네임</StNickNameTitle>
         <StNickNameWrapper>

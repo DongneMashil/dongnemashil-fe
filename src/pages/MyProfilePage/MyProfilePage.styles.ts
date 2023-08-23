@@ -56,13 +56,4 @@ export const StProfileImage = styled.div`
     cursor: pointer;
     height: 40px;
   }
-
-  input[type='file'] {
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
-  }
 `;

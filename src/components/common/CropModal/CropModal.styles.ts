@@ -63,6 +63,12 @@ export const StModalWindow = styled.div`
   border-radius: 0.625rem;
   overflow: hidden;
   box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
+  .message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem 0 2rem 0;
+  }
   .cropper {
     height: 100%;
     width: 100%;
