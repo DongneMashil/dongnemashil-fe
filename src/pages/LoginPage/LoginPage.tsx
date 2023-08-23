@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router';
 import { loginKakao } from 'api/loginApi';
 import { CommonLayout } from 'components/layout';
-import { Button } from 'components/common';
+import { Button, AuthNavButton } from 'components/common';
 import {
   StLoginContainer,
   StLogoWrapper,
@@ -11,7 +11,6 @@ import {
 } from './LoginPage.styles';
 import { ReactComponent as Lightning } from 'assets/icons/Lightning.svg';
 import { ReactComponent as KakaoIcon } from 'assets/icons/KakaoIcon.svg';
-import { ReactComponent as BackButton } from 'assets/icons/ChevronLeft.svg';
 import { ReactComponent as LogoText } from 'assets/images/LogoText.svg';
 import { ReactComponent as Logo } from 'assets/images/Dongdong.svg';
 
@@ -27,16 +26,11 @@ export const LoginPage = () => {
   const onRegisterHandler = () => {
     navigate('/register');
   };
-  // const onBackHandler = () => {
-  //   navigate(-1);
-  // };
 
   return (
     <CommonLayout>
       <StLoginContainer>
-        <Button type="icon" url="/">
-          <BackButton />
-        </Button>
+        <AuthNavButton type="back" />
         <StLoginButtonWrapper>
           <StLogoWrapper>
             <LogoText />

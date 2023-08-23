@@ -6,6 +6,7 @@ import {
   AuthLogoBox,
   AuthInputBox,
   AuthErrorMsg,
+  AuthNavButton,
 } from 'components/common';
 import { register, confirmId, confirmNickname } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
@@ -258,6 +259,7 @@ export const RegisterPage = () => {
   return (
     <CommonLayout>
       <StLoginContainer>
+        <AuthNavButton type="exit" />
         <AuthLogoBox />
         <HeaderText type="h1">회원가입</HeaderText>
         <StLoginWrapper>
