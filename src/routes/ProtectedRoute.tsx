@@ -4,7 +4,7 @@ import { useVerifyUser } from 'hooks';
 import { StLoadingSpinner } from 'components/common';
 
 const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
-  const { data, isLoading, isError } = useVerifyUser(true);
+  const { isLoading, isError, isSuccess } = useVerifyUser(true);
 
   useEffect(() => {
     if (!isLoading && isError) {
@@ -16,7 +16,13 @@ const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
     return <StLoadingSpinner />;
   }
 
-  return data && data.nickname ? element : <Navigate to="/login" replace />;
+  if (isError) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (isSuccess) {
+    return element;
+  }
 };
 
 export default ProtectedRoute;
