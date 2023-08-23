@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import React from 'react';
+import Marker from 'assets/icons/Marker.svg';
+
 interface DetailMapProps {
   width: string;
   height: string;
@@ -61,9 +63,16 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
             parseFloat(result[0].y),
             parseFloat(result[0].x)
           );
+          const svgMarkerImageSrc = Marker;
+          const markerSize = new kakao.maps.Size(36, 48);
+          const markerImage = new kakao.maps.MarkerImage(
+            svgMarkerImageSrc,
+            markerSize
+          );
           new kakao.maps.Marker({
             position: coords,
             map: map, // 이렇게 지정하면 지도 위에 바로 마커가 나타납니다.
+            image: markerImage,
           });
           map.setCenter(coords);
         } else {
@@ -71,6 +80,48 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
         }
       }
     );
+  };
+
+  const displayCurrentLocation = (map: kakao.maps.Map) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          const locPosition = new kakao.maps.LatLng(lat, lon);
+
+          // 빨간 점을 표시하는 CustomOverlay 생성
+          const customOverlay = new kakao.maps.CustomOverlay({
+            position: locPosition,
+            content: `
+            <div style="
+              width:10px;
+              height:10px;
+              border-radius:50%;
+              background:#FF0000;
+              animation: blink 1s infinite;
+            ">
+            </div>
+            <style>
+              @keyframes blink {
+                0% { opacity: 1; }
+                50% { opacity: 0; }
+                100% { opacity: 1; }
+              }
+            </style>
+          `,
+          });
+
+          customOverlay.setMap(map);
+          map.setCenter(locPosition); // 현재 위치를 중심으로 지도 이동
+        },
+        (error) => {
+          console.error('Geolocation failed: ', error);
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
   };
 
   useEffect(() => {
@@ -86,6 +137,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
     if (initMap) {
       initMap(map, setMapCenterByAddress);
     }
+    displayCurrentLocation(map);
   }, []);
 
   return <div id="map" style={{ width, height }}></div>;
