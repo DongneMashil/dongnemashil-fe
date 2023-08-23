@@ -7,7 +7,7 @@ export const useProfileImageUpload = (
   setPostData: React.Dispatch<
     React.SetStateAction<{
       nickname?: string | undefined;
-      imgUrl?: File | null | undefined;
+      imgFile?: File | null | undefined;
       validation: {
         isValid: boolean;
         isVerified: boolean;
@@ -21,7 +21,7 @@ export const useProfileImageUpload = (
 
   const options = {
     maxSizeMB: 0.1,
-    maxWidthOrHeight: 200,
+    maxWidthOrHeight: 100,
     useWebWorker: true,
   };
 
@@ -35,7 +35,7 @@ export const useProfileImageUpload = (
         setFileUrl(imgUrl);
         setPostData((prev) => ({
           ...prev,
-          imgUrl: compressedFile,
+          imgFile: compressedFile,
         }));
       } catch (error) {
         console.error(error);

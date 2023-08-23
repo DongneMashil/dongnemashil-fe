@@ -32,11 +32,6 @@ export const StModalButtonWrpper = styled.div`
     height: 3.75rem;
     background-color: #d8d8d8;
   }
-  .center {
-    width: 100%;
-    height: 3.75rem;
-    background-color: var(--unpressedtag, #ede1ed);
-  }
 `;
 
 export const StModalOverlay = styled.div`

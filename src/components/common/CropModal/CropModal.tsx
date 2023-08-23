@@ -99,7 +99,7 @@ export const CropModal: FC<Props> = ({ isOpen, onCloseHandler }) => {
             {!localSrc && (
               <p className="message">
                 <ArrowDown />
-                이미지를 선택해주세요.
+                이미지를 선택해주세요📸
               </p>
             )}
             <Cropper
