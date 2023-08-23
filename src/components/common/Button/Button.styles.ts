@@ -143,10 +143,9 @@ export const StButton = styled.button<{
     height: 22px;
     border-radius: 16px;
     border: 1px solid ${theme.mainColor};
-    background: #bea8be;
     font-size: 0.75rem;
-    font-weight: 700;
-    color: ${theme.whiteColor};
+    font-weight: 800;
+    color: ${theme.mainColor};
   }
 `;
 
