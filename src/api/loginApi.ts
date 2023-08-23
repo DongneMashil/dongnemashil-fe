@@ -151,6 +151,10 @@ export const confirmNickname = async (nickname: string) => {
 
 /** 로그인 유저 정보 */
 export const verifyUser = () => {
+  const token = window.localStorage.getItem('access_token');
+  if (token) {
+    setClientHeader(token);
+  }
   return axiosInstance.get(`/accesstoken`).then((response) => {
     return response.data;
   });
