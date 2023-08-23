@@ -35,6 +35,7 @@ export interface ButtonProps {
     firstLine?: string;
     secondLine?: string;
   };
+  ariaLabel?: string;
 }
 
 export const Button = ({
@@ -54,6 +55,7 @@ export const Button = ({
     firstLine: modalFirstLine = '',
     secondLine: modalSecondLine = '',
   } = {},
+  ariaLabel,
 }: ButtonProps) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,6 +80,7 @@ export const Button = ({
         secondLine={modalSecondLine || undefined}
       />
       <StSubmitButton
+        aria-label={ariaLabel}
         type="submit"
         className={type}
         onClick={$active ? onClick : () => setIsModalOpen(true)}
@@ -88,6 +91,7 @@ export const Button = ({
     </>
   ) : (
     <StButton
+      aria-label={ariaLabel}
       className={type}
       onClick={handleButtonClick}
       $width={$width}

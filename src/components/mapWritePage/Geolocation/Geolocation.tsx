@@ -4,7 +4,6 @@ import Marker from 'assets/icons/Marker.png';
 
 interface IProps {
   selectedAddress?: string;
-  onMarkerClick?: () => void;
   onAddressUpdate?: (address: string) => void;
   disableCurrentLocation?: boolean;
 }
@@ -18,35 +17,48 @@ interface IMarkerOptions {
 
 export const Geolocation: React.FC<IProps> = ({
   selectedAddress,
-  onMarkerClick,
   onAddressUpdate,
   disableCurrentLocation = false,
 }) => {
   let mapInstance: kakao.maps.Map | null = null;
   const currentMarker = useRef<kakao.maps.Marker | null>(null);
 
+  const addMarkerClick = (map: kakao.maps.Map) => {
+    kakao.maps.event.addListener(
+      map,
+      'click',
+      (mouseEvent: kakao.maps.event.MouseEvent) => {
+        console.log('Map clicked at:', mouseEvent.latLng.toString());
+        const clickedPosition = mouseEvent.latLng;
+        displayMarker(map, clickedPosition);
+      }
+    );
+  };
+
   const initMap = (map: kakao.maps.Map) => {
     mapInstance = map;
 
     if (!disableCurrentLocation) {
-      getCurrentLocation(map, onMarkerClick);
+      getCurrentLocation(map);
     } else if (selectedAddress) {
       moveToAddressLocation(map, selectedAddress);
     } else {
       const defaultPosition = new kakao.maps.LatLng(37.545043, 127.039245);
-      displayMarker(map, defaultPosition, onMarkerClick);
+      displayMarker(map, defaultPosition);
     }
+
+    addMarkerClick(map);
   };
 
   useEffect(() => {
     if (mapInstance) {
       if (!disableCurrentLocation) {
-        getCurrentLocation(mapInstance, onMarkerClick);
+        getCurrentLocation(mapInstance);
       } else if (selectedAddress) {
         moveToAddressLocation(mapInstance, selectedAddress);
       } else {
         const defaultPosition = new kakao.maps.LatLng(37.545043, 127.039245);
-        displayMarker(mapInstance, defaultPosition, onMarkerClick);
+        displayMarker(mapInstance, defaultPosition);
       }
     }
   }, [selectedAddress, disableCurrentLocation]);
@@ -80,7 +92,7 @@ export const Geolocation: React.FC<IProps> = ({
             parseFloat(result[0].y),
             parseFloat(result[0].x)
           );
-          displayMarker(map, locPosition, onMarkerClick);
+          displayMarker(map, locPosition);
         }
       }
     );

@@ -1,6 +1,5 @@
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { deleteComment, editComment, getComment } from 'api/detailApi';
-import SkeletonUI from 'components/common/SkeletonUI/SkeletonUI';
 import noUser from 'assets/images/NoUser.gif';
 import React, { useEffect, useRef, useState } from 'react';
 import timeAgo from 'utils/timeAgo';
@@ -15,7 +14,7 @@ import { queryClient } from 'queries/queryClient';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
 import { useIntersect } from 'hooks/useIntersect';
-import { Modal } from 'components/common';
+import { Modal, StLoadingSpinner } from 'components/common';
 
 interface CommentsProps {
   reviewId: string;
@@ -219,14 +218,7 @@ export const Comments = ({
 
           {isLoading && <div>로딩중...</div>}
 
-          {hasNextPage && (
-            <>
-              <SkeletonUI ref={loaderRef} width="100%" height="80px" />
-              <SkeletonUI width="100%" height="80px" />
-              <SkeletonUI width="100%" height="80px" />
-              <SkeletonUI width="100%" height="80px" />
-            </>
-          )}
+          {hasNextPage && <StLoadingSpinner ref={loaderRef} />}
         </StDetailPageCommentList>
       )}
     </StDetailPageComment>
