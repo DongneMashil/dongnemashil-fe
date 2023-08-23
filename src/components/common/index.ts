@@ -13,3 +13,4 @@ export * from './LoadingSpinner/LoadingSpinner.styles';
 export * from './Modal/Modal';
 export * from './ToggleTag/ToggleTag';
 export * from './VideoPlayer/VideoPlayer';
+export * from './LocationButton/LocationButton';

@@ -5,14 +5,14 @@ import axios from 'axios';
 import { getExtensionName } from 'components/myProfilePage';
 import { UserStateRes } from 'api/loginApi';
 
-export const useMyProfile = (
+export const useGetMyProfile = (
   userData: UserStateRes | undefined,
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>
 ) => {
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const [postData, setPostData] = useState<{
     nickname?: string;
-    imgUrl?: File | null;
+    imgFile?: File | null;
     validation: {
       isValid: boolean;
       isVerified: boolean;
@@ -21,7 +21,7 @@ export const useMyProfile = (
     };
   }>({
     nickname: '',
-    imgUrl: null,
+    imgFile: null,
     validation: {
       isValid: true,
       isVerified: false,
@@ -51,7 +51,7 @@ export const useMyProfile = (
         const prevImage = new File([blob], finalFilename, { type: blob.type });
         setPostData((prev) => ({
           ...prev,
-          imgUrl: prevImage,
+          imgFile: prevImage,
           nickname: data.nickname,
         }));
       } catch (error) {
@@ -76,6 +76,5 @@ export const useMyProfile = (
     setFileUrl,
     postData,
     setPostData,
-    imgFile: postData.imgUrl,
   };
 };

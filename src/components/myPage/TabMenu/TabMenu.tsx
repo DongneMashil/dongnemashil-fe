@@ -81,35 +81,37 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
         </StTabButtonBox>
       </StTabButtonWrapper>
       <StTabContentBox $empty={!data}>
-        {data ? (
-          data.pages.map((page) =>
-            page.content.map(
-              (item) =>
-                item.imgUrl && (
-                  <StReviewBox
-                    key={item.reviewId}
-                    onClick={() => navigate(`/review/${item.reviewId}`)}
-                    $imgUrl={item.imgUrl}
-                    area-label={`${item.roadName}의 ${item.reviewId}번 리뷰로 이동하기`}
-                  >
-                    <div
-                      className="imgWrapper"
-                      role="img"
-                      aria-label={`${item.roadName}의 ${item.reviewId}번 리뷰 이미지`}
-                    />
-                    <div className="contentWrapper">
-                      <h2 className="title">{item.roadName}</h2>
-                      {selectedTab === 'reviews' && (
-                        <time className="date">
-                          {timeFormatWithoutTime(item.createdAt)}
-                        </time>
-                      )}
-                    </div>
+        {data && data.pages ? (
+          data.pages.map(
+            (page) =>
+              page.content &&
+              page.content.map(
+                (item) =>
+                  item.imgUrl && (
+                    <StReviewBox
+                      key={item.reviewId}
+                      onClick={() => navigate(`/review/${item.reviewId}`)}
+                      $imgUrl={item.imgUrl}
+                      area-label={`${item.roadName}의 ${item.reviewId}번 리뷰로 이동하기`}
+                    >
+                      <div
+                        className="imgWrapper"
+                        role="img"
+                        aria-label={`${item.roadName}의 ${item.reviewId}번 리뷰 이미지`}
+                      />
+                      <div className="contentWrapper">
+                        <h2 className="title">{item.roadName}</h2>
+                        {selectedTab === 'reviews' && (
+                          <time className="date">
+                            {timeFormatWithoutTime(item.createdAt)}
+                          </time>
+                        )}
+                      </div>
 
-                    {isLoading && <h2>로딩중...</h2>}
-                  </StReviewBox>
-                )
-            )
+                      {isLoading && <h2>로딩중...</h2>}
+                    </StReviewBox>
+                  )
+              )
           )
         ) : (
           <StEmptyBox>
