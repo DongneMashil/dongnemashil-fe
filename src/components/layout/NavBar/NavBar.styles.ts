@@ -24,7 +24,7 @@ export const StNavBar = styled.div<{ $isWritePage?: boolean }>`
 
 export const StCenterWrapper = styled.div`
   justify-content: center;
-  flex: 1.5;
+  flex: 1.2;
   text-align: center;
 
   h1 {
@@ -39,10 +39,10 @@ export const StCenterWrapper = styled.div`
 `;
 
 export const StLeftWrapper = styled.div`
-  flex: 0.5;
+  flex: 0.8;
 `;
 
 export const StRighttWrapper = styled.div`
   justify-content: right;
-  flex: 0.5;
+  flex: 0.8;
 `;
