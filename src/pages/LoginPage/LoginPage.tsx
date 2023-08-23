@@ -5,13 +5,15 @@ import { CommonLayout } from 'components/layout';
 import { Button } from 'components/common';
 import {
   StLoginContainer,
+  StLogoWrapper,
   StLoginTag,
   StLoginButtonWrapper,
 } from './LoginPage.styles';
-import { ReactComponent as LogoImage } from 'assets/images/Logo.svg';
 import { ReactComponent as Lightning } from 'assets/icons/Lightning.svg';
 import { ReactComponent as KakaoIcon } from 'assets/icons/KakaoIcon.svg';
 import { ReactComponent as BackButton } from 'assets/icons/ChevronLeft.svg';
+import { ReactComponent as LogoText } from 'assets/images/LogoText.svg';
+import { ReactComponent as Logo } from 'assets/images/Dongdong.svg';
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -35,8 +37,11 @@ export const LoginPage = () => {
         <Button type="icon" url="/">
           <BackButton />
         </Button>
-        <LogoImage width={190} height={214} />
         <StLoginButtonWrapper>
+          <StLogoWrapper>
+            <LogoText />
+            <Logo />
+          </StLogoWrapper>
           <StLoginTag>
             3초만에 시작하기
             <Lightning />
@@ -48,6 +53,7 @@ export const LoginPage = () => {
           <Button type="authNormal" $active={true} onClick={onLoginHandler}>
             회원 아이디로 로그인
           </Button>
+          <hr />
           <Button type="authOutline" $active={true} onClick={onRegisterHandler}>
             회원가입
           </Button>
