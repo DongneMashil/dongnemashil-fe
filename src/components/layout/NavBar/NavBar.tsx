@@ -10,9 +10,10 @@ import {
 } from './NavBar.styles';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
+import { ReactComponent as ChevronLeft } from 'assets/icons/ChevronLeft.svg';
+import { ReactComponent as LogoHorizontal } from 'assets/logo/LogoHorizontal.svg';
 import noUser from 'assets/images/NoUser.gif';
 import { useVerifyUser } from 'hooks';
-import { ReactComponent as ChevronLeft } from 'assets/icons/ChevronLeft.svg';
 import { useRecoilState } from 'recoil';
 import { historyStackState } from 'recoil/historyStack/historyStack';
 
@@ -96,7 +97,7 @@ export const NavBar = ({
     ),
     logo: (
       <Button type={'icon'} url={'/'}>
-        🏃🏻‍♀️
+        <LogoHorizontal />
       </Button>
     ),
     closeModal: (
