@@ -1,13 +1,13 @@
-import { useMutation } from '@tanstack/react-query';
+// import { useMutation } from '@tanstack/react-query';
 import { postProfile } from 'api/mypageApi';
 import { CommonLayout, NavBar } from 'components/layout';
 import { useGetMyProfile, useProfileImageUpload, useVerifyUser } from 'hooks';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import noUser from 'assets/images/NoUser.gif';
-import { AuthInputBox, AuthErrorMsg, Modal } from 'components/common';
-import { confirmNickname } from 'api/loginApi';
+import { AuthErrorMsg, Modal } from 'components/common';
+// import { confirmNickname } from 'api/loginApi';
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from 'queries/queryClient';
 import {
@@ -17,6 +17,7 @@ import {
   StProfileImage,
 } from './MyProfilePage.styles';
 import { CropModal } from 'components/common/CropModal/CropModal';
+import { ProfileNicknameCheck } from 'components/myProfilePage/ProfileNicknameCheck/ProfileNicknameCheck';
 
 export const MyProfilePage = () => {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ export const MyProfilePage = () => {
       validation: {
         ...postData.validation,
         alertMsg: '닉네임 중복확인을 해주세요!',
+        msg: '',
         isVerified: false,
         isValid: false,
       },
@@ -75,48 +77,9 @@ export const MyProfilePage = () => {
       setErrorMsg(`프로필 등록에 실패했습니다. 오류코드:${error}`);
     }
   };
-
-  //닉네임 중복확인 함수
-  const { mutate: confirmNicknameMutate } = useMutation(confirmNickname, {
-    onSuccess: () => {
-      const newData = {
-        ...postData,
-        validation: {
-          msg: `*사용가능한 닉네임 입니다.`,
-          isValid: true, // 닉네임 유효 여부 (기존 닉네임 유지 or 변경후 성공시 true)
-          isVerified: true, // 닉네임 중복확인 여부 (변경후 성공시 true)
-          alertMsg: '사진을 등록해주세요!',
-        },
-      };
-      setPostData(newData); //닉네임 중복확인 성공여부 상태 업데이트
-      console.log(`confirm id success`, newData);
-    },
-    onError: (err: Error) => {
-      console.log('confirmIdMutate error', err);
-      const newData = {
-        ...postData,
-        validation: {
-          msg: '*' + err.message,
-          isValid: false,
-          isVerified: false,
-          alertMsg: '닉네임 중복확인 실패',
-        },
-      };
-      setPostData(newData);
-      console.log(`닉네임 중복확인 실패`, newData);
-    },
-  });
-
-  //닉네임 중복확인 버튼 클릭
-  const onDuplicateCheckHandler = async () => {
-    if (!postData.nickname) {
-      window.alert('닉네임을 입력한 뒤 실행해주세요.');
-    } else if (userData?.nickname === postData.nickname) {
-      window.alert('변경된 닉네임이 없습니다.');
-    } else if (postData.nickname) {
-      confirmNicknameMutate(postData.nickname);
-    }
-  };
+  useEffect(() => {
+    console.log('🔴', postData);
+  }, [postData]);
 
   return (
     <CommonLayout
@@ -147,15 +110,21 @@ export const MyProfilePage = () => {
         </StProfileImage>
         <StNickNameTitle>닉네임</StNickNameTitle>
         <StNickNameWrapper>
-          <AuthInputBox
-            type="text"
-            name="nickname"
-            id="nickname"
-            value={postData.nickname}
-            placeholder="닉네임"
+          <ProfileNicknameCheck
+            nickname={postData.nickname}
+            userData={userData}
+            onValid={(isValid, msg) => {
+              setPostData((prevData) => ({
+                ...prevData,
+                validation: {
+                  ...prevData.validation,
+                  msg: msg,
+                  isValid: isValid,
+                  isVerified: isValid,
+                },
+              }));
+            }}
             onChange={onChangeValueHandler}
-            onClick={onDuplicateCheckHandler}
-            btnText="중복 확인"
           />
           <div className="error">
             <AuthErrorMsg isValid={postData.validation.isValid}>
