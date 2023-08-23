@@ -137,6 +137,17 @@ export const StButton = styled.button<{
       top: calc(50% - 11.5px);
     }
   }
+
+  &.login {
+    width: 50px;
+    height: 22px;
+    border-radius: 16px;
+    border: 1px solid ${theme.mainColor};
+    background: #bea8be;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: ${theme.whiteColor};
+  }
 `;
 
 export const StSubmitButton = styled.button<{
