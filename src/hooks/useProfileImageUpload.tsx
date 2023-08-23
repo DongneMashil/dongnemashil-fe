@@ -1,21 +1,13 @@
 import imageCompression from 'browser-image-compression';
+import { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { croppedImageFileSelector } from 'recoil/cropProfileImage/cropProfileImageSelector';
 export const useProfileImageUpload = (
-  //   initialUrl: string | null | undefined,
   setFileUrl: React.Dispatch<React.SetStateAction<string | null | undefined>>,
-  postData: {
-    nickname?: string;
-    imgUrl?: File | null;
-    validation: {
-      isValid: boolean;
-      isVerified: boolean;
-      msg: string;
-      alertMsg: string;
-    };
-  },
   setPostData: React.Dispatch<
     React.SetStateAction<{
       nickname?: string | undefined;
-      imgUrl?: File | null | undefined;
+      imgFile?: File | null | undefined;
       validation: {
         isValid: boolean;
         isVerified: boolean;
@@ -25,27 +17,30 @@ export const useProfileImageUpload = (
     }>
   >
 ) => {
+  const croppedFile = useRecoilValue(croppedImageFileSelector);
+
   const options = {
-    maxSizeMB: 0.8,
-    maxWidthOrHeight: 500,
+    maxSizeMB: 0.1,
+    maxWidthOrHeight: 100,
     useWebWorker: true,
   };
 
-  const onChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (!selectedFile) return;
+  useEffect(() => {
+    const onChangeImage = async () => {
+      if (!croppedFile) return;
 
-    try {
-      const compressedFile = await imageCompression(selectedFile, options);
-      const imgUrl = URL.createObjectURL(compressedFile);
-      setFileUrl(imgUrl);
-      setPostData((prev) => ({
-        ...prev,
-        imgUrl: compressedFile,
-      }));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  return { onChangeImage };
+      try {
+        const compressedFile = await imageCompression(croppedFile, options);
+        const imgUrl = URL.createObjectURL(compressedFile);
+        setFileUrl(imgUrl);
+        setPostData((prev) => ({
+          ...prev,
+          imgFile: compressedFile,
+        }));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    onChangeImage();
+  }, [croppedFile, setFileUrl, setPostData]);
 };

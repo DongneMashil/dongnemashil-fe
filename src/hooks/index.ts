@@ -3,5 +3,5 @@ export * from './useLogout';
 export * from './useLike';
 export * from './useIntersect';
 export * from './useHorizontalDragScroll';
-export * from './useMyProfile';
+export * from './useGetMyProfile';
 export * from './useProfileImageUpload';
