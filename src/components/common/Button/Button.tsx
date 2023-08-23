@@ -18,7 +18,8 @@ export interface ButtonProps {
     | 'iconLeft'
     | 'confirm'
     | 'circle'
-    | 'commentInput';
+    | 'commentInput'
+    | 'login';
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   url?: string;
   inputType?: 'button' | 'submit';

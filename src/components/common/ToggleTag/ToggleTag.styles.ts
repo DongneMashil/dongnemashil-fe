@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-export const StTagWrapper = styled.ul`
+export const StTagWrapper = styled.section`
   padding: 1rem;
   overflow-x: auto;
   white-space: nowrap;
@@ -14,10 +14,10 @@ export const StTagWrapper = styled.ul`
   -ms-overflow-style: none; /* 인터넷 익스플로러 */
   scrollbar-width: none; /* 파이어폭스 */
 
-  div {
+  > div {
     display: flex;
 
-    li:last-child {
+    > div:last-child {
       margin-right: 0;
     }
 
