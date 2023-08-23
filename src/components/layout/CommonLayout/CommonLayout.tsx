@@ -64,6 +64,8 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
       }
     };
   }, [prevPosition]);
+
+  //iOS vh 문제 해결
   const setVH = () => {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
