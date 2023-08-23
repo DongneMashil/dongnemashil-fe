@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { postProfile } from 'api/mypageApi';
 import { CommonLayout, NavBar } from 'components/layout';
-import { useMyProfile, useProfileImageUpload, useVerifyUser } from 'hooks';
-import React, { useRef, useState } from 'react';
+import { useGetMyProfile, useProfileImageUpload, useVerifyUser } from 'hooks';
+import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import noUser from 'assets/images/NoUser.gif';
@@ -16,28 +16,29 @@ import {
   StNickNameWrapper,
   StProfileImage,
 } from './MyProfilePage.styles';
+import { CropModal } from 'components/common/CropModal/CropModal';
 
 export const MyProfilePage = () => {
-  const fileUpload = useRef();
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState(''); // 에러 메시지를 저장하는 상태
   const [doneMsg, setDoneMsg] = useState(''); // 완료 메시지를 저장하는 상태
+  const [cropModal, setCropModal] = useState(false);
   //유저정보 조회 및 업데이트
   const { data: userData } = useVerifyUser(true);
   const setUserState = useSetRecoilState(userProfileSelector);
 
   // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
-  const { fileUrl, setFileUrl, postData, setPostData } = useMyProfile(
+  const { fileUrl, setFileUrl, postData, setPostData } = useGetMyProfile(
     userData,
     setErrorMsg
   );
 
   //프로필 사진 업로드
-  const { onChangeImage } = useProfileImageUpload(
-    setFileUrl,
-    postData,
-    setPostData
-  );
+  const onClickChangeImageHandler = () => {
+    setCropModal(true);
+  };
+
+  useProfileImageUpload(setFileUrl, setPostData);
 
   //닉네임 입력
   const onChangeValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,13 +58,14 @@ export const MyProfilePage = () => {
   //프로필 업로드
   const onSubmitHandler = async () => {
     //변경내용 없는경우
-    if (
-      postData.imgUrl === fileUrl &&
-      postData.nickname === userData?.nickname
-    ) {
-      setErrorMsg('변경된 내용이 없습니다.');
-      return;
-    } //닉네임 미입력시
+    // if (
+    //   postData.imgUrl === fileUrl &&
+    //   postData.nickname === userData?.nickname
+    // ) {
+    //   setErrorMsg('변경된 내용이 없습니다.');
+    //   return;
+    // }
+    //닉네임 미입력시
     if (postData.nickname === '') {
       setErrorMsg('닉네임을 입력해주세요.');
       return;
@@ -147,7 +149,10 @@ export const MyProfilePage = () => {
       <StMyProfileContainer>
         <StProfileImage>
           <img src={fileUrl || noUser} alt="프로필 이미지" />
-          <label
+          <button className="loadimg" onClick={onClickChangeImageHandler}>
+            사진 수정
+          </button>
+          {/* <label
             htmlFor="file"
             className="pcload"
             role="button"
@@ -162,7 +167,7 @@ export const MyProfilePage = () => {
             accept="image/*"
             onChange={onChangeImage}
             ref={fileUpload.current}
-          />
+          /> */}
         </StProfileImage>
         <StNickNameTitle>닉네임</StNickNameTitle>
         <StNickNameWrapper>
@@ -193,6 +198,10 @@ export const MyProfilePage = () => {
               title="알림"
               firstLine={doneMsg}
               onCloseHandler={() => navigate('/mypage')}
+            />
+            <CropModal
+              isOpen={cropModal}
+              onCloseHandler={() => setCropModal(false)}
             />
           </div>
         </StNickNameWrapper>

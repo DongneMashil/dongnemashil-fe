@@ -5,7 +5,7 @@ import axios from 'axios';
 import { getExtensionName } from 'components/myProfilePage';
 import { UserStateRes } from 'api/loginApi';
 
-export const useMyProfile = (
+export const useGetMyProfile = (
   userData: UserStateRes | undefined,
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>
 ) => {

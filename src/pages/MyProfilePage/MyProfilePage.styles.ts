@@ -44,7 +44,8 @@ export const StProfileImage = styled.div`
     border-radius: 50px;
     object-fit: cover;
   }
-  label {
+  .loadimg {
+    background: none;
     color: var(--strokepurple, #9a7b9a);
     text-align: center;
     font-family: Pretendard;
