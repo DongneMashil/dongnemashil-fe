@@ -11,6 +11,6 @@ export * from './SearchPage/SearchPage';
 export * from './WriteMapPage/WriteMapPage';
 export * from './WritePage/WritePage';
 export * from './SearchResultPage/SearchResultPage';
-// export * from './SearchResultMapPage/SearchResultMapPage';
 export * from './WriteMapSearchPage/WriteMapSearchPage';
 export * from './MyCommentsPage/MyCommentsPage';
+export * from './LoadingPage/LoadingPage';
