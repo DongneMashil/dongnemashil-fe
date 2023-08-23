@@ -85,7 +85,7 @@ export const MyCommentsPage = () => {
             <StTarget ref={loaderRef} />
           </>
         ) : (
-          <StMyCommentCounter>마지막 댓글입니다.</StMyCommentCounter>
+          data && <StMyCommentCounter>마지막 댓글입니다.</StMyCommentCounter>
         )}
       </StMyCommentContainer>
     </CommonLayout>
