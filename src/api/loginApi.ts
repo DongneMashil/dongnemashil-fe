@@ -12,11 +12,11 @@ const tokenHandler = (accessToken: string, refreshToken?: string) => {
   if (refreshToken) {
     window.localStorage.setItem('refresh_token', refreshToken);
   }
+};
 
-  // 헤더에 토큰 세팅
-  const token = `Bearer%${window.localStorage.getItem('access_token')}`;
-  axiosInstance.defaults.headers['Accesstoken'] = token;
-  console.log('setting access token to header: ', token);
+export const setClientHeader = (accessToken: string) => {
+  axiosInstance.defaults.headers['Accesstoken'] = `Bearer%${accessToken}`;
+  console.log('setting access token to header: ', `Bearer%${accessToken}`);
 };
 
 /** 카카오 로그인 */
@@ -165,7 +165,7 @@ export const getNewAccessToken = () => {
     // 새로 받은 액세스 토큰 넣어주기
     const accessToken = response.headers['accesstoken'].replace('Bearer%', '');
     tokenHandler(accessToken);
-
+    setClientHeader(accessToken);
     console.log('Got new access token', response.data);
     return response.data;
   });
