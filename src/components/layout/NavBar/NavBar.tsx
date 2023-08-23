@@ -130,14 +130,7 @@ export const NavBar = ({
         <img src={fileUrl || noUser} alt="프로필 이미지" />
       </Button>
     ) : (
-      <Button
-        type={'borderRound'}
-        $width={'50px'}
-        $height={'22px'}
-        $round={'16px'}
-        $stroke={'1px'}
-        url={'/login'}
-      >
+      <Button type={'login'} url={'/login'}>
         로그인
       </Button>
     ),
