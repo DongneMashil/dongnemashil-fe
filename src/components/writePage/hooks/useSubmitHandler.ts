@@ -27,6 +27,10 @@ export const useSubmitHandler = ({
     updateReview(reviewId, formData)
   );
 
+  const getStringByteSize = (s: string): number => {
+    return encodeURI(s).split(/%..|./).length - 1;
+  };
+
   const handleSubmit = async () => {
     if (formValues.title.trim() === '') {
       alert('제목을 입력해주세요.');
@@ -49,6 +53,16 @@ export const useSubmitHandler = ({
     }
     if (!mediaFiles.some((file) => file.type === 'image')) {
       alert('최소 하나의 이미지를 추가해야 합니다.');
+      return;
+    }
+
+    if (getStringByteSize(formValues.title) > 500) {
+      alert('제목은 500바이트를 초과합니다.');
+      return;
+    }
+
+    if (getStringByteSize(formValues.content) > 500) {
+      alert('내용은 500바이트를 초과합니다.');
       return;
     }
 

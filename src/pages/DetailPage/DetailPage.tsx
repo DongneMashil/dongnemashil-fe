@@ -135,7 +135,6 @@ export const DetailPage = () => {
           <StDetailPageContainer>
             {data && (
               <>
-                <button onClick={onEditClickHandler}>임시</button>
                 <StDetailPageHeader>
                   <img
                     src={data.profileImgUrl || noUser}

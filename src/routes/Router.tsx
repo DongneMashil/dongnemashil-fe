@@ -59,6 +59,7 @@ const Router = () => {
           path="/write"
           element={<ProtectedRoute element={<WritePage />} />}
         />
+        {/* <Route path="/write" element={<WritePage />} /> */}
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search/result" element={<SearchResultPage />} />
       </Routes>
