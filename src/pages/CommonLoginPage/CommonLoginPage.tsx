@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'components/common';
+import { Button, AuthNavButton } from 'components/common';
 import { AuthInputBox, AuthLogoBox, AuthErrorMsg } from 'components/common';
 import { CommonLayout } from 'components/layout';
 import { login } from 'api/loginApi';
@@ -64,6 +64,7 @@ export const CommonLoginPage = () => {
   console.log('errmsg', errorMsg);
   return (
     <CommonLayout>
+      <AuthNavButton type="exit" />
       <StCommonLoginLayout>
         <AuthLogoBox align="center" />
         <AuthInputBox

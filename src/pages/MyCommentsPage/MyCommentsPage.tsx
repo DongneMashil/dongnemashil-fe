@@ -9,6 +9,7 @@ import {
   StButton,
   StMyCommentContainer,
   StMyCommentCounter,
+  StTarget,
 } from './MyCommentsPage.styles';
 import { useNavigate } from 'react-router-dom';
 import { useIntersect } from 'hooks/useIntersect';
@@ -17,13 +18,6 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 export const MyCommentsPage = () => {
   const userState = useRecoilValue(userProfileSelector);
   const navigate = useNavigate();
-
-  //useInfinityScroll 커스텀훅 사용시 (하지만 이 방법은 의존성 문제가 있어서 사용하지 않음)
-  // const { data, hasNextPage, loaderRef, isLoading } =
-  //   useInfinityScroll<GetMyCommentResponse>({
-  //     getAPI: (params) => getMyComments(params?.page),
-  //     queryKey: ['myComment', userState.nickName],
-  //   });
 
   const useInfinityScroll = () => {
     const fetchItems = async ({ pageParam = 1 }) => {
@@ -88,10 +82,10 @@ export const MyCommentsPage = () => {
         {isLoading && <div>로딩중...</div>}
         {hasNextPage ? (
           <>
-            <div style={{ height: '300px' }} ref={loaderRef} />
+            <StTarget ref={loaderRef} />
           </>
         ) : (
-          <div>마지막 댓글입니다.</div>
+          data && <StMyCommentCounter>마지막 댓글입니다.</StMyCommentCounter>
         )}
       </StMyCommentContainer>
     </CommonLayout>

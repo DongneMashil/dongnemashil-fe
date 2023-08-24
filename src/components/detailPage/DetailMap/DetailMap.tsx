@@ -1,5 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
+import Marker from 'assets/icons/Marker.svg';
+import { StMapLoadingSpinner, StMyLocationButton } from './DetailMap.styles';
+import { LocationButton } from 'components/common';
+
 interface DetailMapProps {
   width: string;
   height: string;
@@ -48,6 +52,9 @@ interface KakaoSearchResult {
 
 type KakaoSearchStatus = 'OK' | 'ZERO_RESULT' | 'ERROR';
 export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
+  const [showCurrentLocation, setShowCurrentLocation] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const setMapCenterByAddress = async (
     address: string,
     map: kakao.maps.Map
@@ -61,9 +68,16 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
             parseFloat(result[0].y),
             parseFloat(result[0].x)
           );
+          const svgMarkerImageSrc = Marker;
+          const markerSize = new kakao.maps.Size(36, 48);
+          const markerImage = new kakao.maps.MarkerImage(
+            svgMarkerImageSrc,
+            markerSize
+          );
           new kakao.maps.Marker({
             position: coords,
             map: map, // 이렇게 지정하면 지도 위에 바로 마커가 나타납니다.
+            image: markerImage,
           });
           map.setCenter(coords);
         } else {
@@ -71,6 +85,67 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
         }
       }
     );
+  };
+
+  const fitBoundsToMarkers = (
+    map: kakao.maps.Map,
+    positions: kakao.maps.LatLng[]
+  ) => {
+    const bounds = new kakao.maps.LatLngBounds();
+
+    positions.forEach((position) => {
+      bounds.extend(position);
+    });
+
+    map.setBounds(bounds);
+  };
+
+  const displayCurrentLocation = (map: kakao.maps.Map) => {
+    setIsLoading(true); // 로딩 시작
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const locPosition = new kakao.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude
+          );
+
+          // 빨간 점을 표시하는 CustomOverlay 생성
+          const customOverlay = new kakao.maps.CustomOverlay({
+            position: locPosition,
+            content: `
+            <div style="
+              width:10px;
+              height:10px;
+              border-radius:50%;
+              background:#FF0000;
+              animation: blink 1s infinite;
+            ">
+            </div>
+            <style>
+              @keyframes blink {
+                0% { opacity: 1; }
+                50% { opacity: 0; }
+                100% { opacity: 1; }
+              }
+            </style>
+          `,
+          });
+          customOverlay.setMap(map);
+
+          const markerPosition = new kakao.maps.LatLng(37.545043, 127.039245);
+
+          fitBoundsToMarkers(map, [locPosition, markerPosition]);
+          setIsLoading(false); // 로딩 완료
+        },
+        (error) => {
+          console.error('Geolocation failed: ', error);
+          setIsLoading(false); // 로딩 실패
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
   };
 
   useEffect(() => {
@@ -83,10 +158,30 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
     };
 
     const map = new kakao.maps.Map(container, options);
+
     if (initMap) {
       initMap(map, setMapCenterByAddress);
     }
-  }, []);
 
-  return <div id="map" style={{ width, height }}></div>;
+    if (showCurrentLocation) {
+      displayCurrentLocation(map);
+    }
+  }, [showCurrentLocation]);
+
+  return (
+    <div style={{ position: 'relative', width, height }}>
+      <div id="map" style={{ width, height }}></div>
+      {isLoading ? (
+        <StMapLoadingSpinner />
+      ) : (
+        !showCurrentLocation && (
+          <StMyLocationButton onClick={() => setShowCurrentLocation(true)}>
+            <LocationButton
+              onClick={() => setShowCurrentLocation(true)}
+            ></LocationButton>
+          </StMyLocationButton>
+        )
+      )}
+    </div>
+  );
 };
