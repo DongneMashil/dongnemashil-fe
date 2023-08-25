@@ -18,5 +18,5 @@
     "jsx": "react-jsx",
     "types": ["kakao.maps.d.ts"]
   },
-  "include": ["src"]
+  "include": ["src", "src/types"]
 }
