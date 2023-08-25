@@ -128,7 +128,7 @@ export const NavBar = ({
     ),
     mypage: userData ? (
       <Button type={'icon'} url={'/mypage'}>
-        <img src={fileUrl || noUser} alt="프로필 이미지" />
+        <img src={fileUrl || noUser} fetchpriority="high" alt="프로필 이미지" />
       </Button>
     ) : (
       <Button type={'login'} url={'/login'}>
