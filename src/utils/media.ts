@@ -18,7 +18,7 @@ export const getImageMimeType = (extension: string): string => {
     case 'png':
       return 'image/png';
     default:
-      return 'image/jpeg'; // 기본값
+      return 'image/jpeg';
   }
 };
 
@@ -29,6 +29,6 @@ export const getVideoMimeType = (extension: string): string => {
     case 'mov':
       return 'video/mov';
     default:
-      return 'video/mp4'; // 기본값
+      return 'video/mp4';
   }
 };
