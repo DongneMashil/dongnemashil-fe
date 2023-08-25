@@ -1,5 +1,5 @@
 import { AxiosResponse, AxiosError } from 'axios';
-import { axiosInstance } from './api';
+import { axiosInstance, retryConfig } from './api';
 
 export interface UserStateRes {
   email: string;
@@ -15,8 +15,16 @@ const tokenHandler = (accessToken: string, refreshToken?: string) => {
 };
 
 export const setClientHeader = (accessToken: string) => {
-  axiosInstance.defaults.headers['Accesstoken'] = `Bearer%${accessToken}`;
+  axiosInstance.defaults.headers.common[
+    'Accesstoken'
+  ] = `Bearer%${accessToken}`;
   console.log('setting access token to header: ', `Bearer%${accessToken}`);
+};
+
+const resetHeader = () => {
+  window.localStorage.removeItem('access_token');
+  window.localStorage.removeItem('refresh_token');
+  axiosInstance.defaults.headers.common = {};
 };
 
 /** 카카오 로그인 */
@@ -155,7 +163,7 @@ export const verifyUser = () => {
   if (token) {
     setClientHeader(token);
   }
-  return axiosInstance.get(`/accesstoken`).then((response) => {
+  return axiosInstance.get(`/accesstoken`, retryConfig).then((response) => {
     return response.data;
   });
 };
@@ -167,8 +175,8 @@ export const getNewAccessToken = () => {
       'refresh_token'
     )}`;
     console.log('setting refresh token to header', refreshToken);
-    axiosInstance.defaults.headers['Refreshtoken'] = refreshToken;
-    return axiosInstance.get(`/refreshtoken`).then((response) => {
+    axiosInstance.defaults.headers.common['Refreshtoken'] = refreshToken;
+    return axiosInstance.get(`/refreshtoken`, retryConfig).then((response) => {
       // 새로 받은 액세스 토큰 넣어주기
       const accessToken = response.headers['accesstoken'].replace(
         'Bearer%',
@@ -181,8 +189,7 @@ export const getNewAccessToken = () => {
     });
   } catch (e: unknown) {
     console.log(e);
-    window.localStorage.removeItem('access_token');
-    window.localStorage.removeItem('refresh_token');
+    resetHeader();
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data || e.message);
     }
@@ -192,9 +199,6 @@ export const getNewAccessToken = () => {
 
 /** logout */
 export const logout = () => {
-  // 클라이언트측 토큰 삭제
-  window.localStorage.removeItem('access_token');
-  window.localStorage.removeItem('refresh_token');
-
+  resetHeader();
   window.location.href = '/';
 };
