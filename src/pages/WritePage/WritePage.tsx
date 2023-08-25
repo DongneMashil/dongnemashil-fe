@@ -9,6 +9,7 @@ import {
 } from 'components/writePage';
 import { MediaFileType } from 'recoil/mediaFile/mediaFileAtom';
 import { useSubmitHandler } from 'components/writePage/hooks/useSubmitHandler';
+import imageCompression from 'browser-image-compression';
 
 export const WritePage = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ export const WritePage = () => {
     onInputChange,
   } = useWritePageState();
 
-  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
 
     const validFiles = files.filter((file) => {
@@ -50,14 +51,31 @@ export const WritePage = () => {
       return;
     }
 
-    validFiles.forEach((file) => {
-      const fileType: 'image' | 'video' = file.type.startsWith('image/')
+    const compressionOptions = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1440,
+      useWebWorker: true,
+    };
+
+    const compressedFiles = await Promise.all(
+      validFiles.map(async (file) => {
+        if (file.type.startsWith('image/')) {
+          return await imageCompression(file, compressionOptions);
+        }
+        return file;
+      })
+    );
+
+    compressedFiles.forEach((compressedFile) => {
+      const fileType: 'image' | 'video' = compressedFile.type.startsWith(
+        'image/'
+      )
         ? 'image'
         : 'video';
       hooksSetMediaFiles((prev) => {
         const updatedFiles = [
           ...prev,
-          { type: fileType, file, isCover: false },
+          { type: fileType, file: compressedFile, isCover: false },
         ];
 
         if (fileType === 'image' && !prev.some((p) => p.isCover)) {
