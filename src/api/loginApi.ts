@@ -162,17 +162,32 @@ export const verifyUser = () => {
 
 /** refresh token으로 access token 재발급 */
 export const getNewAccessToken = () => {
-  const refreshToken = `Bearer%${window.localStorage.getItem('refresh_token')}`;
-  console.log('setting refresh token to header', refreshToken);
-  axiosInstance.defaults.headers['Refreshtoken'] = refreshToken;
-  return axiosInstance.get(`/refreshtoken`).then((response) => {
-    // 새로 받은 액세스 토큰 넣어주기
-    const accessToken = response.headers['accesstoken'].replace('Bearer%', '');
-    tokenHandler(accessToken);
-    setClientHeader(accessToken);
-    console.log('Got new access token', response.data);
-    return response.data;
-  });
+  try {
+    const refreshToken = `Bearer%${window.localStorage.getItem(
+      'refresh_token'
+    )}`;
+    console.log('setting refresh token to header', refreshToken);
+    axiosInstance.defaults.headers['Refreshtoken'] = refreshToken;
+    return axiosInstance.get(`/refreshtoken`).then((response) => {
+      // 새로 받은 액세스 토큰 넣어주기
+      const accessToken = response.headers['accesstoken'].replace(
+        'Bearer%',
+        ''
+      );
+      tokenHandler(accessToken);
+      setClientHeader(accessToken);
+      console.log('Got new access token', response.data);
+      return response.data;
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    window.localStorage.removeItem('access_token');
+    window.localStorage.removeItem('refresh_token');
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data || e.message);
+    }
+    throw e;
+  }
 };
 
 /** logout */
