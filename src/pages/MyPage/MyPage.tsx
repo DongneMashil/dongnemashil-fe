@@ -54,13 +54,20 @@ export const MyPage = () => {
     },
   });
 
+  const closeModalHandler = () => {
+    setIsModalOpen(false);
+  };
+  const clickWriteHandler = () => {
+    navigate('/write');
+  };
+
   return (
     <CommonLayout
       header={
         isModalOpen ? (
           <NavBar
             btnLeft="closeModal"
-            onClickLeft={() => setIsModalOpen(false)}
+            onClickLeft={closeModalHandler}
             btnRight="mypage"
           ></NavBar>
         ) : (
@@ -68,10 +75,7 @@ export const MyPage = () => {
         )
       }
       footer={
-        <FixFooter
-          onClickRight={() => navigate('/write')}
-          rightButtons="write"
-        />
+        <FixFooter onClickRight={clickWriteHandler} rightButtons="write" />
       }
       hideHeader={false}
       backgroundColor="#f5f5f5"
