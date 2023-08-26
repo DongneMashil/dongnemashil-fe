@@ -1,7 +1,7 @@
 import { MyProfile, postProfile } from 'api/mypageApi';
-import { CommonLayout, NavBar } from 'components/layout';
+import { NavBar } from 'components/layout';
 import { useUpdateUserInfo } from 'hooks';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userIdSelector, userProfileSelector } from 'recoil/userInfo';
 import noUser from 'assets/images/NoUser.jpg';
@@ -115,11 +115,14 @@ export const MyProfilePage = () => {
   }, [croppedFile]);
 
   //닉네임 입력
-  const onChangeValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setValidation({ isValid: false, msg: '' });
-    setNickname(value);
-  };
+  const onChangeValueHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      setValidation({ isValid: false, msg: '' });
+      setNickname(value);
+    },
+    []
+  );
 
   //프로필 업로드
   const onSubmitHandler = async () => {
@@ -147,25 +150,30 @@ export const MyProfilePage = () => {
   const onValidHandler = (isValid: boolean, msg: string) => {
     setValidation({ isValid: isValid, msg: msg });
   };
+  const onCloseErrorModalHandler = () => {
+    setErrorMsg('');
+  };
+  const onCloseDoneModalHandler = () => {
+    () => navigate('/mypage');
+  };
+  const onCloseCropModalHandler = () => {
+    setCropModal(false);
+  };
 
   return (
-    <CommonLayout
-      header={
-        <NavBar
-          btnLeft="back"
-          btnRight="submit"
-          onClickSubmit={onSubmitHandler}
-          onClickActive={validation.isValid}
-          modal={{
-            title: '알림',
-            firstLine: '닉네임을 중복확인 해주세요.',
-          }}
-        >
-          회원정보수정
-        </NavBar>
-      }
-      backgroundColor="#fff"
-    >
+    <>
+      <NavBar
+        btnLeft="back"
+        btnRight="submit"
+        onClickSubmit={onSubmitHandler}
+        onClickActive={validation.isValid}
+        modal={{
+          title: '알림',
+          firstLine: '닉네임을 중복확인 해주세요.',
+        }}
+      >
+        회원정보수정
+      </NavBar>
       <StMyProfileContainer>
         <StProfileImage>
           <img src={imgUrl || noUser} alt="프로필 이미지" />
@@ -190,22 +198,22 @@ export const MyProfilePage = () => {
               isOpen={!!errorMsg}
               title="알림"
               firstLine={errorMsg}
-              onCloseHandler={() => setErrorMsg('')}
+              onCloseHandler={onCloseErrorModalHandler}
             />
 
             <Modal
               isOpen={!!doneMsg}
               title="알림"
               firstLine={doneMsg}
-              onCloseHandler={() => navigate('/mypage')}
+              onCloseHandler={onCloseDoneModalHandler}
             />
             <CropModal
               isOpen={cropModal}
-              onCloseHandler={() => setCropModal(false)}
+              onCloseHandler={onCloseCropModalHandler}
             />
           </div>
         </StNickNameWrapper>
       </StMyProfileContainer>
-    </CommonLayout>
+    </>
   );
 };
