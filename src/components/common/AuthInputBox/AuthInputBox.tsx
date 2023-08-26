@@ -8,7 +8,7 @@ interface AuthInputBoxProps extends InputProps {
   btnText?: string;
 }
 
-export const AuthInputBox = ({
+const AuthInputBoxComponent = ({
   type,
   name,
   id,
@@ -38,3 +38,6 @@ export const AuthInputBox = ({
     </StAuthInputBox>
   );
 };
+
+export const AuthInputBox = React.memo(AuthInputBoxComponent);
+AuthInputBox.displayName = 'AuthInputBox';
