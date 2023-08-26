@@ -3,7 +3,7 @@ import { CommonLayout, NavBar } from 'components/layout';
 import { useVerifyUser } from 'hooks';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { userProfileSelector } from 'recoil/userExample';
+import { userIdSelector, userProfileSelector } from 'recoil/userInfo';
 import noUser from 'assets/images/NoUser.gif';
 import { AuthErrorMsg, Modal } from 'components/common';
 import { useNavigate } from 'react-router-dom';
@@ -57,10 +57,10 @@ export const MyProfilePage = () => {
       alertMsg: '',
     },
   });
-
+  const UserID = useRecoilValue(userIdSelector);
   // 유저 정보 조회
   useQuery<MyProfile>({
-    queryKey: ['myPage', userData?.nickname],
+    queryKey: [UserID, 'userData'],
     queryFn: () => getMyProfile(),
     onSuccess: async (data) => {
       setFileUrl(data.profileImgUrl);

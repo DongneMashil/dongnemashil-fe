@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { useQuery } from '@tanstack/react-query';
 import { useLogout, useVerifyUser } from 'hooks';
 import { MyProfile, getMyProfile } from 'api/mypageApi';
-import { userProfileSelector } from 'recoil/userExample';
+import { userProfileSelector } from 'recoil/userInfo';
 import { TabMenu, UserInfo } from 'components/myPage';
 import { CommonLayout, FixFooter, NavBar } from 'components/layout';
 import noUser from 'assets/images/NoUser.gif';

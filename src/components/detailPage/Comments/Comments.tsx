@@ -9,7 +9,7 @@ import {
   StDetailPageCommentList,
 } from './Comments.styles';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { userProfileSelector } from 'recoil/userExample';
+import { userProfileSelector } from 'recoil/userInfo';
 import { queryClient } from 'queries/queryClient';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';

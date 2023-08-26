@@ -1,7 +1,7 @@
 import { CommonLayout, NavBar } from 'components/layout';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { userProfileSelector } from 'recoil/userExample';
+import { userProfileSelector } from 'recoil/userInfo';
 import { Comment, getMyComments } from 'api/mypageApi';
 import { ReactComponent as ChevronRight } from 'assets/icons/ChevronRight.svg';
 import { ReactComponent as CommentS } from 'assets/icons/CommentS.svg';
