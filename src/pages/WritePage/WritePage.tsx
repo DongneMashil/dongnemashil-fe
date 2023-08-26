@@ -31,14 +31,14 @@ export const WritePage = () => {
 
     const validFiles = files.filter((file) => {
       if (file.size > 100 * 1024 * 1024) {
-        alert(`${file.name} 파일은 100MB를 초과하므로 업로드할 수 없습니다.😱`);
+        alert(`${file.name} 파일은 100MB를 초과하므로 업로드할 수 없습니다.`);
         return false;
       }
       return true;
     });
 
     if (hookMediaFiles.length + validFiles.length > 5) {
-      alert('이미지와 동영상의 합은 최대 5개까지 가능합니다.😱');
+      alert('이미지와 동영상의 합은 최대 5개까지 가능합니다.');
       return;
     }
 
@@ -47,45 +47,61 @@ export const WritePage = () => {
         validFiles.filter((file) => file.type.startsWith('video/')).length >
       1
     ) {
-      alert('동영상은 한개만 가능합니다.😱');
+      alert('동영상은 한개만 가능합니다.');
       return;
     }
 
-    const compressionOptions = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1440,
-      useWebWorker: true,
-    };
-
-    const compressedFiles = await Promise.all(
-      validFiles.map(async (file) => {
-        if (file.type.startsWith('image/')) {
-          return await imageCompression(file, compressionOptions);
-        }
-        return file;
-      })
-    );
-
-    compressedFiles.forEach((compressedFile) => {
-      const fileType: 'image' | 'video' = compressedFile.type.startsWith(
-        'image/'
-      )
+    for (const file of validFiles) {
+      const fileType: 'image' | 'video' = file.type.startsWith('image/')
         ? 'image'
         : 'video';
-      hooksSetMediaFiles((prev) => {
-        const updatedFiles = [
-          ...prev,
-          { type: fileType, file: compressedFile, isCover: false },
-        ];
 
-        if (fileType === 'image' && !prev.some((p) => p.isCover)) {
-          const index = updatedFiles.length - 1;
-          updatedFiles[index].isCover = true;
+      if (fileType === 'image') {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1440,
+          useWebWorker: true,
+        };
+
+        try {
+          const compressedFileBlob = await imageCompression(file, options);
+          const compressedFile = new File([compressedFileBlob], file.name, {
+            type: file.type,
+            lastModified: file.lastModified,
+          });
+
+          hooksSetMediaFiles((prev) => {
+            const updatedFiles = [
+              ...prev,
+              { type: fileType, file: compressedFile, isCover: false },
+            ];
+
+            if (!prev.some((p) => p.isCover)) {
+              const index = updatedFiles.length - 1;
+              updatedFiles[index].isCover = true;
+            }
+
+            return updatedFiles;
+          });
+        } catch (error) {
+          console.error('Error compressing the image:', error);
         }
+      } else {
+        hooksSetMediaFiles((prev) => {
+          const updatedFiles = [
+            ...prev,
+            { type: fileType, file, isCover: false },
+          ];
 
-        return updatedFiles;
-      });
-    });
+          if (!prev.some((p) => p.isCover)) {
+            const index = updatedFiles.length - 1;
+            updatedFiles[index].isCover = true;
+          }
+
+          return updatedFiles;
+        });
+      }
+    }
   };
 
   const setCoverImage = (targetFile: MediaFileType) => {
