@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Map } from 'components/common';
 import { BackButton } from 'components/common';
 import { CurrentPosButton } from './CurrentPosButton/CurrentPosButton';
@@ -19,6 +19,10 @@ export const SearchResultMapPage = ({
     null
   );
   const hasInitialMapPosSet = useRef<boolean>(false);
+  const tooltipImgPreload = () => {
+    const img = new Image();
+    img.src = Tooltip;
+  };
   const mapInstance = useRef<kakao.maps.Map | null>(null);
   const markerImage = new kakao.maps.MarkerImage(
     Marker,
@@ -162,6 +166,10 @@ export const SearchResultMapPage = ({
       setCenter(mapInstance.current, initialMapPos, false); // 첫 번째 마커 좌표로 지도 이동
     }
   }, [initialMapPos]);
+
+  useLayoutEffect(() => {
+    tooltipImgPreload();
+  }, []);
 
   return (
     <StResultMapContainer>
