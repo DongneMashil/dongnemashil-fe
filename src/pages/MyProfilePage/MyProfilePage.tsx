@@ -1,6 +1,6 @@
 import { MyProfile, postProfile } from 'api/mypageApi';
 import { CommonLayout, NavBar } from 'components/layout';
-import { useUpdateUserInfo, useVerifyUser } from 'hooks';
+import { useUpdateUserInfo } from 'hooks';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userInfo';
@@ -29,7 +29,8 @@ export const MyProfilePage = () => {
   const [doneMsg, setDoneMsg] = useState(''); // 완료 메시지를 저장하는 상태
   const [cropModal, setCropModal] = useState(false);
   //유저정보 조회 및 업데이트
-  const { data: userData } = useVerifyUser(true);
+
+  const { isSuccess, data } = useUpdateUserInfo(true);
   const setUserState = useSetRecoilState(userProfileSelector);
 
   // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
@@ -46,7 +47,7 @@ export const MyProfilePage = () => {
       alertMsg: string;
     };
   }>({
-    nickname: userData?.nickname,
+    nickname: data?.nickname,
     imgFile: null,
     validation: {
       isValid: true,
@@ -55,8 +56,6 @@ export const MyProfilePage = () => {
       alertMsg: '',
     },
   });
-
-  const { data, isSuccess } = useUpdateUserInfo(true);
 
   const getProfileImg = async (data: MyProfile) => {
     //
@@ -175,12 +174,14 @@ export const MyProfilePage = () => {
       setErrorMsg(`프로필 등록에 실패했습니다. 오류코드:${error}`);
     }
   };
-  // useEffect(() => {
-  //   console.log('🔴', postData);
-  // }, [postData]);
-  // useEffect(() => {
-  //   console.log('Updated fileUrl:', fileUrl);
-  // }, [fileUrl]);
+
+  //테스트용
+  useEffect(() => {
+    console.log('🔴', postData);
+  }, [postData]);
+  useEffect(() => {
+    console.log('Updated fileUrl:', fileUrl);
+  }, [fileUrl]);
 
   const onValidHandler = (isValid: boolean, msg: string) => {
     setPostData((prevData) => ({
@@ -223,7 +224,7 @@ export const MyProfilePage = () => {
         <StNickNameWrapper>
           <ProfileNicknameCheck
             nickname={postData.nickname}
-            userData={userData}
+            userData={data}
             onValid={onValidHandler}
             onChange={onChangeValueHandler}
           />
