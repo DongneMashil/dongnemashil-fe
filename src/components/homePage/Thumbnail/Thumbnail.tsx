@@ -13,7 +13,7 @@ import { ReviewsList } from 'api/reviewsApi';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { useLike } from 'hooks';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import { numberWithCommas } from 'utils';
 import timeAgo from 'utils/timeAgo';
 

@@ -28,6 +28,7 @@ export const ProfileNicknameCheck: React.FC<ProfileNicknameCheckProps> = ({
         return;
       }
       onValid(true, `*사용가능한 닉네임 입니다.`);
+      console.log('닉네임 중복 확인 완료' + nickname + onValid);
     },
     onError: (err: Error) => {
       onValid(false, '*' + err.message);

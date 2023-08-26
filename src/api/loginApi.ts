@@ -6,7 +6,7 @@ export interface UserStateRes {
   nickname: string;
 }
 
-const tokenHandler = (accessToken: string, refreshToken?: string) => {
+export const tokenHandler = (accessToken: string, refreshToken?: string) => {
   // 토큰 로컬 스토리지에 저장
   window.localStorage.setItem('access_token', accessToken);
   if (refreshToken) {
