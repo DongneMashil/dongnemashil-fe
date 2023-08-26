@@ -6,9 +6,10 @@ interface AuthErrorMsgProps {
   isValid?: boolean;
 }
 
-export const AuthErrorMsg = ({
-  children,
-  isValid = false,
-}: AuthErrorMsgProps) => {
-  return <StAuthErrorMsg $isValid={isValid}>{children}</StAuthErrorMsg>;
-};
+export const AuthErrorMsg = React.memo(
+  ({ children, isValid = false }: AuthErrorMsgProps) => {
+    return <StAuthErrorMsg $isValid={isValid}>{children}</StAuthErrorMsg>;
+  }
+);
+
+AuthErrorMsg.displayName = 'AuthErrorMsg';
