@@ -16,7 +16,6 @@ import {
 } from './MyProfilePage.styles';
 import { CropModal } from 'components/common/CropModal/CropModal';
 import { ProfileNicknameCheck } from 'components/myProfilePage/ProfileNicknameCheck/ProfileNicknameCheck';
-// import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { getExtensionName } from 'components/myProfilePage';
 import DefaultImage from 'assets/images/NoUser.jpg';
@@ -34,8 +33,7 @@ export const MyProfilePage = () => {
   const setUserState = useSetRecoilState(userProfileSelector);
 
   // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
-  // const { fileUrl, setFileUrl, postData, setPostData } =
-  //   useGetMyProfile(userData);
+
   //---------------------------------------------
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const [postData, setPostData] = useState<{
@@ -60,7 +58,7 @@ export const MyProfilePage = () => {
 
   const { data, isSuccess } = useUpdateUserInfo(true);
 
-  const getPhoto = async (data: MyProfile) => {
+  const getProfileImg = async (data: MyProfile) => {
     //
     try {
       const response = await axios.get(
@@ -99,60 +97,13 @@ export const MyProfilePage = () => {
       console.error('이미지 다운로드 실패해서 기본 이미지 삽입:', error);
     }
   };
-  if (isSuccess) {
-    setFileUrl(data.profileImgUrl);
-    getPhoto(data);
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      setFileUrl(data.profileImgUrl);
+      getProfileImg(data);
+    }
+  }, []); //이걸 안하니깐 52번씩 랜더링되다가 멈춤
 
-  // const UserID = useRecoilValue(userIdSelector);
-  // // 유저 정보 조회
-  // useQuery<MyProfile>({
-  //   queryKey: [UserID, 'userData'],
-  //   queryFn: getMyProfile,
-  //   onSuccess: async (data) => {
-  //     setFileUrl(data.profileImgUrl);
-  //     try {
-  //       const response = await axios.get(
-  //         `${data.profileImgUrl!}?timestamp=${Date.now()}`,
-  //         {
-  //           responseType: 'blob',
-  //         }
-  //       );
-  //       console.log(`Response Status: ${response.status}`);
-
-  //       const blob = response.data;
-  //       const extension = getExtensionName(data.profileImgUrl!);
-  //       const finalFilename = 'prev.' + extension;
-  //       const prevImage = new File([blob], finalFilename, { type: blob.type });
-  //       setPostData((prev) => ({
-  //         ...prev,
-  //         imgFile: prevImage,
-  //         nickname: data.nickname,
-  //       }));
-  //     } catch (error) {
-  //       setFileUrl(DefaultImage); //이미지 다운로드 실패시 기본 이미지 삽입
-  //       console.log('✨defalultImage: ' + DefaultImage);
-  //       console.log('✨setfileUrl: ' + fileUrl);
-
-  //       const defaultBlob = base64ToBlob(DefaultImage, 'image/jpg');
-  //       // const defaultBlob = new Blob([DefaultImage], { type: 'image/jpg' });
-  //       const defaultFile = new File([defaultBlob], 'default.jpg', {
-  //         type: 'image/jpg',
-  //       });
-
-  //       setPostData((prev) => ({
-  //         ...prev,
-  //         imgFile: defaultFile,
-  //         nickname: data.nickname,
-  //       }));
-  //       console.error('이미지 다운로드 실패해서 기본 이미지 삽입:', error);
-  //     }
-  //   },
-  //   onError: (error) => {
-  //     console.log('🔴getMyprofile에러:' + error);
-  //   },
-  // });
-  //---------------------------------------------
   //프로필 사진 업로드
   const onClickChangeImageHandler = () => {
     setCropModal(true);
@@ -224,12 +175,12 @@ export const MyProfilePage = () => {
       setErrorMsg(`프로필 등록에 실패했습니다. 오류코드:${error}`);
     }
   };
-  useEffect(() => {
-    console.log('🔴', postData);
-  }, [postData]);
-  useEffect(() => {
-    console.log('Updated fileUrl:', fileUrl);
-  }, [fileUrl]);
+  // useEffect(() => {
+  //   console.log('🔴', postData);
+  // }, [postData]);
+  // useEffect(() => {
+  //   console.log('Updated fileUrl:', fileUrl);
+  // }, [fileUrl]);
 
   const onValidHandler = (isValid: boolean, msg: string) => {
     setPostData((prevData) => ({
