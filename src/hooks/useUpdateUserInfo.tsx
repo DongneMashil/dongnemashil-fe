@@ -16,7 +16,7 @@ export const useUpdateUserInfo = (shouldUpdate: boolean = true) => {
 
   const UserID = useRecoilValue(userIdSelector);
 
-  const { data } = useQuery<MyProfile, Error>({
+  return useQuery<MyProfile, Error>({
     queryKey: [UserID, 'userData'],
     queryFn: getMyProfile,
     enabled: isSuccess && shouldUpdate,
@@ -33,6 +33,4 @@ export const useUpdateUserInfo = (shouldUpdate: boolean = true) => {
     staleTime: 60000 * 10, // 10분 이내에는 캐시된 결과를 사용 -> 어차피 업데이트시 즉시 무효화됨
     retry: 1, // 1번은 재시도 해보기
   });
-
-  return data;
 };
