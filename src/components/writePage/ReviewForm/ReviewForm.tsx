@@ -1,12 +1,15 @@
-import React, { ChangeEvent, RefObject } from 'react';
+import React, { ChangeEvent, RefObject, useEffect, useState } from 'react';
 import {
   StContentBox,
   StTitle,
   StHiddenButton,
   StFormWrapper,
+  StByteSizeTag,
+  StContentWrapper,
 } from './ReviewForm.styles';
 import { FileSlider } from '../FileSlider/FileSlider';
 import { MediaFile, MediaFileType } from 'recoil/mediaFile/mediaFileAtom';
+import { getStringByteSize } from '../getStirngByTeSize/getStringBySize';
 
 interface ReviewFormProps {
   formValues: {
@@ -40,6 +43,12 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
   determineIsCoverImage,
   fileInputRef,
 }) => {
+  const [contentByteSize, setContentByteSize] = useState(0);
+
+  useEffect(() => {
+    setContentByteSize(getStringByteSize(formValues.content));
+  }, [formValues.content]);
+
   return (
     <StFormWrapper>
       <StTitle
@@ -67,12 +76,15 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
         multiple
         onChange={onFileChange}
       />
-      <StContentBox
-        name="content"
-        value={formValues.content}
-        onChange={onInputChange}
-        placeholder="산책은 어땠나요?"
-      />
+      <StContentWrapper>
+        <StContentBox
+          name="content"
+          value={formValues.content}
+          onChange={onInputChange}
+          placeholder="산책은 어땠나요?"
+        />
+        <StByteSizeTag>{contentByteSize} / 500</StByteSizeTag>
+      </StContentWrapper>
     </StFormWrapper>
   );
 };

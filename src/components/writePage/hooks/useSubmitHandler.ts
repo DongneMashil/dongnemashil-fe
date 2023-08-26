@@ -4,6 +4,7 @@ import { MediaFile } from 'recoil/mediaFile/mediaFileAtom';
 import { getExtensionName } from 'components/myProfilePage';
 import { getImageMimeType, getVideoMimeType } from 'utils';
 import { useNavigate } from 'react-router-dom';
+import { getStringByteSize } from '../getStirngByTeSize/getStringBySize';
 
 type UseSubmitHandlerProps = {
   reviewId: number;
@@ -26,10 +27,6 @@ export const useSubmitHandler = ({
   const updateMutation = useMutation((formData: FormData) =>
     updateReview(reviewId, formData)
   );
-
-  const getStringByteSize = (s: string): number => {
-    return encodeURI(s).split(/%..|./).length - 1;
-  };
 
   const handleSubmit = async () => {
     if (formValues.title.trim() === '') {

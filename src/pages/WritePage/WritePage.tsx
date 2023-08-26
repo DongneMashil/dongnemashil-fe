@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import {
   ReviewForm,
   TagContainer,
+  useSubmitHandler,
   useWritePageState,
 } from 'components/writePage';
 import { MediaFileType } from 'recoil/mediaFile/mediaFileAtom';
-import { useSubmitHandler } from 'components/writePage/hooks/useSubmitHandler';
 import imageCompression from 'browser-image-compression';
 
 export const WritePage = () => {
