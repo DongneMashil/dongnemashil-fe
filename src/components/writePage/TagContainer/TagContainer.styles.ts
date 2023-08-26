@@ -1,8 +1,8 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 export const StTagContainer = styled.div`
   width: 100%;
-  height: 8.69rem;
+  height: 8.9rem;
   border-radius: 0.875rem;
   background: #fff;
   margin: 0.75rem 0;
@@ -14,7 +14,7 @@ export const StCurrentAddressWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 0.94rem 1.44rem 0;
+  margin: 0.8rem 1.44rem 0;
 `;
 
 export const StTotalTag = styled.p`
