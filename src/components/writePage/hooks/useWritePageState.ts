@@ -40,7 +40,11 @@ export const useWritePageState = () => {
       });
       setSelectedTags(reviewData.tag.map((t) => t.name));
       setAddress(reviewData.address);
+    }
+  }, [reviewData]);
 
+  useEffect(() => {
+    if (reviewData) {
       const mediaFilesData = [
         urlToMediaFile(reviewData.mainImgUrl, 'image', true),
         ...reviewData.subImgUrl
