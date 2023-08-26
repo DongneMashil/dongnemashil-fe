@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Map } from 'components/common';
-import { Button, BackButton } from 'components/common';
+import { BackButton } from 'components/common';
+import { CurrentPosButton } from './CurrentPosButton/CurrentPosButton';
 import Marker from 'assets/icons/Marker.png';
 import MarkerSelected from 'assets/icons/MarkerSelected.png';
 import { StResultMapContainer } from './SearchResultMapPage.styles';
@@ -148,6 +149,14 @@ export const SearchResultMapPage = ({
     onToggle();
   };
 
+  const onCurrentPosHandler = () => {
+    if (mapInstance.current) {
+      moveToCurrentLocation(mapInstance.current);
+    } else {
+      console.log('no map instance found');
+    }
+  };
+
   useEffect(() => {
     if (initialMapPos && mapInstance.current) {
       setCenter(mapInstance.current, initialMapPos, false); // 첫 번째 마커 좌표로 지도 이동
@@ -158,18 +167,7 @@ export const SearchResultMapPage = ({
     <StResultMapContainer>
       <Map width="100%" height="100%" initMap={initMap} />
       <BackButton onClick={onBackHandler} />
-      <Button
-        type="circleFill"
-        onClick={() => {
-          if (mapInstance.current) {
-            moveToCurrentLocation(mapInstance.current);
-          } else {
-            console.log('no map instance found');
-          }
-        }}
-      >
-        현위치
-      </Button>
+      <CurrentPosButton onClick={onCurrentPosHandler} />
     </StResultMapContainer>
   );
 };
