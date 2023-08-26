@@ -4,7 +4,7 @@ import { useUpdateUserInfo } from 'hooks';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userInfo';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import { AuthErrorMsg, Modal } from 'components/common';
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from 'queries/queryClient';

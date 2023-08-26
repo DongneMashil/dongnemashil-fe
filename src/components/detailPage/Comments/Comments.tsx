@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { deleteComment, editComment, getComment } from 'api/detailApi';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import React, { useEffect, useRef, useState } from 'react';
 import timeAgo from 'utils/timeAgo';
 import {

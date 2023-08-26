@@ -21,7 +21,7 @@ import {
   StVideoPlayerBox,
 } from './DetailPage.styles';
 import noImage from 'assets/images/NoImage.png';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import timeAgo from 'utils/timeAgo';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userInfo';

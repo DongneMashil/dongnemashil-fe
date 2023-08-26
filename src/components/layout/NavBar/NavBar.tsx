@@ -10,7 +10,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import { ReactComponent as ChevronLeft } from 'assets/icons/ChevronLeft.svg';
 import { ReactComponent as LogoHorizontal } from 'assets/logo/LogoHorizontal.svg';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import { useUpdateUserInfo } from 'hooks';
 import { useRecoilState } from 'recoil';
 import { historyStackState } from 'recoil/historyStack/historyStack';

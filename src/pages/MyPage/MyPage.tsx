@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLogout, useUpdateUserInfo } from 'hooks';
 import { TabMenu, UserInfo } from 'components/myPage';
 import { CommonLayout, FixFooter, NavBar } from 'components/layout';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import { ReactComponent as LogoutIcon } from 'assets/icons/Logout.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/CommentL.svg';
 import { StButton, StMyPageContainer } from './Mypage.styles';
