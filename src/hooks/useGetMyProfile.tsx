@@ -4,11 +4,9 @@ import { getMyProfile, MyProfile } from 'api/mypageApi';
 import axios from 'axios';
 import { getExtensionName } from 'components/myProfilePage';
 import { UserStateRes } from 'api/loginApi';
-
-export const useGetMyProfile = (
-  userData: UserStateRes | undefined,
-  setErrorMsg: React.Dispatch<React.SetStateAction<string>>
-) => {
+import DefaultImage from 'assets/images/NoUser.jpg';
+import { base64ToBlob } from 'utils';
+export const useGetMyProfile = (userData: UserStateRes | undefined) => {
   const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
   const [postData, setPostData] = useState<{
     nickname?: string;
@@ -26,12 +24,12 @@ export const useGetMyProfile = (
       isValid: true,
       isVerified: false,
       msg: '',
-      alertMsg: '닉네임을 중복확인을 해주세요!',
+      alertMsg: '',
     },
   });
 
   // 유저 정보 조회
-  useQuery<MyProfile, Error>({
+  useQuery<MyProfile>({
     queryKey: ['myPage', userData?.nickname],
     queryFn: () => getMyProfile(),
     onSuccess: async (data) => {
@@ -55,19 +53,26 @@ export const useGetMyProfile = (
           nickname: data.nickname,
         }));
       } catch (error) {
-        setFileUrl(null); //이미지 다운로드 실패시 미리보기 이미지 제거
+        setFileUrl(DefaultImage); //이미지 다운로드 실패시 기본 이미지 삽입
+        console.log('✨defalultImage: ' + DefaultImage);
+        console.log('✨setfileUrl: ' + fileUrl);
+
+        const defaultBlob = base64ToBlob(DefaultImage, 'image/jpg');
+        // const defaultBlob = new Blob([DefaultImage], { type: 'image/jpg' });
+        const defaultFile = new File([defaultBlob], 'default.jpg', {
+          type: 'image/jpg',
+        });
+
         setPostData((prev) => ({
           ...prev,
+          imgFile: defaultFile,
           nickname: data.nickname,
         }));
-        console.error('Error fetching the image:', error);
-        setErrorMsg(
-          '프로필 사진을 불러오는데 실패했습니다. 새로 등록하고 관리자에게 문의해주세요.'
-        );
+        console.error('이미지 다운로드 실패해서 기본 이미지 삽입:', error);
       }
     },
     onError: (error) => {
-      console.log('🔴' + error);
+      console.log('🔴getMyprofile에러:' + error);
     },
   });
 

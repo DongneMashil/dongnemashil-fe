@@ -1,4 +1,3 @@
-// import { useMutation } from '@tanstack/react-query';
 import { postProfile } from 'api/mypageApi';
 import { CommonLayout, NavBar } from 'components/layout';
 import { useGetMyProfile, useProfileImageUpload, useVerifyUser } from 'hooks';
@@ -7,7 +6,6 @@ import { useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import noUser from 'assets/images/NoUser.gif';
 import { AuthErrorMsg, Modal } from 'components/common';
-// import { confirmNickname } from 'api/loginApi';
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from 'queries/queryClient';
 import {
@@ -29,10 +27,8 @@ export const MyProfilePage = () => {
   const setUserState = useSetRecoilState(userProfileSelector);
 
   // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
-  const { fileUrl, setFileUrl, postData, setPostData } = useGetMyProfile(
-    userData,
-    setErrorMsg
-  );
+  const { fileUrl, setFileUrl, postData, setPostData } =
+    useGetMyProfile(userData);
 
   //프로필 사진 업로드
   const onClickChangeImageHandler = () => {
@@ -72,6 +68,8 @@ export const MyProfilePage = () => {
       setDoneMsg('프로필 등록에 성공했습니다.');
       queryClient.invalidateQueries(['myPage']);
       setUserState((prev) => ({ ...prev, nickname: postData.nickname }));
+      console.log('🟢이제 곧 이동' + postData);
+      navigate('/mypage');
     } catch (error) {
       console.error('😀' + error);
       setErrorMsg(`프로필 등록에 실패했습니다. 오류코드:${error}`);
@@ -80,6 +78,21 @@ export const MyProfilePage = () => {
   useEffect(() => {
     console.log('🔴', postData);
   }, [postData]);
+  useEffect(() => {
+    console.log('Updated fileUrl:', fileUrl);
+  }, [fileUrl]);
+
+  const onValidHandler = (isValid: boolean, msg: string) => {
+    setPostData((prevData) => ({
+      ...prevData,
+      validation: {
+        ...prevData.validation,
+        msg: msg,
+        isValid: isValid,
+        isVerified: isValid,
+      },
+    }));
+  };
 
   return (
     <CommonLayout
@@ -88,9 +101,7 @@ export const MyProfilePage = () => {
           btnLeft="back"
           btnRight="submit"
           onClickSubmit={onSubmitHandler}
-          onClickActive={
-            postData.imgFile !== null && postData.validation.isValid
-          }
+          onClickActive={postData.validation.isValid}
           modal={{
             title: '알림',
             firstLine: postData.validation.alertMsg,
@@ -113,17 +124,7 @@ export const MyProfilePage = () => {
           <ProfileNicknameCheck
             nickname={postData.nickname}
             userData={userData}
-            onValid={(isValid, msg) => {
-              setPostData((prevData) => ({
-                ...prevData,
-                validation: {
-                  ...prevData.validation,
-                  msg: msg,
-                  isValid: isValid,
-                  isVerified: isValid,
-                },
-              }));
-            }}
+            onValid={onValidHandler}
             onChange={onChangeValueHandler}
           />
           <div className="error">
