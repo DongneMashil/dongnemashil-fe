@@ -1,8 +1,8 @@
-import { postProfile } from 'api/mypageApi';
+import { MyProfile, getMyProfile, postProfile } from 'api/mypageApi';
 import { CommonLayout, NavBar } from 'components/layout';
-import { useGetMyProfile, useProfileImageUpload, useVerifyUser } from 'hooks';
+import { useVerifyUser } from 'hooks';
 import React, { useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userExample';
 import noUser from 'assets/images/NoUser.gif';
 import { AuthErrorMsg, Modal } from 'components/common';
@@ -16,6 +16,13 @@ import {
 } from './MyProfilePage.styles';
 import { CropModal } from 'components/common/CropModal/CropModal';
 import { ProfileNicknameCheck } from 'components/myProfilePage/ProfileNicknameCheck/ProfileNicknameCheck';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { getExtensionName } from 'components/myProfilePage';
+import DefaultImage from 'assets/images/NoUser.jpg';
+import { base64ToBlob } from 'utils';
+import { croppedImageFileSelector } from 'recoil/cropProfileImage/cropProfileImageSelector';
+import imageCompression from 'browser-image-compression';
 
 export const MyProfilePage = () => {
   const navigate = useNavigate();
@@ -27,15 +34,110 @@ export const MyProfilePage = () => {
   const setUserState = useSetRecoilState(userProfileSelector);
 
   // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
-  const { fileUrl, setFileUrl, postData, setPostData } =
-    useGetMyProfile(userData);
+  // const { fileUrl, setFileUrl, postData, setPostData } =
+  //   useGetMyProfile(userData);
+  //---------------------------------------------
+  const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
+  const [postData, setPostData] = useState<{
+    nickname?: string;
+    imgFile?: File | null;
+    validation: {
+      isValid: boolean;
+      isVerified: boolean;
+      msg: string;
+      alertMsg: string;
+    };
+  }>({
+    nickname: userData?.nickname,
+    imgFile: null,
+    validation: {
+      isValid: true,
+      isVerified: false,
+      msg: '',
+      alertMsg: '',
+    },
+  });
 
+  // 유저 정보 조회
+  useQuery<MyProfile>({
+    queryKey: ['myPage', userData?.nickname],
+    queryFn: () => getMyProfile(),
+    onSuccess: async (data) => {
+      setFileUrl(data.profileImgUrl);
+      try {
+        const response = await axios.get(
+          `${data.profileImgUrl!}?timestamp=${Date.now()}`,
+          {
+            responseType: 'blob',
+          }
+        );
+        console.log(`Response Status: ${response.status}`);
+
+        const blob = response.data;
+        const extension = getExtensionName(data.profileImgUrl!);
+        const finalFilename = 'prev.' + extension;
+        const prevImage = new File([blob], finalFilename, { type: blob.type });
+        setPostData((prev) => ({
+          ...prev,
+          imgFile: prevImage,
+          nickname: data.nickname,
+        }));
+      } catch (error) {
+        setFileUrl(DefaultImage); //이미지 다운로드 실패시 기본 이미지 삽입
+        console.log('✨defalultImage: ' + DefaultImage);
+        console.log('✨setfileUrl: ' + fileUrl);
+
+        const defaultBlob = base64ToBlob(DefaultImage, 'image/jpg');
+        // const defaultBlob = new Blob([DefaultImage], { type: 'image/jpg' });
+        const defaultFile = new File([defaultBlob], 'default.jpg', {
+          type: 'image/jpg',
+        });
+
+        setPostData((prev) => ({
+          ...prev,
+          imgFile: defaultFile,
+          nickname: data.nickname,
+        }));
+        console.error('이미지 다운로드 실패해서 기본 이미지 삽입:', error);
+      }
+    },
+    onError: (error) => {
+      console.log('🔴getMyprofile에러:' + error);
+    },
+  });
+  //---------------------------------------------
   //프로필 사진 업로드
   const onClickChangeImageHandler = () => {
     setCropModal(true);
   };
 
-  useProfileImageUpload(setFileUrl, setPostData);
+  //압축하기
+  const croppedFile = useRecoilValue(croppedImageFileSelector);
+
+  const options = {
+    maxSizeMB: 0.1,
+    maxWidthOrHeight: 100,
+    useWebWorker: true,
+  };
+
+  useEffect(() => {
+    const onChangeImage = async () => {
+      if (!croppedFile) return;
+
+      try {
+        const compressedFile = await imageCompression(croppedFile, options);
+        const imgUrl = URL.createObjectURL(compressedFile);
+        setFileUrl(imgUrl);
+        setPostData((prev) => ({
+          ...prev,
+          imgFile: compressedFile,
+        }));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    onChangeImage();
+  }, [croppedFile]);
 
   //닉네임 입력
   const onChangeValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
