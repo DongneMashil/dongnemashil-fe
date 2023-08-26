@@ -20,7 +20,7 @@ export const useGetMyProfile = (
       alertMsg: string;
     };
   }>({
-    nickname: '',
+    nickname: userData?.nickname,
     imgFile: null,
     validation: {
       isValid: true,

@@ -45,7 +45,7 @@ export const MyPage = () => {
   //내 정보 조회
   const { data } = useQuery<MyProfile, Error>({
     queryKey: ['myPage', userData?.nickname],
-    queryFn: () => getMyProfile(),
+    queryFn: getMyProfile,
     onSuccess: (data) => {
       console.log(data);
     },
