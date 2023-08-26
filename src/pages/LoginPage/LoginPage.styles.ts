@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { theme } from 'style/theme';
+import GuideBg from 'assets/images/LoginGuideBg.svg';
 
 export interface StLoginButtonProps {
   $type?: 'kakao' | 'common' | 'register';
@@ -23,31 +24,50 @@ export const StLoginContainer = styled.div`
   }
 `;
 
+export const StLogoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+`;
+
 export const StLoginButtonWrapper = styled.div`
   width: 100%;
-  margin-top: 145px;
   padding: 0 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 9px;
 
-  & button:first-of-type {
-    margin-bottom: 13px;
+  & hr {
+    width: 100%;
+    height: 0.6px;
+    background-color: #e2e2e2;
+    border: 0;
+    margin: 19px 0 13px;
+  }
+
+  & button {
+    margin-bottom: 9px;
+  }
+  & button:last-of-type {
+    margin-bottom: 4px;
   }
 `;
 
 export const StLoginTag = styled.span`
-  width: 124px;
-  height: 23px;
-  border: 1px solid #d4d4d4;
-  border-radius: 25px;
+  width: 131px;
+  height: 32px;
+  background-image: url('${GuideBg}');
+  background-size: contain;
   display: flex;
   justify-content: center;
   align-items: center;
   padding-left: 5px;
-  margin-bottom: 4px;
+  padding-bottom: 5px;
+  margin-bottom: 6.34px;
 
   color: ${theme.mainTextColor};
   text-align: center;

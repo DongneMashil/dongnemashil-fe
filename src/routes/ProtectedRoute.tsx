@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useVerifyUser } from 'hooks';
-import { StLoadingSpinner } from 'components/common';
+import { LoadingPage } from 'pages';
 
 const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
   const { isLoading, isError, isSuccess } = useVerifyUser(true);
@@ -13,14 +13,17 @@ const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
   }, [isLoading, isError]);
 
   if (isLoading) {
-    return <StLoadingSpinner />;
+    console.log('useVerifyUser Loading');
+    return <LoadingPage />;
   }
 
   if (isError) {
+    console.log('useVerifyUser Error');
     return <Navigate to="/login" replace />;
   }
 
   if (isSuccess) {
+    console.log('useVerifyUser Success');
     return element;
   }
 };

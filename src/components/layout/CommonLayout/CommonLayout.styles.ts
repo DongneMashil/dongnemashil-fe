@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 
 export const StLayoutOuter = styled.div`
   width: 100vw;
-  min-height: 100vh;
+  height: calc(100 * var(--vh));
   background-color: #404040; //#f8f9fa 기본 배경 색상 -> 추후 테마 적용
   display: flex;
   flex-direction: column;
@@ -15,7 +15,7 @@ export const StLayoutBody = styled.div`
   position: relative;
   width: 100vw;
   max-width: 390px; // 최대 너비 -> 추후 반응형 적용
-  height: 100vh;
+  height: calc(100 * var(--vh));
   max-height: 850px; // 최대 높이 -> 추후 반응형 적용
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 `;
@@ -46,16 +46,9 @@ export const StSlidingHeader = styled.div<{ $isShow: boolean }>`
   top: 0;
   width: 100%;
   opacity: ${(props) => (props.$isShow ? '1' : '0')};
-  // @media (max-height: 850px) {
-  //   transform: translateY(${(props) => (props.$isShow ? '0' : '-50px')});
-  // } //overflow문제로 모바일에서만 적용함 // 문제가 있어서 일단 지움 2023.8.14
 `;
 
 export const StModalPotal = styled.div`
   position: absolute;
-  // width: 100vw;
-  // max-width: 390px; // 최대 너비 -> 추후 반응형 적용
-  // height: 100vh;
-  // max-height: 850px; // 최대 높이 -> 추후 반응형 적용
   z-index: 1000;
 `;

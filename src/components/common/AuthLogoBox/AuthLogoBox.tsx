@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ReactComponent as LogoImage } from 'assets/images/Logo.svg';
+import { ReactComponent as LogoImage } from 'assets/icons/LogoHorizontal.svg';
 import { StLogoBox } from './AuthLogoBox.styles';
 
 export const AuthLogoBox = ({
@@ -11,8 +11,7 @@ export const AuthLogoBox = ({
   return (
     <StLogoBox $align={align}>
       <Link to="/">
-        <LogoImage width={32} height={36} />
-        <span>동네마실</span>
+        <LogoImage />
       </Link>
     </StLogoBox>
   );
