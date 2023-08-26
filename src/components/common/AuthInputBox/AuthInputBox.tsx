@@ -8,36 +8,37 @@ interface AuthInputBoxProps extends InputProps {
   btnText?: string;
 }
 
-const AuthInputBoxComponent = ({
-  type,
-  name,
-  id,
-  value,
-  onChange,
-  placeholder,
-  disabled,
-  onClick = undefined,
-  btnText = '',
-}: AuthInputBoxProps) => {
-  return (
-    <StAuthInputBox>
-      <Input
-        type={type}
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        disabled={disabled}
-      />
-      {onClick && (
-        <Button type="onlyText" onClick={onClick}>
-          {btnText}
-        </Button>
-      )}
-    </StAuthInputBox>
-  );
-};
+export const AuthInputBox = React.memo(
+  ({
+    type,
+    name,
+    id,
+    value,
+    onChange,
+    placeholder,
+    disabled,
+    onClick = undefined,
+    btnText = '',
+  }: AuthInputBoxProps) => {
+    return (
+      <StAuthInputBox>
+        <Input
+          type={type}
+          id={id}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          disabled={disabled}
+        />
+        {onClick && (
+          <Button type="onlyText" onClick={onClick}>
+            {btnText}
+          </Button>
+        )}
+      </StAuthInputBox>
+    );
+  }
+);
 
-export const AuthInputBox = React.memo(AuthInputBoxComponent);
 AuthInputBox.displayName = 'AuthInputBox';
