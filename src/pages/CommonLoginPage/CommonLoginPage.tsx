@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button, AuthNavButton } from 'components/common';
 import { AuthInputBox, AuthLogoBox, AuthErrorMsg } from 'components/common';
-import { CommonLayout } from 'components/layout';
 import { login } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
@@ -38,21 +37,24 @@ export const CommonLoginPage = () => {
     password: '',
   });
 
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newData: CommonLoginProps = {
-      ...loginValues,
-      [e.target.name]: e.target.value,
-    };
-    setLoginValues(newData);
-  };
+  const onChangeHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newData: CommonLoginProps = {
+        ...loginValues,
+        [e.target.name]: e.target.value,
+      };
+      setLoginValues(newData);
+    },
+    []
+  );
 
-  const onSubmitHandler = (e: React.MouseEvent<HTMLElement>) => {
+  const onSubmitHandler = useCallback((e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     mutate({
       email: loginValues.id,
       password: loginValues.password,
     });
-  };
+  }, []);
 
   if (isSuccess) {
     console.log('로그인 성공');
@@ -63,7 +65,7 @@ export const CommonLoginPage = () => {
   console.log('loginValues', loginValues);
   console.log('errmsg', errorMsg);
   return (
-    <CommonLayout>
+    <>
       <AuthNavButton type="exit" />
       <StCommonLoginLayout>
         <AuthLogoBox align="center" />
@@ -96,6 +98,6 @@ export const CommonLoginPage = () => {
           </Button>
         </StLoginButtonWrapper>
       </StCommonLoginLayout>
-    </CommonLayout>
+    </>
   );
 };
