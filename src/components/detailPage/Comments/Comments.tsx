@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { deleteComment, editComment, getComment } from 'api/detailApi';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import React, { useEffect, useRef, useState } from 'react';
 import timeAgo from 'utils/timeAgo';
 import {
@@ -9,7 +9,7 @@ import {
   StDetailPageCommentList,
 } from './Comments.styles';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { userProfileSelector } from 'recoil/userExample';
+import { userProfileSelector } from 'recoil/userInfo';
 import { queryClient } from 'queries/queryClient';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';

@@ -42,5 +42,5 @@ export const useProfileImageUpload = (
       }
     };
     onChangeImage();
-  }, [croppedFile, setFileUrl, setPostData]);
+  }, [croppedFile]);
 };

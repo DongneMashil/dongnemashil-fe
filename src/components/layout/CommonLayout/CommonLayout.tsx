@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   StLayoutBody,
   StLayoutOuter,
@@ -38,23 +38,24 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
   backgroundColor = '#F7F7F7',
   scrollToTopRef,
 }) => {
-  const [isShow, setIsShow] = React.useState(true);
+  const [isShow, setIsShow] = useState(true);
   const [prevPosition, setPrevPosition] = React.useState(0);
-  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   headerHeight = header ? headerHeight : '0px';
-  useEffect(() => {
-    const onScroll = () => {
-      if (scrollRef.current) {
-        const { scrollTop } = scrollRef.current;
-        // console.log(scrollTop + '❤️‍🩹');
-        if (scrollTop > prevPosition) {
-          setIsShow(false);
-        } else {
-          setIsShow(true);
-        }
-        setPrevPosition(scrollTop);
+
+  const onScroll = useCallback(() => {
+    if (scrollRef.current) {
+      const { scrollTop } = scrollRef.current;
+      // console.log(scrollTop + '❤️‍🩹');
+      if (scrollTop > prevPosition) {
+        setIsShow(false);
+      } else {
+        setIsShow(true);
       }
-    };
+      setPrevPosition(scrollTop);
+    }
+  }, [prevPosition]);
+  useEffect(() => {
     if (scrollRef.current && hideHeader && location.pathname !== '/write') {
       scrollRef.current.addEventListener('scroll', onScroll);
     }

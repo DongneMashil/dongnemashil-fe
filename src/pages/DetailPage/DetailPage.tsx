@@ -21,10 +21,10 @@ import {
   StVideoPlayerBox,
 } from './DetailPage.styles';
 import noImage from 'assets/images/NoImage.png';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import timeAgo from 'utils/timeAgo';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
-import { userProfileSelector } from 'recoil/userExample';
+import { userProfileSelector } from 'recoil/userInfo';
 import { useVerifyUser } from 'hooks';
 import { DetailMap } from 'components/detailPage';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
