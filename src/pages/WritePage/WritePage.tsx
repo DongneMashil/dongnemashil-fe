@@ -12,6 +12,7 @@ import { NavigateFunction, useNavigate } from 'react-router-dom';
 import {
   ReviewForm,
   TagContainer,
+  useMediaFiles,
   useSubmitHandler,
   useWritePageState,
 } from 'components/writePage';
@@ -51,14 +52,15 @@ export const WritePage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const {
     reviewId,
+    reviewData,
     formValues: hookFormValues,
     selectedTags,
     setSelectedTags,
     addressData,
-    mediaFiles: hookMediaFiles,
-    setMediaFiles: hooksSetMediaFiles,
     onInputChange,
   } = useWritePageState();
+
+  const { mediaFiles, setMediaFiles } = useMediaFiles(reviewData);
 
   const onFileChange = useCallback(
     async (e: ChangeEvent<HTMLInputElement>) => {
@@ -72,13 +74,13 @@ export const WritePage = () => {
         return true;
       });
 
-      if (hookMediaFiles.length + validFiles.length > 5) {
+      if (mediaFiles.length + validFiles.length > 5) {
         alert('이미지와 동영상의 합은 최대 5개까지 가능합니다.');
         return;
       }
 
       if (
-        hookMediaFiles.filter((file) => file.type === 'video').length +
+        mediaFiles.filter((file) => file.type === 'video').length +
           validFiles.filter((file) => file.type.startsWith('video/')).length >
         1
       ) {
@@ -105,7 +107,7 @@ export const WritePage = () => {
               lastModified: file.lastModified,
             });
 
-            hooksSetMediaFiles((prev) => {
+            setMediaFiles((prev) => {
               const updatedFiles = [
                 ...prev,
                 { type: fileType, file: compressedFile, isCover: false },
@@ -122,7 +124,7 @@ export const WritePage = () => {
             console.error('Error compressing the image:', error);
           }
         } else {
-          hooksSetMediaFiles((prev) => {
+          setMediaFiles((prev) => {
             const updatedFiles = [
               ...prev,
               { type: fileType, file, isCover: false },
@@ -138,11 +140,11 @@ export const WritePage = () => {
         }
       }
     },
-    [hookMediaFiles]
+    [mediaFiles]
   );
 
   const setCoverImage = (targetFile: MediaFileType) => {
-    hooksSetMediaFiles((prev) =>
+    setMediaFiles((prev) =>
       prev.map((file) =>
         file.file === targetFile
           ? { ...file, isCover: true }
@@ -152,9 +154,7 @@ export const WritePage = () => {
   };
 
   const onDeleteImage = (targetFile: MediaFileType) => {
-    hooksSetMediaFiles((prev) =>
-      prev.filter((file) => file.file !== targetFile)
-    );
+    setMediaFiles((prev) => prev.filter((file) => file.file !== targetFile));
   };
 
   const handleTagChange = (tags: string[]) => {
@@ -168,13 +168,13 @@ export const WritePage = () => {
   const { handleSubmit } = useSubmitHandler({
     reviewId,
     formValues: hookFormValues,
-    mediaFiles: hookMediaFiles,
+    mediaFiles: mediaFiles,
     selectedTags,
     addressData,
   });
 
   const determineIsCoverImage = (targetFile: MediaFileType) => {
-    const file = hookMediaFiles.find((file) => file.file === targetFile);
+    const file = mediaFiles.find((file) => file.file === targetFile);
     return file ? file.isCover : false;
   };
 
@@ -197,25 +197,25 @@ export const WritePage = () => {
         {addressData.roadName}
       </NavBar>
       {/* <StContentContainer> */}
-        <TagContainer
-          selectedTags={selectedTags}
-          handleTagChange={handleTagChange}
-          addressData={addressData}
-          onGoToWriteMapPageHandler={onGoToWriteMapPageHandler}
-        />
-        <ReviewForm
-          formValues={hookFormValues}
-          onInputChange={onInputChange}
-          mediaFiles={hookMediaFiles}
-          onFileChange={onFileChange}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          onAddImage={onButtonClick}
-          setCoverImage={setCoverImage}
-          onDeleteImage={onDeleteImage}
-          determineIsCoverImage={determineIsCoverImage}
-          fileInputRef={fileInputRef}
-        />
+      <TagContainer
+        selectedTags={selectedTags}
+        handleTagChange={handleTagChange}
+        addressData={addressData}
+        onGoToWriteMapPageHandler={onGoToWriteMapPageHandler}
+      />
+      <ReviewForm
+        formValues={hookFormValues}
+        onInputChange={onInputChange}
+        mediaFiles={mediaFiles}
+        onFileChange={onFileChange}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        onAddImage={onButtonClick}
+        setCoverImage={setCoverImage}
+        onDeleteImage={onDeleteImage}
+        determineIsCoverImage={determineIsCoverImage}
+        fileInputRef={fileInputRef}
+      />
       {/* </StContentContainer> */}
     </>
   );

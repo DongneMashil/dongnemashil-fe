@@ -1,10 +1,8 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { addressSelector } from 'recoil/address/addressSelector';
-import { mediaFilesAtom } from 'recoil/mediaFile/mediaFileAtom';
 import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
-import { urlToMediaFile } from 'utils';
 import { useQuery } from '@tanstack/react-query';
 import { getReview } from 'api/reviews';
 
@@ -24,7 +22,6 @@ export const useWritePageState = () => {
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const addressData = useRecoilValue(addressSelector);
-  const [mediaFiles, setMediaFiles] = useRecoilState(mediaFilesAtom);
   const setAddress = useSetRecoilState(selectedAddressAtom);
   const selectedAddress = useRecoilValue(selectedAddressAtom);
 
@@ -40,26 +37,6 @@ export const useWritePageState = () => {
       });
       setSelectedTags(reviewData.tag.map((t) => t.name));
       setAddress(reviewData.address);
-    }
-  }, [reviewData]);
-
-  useEffect(() => {
-    if (reviewData) {
-      const mediaFilesData = [
-        urlToMediaFile(reviewData.mainImgUrl, 'image', true),
-        ...reviewData.subImgUrl
-          .filter((url) => url.trim() !== '')
-          .map((url) => urlToMediaFile(url, 'image', false)),
-        reviewData.videoUrl
-          ? urlToMediaFile(reviewData.videoUrl, 'video', false)
-          : null,
-      ].filter(Boolean) as {
-        type: 'image' | 'video';
-        file: string;
-        isCover: boolean;
-      }[];
-
-      setMediaFiles(mediaFilesData);
     }
   }, [reviewData]);
 
@@ -81,13 +58,12 @@ export const useWritePageState = () => {
 
   return {
     reviewId,
+    reviewData,
     formValues,
     setFormValues,
     selectedTags,
     setSelectedTags,
     addressData,
-    mediaFiles,
-    setMediaFiles,
     setAddress,
     onInputChange,
   };

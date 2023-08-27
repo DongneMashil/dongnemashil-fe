@@ -38,10 +38,14 @@ const Router = () => {
           path="/writemap/search"
           element={<ProtectedRoute element={<WriteMapSearchPage />} />}
         />
-        <Route
+        {/* <Route
           path="/write/:id"
-          element={<ProtectedRoute element={<WritePage />} />}
-        />
+          element={<ProtectedRoute element={ element={
+            <StableNavigateContextProvider>
+              <WritePage />
+            </StableNavigateContextProvider>} />}
+        /> */}
+        <Route path="/write/:id" element={<WritePage />} />
         <Route
           path="/mypage"
           element={<ProtectedRoute element={<MyPage />} />}
