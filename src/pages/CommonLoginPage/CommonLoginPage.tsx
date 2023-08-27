@@ -1,20 +1,13 @@
 import React, { useState, useCallback } from 'react';
-import { Button, AuthNavButton } from 'components/common';
-import { AuthInputBox, AuthLogoBox, AuthErrorMsg } from 'components/common';
+import { AuthNavButton } from 'components/common';
+import { AuthInputBox, AuthLogoBox } from 'components/common';
 import { login } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { useVerifyUser } from 'hooks';
-import {
-  StCommonLoginLayout,
-  StLoginErrorMsgBox,
-  StLoginButtonWrapper,
-} from './CommonLoginPage.styles';
-
-interface CommonLoginProps {
-  id: string;
-  password: string;
-}
+import { LoginErrorMsgBox } from 'components/commonLoginPage/LoginErrorMsgBox/LoginErrorMsgBox';
+import { StCommonLoginLayout } from './CommonLoginPage.styles';
+import { LoginBtnWrapper } from 'components/commonLoginPage/LoginBtnWrapper/LoginBtnWrapper';
 
 export const CommonLoginPage = () => {
   const navigate = useNavigate();
@@ -32,27 +25,23 @@ export const CommonLoginPage = () => {
     },
   });
 
-  const [loginValues, setLoginValues] = useState<CommonLoginProps>({
-    id: '',
-    password: '',
-  });
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
-  const onChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newData: CommonLoginProps = {
-        ...loginValues,
-        [e.target.name]: e.target.value,
-      };
-      setLoginValues(newData);
-    },
-    []
+  const onEmailHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value),
+    [email]
+  );
+  const onPasswordHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value),
+    [password]
   );
 
   const onSubmitHandler = useCallback((e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     mutate({
-      email: loginValues.id,
-      password: loginValues.password,
+      email,
+      password,
     });
   }, []);
 
@@ -62,7 +51,6 @@ export const CommonLoginPage = () => {
       pathname: `/`,
     });
   }
-  console.log('loginValues', loginValues);
   console.log('errmsg', errorMsg);
   return (
     <>
@@ -73,30 +61,25 @@ export const CommonLoginPage = () => {
           type="email"
           name="id"
           id="id"
-          value={loginValues.id}
-          onChange={onChangeHandler}
+          value={email}
+          onChange={onEmailHandler}
           placeholder="아이디"
         />
         <AuthInputBox
           type="password"
           name="password"
           id="password"
-          value={loginValues.password}
-          onChange={onChangeHandler}
+          value={password}
+          onChange={onPasswordHandler}
           placeholder="비밀번호"
         />
-        <StLoginErrorMsgBox>
-          {errorMsg && <AuthErrorMsg isValid={false}>{errorMsg}</AuthErrorMsg>}
-        </StLoginErrorMsgBox>
-        <StLoginButtonWrapper>
-          <Button
-            type="authNormal"
-            onClick={onSubmitHandler}
-            $active={loginValues.id !== '' && loginValues.password !== ''}
-          >
-            로그인
-          </Button>
-        </StLoginButtonWrapper>
+        <LoginErrorMsgBox errorMsg={errorMsg} />
+        <LoginBtnWrapper
+          type="authNormal"
+          onClick={onSubmitHandler}
+          $active={email !== '' && password !== ''}
+          label="로그인"
+        />
       </StCommonLoginLayout>
     </>
   );
