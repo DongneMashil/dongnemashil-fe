@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { MediaFile, MediaFileType } from 'recoil/mediaFile/mediaFileAtom';
-import { StCoverImageButton, StImage, StVideo } from './RenderFileOrUrl.styles';
+import { StCoverImageButton, StImage } from './RenderFileOrUrl.styles';
+import StVideoComponent from './Video';
 
 interface RenderFileOrUrlProps {
   file: MediaFile;
@@ -40,7 +41,7 @@ export const RenderFileOrUrl: React.FC<RenderFileOrUrlProps> = ({
       </StCoverImageButton>
     </>
   ) : (
-    <StVideo src={url} controls />
+    <StVideoComponent src={url} />
   );
 };
 
