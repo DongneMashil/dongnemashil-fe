@@ -43,7 +43,7 @@ axiosInstance.interceptors.response.use(
       await getNewAccessToken();
 
       return axiosInstance(retryConfig);
-    }
+    } else throw err;
   }
 );
 
