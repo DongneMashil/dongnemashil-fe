@@ -18,13 +18,5 @@ export const StResultMapContainer = styled.div`
       top: 20px;
       left: 20px;
     }
-
-    // 현위치 버튼
-    &:last-of-type {
-      width: 50px;
-      height: 50px;
-      bottom: 50px;
-      right: 20px;
-    }
   }
 `;
