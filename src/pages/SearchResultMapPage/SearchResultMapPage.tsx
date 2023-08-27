@@ -24,14 +24,6 @@ export const SearchResultMapPage = ({
     img.src = Tooltip;
   };
   const mapInstance = useRef<kakao.maps.Map | null>(null);
-  const markerImage = new kakao.maps.MarkerImage(
-    Marker,
-    new kakao.maps.Size(21, 28)
-  );
-  const markerSelectedImage = new kakao.maps.MarkerImage(
-    MarkerSelected,
-    new kakao.maps.Size(36, 48)
-  );
 
   const moveToCurrentLocation = (map: kakao.maps.Map) => {
     if (navigator.geolocation) {
@@ -82,6 +74,15 @@ export const SearchResultMapPage = ({
   const initMap = async (map: kakao.maps.Map) => {
     let selectedMarker: kakao.maps.Marker | null = null;
     let selectedOverlay: kakao.maps.CustomOverlay | null = null;
+
+    const markerImage = new kakao.maps.MarkerImage(
+      Marker,
+      new kakao.maps.Size(21, 28)
+    );
+    const markerSelectedImage = new kakao.maps.MarkerImage(
+      MarkerSelected,
+      new kakao.maps.Size(36, 48)
+    );
 
     mapInstance.current = map;
 
