@@ -6,6 +6,7 @@ export const StReviewBox = styled.button<{ $imgUrl?: string }>`
   flex-direction: column;
   align-items: center;
 
+  height: fit-content;
   margin-bottom: 1rem;
   padding-top: 0.5rem;
   gap: 0.8rem;
