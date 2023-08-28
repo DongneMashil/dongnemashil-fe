@@ -11,24 +11,28 @@ export interface InputProps {
   disabled?: boolean;
 }
 
-export const Input = ({
-  type = 'text',
-  name = '',
-  id = name,
-  value = '',
-  onChange = () => {},
-  placeholder = '',
-  disabled = false,
-}: InputProps) => {
-  return (
-    <StInput
-      type={type}
-      id={id}
-      name={name}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      disabled={disabled}
-    />
-  );
-};
+export const Input = React.memo(
+  ({
+    type = 'text',
+    name = '',
+    id = name,
+    value = '',
+    onChange = () => {},
+    placeholder = '',
+    disabled = false,
+  }: InputProps) => {
+    return (
+      <StInput
+        type={type}
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        disabled={disabled}
+      />
+    );
+  }
+);
+
+Input.displayName = 'Input';

@@ -6,7 +6,7 @@ import {
   ReviewDetailResponse,
 } from 'api/detailApi';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CommonLayout, NavBar } from 'components/layout';
+import { NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
 import { FooterSpacer, Modal, Tag } from 'components/common';
 import {
@@ -93,15 +93,11 @@ export const DetailPage = () => {
   return (
     <>
       {isMapOpen ? (
-        <CommonLayout
-          header={
-            <NavBar
-              btnLeft="closeModal"
-              onClickLeft={() => setIsMapOpen(false)}
-            />
-          }
-          backgroundColor="#FFF"
-        >
+        <>
+          <NavBar
+            btnLeft="closeModal"
+            onClickLeft={() => setIsMapOpen(false)}
+          />
           <DetailMap
             height="100%"
             width="100%"
@@ -109,29 +105,16 @@ export const DetailPage = () => {
               setMapCenterByAddress(data ? data.address : defaultAddress, map);
             }}
           />
-        </CommonLayout>
+        </>
       ) : (
-        <CommonLayout
-          header={
-            <NavBar
-              btnLeft={'back'}
-              btnRight={'map'}
-              onClickRight={() => setIsMapOpen(true)}
-            >
-              {data && <StNavTitle>{data.roadName}</StNavTitle>}
-            </NavBar>
-          }
-          footer={
-            data && (
-              <Footer
-                reviewId={reviewId}
-                likeCnt={data.likeCnt}
-                isLiked={data.likebool}
-              ></Footer>
-            )
-          }
-          backgroundColor="#FFF"
-        >
+        <>
+          <NavBar
+            btnLeft={'back'}
+            btnRight={'map'}
+            onClickRight={() => setIsMapOpen(true)}
+          >
+            {data && <StNavTitle>{data.roadName}</StNavTitle>}
+          </NavBar>
           <StDetailPageContainer>
             {data && (
               <>
@@ -220,7 +203,14 @@ export const DetailPage = () => {
               </>
             )}
           </StDetailPageContainer>
-        </CommonLayout>
+          {data && (
+            <Footer
+              reviewId={reviewId}
+              likeCnt={data.likeCnt}
+              isLiked={data.likebool}
+            ></Footer>
+          )}
+        </>
       )}
     </>
   );
