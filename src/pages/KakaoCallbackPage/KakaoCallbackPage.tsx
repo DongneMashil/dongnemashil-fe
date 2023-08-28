@@ -4,7 +4,6 @@ import { useMutation } from '@tanstack/react-query';
 import { useVerifyUser } from 'hooks';
 import { useNavigate } from 'react-router-dom';
 import { StLoginContainer } from './KakaoCalbackPage.styles';
-import { CommonLayout } from 'components/layout';
 import { StLoadingSpinner } from 'components/common';
 import { ReactComponent as Logo } from 'assets/images/Dongdong.svg';
 
@@ -34,11 +33,9 @@ export const KakaoCallbackPage = () => {
   }
 
   return (
-    <CommonLayout>
-      <StLoginContainer>
-        <Logo />
-        <StLoadingSpinner />
-      </StLoginContainer>
-    </CommonLayout>
+    <StLoginContainer>
+      <Logo />
+      <StLoadingSpinner />
+    </StLoginContainer>
   );
 };

@@ -4,18 +4,13 @@ import { StHeaderTextH1 } from 'components/common/HeaderText/HeaderText.styles';
 
 export const StSearchHeader = styled.div`
   border-bottom: 1px solid #e3e3e3;
+  background-color: #ffffff;
   padding-top: 50px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
   position: relative;
-  & > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 7px;
-  }
   & > button {
     position: absolute;
     top: 52px;
@@ -27,6 +22,7 @@ export const StSearchInput = styled(StInput)`
   width: 166px;
   border-radius: 25px;
   margin: 12px 0;
+  padding: 0 1.2rem;
   text-align: center;
 
   &::placeholder {
@@ -36,6 +32,10 @@ export const StSearchInput = styled(StInput)`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+  }
+
+  &:focus {
+    background-color: #ffffff;
   }
 `;
 

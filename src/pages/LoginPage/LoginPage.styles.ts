@@ -9,13 +9,19 @@ export interface StLoginButtonProps {
 export const StLoginContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding: 25px;
+  padding: 104px 25px 25px;
+  margin: 0 auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
+  background-color: #ffffff;
+
+  @media screen and (min-width: 406px) {
+    padding: 126px 25px 25px;
+  }
 
   & > button:first-of-type {
     position: absolute;
@@ -35,7 +41,7 @@ export const StLogoWrapper = styled.div`
 
 export const StLoginButtonWrapper = styled.div`
   width: 100%;
-  padding: 0 20px;
+  max-width: 406px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -47,6 +53,10 @@ export const StLoginButtonWrapper = styled.div`
     background-color: #e2e2e2;
     border: 0;
     margin: 19px 0 13px;
+
+    @media ${(props) => props.theme.device.tablet} {
+      margin: 26px 0 12px;
+    }
   }
 
   & button {

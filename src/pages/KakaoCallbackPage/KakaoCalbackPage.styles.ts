@@ -3,6 +3,7 @@ import { theme } from 'style/theme';
 
 export const StLoginContainer = styled.div`
   ${theme.authLayout};
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;

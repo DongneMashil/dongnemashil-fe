@@ -28,6 +28,8 @@ export interface ReviewsList {
   id: number;
   roadName: string;
   mainImgUrl: string;
+  // middleMainImgUrl: string;
+  // smallMainImgUrl: string;
   profileImgUrl: string | null;
   createdAt: string;
   likeCnt: number;
