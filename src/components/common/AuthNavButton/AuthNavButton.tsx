@@ -8,14 +8,18 @@ export interface AuthNavButtonProps {
   type: 'exit' | 'back';
 }
 
-export const AuthNavButton = ({ type = 'back' }: AuthNavButtonProps) => {
-  const navigate = useNavigate();
-  const onClickHandler = () => {
-    navigate(-1);
-  };
-  return (
-    <StAuthNavButton type={type} onClick={onClickHandler}>
-      {type === 'exit' ? <XButton /> : <BackButton />}
-    </StAuthNavButton>
-  );
-};
+export const AuthNavButton = React.memo(
+  ({ type = 'back' }: AuthNavButtonProps) => {
+    const navigate = useNavigate();
+    const onClickHandler = () => {
+      navigate(-1);
+    };
+    return (
+      <StAuthNavButton type={type} onClick={onClickHandler}>
+        {type === 'exit' ? <XButton /> : <BackButton />}
+      </StAuthNavButton>
+    );
+  }
+);
+
+AuthNavButton.displayName = 'AuthNavButton';

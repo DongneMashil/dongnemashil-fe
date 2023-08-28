@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
 import { loginKakao } from 'api/loginApi';
-import { CommonLayout } from 'components/layout';
 import { Button, AuthNavButton } from 'components/common';
 import {
   StLoginContainer,
@@ -28,7 +27,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <CommonLayout>
+    <>
       <StLoginContainer>
         <AuthNavButton type="back" />
         <StLoginButtonWrapper>
@@ -53,6 +52,6 @@ export const LoginPage = () => {
           </Button>
         </StLoginButtonWrapper>
       </StLoginContainer>
-    </CommonLayout>
+    </>
   );
 };

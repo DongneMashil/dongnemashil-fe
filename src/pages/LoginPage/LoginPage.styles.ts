@@ -58,7 +58,7 @@ export const StLoginButtonWrapper = styled.div`
 `;
 
 export const StLoginTag = styled.span`
-  width: 131px;
+  width: 130px;
   height: 32px;
   background-image: url('${GuideBg}');
   background-size: contain;
