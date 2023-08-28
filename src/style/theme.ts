@@ -24,11 +24,13 @@ const maxSizes = {
   maxWidth: '390px',
   maxHeight: '850px',
 };
+
 const authLayout = css`
   width: 100%;
   height: 100%;
-  background-color: whiteColor;
-  padding: 43px 26px;
+  background-color: #ffffff;
+  padding: 43px 28px;
+  margin: 0 auto;
 `;
 
 const authButton = css`
@@ -40,6 +42,37 @@ const authButton = css`
   font-weight: 700;
   border-radius: 20px;
   position: relative;
+
+  @media screen and (max-width: ${size.tablet}) {
+    height: 47px;
+  }
+`;
+
+const getAuthViewPoint = (page: string) => {
+  switch (page) {
+    case 'commonLogin':
+      return '340px';
+    case 'register':
+      return '360px';
+    case 'login':
+      return '408px';
+    default:
+      return '768px';
+  }
+};
+
+// 반응형 최상위 컴포넌트 믹스인
+const responsiveLayout = css`
+  width: 100%;
+  height: 100%;
+`;
+
+// 반응형 콘텐츠 감싸는 컴포넌트 믹스인
+const responsiveContainer = css`
+  width: 100%;
+  height: 100%;
+  max-width: ${size.tablet};
+  margin: 0 auto;
 `;
 export const theme = {
   ...colors,
@@ -58,6 +91,9 @@ export const theme = {
     boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
     borderRadius: '0.8rem',
   },
+  getAuthViewPoint,
+  responsiveLayout,
+  responsiveContainer,
 };
 
 // 사용법
