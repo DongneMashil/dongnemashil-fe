@@ -1,4 +1,10 @@
-import React, { ChangeEvent, RefObject, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  RefObject,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   StContentBox,
   StTitle,
@@ -49,6 +55,11 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
     setContentByteSize(getStringByteSize(formValues.content));
   }, [formValues.content]);
 
+  const images = useMemo(
+    () => mediaFiles.map((file) => file.file),
+    [mediaFiles]
+  );
+
   return (
     <StFormWrapper>
       <StTitle
@@ -60,7 +71,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
       />
       <FileSlider
         files={mediaFiles}
-        images={mediaFiles.map((file) => file.file)}
+        images={images}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         onAddImage={onAddImage}

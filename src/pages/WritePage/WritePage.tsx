@@ -180,10 +180,10 @@ export const WritePage = () => {
     addressData,
   });
 
-  const determineIsCoverImage = (targetFile: MediaFileType) => {
+  const determineIsCoverImage = useCallback((targetFile: MediaFileType) => {
     const file = mediaFiles.find((file) => file.file === targetFile);
     return file ? file.isCover : false;
-  };
+  }, []);
 
   const onGoToWriteMapPageHandler = () => {
     if (reviewId) {
@@ -210,16 +210,16 @@ export const WritePage = () => {
         onGoToWriteMapPageHandler={onGoToWriteMapPageHandler}
       />
       <ReviewForm
-        formValues={hookFormValues}
-        onInputChange={onInputChange}
+        formValues={hookFormValues} //
+        onInputChange={onInputChange} //
         mediaFiles={mediaFiles}
         onFileChange={onFileChange}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        onAddImage={onButtonClick}
-        setCoverImage={setCoverImage}
-        onDeleteImage={onDeleteImage}
-        determineIsCoverImage={determineIsCoverImage}
+        onAddImage={onButtonClick} //
+        setCoverImage={setCoverImage} //
+        onDeleteImage={onDeleteImage} //
+        determineIsCoverImage={determineIsCoverImage} //
         fileInputRef={fileInputRef}
       />
       <Modal
