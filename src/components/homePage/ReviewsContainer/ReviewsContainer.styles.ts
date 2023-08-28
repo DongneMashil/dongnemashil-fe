@@ -1,7 +1,7 @@
 import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
-export const StReviewsContainer = styled.ul`
+export const StReviewsContainer = styled.div`
   width: 100%;
   padding: 0 15px;
   border-radius: 14px 14px 0 0;
@@ -30,8 +30,16 @@ export const StTopWrapper = styled.div`
 `;
 
 export const StThumbnailWrapper = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+
   & li:nth-last-child(2) {
     border-bottom: 0px;
+  }
+
+  @media ${theme.device.tablet} {
+    /* column-gap: 14px; */
+    justify-content: space-between;
   }
 `;
 

@@ -65,7 +65,6 @@ export const Thumbnail = ({
       <StThumbnailTitle>
         <StThumbnailTitleLeft>
           <img src={profileImgUrl || noUser} alt="프로필 이미지" />
-
           <StTitleText onClick={onClickThumbnail}>
             <Span size={'title'}>
               <strong>{roadName}</strong>
