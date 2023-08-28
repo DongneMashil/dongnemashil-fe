@@ -47,6 +47,19 @@ const authButton = css`
   }
 `;
 
+const getAuthViewPoint = (page: string) => {
+  switch (page) {
+    case 'commonLogin':
+      return '340px';
+    case 'register':
+      return '360px';
+    case 'login':
+      return '408px';
+    default:
+      return '768px';
+  }
+};
+
 export const theme = {
   ...colors,
   ...maxSizes,
@@ -64,6 +77,7 @@ export const theme = {
     boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
     borderRadius: '0.8rem',
   },
+  getAuthViewPoint,
 };
 
 // 사용법
