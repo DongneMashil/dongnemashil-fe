@@ -77,7 +77,7 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
   return (
     <StLayoutOuter>
       <StLayoutBody>
-        <StModalPotal id="modal"></StModalPotal>
+        <StModalPotal></StModalPotal>
         {header && <StSlidingHeader $isShow={isShow}>{header}</StSlidingHeader>}
         <StLayoutSection
           ref={scrollRef}

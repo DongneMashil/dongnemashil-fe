@@ -12,12 +12,3 @@ export const StLoginWrapper = styled.div`
 export const StErrorMsgBox = styled.div`
   margin: 4px 0 0;
 `;
-
-export const StInputLabel = styled.h4`
-  margin-top: 10px;
-`;
-
-export const StButtonWrapper = styled.div`
-  width: 100%;
-  padding: 0 22px;
-`;
