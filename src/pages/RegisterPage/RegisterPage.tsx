@@ -26,6 +26,7 @@ interface VerifyMsgProps {
 
 export const RegisterPage = React.memo(() => {
   const navigate = useNavigate();
+  // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [shouldVerify, setShouldVerify] = useState<boolean>(false);
   const [isNotDuplicated, setIsNotDuplicated] = useState({
     email: false,
@@ -211,33 +212,44 @@ export const RegisterPage = React.memo(() => {
         setPasswordVerifyMsg(newVeirfyMsg);
       }
     },
-    [passwordVerifyMsg]
+    [password, passwordVerifyMsg]
   );
 
-  const onSubmitHandler = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    registerMutate({
-      email,
-      nickname,
-      password,
-    });
-  }, []);
+  const onSubmitHandler = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      registerMutate({
+        email,
+        nickname,
+        password,
+      });
+    },
+    [email, nickname, password]
+  );
 
   const onConfirmIdHandler = useCallback(() => {
     if (email === '') {
+      // setIsModalOpen(true);
       window.alert('이메일을 입력한 뒤 실행해주세요.');
     } else if (emailMsg.isValid === false) {
-      window.alert('올바른 양식의 이메일을 입력해주세요.');
+      // setIsModalOpen(true);
+      window.alert('올바른 /양식의 이메일을 입력해주세요.');
     } else confirmIdMutate(email);
   }, [email]);
 
   const onConfirmNicknameHandler = useCallback(() => {
     if (nickname === '') {
+      // setIsModalOpen(true);
       window.alert('닉네임을 입력한 뒤 실행해주세요.');
     } else if (nicknameMsg.isValid === false) {
+      // setIsModalOpen(true);
       window.alert('올바른 양식의 닉네임을 입력해주세요.');
     } else confirmNicknameMutate(nickname);
   }, [nickname]);
+
+  // const onCloseModalHandler = useCallback(() => {
+  //   setIsModalOpen(false);
+  // }, []);
 
   useEffect(() => {
     if (data) {
@@ -247,93 +259,96 @@ export const RegisterPage = React.memo(() => {
   }, []);
 
   return (
-    <StLoginContainer>
-      <AuthNavButton type="exit" />
-      <AuthLogoBox />
-      <HeaderText type="h1">회원가입</HeaderText>
-      <StLoginWrapper>
-        <RegisterLabel>이메일</RegisterLabel>
-        <AuthInputBox
-          type="email"
-          name="email"
-          id="email"
-          value={email}
-          placeholder="이메일을 입력해주세요"
-          onChange={onEmailChangeHandler}
-          onClick={onConfirmIdHandler}
-          btnText="중복 확인"
+    <>
+      <StLoginContainer>
+        <AuthNavButton type="exit" />
+        <AuthLogoBox />
+        <HeaderText type="h1">회원가입</HeaderText>
+        <StLoginWrapper>
+          <RegisterLabel>이메일</RegisterLabel>
+          <AuthInputBox
+            type="email"
+            name="email"
+            id="email"
+            value={email}
+            placeholder="이메일을 입력해주세요"
+            onChange={onEmailChangeHandler}
+            onClick={onConfirmIdHandler}
+            btnText="중복 확인"
+          />
+          {emailMsg.msg && (
+            <StErrorMsgBox>
+              <AuthErrorMsg isValid={emailMsg.isValid}>
+                {emailMsg.msg}
+              </AuthErrorMsg>
+            </StErrorMsgBox>
+          )}
+          <RegisterLabel>닉네임</RegisterLabel>
+          <AuthInputBox
+            type="text"
+            name="nickname"
+            id="nickname"
+            value={nickname}
+            onChange={onNicknameChangeHandler}
+            placeholder="한글 또는 영문 대소문자 4자리 이상"
+            onClick={onConfirmNicknameHandler}
+            btnText="중복 확인"
+          />
+          {nicknameMsg.msg && (
+            <StErrorMsgBox>
+              <AuthErrorMsg isValid={nicknameMsg.isValid}>
+                {nicknameMsg.msg}
+              </AuthErrorMsg>
+            </StErrorMsgBox>
+          )}
+          <RegisterLabel>비밀번호</RegisterLabel>
+          <AuthInputBox
+            type="password"
+            name="password"
+            id="password"
+            value={password}
+            onChange={onPasswordChangeHandler}
+            placeholder="영문, 숫자, 특수문자(!@#$%^&*) 포함 8~15자리"
+          />
+          {passwordMsg.msg && (
+            <StErrorMsgBox>
+              <AuthErrorMsg isValid={passwordMsg.isValid}>
+                {passwordMsg.msg}
+              </AuthErrorMsg>
+            </StErrorMsgBox>
+          )}
+          <AuthInputBox
+            type="password"
+            name="passwordVerify"
+            id="passwordVerify"
+            value={passwordVerify}
+            onChange={onPasswordVerifyChangeHandler}
+            placeholder="비밀번호 확인"
+          />
+          {passwordVerifyMsg.msg && (
+            <StErrorMsgBox>
+              <AuthErrorMsg isValid={passwordVerifyMsg.isValid}>
+                {passwordVerifyMsg.msg}
+              </AuthErrorMsg>
+            </StErrorMsgBox>
+          )}
+        </StLoginWrapper>
+        <RegisterBtnWrapper
+          type="authNormal"
+          onClick={onSubmitHandler}
+          $active={
+            emailMsg.isValid &&
+            nicknameMsg.isValid &&
+            passwordMsg.isValid &&
+            passwordVerifyMsg.isValid &&
+            isNotDuplicated.email &&
+            isNotDuplicated.nickname
+          }
+          label="회원가입"
         />
-        {emailMsg.msg && (
-          <StErrorMsgBox>
-            <AuthErrorMsg isValid={emailMsg.isValid}>
-              {emailMsg.msg}
-            </AuthErrorMsg>
-          </StErrorMsgBox>
-        )}
-        <RegisterLabel>닉네임</RegisterLabel>
-        <AuthInputBox
-          type="text"
-          name="nickname"
-          id="nickname"
-          value={nickname}
-          onChange={onNicknameChangeHandler}
-          placeholder="한글 또는 영문 대소문자 4자리 이상"
-          onClick={onConfirmNicknameHandler}
-          btnText="중복 확인"
-        />
-        {nicknameMsg.msg && (
-          <StErrorMsgBox>
-            <AuthErrorMsg isValid={nicknameMsg.isValid}>
-              {nicknameMsg.msg}
-            </AuthErrorMsg>
-          </StErrorMsgBox>
-        )}
-        <RegisterLabel>비밀번호</RegisterLabel>
-        <AuthInputBox
-          type="password"
-          name="password"
-          id="password"
-          value={password}
-          onChange={onPasswordChangeHandler}
-          placeholder="영문, 숫자, 특수문자(!@#$%^&*) 포함 8~15자리"
-        />
-        {passwordMsg.msg && (
-          <StErrorMsgBox>
-            <AuthErrorMsg isValid={passwordMsg.isValid}>
-              {passwordMsg.msg}
-            </AuthErrorMsg>
-          </StErrorMsgBox>
-        )}
-        <AuthInputBox
-          type="password"
-          name="passwordVerify"
-          id="passwordVerify"
-          value={passwordVerify}
-          onChange={onPasswordVerifyChangeHandler}
-          placeholder="비밀번호 확인"
-        />
-        {passwordVerifyMsg.msg && (
-          <StErrorMsgBox>
-            <AuthErrorMsg isValid={passwordVerifyMsg.isValid}>
-              {passwordVerifyMsg.msg}
-            </AuthErrorMsg>
-          </StErrorMsgBox>
-        )}
-      </StLoginWrapper>
-      <RegisterBtnWrapper
-        type="authNormal"
-        onClick={onSubmitHandler}
-        $active={
-          emailMsg.isValid &&
-          nicknameMsg.isValid &&
-          passwordMsg.isValid &&
-          passwordVerifyMsg.isValid &&
-          isNotDuplicated.email &&
-          isNotDuplicated.nickname
-        }
-        label="회원가입"
-      />
-    </StLoginContainer>
+      </StLoginContainer>
+      {/* <Modal isOpen={true} onCloseHandler={onCloseModalHandler} title="메롱" /> */}
+    </>
   );
 });
 
