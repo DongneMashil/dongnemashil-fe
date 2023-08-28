@@ -9,7 +9,7 @@ export interface StLoginButtonProps {
 export const StLoginContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding: 25px;
+  padding: 104px 25px 25px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
