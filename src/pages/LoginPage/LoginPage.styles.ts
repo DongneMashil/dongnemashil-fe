@@ -16,6 +16,7 @@ export const StLoginContainer = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  background-color: #ffffff;
 
   & > button:first-of-type {
     position: absolute;
