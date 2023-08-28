@@ -118,6 +118,7 @@ export const StEmptyBox = styled.div`
   align-items: flex-end;
   justify-content: center;
   margin-top: 100px;
+  margin-bottom: 100px; // 높이 매우 낮아질때 반응형 적용 예정
 `;
 export const StRefBox = styled.div`
   height: 200px;

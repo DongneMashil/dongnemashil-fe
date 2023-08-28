@@ -1,5 +1,5 @@
 import { MyProfile, postProfile } from 'api/mypageApi';
-import { CommonLayout, NavBar } from 'components/layout';
+import { NavBar } from 'components/layout';
 import { useUpdateUserInfo } from 'hooks';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -161,23 +161,20 @@ export const MyProfilePage = () => {
   };
 
   return (
-    <CommonLayout
-      header={
-        <NavBar
-          btnLeft="back"
-          btnRight="submit"
-          onClickSubmit={onSubmitHandler}
-          onClickActive={validation.isValid}
-          modal={{
-            title: '알림',
-            firstLine: '닉네임을 중복확인 해주세요.',
-          }}
-        >
-          회원정보수정
-        </NavBar>
-      }
-      backgroundColor="#fff"
-    >
+    <>
+      {' '}
+      <NavBar
+        btnLeft="back"
+        btnRight="submit"
+        onClickSubmit={onSubmitHandler}
+        onClickActive={validation.isValid}
+        modal={{
+          title: '알림',
+          firstLine: '닉네임을 중복확인 해주세요.',
+        }}
+      >
+        회원정보수정
+      </NavBar>
       <StMyProfileContainer>
         <StProfileImage>
           <img src={imgUrl || noUser} alt="프로필 이미지" />
@@ -218,6 +215,6 @@ export const MyProfilePage = () => {
           </div>
         </StNickNameWrapper>
       </StMyProfileContainer>
-    </CommonLayout>
+    </>
   );
 };
