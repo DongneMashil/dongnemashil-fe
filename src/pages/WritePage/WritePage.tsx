@@ -37,6 +37,9 @@ export const StableNavigateContextProvider: React.FC<
   );
 };
 
+const ALLOWED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
+const ALLOWED_VIDEO_TYPES = ['video/mov', 'video/mp4'];
+
 const useStableNavigate = () => {
   const navigateRef = useContext(StableNavigateContext);
   if (!navigateRef || !navigateRef.current) {
@@ -70,6 +73,16 @@ export const WritePage = () => {
       const files = Array.from(e.target.files || []);
 
       const validFiles = files.filter((file) => {
+        if (
+          !ALLOWED_IMAGE_TYPES.includes(file.type) &&
+          !ALLOWED_VIDEO_TYPES.includes(file.type)
+        ) {
+          setModalMessage(
+            '파일 형식이 올바르지 않습니다. PNG, JPG, JPEG 이미지 또는 MOV, MP4 동영상만 업로드 가능합니다.'
+          );
+          setIsModalOpen(true);
+          return false;
+        }
         if (file.size > 100 * 1024 * 1024) {
           setModalMessage(
             `${file.name} 파일은 100MB를 초과하므로 업로드할 수 없습니다.`
