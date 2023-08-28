@@ -17,9 +17,8 @@ const colors = {
 };
 
 const size = {
-  mobile: '375px',
+  mobile: '358px',
   tablet: '768px',
-  desktop: '1000px',
 };
 const maxSizes = {
   maxWidth: '390px',
@@ -28,8 +27,9 @@ const maxSizes = {
 const authLayout = css`
   width: 100%;
   height: 100%;
-  background-color: whiteColor;
-  padding: 43px 26px;
+  background-color: #ffffff;
+  padding: 43px 28px;
+  margin: 0 auto;
 `;
 
 const authButton = css`
@@ -41,7 +41,24 @@ const authButton = css`
   font-weight: 700;
   border-radius: 20px;
   position: relative;
+
+  @media screen and (max-width: ${size.tablet}) {
+    height: 47px;
+  }
 `;
+
+const getAuthViewPoint = (page: string) => {
+  switch (page) {
+    case 'commonLogin':
+      return '340px';
+    case 'register':
+      return '360px';
+    case 'login':
+      return '408px';
+    default:
+      return '768px';
+  }
+};
 
 export const theme = {
   ...colors,
@@ -50,8 +67,8 @@ export const theme = {
   authButton,
   device: {
     mobile: `(max-width: ${size.mobile})`,
-    tablet: `(min-width: ${size.tablet}) and (max-width: ${size.desktop})`,
-    desktop: `(min-width: ${size.desktop})`,
+    tablet: `(min-width: ${size.mobile}) and (max-width: ${size.tablet})`,
+    desktop: `(min-width: ${size.tablet})`,
   },
   floatingBox: {
     width: '100%',
@@ -60,6 +77,7 @@ export const theme = {
     boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
     borderRadius: '0.8rem',
   },
+  getAuthViewPoint,
 };
 
 // 사용법

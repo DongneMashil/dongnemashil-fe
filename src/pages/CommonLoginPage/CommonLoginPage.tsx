@@ -6,7 +6,10 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { useVerifyUser } from 'hooks';
 import { LoginErrorMsgBox } from 'components/commonLoginPage/LoginErrorMsgBox/LoginErrorMsgBox';
-import { StCommonLoginLayout } from './CommonLoginPage.styles';
+import {
+  StCommonLoginLayout,
+  StCommonLoginContainer,
+} from './CommonLoginPage.styles';
 import { LoginBtnWrapper } from 'components/commonLoginPage/LoginBtnWrapper/LoginBtnWrapper';
 
 export const CommonLoginPage = () => {
@@ -56,9 +59,9 @@ export const CommonLoginPage = () => {
   }
   console.log('errmsg', errorMsg);
   return (
-    <>
-      <AuthNavButton type="exit" />
-      <StCommonLoginLayout>
+    <StCommonLoginLayout>
+      <AuthNavButton type="exit" page="commonLogin" />
+      <StCommonLoginContainer>
         <AuthLogoBox align="center" />
         <AuthInputBox
           type="email"
@@ -83,7 +86,7 @@ export const CommonLoginPage = () => {
           $active={email !== '' && password !== ''}
           label="로그인"
         />
-      </StCommonLoginLayout>
-    </>
+      </StCommonLoginContainer>
+    </StCommonLoginLayout>
   );
 };

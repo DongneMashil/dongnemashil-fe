@@ -29,7 +29,7 @@ export const LoginPage = () => {
   return (
     <>
       <StLoginContainer>
-        <AuthNavButton type="back" />
+        <AuthNavButton type="back" page="login" />
         <StLoginButtonWrapper>
           <StLogoWrapper>
             <LogoText />
