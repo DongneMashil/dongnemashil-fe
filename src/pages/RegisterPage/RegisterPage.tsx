@@ -264,7 +264,7 @@ export const RegisterPage = React.memo(() => {
   return (
     <>
       <StLoginContainer>
-        <AuthNavButton type="exit" />
+        <AuthNavButton type="exit" page="register" />
         <AuthLogoBox />
         <StLoginWrapper>
           <HeaderText type="h1">회원가입</HeaderText>

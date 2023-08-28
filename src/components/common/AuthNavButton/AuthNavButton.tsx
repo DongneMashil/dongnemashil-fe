@@ -6,16 +6,17 @@ import { ReactComponent as XButton } from 'assets/icons/XMark.svg';
 
 export interface AuthNavButtonProps {
   type: 'exit' | 'back';
+  page?: 'login' | 'register' | 'commonLogin';
 }
 
 export const AuthNavButton = React.memo(
-  ({ type = 'back' }: AuthNavButtonProps) => {
+  ({ type = 'back', page }: AuthNavButtonProps) => {
     const navigate = useNavigate();
     const onClickHandler = () => {
       navigate(-1);
     };
     return (
-      <StAuthNavButton type={type} onClick={onClickHandler}>
+      <StAuthNavButton type={type} page={page} onClick={onClickHandler}>
         {type === 'exit' ? <XButton /> : <BackButton />}
       </StAuthNavButton>
     );
