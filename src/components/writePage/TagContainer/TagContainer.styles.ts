@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import { ReactComponent as PurpleMarker } from 'assets/icons/PurpleMarker.svg';
 
 export const StTagContainer = styled.div`
   width: 100%;
@@ -7,6 +8,11 @@ export const StTagContainer = styled.div`
   background: #fff;
   box-sizing: border-box;
   padding: 0.1rem;
+  @media ${(props) => props.theme.device.desktop} {
+    display: flex;
+    justify-content: row;
+    padding: 1rem;
+  }
 `;
 
 export const StCurrentAddressWrapper = styled.div`
@@ -15,6 +21,15 @@ export const StCurrentAddressWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 0.88rem 1.54rem 0 1.54rem;
+  @media ${(props) => props.theme.device.desktop} {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    & > * {
+      display: flex;
+      flex-direction: column;
+    }
+  }
 `;
 
 export const StTotalTag = styled.p`
@@ -23,6 +38,9 @@ export const StTotalTag = styled.p`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  @media ${(props) => props.theme.device.desktop} {
+    margin-left: 0.8rem;
+  }
 `;
 
 export const StCurrentAddress = styled.span`
@@ -34,4 +52,17 @@ export const StCurrentAddress = styled.span`
   font-weight: 500;
   margin-left: 0.33rem;
   cursor: pointer;
+  @media ${(props) => props.theme.device.desktop} {
+    margin-left: 0.69rem;
+    margin-bottom: 0.19rem;
+  }
+`;
+
+export const StPurpleMarker = styled(PurpleMarker)`
+  @media ${(props) => props.theme.device.desktop} {
+    width: 1.5rem;
+    height: 2rem;
+    margin-left: 3.19rem;
+    margin-bottom: 0.25rem;
+  }
 `;
