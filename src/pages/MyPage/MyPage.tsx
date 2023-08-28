@@ -1,13 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { useQuery } from '@tanstack/react-query';
-import { useLogout, useVerifyUser } from 'hooks';
-import { MyProfile, getMyProfile } from 'api/mypageApi';
-import { userProfileSelector } from 'recoil/userExample';
+import { useLogout, useUpdateUserInfo } from 'hooks';
 import { TabMenu, UserInfo } from 'components/myPage';
 import { CommonLayout, FixFooter, NavBar } from 'components/layout';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import { ReactComponent as LogoutIcon } from 'assets/icons/Logout.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/CommentL.svg';
 import { StButton, StMyPageContainer } from './Mypage.styles';
@@ -19,14 +15,7 @@ export const MyPage = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   //유저정보 조회 및 업데이트
-  const { data: userData } = useVerifyUser(true);
-  const userState = useRecoilValue(userProfileSelector);
-  useEffect(() => {
-    console.log('current user state: ', userState);
-    if (userData) {
-      console.log('useVerifyUser data: ', userData);
-    }
-  }, [userState]);
+  const { data } = useUpdateUserInfo(true);
 
   //로그아웃
   const onLogoutHandler = useCallback(() => {
@@ -41,18 +30,21 @@ export const MyPage = () => {
   const navigateToProfileHandler = () => {
     navigate('/mypage/profile');
   };
-
-  //내 정보 조회
-  const { data } = useQuery<MyProfile, Error>({
-    queryKey: ['myPage', userData?.nickname],
-    queryFn: () => getMyProfile(),
-    onSuccess: (data) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.log('🔴' + error);
-    },
-  });
+  const closeModalHandler = () => {
+    setIsModalOpen(false);
+  };
+  const clickWriteHandler = () => {
+    navigate('/write');
+  };
+  const openLogoutModalHandler = () => {
+    setIsLogoutModalOpen(true);
+  };
+  const closeLogoutModalHandler = () => {
+    setIsLogoutModalOpen(false);
+  };
+  const clickMyCommentHandler = () => {
+    navigate('/mypage/comments');
+  };
 
   return (
     <CommonLayout
@@ -60,7 +52,7 @@ export const MyPage = () => {
         isModalOpen ? (
           <NavBar
             btnLeft="closeModal"
-            onClickLeft={() => setIsModalOpen(false)}
+            onClickLeft={closeModalHandler}
             btnRight="mypage"
           ></NavBar>
         ) : (
@@ -68,10 +60,7 @@ export const MyPage = () => {
         )
       }
       footer={
-        <FixFooter
-          onClickRight={() => navigate('/write')}
-          rightButtons="write"
-        />
+        <FixFooter onClickRight={clickWriteHandler} rightButtons="write" />
       }
       hideHeader={false}
       backgroundColor="#f5f5f5"
@@ -80,10 +69,7 @@ export const MyPage = () => {
         {isModalOpen ? (
           <>
             <p className="category">내 정보</p>
-            <StButton
-              onClick={() => navigate('/mypage/comments')}
-              aria-label="내가 쓴 댓글"
-            >
+            <StButton onClick={clickMyCommentHandler} aria-label="내가 쓴 댓글">
               <CommentIcon />
               <div className="title">내가 쓴 댓글</div>
             </StButton>
@@ -95,10 +81,7 @@ export const MyPage = () => {
               <div className="title">프로필 수정</div>
             </StButton>
             <p className="category">설정</p>
-            <StButton
-              onClick={() => setIsLogoutModalOpen(true)}
-              aria-label="로그아웃"
-            >
+            <StButton onClick={openLogoutModalHandler} aria-label="로그아웃">
               <LogoutIcon />
               <div className="title">로그아웃</div>
             </StButton>
@@ -107,8 +90,8 @@ export const MyPage = () => {
               onSubmitText="확인"
               title="로그아웃"
               firstLine="로그아웃 하시겠습니까?"
-              onSubmitHandler={() => onLogoutHandler()}
-              onCloseHandler={() => setIsLogoutModalOpen(false)}
+              onSubmitHandler={onLogoutHandler}
+              onCloseHandler={closeLogoutModalHandler}
             />
           </>
         ) : (
@@ -120,7 +103,7 @@ export const MyPage = () => {
               email={data?.email}
               setIsModalOpen={setIsModalOpen}
             />
-            <TabMenu nickName={userData?.nickname} />
+            <TabMenu nickName={data?.nickname} />
           </>
         )}
       </StMyPageContainer>

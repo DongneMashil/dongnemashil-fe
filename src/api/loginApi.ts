@@ -1,12 +1,12 @@
 import { AxiosResponse, AxiosError } from 'axios';
-import { axiosInstance } from './api';
+import { axiosInstance, retryConfig } from './api';
 
 export interface UserStateRes {
   email: string;
   nickname: string;
 }
 
-const tokenHandler = (accessToken: string, refreshToken?: string) => {
+export const tokenHandler = (accessToken: string, refreshToken?: string) => {
   // 토큰 로컬 스토리지에 저장
   window.localStorage.setItem('access_token', accessToken);
   if (refreshToken) {
@@ -15,8 +15,16 @@ const tokenHandler = (accessToken: string, refreshToken?: string) => {
 };
 
 export const setClientHeader = (accessToken: string) => {
-  axiosInstance.defaults.headers['Accesstoken'] = `Bearer%${accessToken}`;
+  axiosInstance.defaults.headers.common[
+    'Accesstoken'
+  ] = `Bearer%${accessToken}`;
   console.log('setting access token to header: ', `Bearer%${accessToken}`);
+};
+
+const resetHeader = () => {
+  window.localStorage.removeItem('access_token');
+  window.localStorage.removeItem('refresh_token');
+  axiosInstance.defaults.headers.common = {};
 };
 
 /** 카카오 로그인 */
@@ -155,31 +163,42 @@ export const verifyUser = () => {
   if (token) {
     setClientHeader(token);
   }
-  return axiosInstance.get(`/accesstoken`).then((response) => {
+  return axiosInstance.get(`/accesstoken`, retryConfig).then((response) => {
     return response.data;
   });
 };
 
 /** refresh token으로 access token 재발급 */
 export const getNewAccessToken = () => {
-  const refreshToken = `Bearer%${window.localStorage.getItem('refresh_token')}`;
-  console.log('setting refresh token to header', refreshToken);
-  axiosInstance.defaults.headers['Refreshtoken'] = refreshToken;
-  return axiosInstance.get(`/refreshtoken`).then((response) => {
-    // 새로 받은 액세스 토큰 넣어주기
-    const accessToken = response.headers['accesstoken'].replace('Bearer%', '');
-    tokenHandler(accessToken);
-    setClientHeader(accessToken);
-    console.log('Got new access token', response.data);
-    return response.data;
-  });
+  try {
+    const refreshToken = `Bearer%${window.localStorage.getItem(
+      'refresh_token'
+    )}`;
+    console.log('setting refresh token to header', refreshToken);
+    axiosInstance.defaults.headers.common['Refreshtoken'] = refreshToken;
+    return axiosInstance.get(`/refreshtoken`, retryConfig).then((response) => {
+      // 새로 받은 액세스 토큰 넣어주기
+      const accessToken = response.headers['accesstoken'].replace(
+        'Bearer%',
+        ''
+      );
+      tokenHandler(accessToken);
+      setClientHeader(accessToken);
+      console.log('Got new access token', response.data);
+      return response.data;
+    });
+  } catch (e: unknown) {
+    console.log(e);
+    resetHeader();
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data || e.message);
+    }
+    throw e;
+  }
 };
 
 /** logout */
 export const logout = () => {
-  // 클라이언트측 토큰 삭제
-  window.localStorage.removeItem('access_token');
-  window.localStorage.removeItem('refresh_token');
-
+  resetHeader();
   window.location.href = '/';
 };

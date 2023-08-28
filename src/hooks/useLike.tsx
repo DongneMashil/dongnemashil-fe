@@ -1,7 +1,7 @@
 import { postLikeOptimistic } from 'api/detailApi';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { userProfileSelector } from 'recoil/userExample';
+import { userProfileSelector } from 'recoil/userInfo';
 
 interface UseLikeProps {
   initialIsLiked: boolean;

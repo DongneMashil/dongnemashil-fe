@@ -1,5 +1,5 @@
 import React from 'react';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import { ReactComponent as ChevronRight } from 'assets/icons/ChevronRight.svg';
 import { StUserInfoContainer } from './UserInfo.styles';
 interface UserInfoProps {

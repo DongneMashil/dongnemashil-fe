@@ -1,7 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { MyProfile, getMyProfile } from 'api/mypageApi';
 import { Button } from 'components/common';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   StCenterWrapper,
   StLeftWrapper,
@@ -12,8 +10,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
 import { ReactComponent as ChevronLeft } from 'assets/icons/ChevronLeft.svg';
 import { ReactComponent as LogoHorizontal } from 'assets/logo/LogoHorizontal.svg';
-import noUser from 'assets/images/NoUser.gif';
-import { useVerifyUser } from 'hooks';
+import noUser from 'assets/images/NoUser.jpg';
+import { useUpdateUserInfo } from 'hooks';
 import { useRecoilState } from 'recoil';
 import { historyStackState } from 'recoil/historyStack/historyStack';
 
@@ -46,22 +44,7 @@ export const NavBar = ({
   modal,
   $isWritePage = false,
 }: NavBarProps) => {
-  const { data: userData } = useVerifyUser(true);
-  const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
-
-  const { data } = useQuery<MyProfile, Error>({
-    queryKey: ['myPage', userData?.nickname],
-    queryFn: () => getMyProfile(),
-    // enabled: !!userData?.nickname,
-    onSuccess: (data) => {
-      console.log(data);
-      setFileUrl(data.profileImgUrl);
-    },
-    onError: (error) => {
-      console.log('🔴' + error);
-    },
-  });
-  console.log(data);
+  const { data: userData } = useUpdateUserInfo(true);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -128,7 +111,7 @@ export const NavBar = ({
     ),
     mypage: userData ? (
       <Button type={'icon'} url={'/mypage'}>
-        <img src={fileUrl || noUser} fetchpriority="high" alt="프로필 이미지" />
+        <img src={userData.profileImgUrl || noUser} alt="프로필 이미지" />
       </Button>
     ) : (
       <Button type={'login'} url={'/login'}>

@@ -6,7 +6,7 @@ import {
   StFormWrapper,
 } from './ReviewForm.styles';
 import { FileSlider } from '../FileSlider/FileSlider';
-import { MediaFile, MediaFileType } from 'pages';
+import { MediaFile, MediaFileType } from 'recoil/mediaFile/mediaFileAtom';
 
 interface ReviewFormProps {
   formValues: {

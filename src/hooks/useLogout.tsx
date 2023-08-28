@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { logout } from 'api/loginApi';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { UserState, userProfileSelector } from 'recoil/userExample';
+import { UserState, userProfileSelector } from 'recoil/userInfo';
 
 /** 로그아웃 cusom hook
  * @param {boolean} shouldVerify - useQuery 실행 여부 제어하는 값 (default: true)
