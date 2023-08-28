@@ -7,6 +7,11 @@ export const StReviewsContainer = styled.div`
   border-radius: 14px 14px 0 0;
   background-color: ${theme.whiteColor};
   box-shadow: 0px -6px 6px 0px rgba(0, 0, 0, 0.03);
+
+  @media ${theme.device.tablet}, ${theme.device.desktop} {
+    max-width: 768px;
+    margin: 0 auto;
+  }
 `;
 
 export const StTarget = styled.div`
@@ -30,16 +35,19 @@ export const StTopWrapper = styled.div`
 `;
 
 export const StThumbnailWrapper = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: masonry;
+  gap: 14px;
 
-  & li:nth-last-child(2) {
+  & li:nth-last-child(1) {
     border-bottom: 0px;
   }
 
-  @media ${theme.device.tablet} {
+  @media ${theme.device.tablet}, ${theme.device.desktop} {
     /* column-gap: 14px; */
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
