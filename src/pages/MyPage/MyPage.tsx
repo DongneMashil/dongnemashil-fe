@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLogout, useUpdateUserInfo } from 'hooks';
 import { TabMenu, UserInfo } from 'components/myPage';
-import { CommonLayout, FixFooter, NavBar } from 'components/layout';
+import { FixFooter, NavBar } from 'components/layout';
 import noUser from 'assets/images/NoUser.jpg';
 import { ReactComponent as LogoutIcon } from 'assets/icons/Logout.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/CommentL.svg';
@@ -47,24 +47,16 @@ export const MyPage = () => {
   };
 
   return (
-    <CommonLayout
-      header={
-        isModalOpen ? (
-          <NavBar
-            btnLeft="closeModal"
-            onClickLeft={closeModalHandler}
-            btnRight="mypage"
-          ></NavBar>
-        ) : (
-          <NavBar btnLeft="logo" btnRight="mypage"></NavBar>
-        )
-      }
-      footer={
-        <FixFooter onClickRight={clickWriteHandler} rightButtons="write" />
-      }
-      hideHeader={false}
-      backgroundColor="#f5f5f5"
-    >
+    <>
+      {isModalOpen ? (
+        <NavBar
+          btnLeft="closeModal"
+          onClickLeft={closeModalHandler}
+          btnRight="mypage"
+        ></NavBar>
+      ) : (
+        <NavBar btnLeft="logo" btnRight="mypage"></NavBar>
+      )}
       <StMyPageContainer>
         {isModalOpen ? (
           <>
@@ -107,6 +99,7 @@ export const MyPage = () => {
           </>
         )}
       </StMyPageContainer>
-    </CommonLayout>
+      <FixFooter onClickRight={clickWriteHandler} rightButtons="write" />
+    </>
   );
 };
