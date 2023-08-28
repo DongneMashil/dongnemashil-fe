@@ -21,6 +21,8 @@ export const Thumbnail = ({
   id,
   roadName,
   mainImgUrl,
+  // middleMainImgUrl,
+  // smallMainImgUrl,
   profileImgUrl,
   createdAt,
   likeCnt: initialLikeCnt,
@@ -59,7 +61,13 @@ export const Thumbnail = ({
     <StThumbnail>
       <StThumnailMain onClick={onClickThumbnail} $imgRatio={imgRatio}>
         {mainImgUrl ? (
-          <img ref={imageRef} src={mainImgUrl} onLoad={handleImageLoad} />
+          <img
+            ref={imageRef}
+            src={mainImgUrl}
+            // srcSet={`${smallMainImgUrl} 1x, ${middleMainImgUrl}@2x 2x`}
+            onLoad={handleImageLoad}
+            alt="썸네일 이미지"
+          />
         ) : null}
       </StThumnailMain>
       <StThumbnailTitle>
