@@ -88,8 +88,9 @@ export const WritePage = () => {
             `${file.name} 파일은 100MB를 초과하므로 업로드할 수 없습니다.`
           );
           setIsModalOpen(true);
+          return false;
         }
-        return false;
+        return true;
       });
 
       if (mediaFiles.length + validFiles.length > 5) {

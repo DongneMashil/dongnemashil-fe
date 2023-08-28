@@ -17,9 +17,8 @@ const colors = {
 };
 
 const size = {
-  mobile: '375px',
+  mobile: '358px',
   tablet: '768px',
-  desktop: '1000px',
 };
 const maxSizes = {
   maxWidth: '390px',
@@ -42,7 +41,6 @@ const authButton = css`
   border-radius: 20px;
   position: relative;
 `;
-
 export const theme = {
   ...colors,
   ...maxSizes,
@@ -50,8 +48,8 @@ export const theme = {
   authButton,
   device: {
     mobile: `(max-width: ${size.mobile})`,
-    tablet: `(min-width: ${size.tablet}) and (max-width: ${size.desktop})`,
-    desktop: `(min-width: ${size.desktop})`,
+    tablet: `(min-width: ${size.mobile}) and (max-width: ${size.tablet})`,
+    desktop: `(min-width: ${size.tablet})`,
   },
   floatingBox: {
     width: '100%',
