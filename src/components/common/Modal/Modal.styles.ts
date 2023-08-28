@@ -77,9 +77,7 @@ export const StModalOverlay = styled.div`
   justify-content: center;
   align-items: center;
   width: 100vw;
-  /* max-width: 390px; // 최대 너비 -> 추후 반응형 적용 */
   height: 100vh;
-  /* max-height: 850px; // 최대 높이 -> 추후 반응형 적용 */
   position: fixed;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 9999;

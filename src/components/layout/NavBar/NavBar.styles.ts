@@ -1,12 +1,38 @@
 import styled, { css } from 'styled-components';
 import { theme } from 'style/theme';
 
+const blockHeader = css`
+  transform: translateY(0);
+`;
+
+const fixedHeader = css`
+  transform: translateY(0);
+`;
+
+const hiddenHeader = css`
+  transform: translateY(-100%);
+`;
+
 const basicNavBar = css`
   border-radius: 0px 0px 14px 14px;
 `;
 
-export const StNavBar = styled.div<{ $isWritePage?: boolean }>`
+export const StNavBar = styled.div<{
+  isNavBarVisible: boolean;
+  prevScrollY: number;
+  $isWritePage?: boolean;
+}>`
+  ${(props) =>
+    props.isNavBarVisible === false
+      ? hiddenHeader
+      : props.prevScrollY > 50
+      ? fixedHeader
+      : blockHeader};
   ${(props) => (props.$isWritePage ? null : basicNavBar)}
+  position: sticky;
+  top: 0;
+  will-change: transform;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,6 +41,7 @@ export const StNavBar = styled.div<{ $isWritePage?: boolean }>`
   padding: 0 10px;
   background: ${theme.whiteColor};
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s ease-in-out;
 
   > div {
     display: flex;
