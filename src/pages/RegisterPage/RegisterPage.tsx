@@ -18,6 +18,7 @@ import {
   StErrorMsgBox,
 } from './Registerpage.styles';
 import { RegisterBtnWrapper } from 'components/registerPage/RegisterBtnWrapper/RegisterBtnWrapper';
+import { Modal } from 'components/common';
 
 interface VerifyMsgProps {
   msg: string;
@@ -26,7 +27,8 @@ interface VerifyMsgProps {
 
 export const RegisterPage = React.memo(() => {
   const navigate = useNavigate();
-  // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalMsg, setModalMsg] = useState<string>('');
   const [shouldVerify, setShouldVerify] = useState<boolean>(false);
   const [isNotDuplicated, setIsNotDuplicated] = useState({
     email: false,
@@ -229,27 +231,28 @@ export const RegisterPage = React.memo(() => {
 
   const onConfirmIdHandler = useCallback(() => {
     if (email === '') {
-      // setIsModalOpen(true);
-      window.alert('이메일을 입력한 뒤 실행해주세요.');
+      onOpenModalHandler('이메일을 입력한 뒤 실행해주세요.');
     } else if (emailMsg.isValid === false) {
-      // setIsModalOpen(true);
-      window.alert('올바른 /양식의 이메일을 입력해주세요.');
+      onOpenModalHandler('올바른 /양식의 이메일을 입력해주세요.');
     } else confirmIdMutate(email);
   }, [email]);
 
   const onConfirmNicknameHandler = useCallback(() => {
     if (nickname === '') {
-      // setIsModalOpen(true);
-      window.alert('닉네임을 입력한 뒤 실행해주세요.');
+      onOpenModalHandler('닉네임을 입력한 뒤 실행해주세요.');
     } else if (nicknameMsg.isValid === false) {
-      // setIsModalOpen(true);
-      window.alert('올바른 양식의 닉네임을 입력해주세요.');
+      onOpenModalHandler('올바른 양식의 닉네임을 입력해주세요.');
     } else confirmNicknameMutate(nickname);
   }, [nickname]);
 
-  // const onCloseModalHandler = useCallback(() => {
-  //   setIsModalOpen(false);
-  // }, []);
+  const onCloseModalHandler = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
+
+  const onOpenModalHandler = (msg: string) => {
+    setModalMsg(msg);
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     if (data) {
@@ -347,7 +350,11 @@ export const RegisterPage = React.memo(() => {
           label="회원가입"
         />
       </StLoginContainer>
-      {/* <Modal isOpen={true} onCloseHandler={onCloseModalHandler} title="메롱" /> */}
+      <Modal
+        isOpen={isModalOpen}
+        onCloseHandler={onCloseModalHandler}
+        title={modalMsg}
+      />
     </>
   );
 });
