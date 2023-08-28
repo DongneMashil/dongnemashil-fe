@@ -18,6 +18,7 @@ import {
 import { MediaFileType } from 'recoil/mediaFile/mediaFileAtom';
 import imageCompression from 'browser-image-compression';
 import { Modal } from 'components/common';
+import { StLayout, StLayoutContainer } from './WritePagestyles';
 
 interface StableNavigateContextProviderProps {
   children: React.ReactNode;
@@ -214,7 +215,7 @@ export const WritePage = () => {
   };
 
   return (
-    <>
+    <StLayout>
       <NavBar
         btnLeft={'back'}
         btnRight={'submit'}
@@ -223,31 +224,33 @@ export const WritePage = () => {
       >
         {addressData.roadName}
       </NavBar>
-      <TagContainer
-        selectedTags={selectedTags}
-        handleTagChange={handleTagChange}
-        addressData={addressData}
-        onGoToWriteMapPageHandler={onGoToWriteMapPageHandler}
-      />
-      <ReviewForm
-        formValues={hookFormValues}
-        onInputChange={onInputChange}
-        mediaFiles={mediaFiles}
-        onFileChange={onFileChange}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        onAddImage={onButtonClick}
-        setCoverImage={setCoverImage}
-        onDeleteImage={onDeleteImage}
-        determineIsCoverImage={determineIsCoverImage}
-        fileInputRef={fileInputRef}
-      />
-      <Modal
-        isOpen={isModalOpen}
-        onCloseHandler={onCloseHandler}
-        title="알림"
-        firstLine={modalMessage}
-      />
-    </>
+      <StLayoutContainer>
+        <TagContainer
+          selectedTags={selectedTags}
+          handleTagChange={handleTagChange}
+          addressData={addressData}
+          onGoToWriteMapPageHandler={onGoToWriteMapPageHandler}
+        />
+        <ReviewForm
+          formValues={hookFormValues}
+          onInputChange={onInputChange}
+          mediaFiles={mediaFiles}
+          onFileChange={onFileChange}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          onAddImage={onButtonClick}
+          setCoverImage={setCoverImage}
+          onDeleteImage={onDeleteImage}
+          determineIsCoverImage={determineIsCoverImage}
+          fileInputRef={fileInputRef}
+        />
+        <Modal
+          isOpen={isModalOpen}
+          onCloseHandler={onCloseHandler}
+          title="알림"
+          firstLine={modalMessage}
+        />
+      </StLayoutContainer>
+    </StLayout>
   );
 };
