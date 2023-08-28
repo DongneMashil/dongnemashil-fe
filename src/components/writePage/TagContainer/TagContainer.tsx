@@ -1,10 +1,10 @@
 import React from 'react';
 import {
+  StCurrentAddress,
   StCurrentAddressWrapper,
   StTagContainer,
   StTotalTag,
 } from './TagContainer.styles';
-import { StCurrentAddress } from 'pages/WritePage/WritePage.styles';
 import { ToggleTagButton } from 'components/common';
 import { ReactComponent as PurpleMarker } from 'assets/icons/PurpleMarker.svg';
 

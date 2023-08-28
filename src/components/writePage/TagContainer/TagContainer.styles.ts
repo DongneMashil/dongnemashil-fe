@@ -24,3 +24,14 @@ export const StTotalTag = styled.p`
   font-weight: 400;
   line-height: normal;
 `;
+
+export const StCurrentAddress = styled.span`
+  width: 6.4rem;
+  height: 1.01rem;
+  color: #333;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-left: 0.33rem;
+  cursor: pointer;
+`;
