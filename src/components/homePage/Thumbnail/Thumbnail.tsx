@@ -20,9 +20,8 @@ import timeAgo from 'utils/timeAgo';
 export const Thumbnail = ({
   id,
   roadName,
-  mainImgUrl,
-  // middleMainImgUrl,
-  // smallMainImgUrl,
+  middleMainImgUrl,
+  smallMainImgUrl,
   profileImgUrl,
   createdAt,
   likeCnt: initialLikeCnt,
@@ -60,11 +59,11 @@ export const Thumbnail = ({
   return (
     <StThumbnail>
       <StThumnailMain onClick={onClickThumbnail} $imgRatio={imgRatio}>
-        {mainImgUrl ? (
+        {middleMainImgUrl ? (
           <img
             ref={imageRef}
-            src={mainImgUrl}
-            // srcSet={`${smallMainImgUrl} 1x, ${middleMainImgUrl}@2x 2x`}
+            src={middleMainImgUrl}
+            srcSet={`${smallMainImgUrl} 360w, ${middleMainImgUrl} 768w`}
             onLoad={handleImageLoad}
             alt="썸네일 이미지"
           />
@@ -73,7 +72,6 @@ export const Thumbnail = ({
       <StThumbnailTitle>
         <StThumbnailTitleLeft>
           <img src={profileImgUrl || noUser} alt="프로필 이미지" />
-
           <StTitleText onClick={onClickThumbnail}>
             <Span size={'title'}>
               <strong>{roadName}</strong>

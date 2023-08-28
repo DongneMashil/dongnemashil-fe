@@ -52,11 +52,17 @@ export const StNavBar = styled.div<{
 export const StCenterWrapper = styled.div`
   justify-content: center;
   flex: 1.2;
-  text-align: center;
+  overflow: hidden;
 
   h1 {
     font-size: 18px;
     font-weight: 700;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-all;
+    text-align: center;
 
     svg {
       margin-right: 4px;

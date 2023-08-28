@@ -5,7 +5,7 @@ import {
   sortTypeState,
 } from 'recoil/reviewsQuery/reviewsQuery';
 import { FixFooter, NavBar } from 'components/layout';
-import { ThumbnailWrapper } from 'components/homePage';
+import { ReviewsContainer } from 'components/homePage';
 import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
 import { useFetchReviews } from 'api/reviewsApi';
 
@@ -41,7 +41,7 @@ export const HomePage = () => {
         <h1>서울 전체</h1>
       </NavBar>
       <ToggleTagButton onTagChange={handleTagChange} />
-      <ThumbnailWrapper
+      <ReviewsContainer
         type={type}
         reviews={reviews}
         hasNextPage={hasNextPage}

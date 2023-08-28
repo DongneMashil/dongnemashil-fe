@@ -51,7 +51,6 @@ export const NavBar = ({
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      console.log(currentScrollY, prevScrollY);
 
       if (currentScrollY > prevScrollY) {
         setScrollDirection('down');
@@ -74,6 +73,7 @@ export const NavBar = ({
   const [historyStack, setHistoryStack] = useRecoilState(historyStackState);
 
   useEffect(() => {
+    console.log(historyStack);
     setHistoryStack([location.pathname, ...historyStack]);
     if (location.pathname === '/') {
       setHistoryStack([location.pathname]);
@@ -81,7 +81,7 @@ export const NavBar = ({
   }, [location.pathname]);
 
   const goBack = () => {
-    location.pathname === '/write' && historyStack[1] === '/writemap/search'
+    location.pathname === '/write' && historyStack[0] === '/writemap/search'
       ? navigate(-4)
       : location.pathname === '/write'
       ? navigate(-2)
