@@ -45,7 +45,14 @@ const Router = () => {
               <WritePage />
             </StableNavigateContextProvider>} />}
         /> */}
-        <Route path="/write/:id" element={<WritePage />} />
+        <Route
+          path="/write/:id"
+          element={
+            <StableNavigateContextProvider>
+              <WritePage />
+            </StableNavigateContextProvider>
+          }
+        />
         <Route
           path="/mypage"
           element={<ProtectedRoute element={<MyPage />} />}

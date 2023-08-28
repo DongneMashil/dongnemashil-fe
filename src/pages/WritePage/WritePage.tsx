@@ -6,7 +6,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-// import { StContentContainer } from './WritePage.styles';
 import { NavBar } from 'components/layout';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import {
@@ -18,6 +17,7 @@ import {
 } from 'components/writePage';
 import { MediaFileType } from 'recoil/mediaFile/mediaFileAtom';
 import imageCompression from 'browser-image-compression';
+import { Modal } from 'components/common';
 
 interface StableNavigateContextProviderProps {
   children: React.ReactNode;
@@ -48,6 +48,9 @@ const useStableNavigate = () => {
 export const WritePage = () => {
   const navigate = useStableNavigate();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
   const [currentPage, setCurrentPage] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const {
@@ -68,14 +71,17 @@ export const WritePage = () => {
 
       const validFiles = files.filter((file) => {
         if (file.size > 100 * 1024 * 1024) {
-          alert(`${file.name} 파일은 100MB를 초과하므로 업로드할 수 없습니다.`);
-          return false;
+          setModalMessage(
+            `${file.name} 파일은 100MB를 초과하므로 업로드할 수 없습니다.`
+          );
+          setIsModalOpen(true);
         }
         return true;
       });
 
       if (mediaFiles.length + validFiles.length > 5) {
-        alert('이미지와 동영상의 합은 최대 5개까지 가능합니다.');
+        setModalMessage('이미지와 동영상의 합은 최대 5개까지 가능합니다.');
+        setIsModalOpen(true);
         return;
       }
 
@@ -84,7 +90,8 @@ export const WritePage = () => {
           validFiles.filter((file) => file.type.startsWith('video/')).length >
         1
       ) {
-        alert('동영상은 한개만 가능합니다.');
+        setModalMessage('동영상은 한개만 가능합니다.');
+        setIsModalOpen(true);
         return;
       }
 
@@ -196,7 +203,6 @@ export const WritePage = () => {
       >
         {addressData.roadName}
       </NavBar>
-      {/* <StContentContainer> */}
       <TagContainer
         selectedTags={selectedTags}
         handleTagChange={handleTagChange}
@@ -216,7 +222,12 @@ export const WritePage = () => {
         determineIsCoverImage={determineIsCoverImage}
         fileInputRef={fileInputRef}
       />
-      {/* </StContentContainer> */}
+      <Modal
+        isOpen={isModalOpen}
+        onCloseHandler={() => setIsModalOpen(false)}
+        title="알림"
+        firstLine={modalMessage}
+      />
     </>
   );
 };
