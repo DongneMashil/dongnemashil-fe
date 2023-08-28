@@ -6,6 +6,7 @@ import {
   StInputWrapper,
   StMarker,
   StPostButton,
+  StTablet,
   StWirteMapContainer,
 } from './WriteMapPage.styles.ts';
 import { Geolocation } from 'components/mapWritePage';
@@ -52,13 +53,15 @@ export const WriteMapPage = () => {
         <StCurrentLocationTitle>
           산책 지점을 먼저 선택해주세요!
         </StCurrentLocationTitle>
-        <StInputWrapper>
-          <StMarker />
-          <StCurrentLocationText onClick={onGoWriteMapSearchPageHandler}>
-            현위치: {addressData.fullAddress}
-          </StCurrentLocationText>
-        </StInputWrapper>
-        <StPostButton onClick={onGoWritePageHandler}>글 작성</StPostButton>
+        <StTablet>
+          <StInputWrapper>
+            <StMarker />
+            <StCurrentLocationText onClick={onGoWriteMapSearchPageHandler}>
+              현위치: {addressData.fullAddress}
+            </StCurrentLocationText>
+          </StInputWrapper>
+          <StPostButton onClick={onGoWritePageHandler}>글 작성</StPostButton>
+        </StTablet>
       </StCurrentLocationContainer>
       <Geolocation
         selectedAddress={selectedAddress}

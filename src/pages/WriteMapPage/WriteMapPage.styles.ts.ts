@@ -25,6 +25,9 @@ export const StCurrentLocationContainer = styled.div`
   background-color: #fff;
   padding-top: 1.37rem;
   padding-left: 1.5rem;
+  @media ${(props) => props.theme.device.desktop} {
+    height: 12.1rem;
+  }
 `;
 
 export const StCurrentLocationTitle = styled.span`
@@ -36,10 +39,23 @@ export const StCurrentLocationTitle = styled.span`
   margin-bottom: 1.4rem;
 `;
 
+export const StTablet = styled.div`
+  width: 100%;
+  @media ${(props) => props.theme.device.desktop} {
+    display: flex;
+    flex-direction: row;
+  }
+`;
+
 export const StInputWrapper = styled.div`
   width: 90%;
   height: 2rem;
   border-bottom: 1px solid #dbdbdb;
+  @media ${(props) => props.theme.device.desktop} {
+    width: 22.4375rem;
+    height: 3.625rem;
+    border-radius: 1.88rem;
+  }
 `;
 
 export const StMarker = styled(MarkerIcon)`
@@ -71,4 +87,10 @@ export const StPostButton = styled.button`
   font-size: 1.125rem;
   font-style: normal;
   font-weight: 700;
+  @media ${(props) => props.theme.device.desktop} {
+    width: 11.5rem;
+    height: 3.625rem;
+    border-radius: 1.88rem;
+    margin: 4.64rem 6rem 3.81rem;
+  }
 `;

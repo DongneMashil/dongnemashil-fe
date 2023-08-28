@@ -2,6 +2,8 @@ import { NavBar } from 'components/layout';
 import React, { ChangeEvent, useState } from 'react';
 import {
   StChooseButton,
+  StLayout,
+  StLayoutContainer,
   StMarker,
   StPlaceName,
   StRoadBox,
@@ -80,46 +82,48 @@ export const WriteMapSearchPage = () => {
   };
 
   return (
-    <>
+    <StLayout>
       <NavBar btnLeft={'back'} btnRight={null}>
         위치 검색
       </NavBar>
-      <StSearchWrapper>
-        <StSearchBox>
-          <StMarker />
-          <StSearchInput
-            value={search}
-            type="text"
-            placeholder="주소"
-            onChange={onInputChangeHandler}
-          />
-        </StSearchBox>
-        <StSeacrhResultWrapper>
-          {responseData?.documents.map((result: Document, index: number) => (
-            <StSearchResult key={index}>
-              <StRoadBox>
-                <StPlaceName>
-                  {highlightSearchText(result.place_name || '', search)}
-                </StPlaceName>
-                <StRoadName>
-                  {result.road_address_name || result.address_name}
-                </StRoadName>
-              </StRoadBox>
-              <StChooseButton
-                onClick={() =>
-                  onSelectAddressHandler(
-                    result.road_address_name || result.address_name
-                  )
-                }
-              >
-                선택
-              </StChooseButton>
-              {isError && <div>Error: {(error as Error).message}</div>}
-              {isLoading && <div>Loading...</div>}
-            </StSearchResult>
-          ))}
-        </StSeacrhResultWrapper>
-      </StSearchWrapper>
-    </>
+      <StLayoutContainer>
+        <StSearchWrapper>
+          <StSearchBox>
+            <StMarker />
+            <StSearchInput
+              value={search}
+              type="text"
+              placeholder="주소"
+              onChange={onInputChangeHandler}
+            />
+          </StSearchBox>
+          <StSeacrhResultWrapper>
+            {responseData?.documents.map((result: Document, index: number) => (
+              <StSearchResult key={index}>
+                <StRoadBox>
+                  <StPlaceName>
+                    {highlightSearchText(result.place_name || '', search)}
+                  </StPlaceName>
+                  <StRoadName>
+                    {result.road_address_name || result.address_name}
+                  </StRoadName>
+                </StRoadBox>
+                <StChooseButton
+                  onClick={() =>
+                    onSelectAddressHandler(
+                      result.road_address_name || result.address_name
+                    )
+                  }
+                >
+                  선택
+                </StChooseButton>
+                {isError && <div>Error: {(error as Error).message}</div>}
+                {isLoading && <div>Loading...</div>}
+              </StSearchResult>
+            ))}
+          </StSeacrhResultWrapper>
+        </StSearchWrapper>
+      </StLayoutContainer>
+    </StLayout>
   );
 };
