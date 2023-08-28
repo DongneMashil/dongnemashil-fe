@@ -4,11 +4,12 @@ import { Thumbnail } from '../Thumbnail/Thumbnail';
 import {
   StLine,
   StNoReviews,
+  StReviewsContainer,
   StSort,
   StTarget,
   StThumbnailWrapper,
   StTopWrapper,
-} from './ThumbnailWrapper.styles';
+} from './ReviewsContainer.styles';
 import { useIntersect } from 'hooks/useIntersect';
 import { Button } from 'components/common';
 import { ReviewsList } from 'api/reviewsApi';
@@ -24,7 +25,7 @@ export interface ReviewsProps {
   totalElements?: number | null;
 }
 
-export const ThumbnailWrapper = ({
+export const ReviewsContainer = ({
   type,
   reviews,
   hasNextPage,
@@ -46,7 +47,7 @@ export const ThumbnailWrapper = ({
   );
 
   return (
-    <StThumbnailWrapper>
+    <StReviewsContainer>
       <StTopWrapper>
         {totalElements && totalElements !== 0 ? (
           <span>
@@ -75,18 +76,20 @@ export const ThumbnailWrapper = ({
       {!isFetching && reviews.length === 0 ? (
         <StNoReviews>검색된 글이 없습니다.</StNoReviews>
       ) : (
-        reviews?.map((review) => (
-          <Thumbnail
-            key={review.id}
-            id={review.id}
-            roadName={review.roadName}
-            mainImgUrl={review.mainImgUrl}
-            profileImgUrl={review.profileImgUrl}
-            createdAt={review.createdAt}
-            likeCnt={review.likeCnt}
-            likebool={review.likebool}
-          />
-        ))
+        <StThumbnailWrapper>
+          {reviews?.map((review) => (
+            <Thumbnail
+              key={review.id}
+              id={review.id}
+              roadName={review.roadName}
+              mainImgUrl={review.mainImgUrl}
+              profileImgUrl={review.profileImgUrl}
+              createdAt={review.createdAt}
+              likeCnt={review.likeCnt}
+              likebool={review.likebool}
+            />
+          ))}
+        </StThumbnailWrapper>
       )}
       {isFetching && (
         <StNoReviews>
@@ -94,6 +97,6 @@ export const ThumbnailWrapper = ({
         </StNoReviews>
       )}
       <StTarget ref={ref} />
-    </StThumbnailWrapper>
+    </StReviewsContainer>
   );
 };

@@ -7,7 +7,7 @@ import {
   StSlidingHeader,
 } from './CommonLayout.styles';
 import { FloatingFooter } from './components/FloatingFooter/FloatingFooter';
-import { StTarget } from 'components/homePage/ThumbnailWrapper/ThumbnailWrapper.styles';
+import { StTarget } from 'components/homePage/ReviewsContainer/ReviewsContainer.styles';
 
 interface CommonLayoutProps {
   children: React.ReactNode;

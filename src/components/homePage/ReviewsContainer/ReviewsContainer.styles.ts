@@ -1,16 +1,12 @@
 import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
-export const StThumbnailWrapper = styled.ul`
+export const StReviewsContainer = styled.ul`
   width: 100%;
   padding: 0 15px;
   border-radius: 14px 14px 0 0;
   background-color: ${theme.whiteColor};
   box-shadow: 0px -6px 6px 0px rgba(0, 0, 0, 0.03);
-
-  & li:nth-last-child(2) {
-    border-bottom: 0px;
-  }
 `;
 
 export const StTarget = styled.div`
@@ -30,6 +26,12 @@ export const StTopWrapper = styled.div`
     & strong {
       font-weight: 600;
     }
+  }
+`;
+
+export const StThumbnailWrapper = styled.ul`
+  & li:nth-last-child(2) {
+    border-bottom: 0px;
   }
 `;
 
