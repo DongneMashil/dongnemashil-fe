@@ -1,6 +1,10 @@
 import { styled } from 'styled-components';
 
 export const StFooterContatiner = styled.footer<{ $isCommentOpen: boolean }>`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+
   z-index: 100;
   border-radius: 0.875rem 0.875rem 0rem 0rem;
 
@@ -23,8 +27,9 @@ export const StFooterButtonWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  padding-right: 10px;
+  padding: 0 10px;
   width: 100%;
+  max-width: 768px; //theme프로바이더로 빼기
 `;
 export const StLike = styled.div`
   gap: 0.5rem;

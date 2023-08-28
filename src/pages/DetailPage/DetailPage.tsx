@@ -10,6 +10,7 @@ import { NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
 import { FooterSpacer, Modal, Tag } from 'components/common';
 import {
+  StContentGridBox,
   StCreatedTime,
   StDetailPageContainer,
   StDetailPageContent,
@@ -142,33 +143,35 @@ export const DetailPage = () => {
                 </StDetailPageHeader>
                 <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>
                 <StDetailPageContent>
-                  <img
-                    className="detailimg"
-                    src={data.mainImgUrl || noImage}
-                    alt={`${data.address}의 메인 사진`}
-                  />
-                  {data.subImgUrl.map((img, index) =>
-                    img !== '' ? (
-                      <img
-                        key={index}
-                        src={img}
-                        alt={`${data.address}의 ${index}번째 서브 사진`}
-                      />
-                    ) : null
-                  )}
-
-                  {data.videoUrl && (
-                    <StVideoPlayerBox>
-                      {/* <VideoPlayer videoUrl={data.videoUrl} /> */}
-                      <video
-                        controls
-                        width={'100%'}
-                        height={'100%'}
-                        src={data.videoUrl}
-                        aria-label={`${data.address}의 비디오`}
-                      />
-                    </StVideoPlayerBox>
-                  )}
+                  <StContentGridBox>
+                    {' '}
+                    <img
+                      className="detailimg"
+                      src={data.mainImgUrl || noImage}
+                      alt={`${data.address}의 메인 사진`}
+                    />
+                    {data.subImgUrl.map((img, index) =>
+                      img !== '' ? (
+                        <img
+                          key={index}
+                          src={img}
+                          alt={`${data.address}의 ${index}번째 서브 사진`}
+                        />
+                      ) : null
+                    )}
+                    {data.videoUrl && (
+                      <StVideoPlayerBox>
+                        {/* <VideoPlayer videoUrl={data.videoUrl} /> */}
+                        <video
+                          controls
+                          width={'100%'}
+                          height={'100%'}
+                          src={data.videoUrl}
+                          aria-label={`${data.address}의 비디오`}
+                        />
+                      </StVideoPlayerBox>
+                    )}
+                  </StContentGridBox>
 
                   <p className="content" aria-label="본문">
                     {data.content}

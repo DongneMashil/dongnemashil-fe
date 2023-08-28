@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import React from 'react';
 import Marker from 'assets/icons/Marker.svg';
-import { StMapLoadingSpinner, StMyLocationButton } from './DetailMap.styles';
+import {
+  StMapContainer,
+  StMapLoadingSpinner,
+  StMyLocationButton,
+} from './DetailMap.styles';
 import { LocationButton } from 'components/common';
 
 interface DetailMapProps {
@@ -169,7 +173,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
   }, [showCurrentLocation]);
 
   return (
-    <div style={{ position: 'relative', width, height }}>
+    <StMapContainer>
       <div id="map" style={{ width, height }}></div>
       {isLoading ? (
         <StMapLoadingSpinner />
@@ -182,6 +186,6 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
           </StMyLocationButton>
         )
       )}
-    </div>
+    </StMapContainer>
   );
 };
