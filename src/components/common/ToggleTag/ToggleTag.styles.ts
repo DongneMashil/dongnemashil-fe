@@ -1,3 +1,4 @@
+import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StTagWrapper = styled.section`
@@ -7,8 +8,6 @@ export const StTagWrapper = styled.section`
   display: flex;
   align-items: start;
   flex-direction: column;
-  width: fit-content;
-  margin: 0 auto;
 
   &::-webkit-scrollbar {
     display: none; /* 크롬, 사파리, 오페라, 엣지 */
@@ -26,5 +25,9 @@ export const StTagWrapper = styled.section`
     &:nth-child(1) {
       margin-bottom: 12px;
     }
+  }
+  @media ${theme.device.desktop} {
+    width: fit-content;
+    margin: 0 auto;
   }
 `;
