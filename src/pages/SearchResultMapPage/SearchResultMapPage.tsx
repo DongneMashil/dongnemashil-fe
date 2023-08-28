@@ -113,7 +113,7 @@ export const SearchResultMapPage = ({
             position: coord,
             content: `<div style="background-image: url(${Tooltip}); width: 192px; height: 208px; padding: 10px 14px 34px;">
             <a href="/review/${data.id}" style="display: block; position: relative; width:164px; height: 164px; border-radius: 12px; overflow: hidden;">
-            <img src='${data.mainImgUrl}' style="position: absolute; top: 0; left: 0; transform: translate(50, 50); width: 100%; height: 100%; object-fit: cover; margin: auto;"/>
+            <img src='${data.smallMainImgUrl}' style="position: absolute; top: 0; left: 0; transform: translate(50, 50); width: 100%; height: 100%; object-fit: cover; margin: auto;"/>
             </a>
             </div>`,
             xAnchor: 0.495,

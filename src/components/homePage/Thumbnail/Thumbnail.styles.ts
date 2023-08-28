@@ -5,6 +5,8 @@ export const StThumbnail = styled.li`
   display: flex;
   flex-direction: column;
 
+  width: 100%;
+
   padding: 26px 0 8px;
   border-bottom: 1px solid ${theme.whiteGrayColor};
 `;
