@@ -7,9 +7,9 @@ import {
 import { FixFooter, NavBar } from 'components/layout';
 import { useFetchReviews } from 'api/reviewsApi';
 import { SearchResultMapPage } from 'pages/SearchResultMapPage/SearchResultMapPage';
-import { SearchResultListPage } from 'pages/SearchResultListPage/SearchResultListPage';
 import { useLocation } from 'react-router-dom';
 import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
+import { ReviewsContainer } from 'components/homePage';
 
 export const SearchResultPage = () => {
   const location = useLocation();
@@ -71,7 +71,7 @@ export const SearchResultPage = () => {
         <h1>{q}</h1>
       </NavBar>
       <ToggleTagButton onTagChange={handleTagChange} />
-      <SearchResultListPage
+      <ReviewsContainer
         type={type}
         reviews={reviews}
         hasNextPage={hasNextPage}
