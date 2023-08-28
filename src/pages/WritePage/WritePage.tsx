@@ -178,6 +178,8 @@ export const WritePage = () => {
     mediaFiles: mediaFiles,
     selectedTags,
     addressData,
+    setIsModalOpen,
+    setModalMessage,
   });
 
   const determineIsCoverImage = useCallback((targetFile: MediaFileType) => {
@@ -191,6 +193,10 @@ export const WritePage = () => {
     } else {
       navigate('/writemap');
     }
+  };
+
+  const onCloseHandler = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -224,7 +230,7 @@ export const WritePage = () => {
       />
       <Modal
         isOpen={isModalOpen}
-        onCloseHandler={() => setIsModalOpen(false)}
+        onCloseHandler={onCloseHandler}
         title="알림"
         firstLine={modalMessage}
       />

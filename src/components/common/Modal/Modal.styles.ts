@@ -82,6 +82,7 @@ export const StModalOverlay = styled.div`
   /* max-height: 850px; // 최대 높이 -> 추후 반응형 적용 */
   position: fixed;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
 `;
 
 export const StModalWindow = styled.div`
