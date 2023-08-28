@@ -24,6 +24,7 @@ const maxSizes = {
   maxWidth: '390px',
   maxHeight: '850px',
 };
+
 const authLayout = css`
   width: 100%;
   height: 100%;
@@ -60,6 +61,20 @@ const getAuthViewPoint = (page: string) => {
   }
 };
 
+// 반응형 최상위 컴포넌트 믹스인
+const responsiveLayout = css`
+  width: 100%;
+  height: 100%;
+`;
+
+// 반응형 콘텐츠 감싸는 컴포넌트 믹스인
+const responsiveContainer = css`
+  width: 100%;
+  height: 100%;
+  max-width: ${size.tablet};
+  margin: 0 auto;
+`;
+
 export const theme = {
   ...colors,
   ...maxSizes,
@@ -78,6 +93,8 @@ export const theme = {
     borderRadius: '0.8rem',
   },
   getAuthViewPoint,
+  responsiveLayout,
+  responsiveContainer,
 };
 
 // 사용법
