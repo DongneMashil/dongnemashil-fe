@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { UserStateRes, confirmNickname } from 'api/loginApi';
 import { AuthInputBox } from 'components/common';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 interface ProfileNicknameCheckProps {
   nickname: string | undefined;
@@ -10,7 +10,7 @@ interface ProfileNicknameCheckProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const ProfileNicknameCheck: React.FC<ProfileNicknameCheckProps> = ({
+const ProfileNicknameCheckComponent: React.FC<ProfileNicknameCheckProps> = ({
   nickname,
   userData,
   onValid,
@@ -35,7 +35,7 @@ export const ProfileNicknameCheck: React.FC<ProfileNicknameCheckProps> = ({
     },
   });
 
-  const onDuplicateCheckHandler = async () => {
+  const onDuplicateCheckHandler = useCallback(async () => {
     if (!nickname) {
       window.alert('닉네임을 입력한 뒤 실행해주세요.');
     } else if (userData?.nickname === nickname) {
@@ -43,15 +43,18 @@ export const ProfileNicknameCheck: React.FC<ProfileNicknameCheckProps> = ({
     } else if (nickname) {
       confirmNicknameMutate(nickname);
     }
-  };
+  }, [nickname, userData, confirmNicknameMutate]);
 
-  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // 닉네임이 변경될 때마다 중복 확인 메시지 초기화
-    onValid(false, '');
+  const handleNicknameChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      // 닉네임이 변경될 때마다 중복 확인 메시지 초기화
+      onValid(false, '');
 
-    // 부모 컴포넌트에서 제공된 onChange 함수 호출
-    onChange(e);
-  };
+      // 부모 컴포넌트에서 제공된 onChange 함수 호출
+      onChange(e);
+    },
+    []
+  );
 
   return (
     <AuthInputBox
@@ -66,3 +69,5 @@ export const ProfileNicknameCheck: React.FC<ProfileNicknameCheckProps> = ({
     />
   );
 };
+export const ProfileNicknameCheck = React.memo(ProfileNicknameCheckComponent);
+ProfileNicknameCheck.displayName = 'ProfileNicknameCheck';

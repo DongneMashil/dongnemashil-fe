@@ -1,9 +1,9 @@
 import { MyProfile, postProfile } from 'api/mypageApi';
-import { CommonLayout, NavBar } from 'components/layout';
+import { NavBar } from 'components/layout';
 import { useUpdateUserInfo } from 'hooks';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { userProfileSelector } from 'recoil/userInfo';
+import { userIdSelector, userProfileSelector } from 'recoil/userInfo';
 import noUser from 'assets/images/NoUser.jpg';
 import { AuthErrorMsg, Modal } from 'components/common';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +27,15 @@ export const MyProfilePage = () => {
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState(''); // 에러 메시지를 저장하는 상태
   const [doneMsg, setDoneMsg] = useState(''); // 완료 메시지를 저장하는 상태
+  const [imgFile, setImgFile] = useState<File | null>(null); //이미지 파일
+  const [imgUrl, setImgUrl] = useState<string | null | undefined>(null); //이미지 url
+  const [nickname, setNickname] = useState<string>(''); //닉네임
+  const [validation, setValidation] = useState<{
+    isValid: boolean;
+    msg: string;
+  }>({ isValid: true, msg: '' }); //닉네임 유효성 여부
   const [cropModal, setCropModal] = useState(false);
+  const userID = useRecoilValue(userIdSelector);
   //유저정보 조회 및 업데이트
 
   const { isSuccess, data } = useUpdateUserInfo(true);
@@ -36,26 +44,6 @@ export const MyProfilePage = () => {
   // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
 
   //---------------------------------------------
-  const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
-  const [postData, setPostData] = useState<{
-    nickname?: string;
-    imgFile?: File | null;
-    validation: {
-      isValid: boolean;
-      isVerified: boolean;
-      msg: string;
-      alertMsg: string;
-    };
-  }>({
-    nickname: data?.nickname,
-    imgFile: null,
-    validation: {
-      isValid: true,
-      isVerified: false,
-      msg: '',
-      alertMsg: '',
-    },
-  });
 
   const getProfileImg = async (data: MyProfile) => {
     //
@@ -72,33 +60,26 @@ export const MyProfilePage = () => {
       const extension = getExtensionName(data.profileImgUrl!);
       const finalFilename = 'prev.' + extension;
       const prevImage = new File([blob], finalFilename, { type: blob.type });
-      setPostData((prev) => ({
-        ...prev,
-        imgFile: prevImage,
-        nickname: data.nickname,
-      }));
+      setImgFile(prevImage);
+      setNickname(data.nickname);
     } catch (error) {
-      setFileUrl(DefaultImage); //이미지 다운로드 실패시 기본 이미지 삽입
+      setImgUrl(DefaultImage); //이미지 다운로드 실패시 기본 이미지 삽입
       console.log('✨defalultImage: ' + DefaultImage);
-      console.log('✨setfileUrl: ' + fileUrl);
+      console.log('✨setimgUrl: ' + imgUrl);
 
       const defaultBlob = base64ToBlob(DefaultImage, 'image/jpg');
-      // const defaultBlob = new Blob([DefaultImage], { type: 'image/jpg' });
       const defaultFile = new File([defaultBlob], 'default.jpg', {
         type: 'image/jpg',
       });
 
-      setPostData((prev) => ({
-        ...prev,
-        imgFile: defaultFile,
-        nickname: data.nickname,
-      }));
+      setImgFile(defaultFile);
+      setNickname(data.nickname);
       console.error('이미지 다운로드 실패해서 기본 이미지 삽입:', error);
     }
   };
   useEffect(() => {
     if (isSuccess) {
-      setFileUrl(data.profileImgUrl);
+      setImgUrl(data.profileImgUrl);
       getProfileImg(data);
     }
   }, []); //이걸 안하니깐 52번씩 랜더링되다가 멈춤
@@ -124,11 +105,8 @@ export const MyProfilePage = () => {
       try {
         const compressedFile = await imageCompression(croppedFile, options);
         const imgUrl = URL.createObjectURL(compressedFile);
-        setFileUrl(imgUrl);
-        setPostData((prev) => ({
-          ...prev,
-          imgFile: compressedFile,
-        }));
+        setImgUrl(imgUrl);
+        setImgFile(compressedFile);
       } catch (error) {
         console.error(error);
       }
@@ -137,37 +115,31 @@ export const MyProfilePage = () => {
   }, [croppedFile]);
 
   //닉네임 입력
-  const onChangeValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setPostData({
-      ...postData,
-      [name]: value,
-      validation: {
-        ...postData.validation,
-        alertMsg: '닉네임 중복확인을 해주세요!',
-        msg: '',
-        isVerified: false,
-        isValid: false,
-      },
-    });
-  };
+  const onChangeValueHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      setValidation({ isValid: false, msg: '' });
+      setNickname(value);
+    },
+    []
+  );
 
   //프로필 업로드
   const onSubmitHandler = async () => {
     //닉네임 미입력시
-    if (postData.nickname === '') {
+    if (nickname === '') {
       setErrorMsg('닉네임을 입력해주세요.');
       return;
     }
     try {
       await postProfile({
-        imgUrl: postData.imgFile!,
-        nickname: postData.nickname!,
+        imgUrl: imgFile,
+        nickname: nickname,
       });
       setDoneMsg('프로필 등록에 성공했습니다.');
-      queryClient.invalidateQueries(['myPage']);
-      setUserState((prev) => ({ ...prev, nickname: postData.nickname }));
-      console.log('🟢이제 곧 이동' + postData);
+      queryClient.invalidateQueries([userID]);
+      setUserState((prev) => ({ ...prev, nickname: nickname }));
+      console.log('🟢이제 곧 이동');
       navigate('/mypage');
     } catch (error) {
       console.error('😀' + error);
@@ -175,47 +147,37 @@ export const MyProfilePage = () => {
     }
   };
 
-  //테스트용
-  useEffect(() => {
-    console.log('🔴', postData);
-  }, [postData]);
-  useEffect(() => {
-    console.log('Updated fileUrl:', fileUrl);
-  }, [fileUrl]);
-
   const onValidHandler = (isValid: boolean, msg: string) => {
-    setPostData((prevData) => ({
-      ...prevData,
-      validation: {
-        ...prevData.validation,
-        msg: msg,
-        isValid: isValid,
-        isVerified: isValid,
-      },
-    }));
+    setValidation({ isValid: isValid, msg: msg });
+  };
+  const onCloseErrorModalHandler = () => {
+    setErrorMsg('');
+  };
+  const onCloseDoneModalHandler = () => {
+    () => navigate('/mypage');
+  };
+  const onCloseCropModalHandler = () => {
+    setCropModal(false);
   };
 
   return (
-    <CommonLayout
-      header={
-        <NavBar
-          btnLeft="back"
-          btnRight="submit"
-          onClickSubmit={onSubmitHandler}
-          onClickActive={postData.validation.isValid}
-          modal={{
-            title: '알림',
-            firstLine: postData.validation.alertMsg,
-          }}
-        >
-          회원정보수정
-        </NavBar>
-      }
-      backgroundColor="#fff"
-    >
+    <>
+      {' '}
+      <NavBar
+        btnLeft="back"
+        btnRight="submit"
+        onClickSubmit={onSubmitHandler}
+        onClickActive={validation.isValid}
+        modal={{
+          title: '알림',
+          firstLine: '닉네임을 중복확인 해주세요.',
+        }}
+      >
+        회원정보수정
+      </NavBar>
       <StMyProfileContainer>
         <StProfileImage>
-          <img src={fileUrl || noUser} alt="프로필 이미지" />
+          <img src={imgUrl || noUser} alt="프로필 이미지" />
           <button className="loadimg" onClick={onClickChangeImageHandler}>
             사진 수정
           </button>
@@ -223,36 +185,36 @@ export const MyProfilePage = () => {
         <StNickNameTitle>닉네임</StNickNameTitle>
         <StNickNameWrapper>
           <ProfileNicknameCheck
-            nickname={postData.nickname}
+            nickname={nickname}
             userData={data}
             onValid={onValidHandler}
             onChange={onChangeValueHandler}
           />
           <div className="error">
-            <AuthErrorMsg isValid={postData.validation.isValid}>
-              {postData.validation.msg}
+            <AuthErrorMsg isValid={validation.isValid}>
+              {validation.msg}
             </AuthErrorMsg>
 
             <Modal
               isOpen={!!errorMsg}
               title="알림"
               firstLine={errorMsg}
-              onCloseHandler={() => setErrorMsg('')}
+              onCloseHandler={onCloseErrorModalHandler}
             />
 
             <Modal
               isOpen={!!doneMsg}
               title="알림"
               firstLine={doneMsg}
-              onCloseHandler={() => navigate('/mypage')}
+              onCloseHandler={onCloseDoneModalHandler}
             />
             <CropModal
               isOpen={cropModal}
-              onCloseHandler={() => setCropModal(false)}
+              onCloseHandler={onCloseCropModalHandler}
             />
           </div>
         </StNickNameWrapper>
       </StMyProfileContainer>
-    </CommonLayout>
+    </>
   );
 };

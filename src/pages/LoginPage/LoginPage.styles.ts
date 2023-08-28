@@ -9,7 +9,7 @@ export interface StLoginButtonProps {
 export const StLoginContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding: 25px;
+  padding: 104px 25px 25px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -58,7 +58,7 @@ export const StLoginButtonWrapper = styled.div`
 `;
 
 export const StLoginTag = styled.span`
-  width: 131px;
+  width: 130px;
   height: 32px;
   background-image: url('${GuideBg}');
   background-size: contain;

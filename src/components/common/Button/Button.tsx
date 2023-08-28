@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StButton, StSubmitButton } from './Button.styles';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from 'components/common';
@@ -60,21 +60,37 @@ export const Button = ({
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleButtonClick = (e: React.MouseEvent<HTMLElement>) => {
-    if (inputType === 'button') {
-      if (url) {
-        navigate(url);
-      } else if (onClick) {
-        onClick(e);
+  const handleButtonClick = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      if (inputType === 'button') {
+        if (url) {
+          navigate(url);
+        } else if (onClick) {
+          onClick(e);
+        }
       }
+    },
+    [inputType, url, onClick, navigate]
+  );
+
+  const onSubmitButtonClickHandler = useCallback(() => {
+    if ($active) {
+      if (onClick) {
+        onClick({} as React.MouseEvent<HTMLElement>);
+      }
+    } else {
+      setIsModalOpen(true);
     }
-  };
+  }, [onClick, $active, setIsModalOpen]);
+  const onModalCloseHandler = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
 
   return inputType === 'submit' ? (
     <>
       <Modal
         isOpen={isModalOpen}
-        onCloseHandler={() => setIsModalOpen(false)}
+        onCloseHandler={onModalCloseHandler}
         title={modalTitle}
         firstLine={modalFirstLine}
         secondLine={modalSecondLine || undefined}
@@ -83,7 +99,7 @@ export const Button = ({
         aria-label={ariaLabel}
         type="submit"
         className={type}
-        onClick={$active ? onClick : () => setIsModalOpen(true)}
+        onClick={onSubmitButtonClickHandler}
         $active={$active}
       >
         {children}

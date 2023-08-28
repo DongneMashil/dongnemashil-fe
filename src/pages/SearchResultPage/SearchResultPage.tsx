@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import {
   selectedTagsState,
   sortTypeState,
 } from 'recoil/reviewsQuery/reviewsQuery';
-import { CommonLayout, FixFooter, NavBar } from 'components/layout';
+import { FixFooter, NavBar } from 'components/layout';
 import { useFetchReviews } from 'api/reviewsApi';
 import { SearchResultMapPage } from 'pages/SearchResultMapPage/SearchResultMapPage';
 import { SearchResultListPage } from 'pages/SearchResultListPage/SearchResultListPage';
@@ -58,55 +58,18 @@ export const SearchResultPage = () => {
     setIsMapOpen(!isMapOpen);
   };
 
-  const scrollToTopRef = useRef<HTMLDivElement>(null);
-
   const handleGotoTop = () => {
-    if (scrollToTopRef.current) {
-      scrollToTopRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   };
-  console.log(scrollToTopRef);
-
-  // const handleGotoTop = () => {
-  //   window.scrollTo({
-  //     top: 0,
-  //     behavior: 'smooth',
-  //   });
-  // };
-
-  // const handleGotoTop = () => {
-  //   window.scrollBy({
-  //     top: -300,
-  //     behavior: 'smooth',
-  //   });
-  // };
 
   return (
-    <CommonLayout
-      scrollToTopRef={scrollToTopRef}
-      header={
-        <>
-          <NavBar
-            btnLeft={'logo'}
-            btnSecondRight={'search'}
-            btnRight={'mypage'}
-          >
-            <h1>{q}</h1>
-          </NavBar>
-        </>
-      }
-      footer={
-        <FixFooter
-          centerButtons={'map'}
-          rightButtons={'goTop'}
-          onClickCenter={toggleMapOpen}
-          onClickRight={handleGotoTop}
-        />
-      }
-    >
+    <>
+      <NavBar btnLeft={'logo'} btnSecondRight={'search'} btnRight={'mypage'}>
+        <h1>{q}</h1>
+      </NavBar>
       <ToggleTagButton onTagChange={handleTagChange} />
       <SearchResultListPage
         type={type}
@@ -120,6 +83,12 @@ export const SearchResultPage = () => {
       {isMapOpen && (
         <SearchResultMapPage reviewList={reviews} onToggle={toggleMapOpen} />
       )}
-    </CommonLayout>
+      <FixFooter
+        centerButtons={'map'}
+        rightButtons={'goTop'}
+        onClickCenter={toggleMapOpen}
+        onClickRight={handleGotoTop}
+      />
+    </>
   );
 };

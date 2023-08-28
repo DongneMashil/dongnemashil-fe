@@ -1,5 +1,5 @@
 import { Button } from 'components/common';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StCenterWrapper,
   StLeftWrapper,
@@ -45,6 +45,29 @@ export const NavBar = ({
   $isWritePage = false,
 }: NavBarProps) => {
   const { data: userData } = useUpdateUserInfo(true);
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
+  const [prevScrollY, setPrevScrollY] = useState<number>(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      console.log(currentScrollY, prevScrollY);
+
+      if (currentScrollY > prevScrollY) {
+        setScrollDirection('down');
+      } else {
+        setScrollDirection('up');
+      }
+      setPrevScrollY(currentScrollY);
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollY]);
+
+  const isNavBarVisible = scrollDirection === 'up' || window.scrollY <= 50;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -141,7 +164,11 @@ export const NavBar = ({
   };
 
   return (
-    <StNavBar $isWritePage={$isWritePage}>
+    <StNavBar
+      isNavBarVisible={isNavBarVisible}
+      prevScrollY={prevScrollY}
+      $isWritePage={$isWritePage}
+    >
       <StLeftWrapper>{leftButtons[btnLeft]}</StLeftWrapper>
       {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
       <StRighttWrapper>
