@@ -6,7 +6,7 @@ export const StSlideContainer = styled.div`
   overflow: hidden;
   position: relative;
   min-height: 200px;
-  width: 18.75rem;
+  width: 85%;
   justify-content: center;
   align-items: center;
   margin: 0 auto;

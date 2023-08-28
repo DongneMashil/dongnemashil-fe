@@ -5,8 +5,8 @@ import {
   StTagContainer,
   StTotalTag,
 } from './TagContainer.styles';
-import { ToggleTagButton } from 'components/common';
 import { ReactComponent as PurpleMarker } from 'assets/icons/PurpleMarker.svg';
+import { ToggleTagButton } from 'components/common';
 
 interface TagProps {
   selectedTags: string[];

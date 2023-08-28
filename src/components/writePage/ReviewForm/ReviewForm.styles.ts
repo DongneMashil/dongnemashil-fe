@@ -53,10 +53,13 @@ export const StContentWrapper = styled.div`
 
 export const StByteSizeTag = styled.p`
   position: absolute;
-  bottom: 5px;
-  right: 10px;
+  bottom: 3.69rem;
+  right: 1.44rem;
   color: #a9a9a9;
-  font-size: 0.8rem;
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
+  line-height: normal;
 `;

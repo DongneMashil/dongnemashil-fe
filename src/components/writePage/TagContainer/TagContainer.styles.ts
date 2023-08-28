@@ -2,11 +2,11 @@ import { styled } from 'styled-components';
 
 export const StTagContainer = styled.div`
   width: 100%;
-  height: 8.9rem;
+  height: 9rem;
   border-radius: 0.875rem;
   background: #fff;
-  margin: 0.75rem 0;
   box-sizing: border-box;
+  padding: 0.1rem;
 `;
 
 export const StCurrentAddressWrapper = styled.div`
@@ -14,7 +14,7 @@ export const StCurrentAddressWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 0.8rem 1.44rem 0;
+  margin: 0.88rem 1.54rem 0 1.54rem;
 `;
 
 export const StTotalTag = styled.p`

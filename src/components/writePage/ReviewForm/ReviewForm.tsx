@@ -94,7 +94,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
           onChange={onInputChange}
           placeholder="산책은 어땠나요?"
         />
-        <StByteSizeTag>{contentByteSize} / 500</StByteSizeTag>
+        <StByteSizeTag>( {contentByteSize} / 500 )</StByteSizeTag>
       </StContentWrapper>
     </StFormWrapper>
   );
