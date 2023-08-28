@@ -6,8 +6,6 @@ const blockHeader = css`
 `;
 
 const fixedHeader = css`
-  position: fixed;
-  top: 0;
   transform: translateY(0);
 `;
 
@@ -31,6 +29,9 @@ export const StNavBar = styled.div<{
       ? fixedHeader
       : blockHeader};
   ${(props) => (props.$isWritePage ? null : basicNavBar)}
+  position: sticky;
+  top: 0;
+  will-change: transform;
   z-index: 100;
   display: flex;
   justify-content: space-between;
@@ -40,7 +41,7 @@ export const StNavBar = styled.div<{
   padding: 0 10px;
   background: ${theme.whiteColor};
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease-in-out;
+  transition: all 0.4s ease-in-out;
 
   > div {
     display: flex;
