@@ -1,5 +1,4 @@
 import React from 'react';
-import { CommonLayout } from 'components/layout';
 import {
   StCurrentLocationContainer,
   StCurrentLocationText,
@@ -7,6 +6,7 @@ import {
   StInputWrapper,
   StMarker,
   StPostButton,
+  StWirteMapContainer,
 } from './WriteMapPage.styles.ts';
 import { Geolocation } from 'components/mapWritePage';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -46,7 +46,7 @@ export const WriteMapPage = () => {
   };
 
   return (
-    <CommonLayout>
+    <StWirteMapContainer>
       <BackButton onClick={onGoBackHandler} />
       <StCurrentLocationContainer>
         <StCurrentLocationTitle>
@@ -65,6 +65,6 @@ export const WriteMapPage = () => {
         onAddressUpdate={setCurrentAddress}
         disableCurrentLocation={disableCurrentLocation}
       />
-    </CommonLayout>
+    </StWirteMapContainer>
   );
 };

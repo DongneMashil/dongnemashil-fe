@@ -1,4 +1,4 @@
-import { CommonLayout, NavBar } from 'components/layout';
+import { NavBar } from 'components/layout';
 import React, { ChangeEvent, useState } from 'react';
 import {
   StChooseButton,
@@ -80,13 +80,10 @@ export const WriteMapSearchPage = () => {
   };
 
   return (
-    <CommonLayout
-      header={
-        <NavBar btnLeft={'back'} btnRight={null}>
-          위치 검색
-        </NavBar>
-      }
-    >
+    <>
+      <NavBar btnLeft={'back'} btnRight={null}>
+        위치 검색
+      </NavBar>
       <StSearchWrapper>
         <StSearchBox>
           <StMarker />
@@ -123,6 +120,6 @@ export const WriteMapSearchPage = () => {
           ))}
         </StSeacrhResultWrapper>
       </StSearchWrapper>
-    </CommonLayout>
+    </>
   );
 };

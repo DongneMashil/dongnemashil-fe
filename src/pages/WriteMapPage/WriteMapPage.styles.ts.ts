@@ -1,6 +1,15 @@
 import { styled } from 'styled-components';
 import { ReactComponent as MarkerIcon } from 'assets/icons/Marker.svg';
 
+export const StWirteMapContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+`;
+
 export const StCurrentLocationContainer = styled.div`
   height: 12.9rem;
   display: flex;
