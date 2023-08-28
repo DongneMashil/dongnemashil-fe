@@ -91,6 +91,13 @@ export const useSubmitHandler = ({
     const coverImage = mediaFiles.find(
       (file) => file.isCover && file.type === 'image'
     );
+
+    if (!coverImage) {
+      setModalMessage('메인 이미지를 선택해주세요.');
+      setIsModalOpen(true);
+      return;
+    }
+
     try {
       if (coverImage) {
         if (typeof coverImage.file === 'string') {

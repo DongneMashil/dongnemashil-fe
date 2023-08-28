@@ -78,7 +78,7 @@ export const WritePage = () => {
           !ALLOWED_VIDEO_TYPES.includes(file.type)
         ) {
           setModalMessage(
-            '파일 형식이 올바르지 않습니다. PNG, JPG, JPEG 이미지 또는 MOV, MP4 동영상만 업로드 가능합니다.'
+            '이미지는 PNG, JPG, JPEG | 동영상은 MOV, MP4만 업로드 가능합니다.'
           );
           setIsModalOpen(true);
           return false;
@@ -89,7 +89,7 @@ export const WritePage = () => {
           );
           setIsModalOpen(true);
         }
-        return true;
+        return false;
       });
 
       if (mediaFiles.length + validFiles.length > 5) {
@@ -229,16 +229,16 @@ export const WritePage = () => {
         onGoToWriteMapPageHandler={onGoToWriteMapPageHandler}
       />
       <ReviewForm
-        formValues={hookFormValues} //
-        onInputChange={onInputChange} //
+        formValues={hookFormValues}
+        onInputChange={onInputChange}
         mediaFiles={mediaFiles}
         onFileChange={onFileChange}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        onAddImage={onButtonClick} //
-        setCoverImage={setCoverImage} //
-        onDeleteImage={onDeleteImage} //
-        determineIsCoverImage={determineIsCoverImage} //
+        onAddImage={onButtonClick}
+        setCoverImage={setCoverImage}
+        onDeleteImage={onDeleteImage}
+        determineIsCoverImage={determineIsCoverImage}
         fileInputRef={fileInputRef}
       />
       <Modal
