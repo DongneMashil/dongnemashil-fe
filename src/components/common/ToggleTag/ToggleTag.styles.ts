@@ -7,6 +7,8 @@ export const StTagWrapper = styled.section`
   display: flex;
   align-items: start;
   flex-direction: column;
+  width: fit-content;
+  margin: 0 auto;
 
   &::-webkit-scrollbar {
     display: none; /* 크롬, 사파리, 오페라, 엣지 */
