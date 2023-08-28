@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { verifyUser, UserStateRes } from 'api/loginApi';
 import { useSetRecoilState } from 'recoil';
-import { UserState, userProfileSelector } from 'recoil/userExample';
+import { UserState, userProfileSelector } from 'recoil/userInfo';
 // import { useNavigate } from 'react-router-dom';
 
 /** 로그인 여부가 필요할 때 사용하는 cusom hook

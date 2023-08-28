@@ -50,7 +50,7 @@ export const StThumbnailLike = styled.div`
   }
 `;
 
-const LongerHight = css`
+const longerHight = css`
   position: relative;
 
   &::after {
@@ -66,7 +66,7 @@ const LongerHight = css`
   }
 `;
 
-const LongerWidth = css`
+const longerWidth = css`
   & img {
     width: 100%;
     height: 100%;
@@ -76,13 +76,13 @@ const LongerWidth = css`
 `;
 
 export const StThumnailMain = styled.div<{
-  $imgRatio?: 'LongerHeight' | 'LongerWidth' | null;
+  $imgRatio?: 'longerHeight' | 'longerWidth' | null;
 }>`
   ${(props) =>
-    props.$imgRatio === 'LongerHeight'
-      ? LongerHight
-      : props.$imgRatio === 'LongerWidth'
-      ? LongerWidth
+    props.$imgRatio === 'longerHeight'
+      ? longerHight
+      : props.$imgRatio === 'longerWidth'
+      ? longerWidth
       : null}
 
   width: 100%;

@@ -46,3 +46,7 @@ export const StMyCommentContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
+export const StTarget = styled.div`
+  height: 100px;
+`;

@@ -13,7 +13,7 @@ import { ReviewsList } from 'api/reviewsApi';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { useLike } from 'hooks';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import { numberWithCommas } from 'utils';
 import timeAgo from 'utils/timeAgo';
 
@@ -28,7 +28,7 @@ export const Thumbnail = ({
 }: ReviewsList) => {
   const navigate = useNavigate();
   const [imgRatio, setImgRatio] = useState<
-    'LongerHeight' | 'LongerWidth' | null
+    'longerHeight' | 'longerWidth' | null
   >(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
@@ -42,9 +42,9 @@ export const Thumbnail = ({
       const imageHeight = imageRef.current.naturalHeight;
 
       if (imageWidth < imageHeight) {
-        setImgRatio('LongerHeight');
+        setImgRatio('longerHeight');
       } else {
-        setImgRatio('LongerWidth');
+        setImgRatio('longerWidth');
       }
     }
   };

@@ -15,9 +15,14 @@ const hiddenHeader = css`
   transform: translateY(-100%);
 `;
 
+const basicNavBar = css`
+  border-radius: 0px 0px 14px 14px;
+`;
+
 export const StNavBar = styled.div<{
   isNavBarVisible: boolean;
   prevScrollY: number;
+  $isWritePage?: boolean;
 }>`
   ${(props) =>
     props.isNavBarVisible === false
@@ -25,6 +30,7 @@ export const StNavBar = styled.div<{
       : props.prevScrollY > 50
       ? fixedHeader
       : blockHeader};
+  ${(props) => (props.$isWritePage ? null : basicNavBar)}
   z-index: 100;
   display: flex;
   justify-content: space-between;
@@ -33,7 +39,6 @@ export const StNavBar = styled.div<{
   height: 50px;
   padding: 0 10px;
   background: ${theme.whiteColor};
-  border-radius: 0px 0px 14px 14px;
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease-in-out;
 
@@ -45,7 +50,7 @@ export const StNavBar = styled.div<{
 
 export const StCenterWrapper = styled.div`
   justify-content: center;
-  flex: 1.5;
+  flex: 1.2;
   text-align: center;
 
   h1 {
@@ -60,10 +65,10 @@ export const StCenterWrapper = styled.div`
 `;
 
 export const StLeftWrapper = styled.div`
-  flex: 0.5;
+  flex: 0.8;
 `;
 
 export const StRighttWrapper = styled.div`
   justify-content: right;
-  flex: 0.5;
+  flex: 0.8;
 `;

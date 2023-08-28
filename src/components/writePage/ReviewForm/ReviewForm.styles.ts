@@ -12,6 +12,9 @@ export const StContentBox = styled.textarea`
   padding: 0.45rem;
   border: none;
   font-family: Pretendard;
+  border-top: 1px solid #e2e2e2;
+  font-size: 1rem;
+  outline: none;
   &:focus {
     outline: 1px solid #9a7b9a;
     border-radius: 1rem;
@@ -30,6 +33,7 @@ export const StTitle = styled.input`
   font-weight: 400;
   line-height: normal;
   padding-top: 1.25rem;
+  margin-bottom: 0.9375rem;
   outline: none;
   font-family: Pretendard;
 `;

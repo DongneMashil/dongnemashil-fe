@@ -5,7 +5,7 @@ import { queryClient } from 'queries/queryClient';
 import React, { useState } from 'react';
 import { StFooterContatiner, StFooterWrapper } from './CommentInput.styles';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { userProfileSelector } from 'recoil/userExample';
+import { userProfileSelector } from 'recoil/userInfo';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
 
 interface FooterProps {

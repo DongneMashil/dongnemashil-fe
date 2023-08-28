@@ -44,7 +44,8 @@ export const StProfileImage = styled.div`
     border-radius: 50px;
     object-fit: cover;
   }
-  label {
+  .loadimg {
+    background: none;
     color: var(--strokepurple, #9a7b9a);
     text-align: center;
     font-family: Pretendard;
@@ -54,14 +55,5 @@ export const StProfileImage = styled.div`
     line-height: normal;
     cursor: pointer;
     height: 40px;
-  }
-
-  input[type='file'] {
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
   }
 `;
