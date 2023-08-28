@@ -4,6 +4,7 @@ import { StHeaderTextH1 } from 'components/common/HeaderText/HeaderText.styles';
 
 export const StSearchHeader = styled.div`
   border-bottom: 1px solid #e3e3e3;
+  background-color: #ffffff;
   padding-top: 50px;
   display: flex;
   flex-direction: column;
