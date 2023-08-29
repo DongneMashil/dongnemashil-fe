@@ -38,7 +38,6 @@ export const useSubmitHandler = ({
   );
 
   const handleSubmit = async () => {
-    setIsLoading(true);
     if (formValues.title.trim() === '') {
       setModalMessage('제목을 입력해주세요.');
       setIsModalOpen(true);
@@ -103,6 +102,8 @@ export const useSubmitHandler = ({
       setIsModalOpen(true);
       return;
     }
+
+    setIsLoading(true);
 
     try {
       if (coverImage) {
