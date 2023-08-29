@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { theme } from 'style/theme';
-import GuideBg from 'assets/images/LoginGuideBg.svg';
 
 export interface StLoginButtonProps {
   $type?: 'kakao' | 'common' | 'register';
@@ -69,23 +68,7 @@ export const StLoginButtonWrapper = styled.div`
 `;
 
 export const StLoginTag = styled.span`
-  width: 130px;
+  width: 131px;
   height: 32px;
-  background-image: url('${GuideBg}');
-  background-size: contain;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-left: 5px;
-  padding-bottom: 5px;
   margin-bottom: 6.34px;
-
-  color: ${theme.mainTextColor};
-  text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-
-  & > svg {
-    transform: rotate(-14.689deg);
-  }
 `;

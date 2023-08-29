@@ -8,7 +8,7 @@ import {
   StLoginTag,
   StLoginButtonWrapper,
 } from './LoginPage.styles';
-import { ReactComponent as Lightning } from 'assets/icons/Lightning.svg';
+import { ReactComponent as GuideBg } from 'assets/images/LoginGuideBg.svg';
 import { ReactComponent as KakaoIcon } from 'assets/icons/KakaoIcon.svg';
 import { ReactComponent as LogoText } from 'assets/images/LogoText.svg';
 import { ReactComponent as Logo } from 'assets/images/Dongdong.svg';
@@ -36,8 +36,7 @@ export const LoginPage = () => {
             <Logo />
           </StLogoWrapper>
           <StLoginTag>
-            3초만에 시작하기
-            <Lightning />
+            <GuideBg />
           </StLoginTag>
           <Button type="authKakao" $active={true} onClick={onKakaoHandler}>
             <KakaoIcon />
