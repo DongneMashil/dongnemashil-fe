@@ -63,7 +63,7 @@ export const ReviewsContainer = ({
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [window.innerWidth]);
 
   const masonryGridOptions: MasonryGridOptions = {
     column: columns,
