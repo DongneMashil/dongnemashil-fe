@@ -6,7 +6,7 @@ import {
   StMapLoadingSpinner,
   StMyLocationButton,
 } from './DetailMap.styles';
-import { LocationButton } from 'components/common';
+import { LocationButton, Map } from 'components/common';
 
 interface DetailMapProps {
   width: string;
@@ -151,6 +151,15 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
       console.error('Geolocation is not supported by this browser.');
     }
   };
+  const initializeMap = (map: kakao.maps.Map) => {
+    if (initMap) {
+      initMap(map, setMapCenterByAddress);
+    }
+
+    if (showCurrentLocation) {
+      displayCurrentLocation(map);
+    }
+  };
 
   useEffect(() => {
     const container = document.getElementById('map');
@@ -162,27 +171,22 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
     };
 
     const map = new kakao.maps.Map(container, options);
-
-    if (initMap) {
-      initMap(map, setMapCenterByAddress);
-    }
-
-    if (showCurrentLocation) {
-      displayCurrentLocation(map);
-    }
+    initializeMap(map);
   }, [showCurrentLocation]);
+
+  const onClickMyLocation = () => {
+    setShowCurrentLocation(true);
+  };
 
   return (
     <StMapContainer>
-      <div id="map" style={{ width, height }}></div>
+      <Map width={width} height={height} initMap={initializeMap} />
       {isLoading ? (
         <StMapLoadingSpinner />
       ) : (
         !showCurrentLocation && (
-          <StMyLocationButton onClick={() => setShowCurrentLocation(true)}>
-            <LocationButton
-              onClick={() => setShowCurrentLocation(true)}
-            ></LocationButton>
+          <StMyLocationButton>
+            <LocationButton onClick={onClickMyLocation}></LocationButton>
           </StMyLocationButton>
         )
       )}

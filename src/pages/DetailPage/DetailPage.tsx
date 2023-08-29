@@ -92,6 +92,17 @@ export const DetailPage = () => {
     navigate(`/write/${data.id}`, { state: { reviewId: data.id } });
   };
 
+  const initMapHandler = (
+    map: kakao.maps.Map,
+    setMapCenterByAddress: (address: string, map: kakao.maps.Map) => void
+  ) => {
+    if (data) {
+      setMapCenterByAddress(data.address, map);
+    } else {
+      setMapCenterByAddress(defaultAddress, map);
+    }
+  };
+
   return (
     <>
       {isMapOpen ? (
@@ -100,13 +111,7 @@ export const DetailPage = () => {
             btnLeft="closeModal"
             onClickLeft={() => setIsMapOpen(false)}
           />
-          <DetailMap
-            height="100%"
-            width="100%"
-            initMap={(map, setMapCenterByAddress) => {
-              setMapCenterByAddress(data ? data.address : defaultAddress, map);
-            }}
-          />
+          <DetailMap height="100%" width="100%" initMap={initMapHandler} />
         </>
       ) : (
         <StDetailPageLayout>
