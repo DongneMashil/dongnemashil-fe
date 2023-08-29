@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   StCurrentAddress,
   StCurrentAddressWrapper,
@@ -7,7 +7,6 @@ import {
   StTotalTag,
 } from './TagContainer.styles';
 import { ToggleTagButton } from 'components/common';
-import { useHorizontalDragScroll } from 'hooks';
 
 interface TagProps {
   selectedTags: string[];
@@ -22,11 +21,8 @@ export const TagContainer: React.FC<TagProps> = ({
   addressData,
   onGoToWriteMapPageHandler,
 }) => {
-  const wrapperRef = useRef(null);
-  useHorizontalDragScroll(wrapperRef);
-  
   return (
-    <StTagContainer  ref={wrapperRef}>
+    <StTagContainer>
       <StCurrentAddressWrapper>
         <div onClick={onGoToWriteMapPageHandler}>
           <StPurpleMarker />

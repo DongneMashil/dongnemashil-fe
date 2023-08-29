@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   StCenteredBox,
   StSlideContainer,
@@ -10,6 +10,7 @@ import { ReactComponent as FileUpload } from 'assets/icons/FileUpload.svg';
 import { ReactComponent as TrashCan } from 'assets/icons/TrashCan.svg';
 import { MediaFile, MediaFileType } from 'recoil/mediaFile/mediaFileAtom';
 import { RenderFileOrUrl } from './RenderFileOrUrl/RenderFileOrUrl';
+import { useHorizontalDragScroll } from 'hooks';
 
 interface ImageSliderProps {
   images: MediaFileType[];
@@ -44,8 +45,11 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
     onDeleteImage(file);
   }, []);
 
+  const wrapperRef = useRef(null);
+  useHorizontalDragScroll(wrapperRef);
+
   return (
-    <StSlideContainer>
+    <StSlideContainer ref={wrapperRef}>
       {files.map((file, index) => (
         <StImageContainer key={index}>
           <RenderFileOrUrl
