@@ -19,6 +19,7 @@ import { MediaFileType } from 'recoil/mediaFile/mediaFileAtom';
 import imageCompression from 'browser-image-compression';
 import { Modal } from 'components/common';
 import { StLayout, StLayoutContainer } from './WritePagestyles';
+import { LoadingPage } from 'pages/LoadingPage/LoadingPage';
 
 interface StableNavigateContextProviderProps {
   children: React.ReactNode;
@@ -187,7 +188,7 @@ export const WritePage = () => {
     fileInputRef.current?.click();
   };
 
-  const { handleSubmit } = useSubmitHandler({
+  const { handleSubmit, isLoading } = useSubmitHandler({
     reviewId,
     formValues: hookFormValues,
     mediaFiles: mediaFiles,
@@ -216,6 +217,7 @@ export const WritePage = () => {
 
   return (
     <StLayout>
+      {isLoading && <LoadingPage />}
       <NavBar
         btnLeft={'back'}
         btnRight={'submit'}

@@ -11,9 +11,26 @@ export const StImage = styled.img`
 `;
 
 export const StVideo = styled.video`
+  max-width: 100%;
+  max-height: 100%;
+  margin-bottom: 0.5rem 0;
+  @media ${(props) => props.theme.device.desktop} {
+    margin: auto;
+  }
+`;
+
+export const StVideoTablet = styled.div`
   width: 100%;
   height: 100%;
-  margin-bottom: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media ${(props) => props.theme.device.desktop} {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1/1;
+  }
 `;
 
 export const StCoverImageButton = styled.button<{ isActive: boolean }>`
