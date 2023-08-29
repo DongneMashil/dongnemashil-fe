@@ -94,6 +94,11 @@ export const StDetailPageContent = styled.main`
   img {
     cursor: pointer;
   }
+  @media (min-width: ${theme.size.tablet}) {
+    .isSingle {
+      transform: translateX(50%);
+    }
+  }
 `;
 
 export const StVideoPlayerBox = styled.div`
@@ -132,22 +137,6 @@ export const StEditButtonWrapper = styled.div`
   }
 `;
 
-// export const StContentGridBox = styled.div`
-//   width: 100%;
-//   display: grid;
-//   grid-template-columns: repeat(1, 1fr);
-//   @media (min-width: 580px) {
-//     grid-template-columns: repeat(2, 1fr);
-//   }
-
-//   gap: 0.5rem;
-//   margin-bottom: 1rem;
-//   img {
-//     width: 100%;
-//     height: 100%;
-//     object-fit: contain;
-//   }
-// `;
 export const StContentGridBox = styled.div`
   // width: 100%;
   display: flex;

@@ -209,6 +209,9 @@ export const DetailPage = () => {
                       sizes={`(min-width:768px) 360px, (min-width:500px) 768px, 360px`}
                       alt={`${data.address}의 메인 사진`}
                       onClick={() => onClickImage(mainImageUrl[0]!)}
+                      className={
+                        !(data.subImgUrl[0] !== '') ? 'isSingle' : 'notSingle'
+                      }
                     />
                     {subImgUrl &&
                       subImgUrl.map((img, index) => (
