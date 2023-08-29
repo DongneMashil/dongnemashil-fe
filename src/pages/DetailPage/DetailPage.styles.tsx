@@ -148,21 +148,22 @@ export const StContentGridBox = styled.div`
   justify-content: center;
   grid-auto-rows: 1fr;
 
-  img {
+  img,
+  video {
     height: fit-content;
     width: 100%; // 모바일 기본값으로 100% 폭 설정
     margin: 0.5rem 0; // 상하 간격 설정
 
     // 태블릿 뷰
-    @media (min-width: 580px) {
+    @media (min-width: 768px) {
       width: calc(50% - 1rem); // 2개의 열로 나누기 위해 50% 폭 지정
       margin: 0.5rem;
     }
 
-    // 데스크톱 뷰
-    @media (min-width: 1024px) {
-      width: calc(33.33% - 0.5rem); // 3개의 열로 나누기 위해 33.33% 폭 지정
-      margin: 0.5rem;
-    }
+    // // 데스크톱 뷰
+    // @media (min-width: 1024px) {
+    //   width: calc(33.33% - 0.5rem); // 3개의 열로 나누기 위해 33.33% 폭 지정
+    //   margin: 0.5rem;
+    // }
   }
 `;

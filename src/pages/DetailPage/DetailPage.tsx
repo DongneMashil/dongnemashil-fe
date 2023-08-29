@@ -19,7 +19,6 @@ import {
   StEditButtonWrapper,
   StNavTitle,
   StTagWrapper,
-  StVideoPlayerBox,
 } from './DetailPage.styles';
 import noImage from 'assets/images/NoImage.png';
 import noUser from 'assets/images/NoUser.jpg';
@@ -35,6 +34,7 @@ export const DetailPage = () => {
   const [isDeleteDetailModalOpen, setIsDeleteDetailModalOpen] = useState(false);
   const [isDeleteCompleteModalOpen, setIsDeleteCompleteModalOpen] =
     useState(false);
+
   const setCommentCount = useSetRecoilState(commentCountAtom);
   const navigate = useNavigate();
   const defaultAddress = '서울특별시 마포구 와우산로 94'; //정보가 없을시 기본 주소
@@ -160,7 +160,7 @@ export const DetailPage = () => {
                       ) : null
                     )}
                     {data.videoUrl && (
-                      <StVideoPlayerBox>
+                      <>
                         {/* <VideoPlayer videoUrl={data.videoUrl} /> */}
                         <video
                           controls
@@ -169,7 +169,7 @@ export const DetailPage = () => {
                           src={data.videoUrl}
                           aria-label={`${data.address}의 비디오`}
                         />
-                      </StVideoPlayerBox>
+                      </>
                     )}
                   </StContentGridBox>
 
