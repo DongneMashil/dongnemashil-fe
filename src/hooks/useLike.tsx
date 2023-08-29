@@ -1,5 +1,6 @@
 import { postLikeOptimistic } from 'api/detailApi';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userInfo';
 
@@ -22,12 +23,12 @@ export const useLike = ({
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCnt, setLikeCnt] = useState(initialLikeCnt);
   const userState = useRecoilValue(userProfileSelector);
+  const navigate = useNavigate();
   const toggleLikeHandler = async () => {
     if (Date.now() - (lastClickedTime || 0) < 500) return; // 마지막 클릭으로부터 0.5초 안에 재클릭을 방지
     setLastClickedTime(Date.now());
 
-    if (userState.isLoggedIn === false)
-      return alert('로그인 하시면 좋아요를 누를 수 있습니다.');
+    if (userState.isLoggedIn === false) return navigate('/login');
     const previousIsLiked = isLiked;
     const optimisticLikeCnt = isLiked ? likeCnt - 1 : likeCnt + 1;
     setIsLiked(!isLiked);
