@@ -57,7 +57,8 @@ export const Comments = ({
       refetchOnMount: false,
       refetchOnReconnect: true,
       retry: false,
-      staleTime: 3000, // 3초 동안 데이터는 fresh 상태를 유지, 무분별한 요청을 막기 위함.
+      staleTime: 10000, // 10초 동안 데이터는 fresh 상태를 유지, 무분별한 요청을 막기 위함.
+      cacheTime: 600000, // 10분 동안 데이터를 캐시에 저장
     });
     return query;
   };
@@ -149,10 +150,6 @@ export const Comments = ({
                       <>
                         {isEdit.state && isEdit.id === comment.id ? (
                           <>
-                            {/* <button className="left" onClick={onEditEndHandler}>
-                              취소
-                            </button>
-                            <div className="divider">|</div> */}
                             <button
                               className="center"
                               onClick={onEditSubmitHandler}

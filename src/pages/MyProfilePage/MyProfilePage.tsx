@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { queryClient } from 'queries/queryClient';
 import {
   StMyProfileContainer,
+  StMyProfileLayout,
   StNickNameTitle,
   StNickNameWrapper,
   StProfileImage,
@@ -161,8 +162,7 @@ export const MyProfilePage = () => {
   };
 
   return (
-    <>
-      {' '}
+    <StMyProfileLayout>
       <NavBar
         btnLeft="back"
         btnRight="submit"
@@ -215,6 +215,6 @@ export const MyProfilePage = () => {
           </div>
         </StNickNameWrapper>
       </StMyProfileContainer>
-    </>
+    </StMyProfileLayout>
   );
 };

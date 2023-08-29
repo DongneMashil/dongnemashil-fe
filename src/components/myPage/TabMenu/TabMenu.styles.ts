@@ -70,7 +70,13 @@ export const StTabContentBox = styled.div<{ $empty?: boolean }>`
   grid-template-columns: repeat(1, 1fr);
   @media (min-width: 300px) {
     grid-template-columns: repeat(2, 1fr);
-  }`}
+  }
+  @media(min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  
+  `}
 `;
 
 export const StTabContainer = styled.div`
