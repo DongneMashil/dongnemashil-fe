@@ -35,27 +35,6 @@ export const StTopWrapper = styled.div`
   }
 `;
 
-export const StThumbnailWrapper = styled.ul`
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-template-rows: masonry;
-  gap: 14px;
-
-  & li:nth-last-child(1) {
-    border-bottom: 0px;
-  }
-
-  @media ${theme.device.desktop} {
-    /* column-gap: 14px; */
-    /* justify-content: space-between; */
-    grid-template-columns: repeat(2, 1fr);
-
-    & li:nth-last-child(2) {
-      border-bottom: 0px;
-    }
-  }
-`;
-
 export const StSort = styled.div`
   display: flex;
   align-items: center;
