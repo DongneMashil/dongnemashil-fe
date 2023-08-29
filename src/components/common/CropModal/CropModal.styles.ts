@@ -1,3 +1,4 @@
+import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StModalButtonWrpper = styled.div`
@@ -6,6 +7,8 @@ export const StModalButtonWrpper = styled.div`
   align-items: center;
   width: 100%;
   height: 3.75rem;
+  margin-bottom: 0;
+  margin-top: auto;
 
   button {
     background: none;
@@ -35,36 +38,38 @@ export const StModalButtonWrpper = styled.div`
 `;
 
 export const StModalOverlay = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.35);
-  z-index: 9999;
+  ${theme.overlayBackground}
 `;
 
 export const StModalWindow = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  // justify-content: space-between;
   align-items: center;
   width: 21.875rem;
   height: fit-content;
+  // min-height: 15.625rem;
   flex-shrink: 0;
   background-color: white;
   border-radius: 0.625rem;
   overflow: hidden;
   box-shadow: 0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
+  .cropper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
   .message {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 3rem 0 2rem 0;
   }
-  .cropper {
-    height: 100%;
+  img {
+    object-fit: cover;
     width: 100%;
+    height: 100%;
   }
 `;

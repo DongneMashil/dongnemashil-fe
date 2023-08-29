@@ -33,6 +33,7 @@ export const Comments = ({
     useState(false);
   const latestCommentRef = useRef(null);
   // const loader = useRef(null);
+  const [deleteCommentId, setDeleteCommentId] = useState<number>(0);
   const useInfinityScroll = () => {
     const fetchComment = async ({ pageParam = 1 }) => {
       const response = await getComment({
@@ -99,12 +100,14 @@ export const Comments = ({
       queryClient.invalidateQueries(['comment', reviewId]);
     },
   });
-  const onDeleteCommentHandler = (commentId: number) => {
-    deleteCommentMutation.mutate(String(commentId)); // API 요청을 발생시키기 위해 mutate를 호출합니다.
-  };
+  // const onDeleteCommentHandler = (commentId: number) => {
+  //   deleteCommentMutation.mutate(String(commentId)); // API 요청을 발생시키기 위해 mutate를 호출합니다.
+  // };
   const [isEdit, setIsEdit] = useState({ state: false, id: 0, comment: '' });
   const onEditCommentHandler = (commentId: number, comment: string) => {
     setIsEdit({ state: true, id: commentId, comment });
+    console.log('commentId', commentId);
+    console.log('comment', comment);
   };
   const onChangeCommentHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsEdit({ ...isEdit, comment: e.target.value });
@@ -122,6 +125,11 @@ export const Comments = ({
       onEditEndHandler();
       queryClient.invalidateQueries(['comment', reviewId]);
     });
+  };
+
+  const onDeleteCommentHandler = (commentId: number) => {
+    setDeleteCommentId(commentId);
+    setIsDeleteCommentModalOpen(true);
   };
 
   return (
@@ -175,7 +183,7 @@ export const Comments = ({
                             <button
                               className="right"
                               disabled={isEdit.state}
-                              onClick={() => setIsDeleteCommentModalOpen(true)}
+                              onClick={() => onDeleteCommentHandler(comment.id)}
                             >
                               삭제
                             </button>
@@ -186,7 +194,9 @@ export const Comments = ({
                               firstLine="삭제된 댓글은 복구할 수 없습니다."
                               secondLine="삭제하시겠습니까?"
                               onSubmitHandler={() => {
-                                onDeleteCommentHandler(comment.id);
+                                deleteCommentMutation.mutate(
+                                  String(deleteCommentId)
+                                );
                                 setIsDeleteCommentModalOpen(false);
                               }}
                               onCloseHandler={() =>
