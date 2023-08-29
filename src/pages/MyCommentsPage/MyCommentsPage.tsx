@@ -1,4 +1,4 @@
-import { CommonLayout, NavBar } from 'components/layout';
+import { NavBar } from 'components/layout';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userInfo';
@@ -7,8 +7,10 @@ import { ReactComponent as ChevronRight } from 'assets/icons/ChevronRight.svg';
 import { ReactComponent as CommentS } from 'assets/icons/CommentS.svg';
 import {
   StButton,
+  StCounterWrapper,
   StMyCommentContainer,
   StMyCommentCounter,
+  StMyCommentsLayout,
   StTarget,
 } from './MyCommentsPage.styles';
 import { useNavigate } from 'react-router-dom';
@@ -56,11 +58,15 @@ export const MyCommentsPage = () => {
   });
 
   return (
-    <CommonLayout header={<NavBar btnLeft="back" />} backgroundColor="#f5f5f5">
+    <StMyCommentsLayout>
+      <NavBar btnLeft="back" />
       {data ? (
-        <StMyCommentCounter>
-          {data.pages[0].totalElements}개의 댓글
-        </StMyCommentCounter>
+        <StCounterWrapper>
+          {' '}
+          <StMyCommentCounter>
+            {data.pages[0].totalElements}개의 댓글
+          </StMyCommentCounter>
+        </StCounterWrapper>
       ) : (
         <StMyCommentCounter>댓글이 없습니다🫥</StMyCommentCounter>
       )}
@@ -88,6 +94,6 @@ export const MyCommentsPage = () => {
           data && <StMyCommentCounter>마지막 댓글입니다.</StMyCommentCounter>
         )}
       </StMyCommentContainer>
-    </CommonLayout>
+    </StMyCommentsLayout>
   );
 };
