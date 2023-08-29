@@ -58,6 +58,9 @@ type KakaoSearchStatus = 'OK' | 'ZERO_RESULT' | 'ERROR';
 export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
   const [showCurrentLocation, setShowCurrentLocation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [reviewAddress, setReviewAddress] = useState<kakao.maps.LatLng | null>(
+    null
+  );
 
   const setMapCenterByAddress = async (
     address: string,
@@ -72,6 +75,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
             parseFloat(result[0].y),
             parseFloat(result[0].x)
           );
+          setReviewAddress(coords);
           const svgMarkerImageSrc = Marker;
           const markerSize = new kakao.maps.Size(36, 48);
           const markerImage = new kakao.maps.MarkerImage(
@@ -137,9 +141,9 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
           });
           customOverlay.setMap(map);
 
-          const markerPosition = new kakao.maps.LatLng(37.545043, 127.039245);
+          // const markerPosition = new kakao.maps.LatLng(37.545043, 127.039245);
 
-          fitBoundsToMarkers(map, [locPosition, markerPosition]);
+          fitBoundsToMarkers(map, [locPosition, reviewAddress!]);
           setIsLoading(false); // 로딩 완료
         },
         (error) => {
