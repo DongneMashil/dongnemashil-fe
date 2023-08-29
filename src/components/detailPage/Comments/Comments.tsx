@@ -217,9 +217,7 @@ export const Comments = ({
                       onChange={onChangeCommentHandler}
                     />
                   ) : (
-                    <div className="content">
-                      {comment.comment}={comment.id}
-                    </div>
+                    <div className="content">{comment.comment}</div>
                   )}
                 </StDetailPageCommentItem>
               );
