@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { axiosInstance } from './api';
 
-interface ReviewData {
+export interface ReviewData {
   id: number;
   address: string;
   content: string;

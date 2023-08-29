@@ -1,12 +1,14 @@
 import React from 'react';
-import { CommonLayout } from 'components/layout';
 import {
   StCurrentLocationContainer,
   StCurrentLocationText,
   StCurrentLocationTitle,
   StInputWrapper,
   StMarker,
+  StMaxSize,
   StPostButton,
+  StTablet,
+  StWirteMapContainer,
 } from './WriteMapPage.styles.ts';
 import { Geolocation } from 'components/mapWritePage';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -46,25 +48,29 @@ export const WriteMapPage = () => {
   };
 
   return (
-    <CommonLayout>
+    <StWirteMapContainer>
       <BackButton onClick={onGoBackHandler} />
       <StCurrentLocationContainer>
-        <StCurrentLocationTitle>
-          산책 지점을 먼저 선택해주세요!
-        </StCurrentLocationTitle>
-        <StInputWrapper>
-          <StMarker />
-          <StCurrentLocationText onClick={onGoWriteMapSearchPageHandler}>
-            현위치: {addressData.fullAddress}
-          </StCurrentLocationText>
-        </StInputWrapper>
-        <StPostButton onClick={onGoWritePageHandler}>글 작성</StPostButton>
+        <StMaxSize>
+          <StCurrentLocationTitle>
+            산책 지점을 먼저 선택해주세요!
+          </StCurrentLocationTitle>
+          <StTablet>
+            <StInputWrapper>
+              <StMarker />
+              <StCurrentLocationText onClick={onGoWriteMapSearchPageHandler}>
+                현위치: {addressData.fullAddress}
+              </StCurrentLocationText>
+            </StInputWrapper>
+            <StPostButton onClick={onGoWritePageHandler}>글 작성</StPostButton>
+          </StTablet>
+        </StMaxSize>
       </StCurrentLocationContainer>
       <Geolocation
         selectedAddress={selectedAddress}
         onAddressUpdate={setCurrentAddress}
         disableCurrentLocation={disableCurrentLocation}
       />
-    </CommonLayout>
+    </StWirteMapContainer>
   );
 };

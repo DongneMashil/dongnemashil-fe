@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   StCenteredBox,
   StSlideContainer,
@@ -32,17 +32,17 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   files,
   onDeleteImage,
 }) => {
-  const onImageClick = (image: MediaFileType) => {
+  const onImageClick = useCallback((image: MediaFileType) => {
     onSelectedCoverImage && onSelectedCoverImage(image);
-  };
+  }, []);
 
-  const onCoverButtonClick = (image: MediaFileType) => {
+  const onCoverButtonClick = useCallback((image: MediaFileType) => {
     setCoverImage(image);
-  };
+  }, []);
 
-  const onImageDelete = (file: MediaFileType) => {
+  const onImageDelete = useCallback((file: MediaFileType) => {
     onDeleteImage(file);
-  };
+  }, []);
 
   return (
     <StSlideContainer>
