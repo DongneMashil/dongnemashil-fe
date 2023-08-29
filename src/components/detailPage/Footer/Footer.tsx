@@ -1,11 +1,12 @@
 import { Button } from 'components/common';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, Suspense } from 'react';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/CommentS.svg';
 import { ReactComponent as ChevronTop } from 'assets/icons/ChevronTop.svg';
 import { ReactComponent as Close } from 'assets/icons/Close.svg';
-import { Comments } from '../Comments/Comments';
+// import { Comments } from '../Comments/Comments';
+const Comments = React.lazy(() => import('../Comments/Comments'));
 import { CommentInput } from '../CommentInput/CommentInput';
 import { useLike } from 'hooks';
 import { useRecoilValue } from 'recoil';
@@ -93,7 +94,9 @@ export const Footer = ({
       {isCommentOpen && (
         <>
           <StFooterCommentSection>
-            <Comments reviewId={reviewId} $isCommentShow={isCommentShow} />
+            <Suspense fallback={<div>loading...</div>}>
+              <Comments reviewId={reviewId} $isCommentShow={isCommentShow} />
+            </Suspense>
           </StFooterCommentSection>
           <CommentInput reviewId={reviewId} $isCommentShow={isCommentShow} />
         </>

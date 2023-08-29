@@ -10,7 +10,11 @@ export type ReviewDetailResponse = {
   roadName: string;
   title: string;
   mainImgUrl: string | null;
+  smallMainImgUrl: string | null;
+  middleMainImgUrl: string | null;
   subImgUrl: string[];
+  smallSubImgUrl: string[];
+  middleSubImgUrl: string[];
   videoUrl: string | null;
   likeCnt: number;
   commentCnt: number;
