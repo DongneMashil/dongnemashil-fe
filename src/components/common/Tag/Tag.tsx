@@ -24,7 +24,7 @@ type IconKeys =
 
 const iconMapping: { [key: string]: IconKeys } = {
   동물친구들: 'animalFriends',
-  혼자서: 'alone', // 이 부분은 실제 tagImg의 키값과 일치해야 합니다.
+  혼자서: 'alone',
   연인이랑: 'withLover',
   벤치: 'bench',
   한적해요: 'quiet',
