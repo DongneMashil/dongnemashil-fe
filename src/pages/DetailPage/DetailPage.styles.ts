@@ -28,8 +28,13 @@ export const StDetailPageContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: 1rem;
-  // ${theme.floatingBox}
+  background: ${theme.windowBackgroundColor};
+  padding: 3rem;
+  @media (min-width: ${theme.size.tablet}) {
+    ${theme.floatingBox}
+    padding:3rem;
+    top: 2rem;
+  }
   ${theme.responsiveContainer}
 `;
 
@@ -78,17 +83,16 @@ export const StDetailPageContent = styled.main`
   flex-direction: column;
   justify-content: space-between;
   gap: 0.3rem;
-  // .detailimg {
-  //   width: 100%;
-  //   object-fit: contain;
-  //   // z-index: 1;
-  // }
+
   .content {
     margin: 1rem 0.5rem 1rem 0.5rem;
 
     height: fit-content;
     font-size: 16px;
     line-height: 1.5;
+  }
+  img {
+    cursor: pointer;
   }
 `;
 
@@ -158,22 +162,19 @@ export const StContentGridBox = styled.div`
     margin: 0.5rem 0; // 상하 간격 설정
 
     // 태블릿 뷰
-    @media (min-width: 768px) {
+    @media (min-width: 640px) {
       width: calc(50% - 1rem); // 2개의 열로 나누기 위해 50% 폭 지정
       margin: 0.5rem;
     }
-
-    // // 데스크톱 뷰
-    // @media (min-width: 1024px) {
-    //   width: calc(33.33% - 0.5rem); // 3개의 열로 나누기 위해 33.33% 폭 지정
-    //   margin: 0.5rem;
-    // }
   }
 `;
 
 export const StDetailPageLayout = styled.div`
   ${theme.responsiveLayout}
-  // background: #F7F7F7;
-  background:#ffffff;
+  background: #F7F7F7;
+  // background:#ffffff;
+  @media (max-width: ${theme.size.tablet}) {
+    background: #ffffff;
+  }
   min-height: 100vh;
 `;
