@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export interface AuthLogoBoxProps {
   $align: 'left' | 'center' | 'right';
+  $page: 'login' | 'register' | 'commonLogin';
 }
 
 export const StLogoBox = styled.div<AuthLogoBoxProps>`
