@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TabButton } from '../TabButton/TabButton';
 import { getMyReviews } from 'api/mypageApi';
 import { useNavigate } from 'react-router-dom';
@@ -51,7 +51,9 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
       fetchNextPage();
     }
   };
-
+  useEffect(() => {
+    console.log('🐬' + JSON.stringify(data?.pages, null, 2));
+  }, [data?.pages]);
   // 커스텀훅 사용
   const loaderRef = useIntersect(onIntersectCallback, {
     root: null,
