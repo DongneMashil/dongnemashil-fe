@@ -82,8 +82,8 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
           </TabButton>
         </StTabButtonBox>
       </StTabButtonWrapper>
-      <StTabContentBox $empty={!data}>
-        {data && data.pages ? (
+      <StTabContentBox $empty={!(data && data.pages[0].content.length > 0)}>
+        {data && data.pages[0].content.length > 0 ? (
           data.pages.map(
             (page) =>
               page.content &&
