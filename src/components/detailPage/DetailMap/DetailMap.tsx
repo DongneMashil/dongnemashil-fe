@@ -4,6 +4,7 @@ import Marker from 'assets/icons/Marker.svg';
 import { StMapContainer, StMyLocationButton } from './DetailMap.styles';
 import { LocationButton, Map } from 'components/common';
 import { calculateDistance } from 'utils';
+import { useNavigate } from 'react-router-dom';
 
 interface DetailMapProps {
   width: string;
@@ -61,6 +62,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
   const [currentLocation, setCurrentLocation] =
     useState<kakao.maps.LatLng | null>(null);
   const [distance, setDistance] = useState<number | null>(null); // 상태 추가
+  const navigate = useNavigate();
 
   const setMapCenterByAddress = async (
     address: string,
@@ -90,6 +92,8 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
           map.setCenter(coords);
         } else {
           console.error('Failed to get coordinates from the address.');
+          alert('주소로부터 좌표를 가져올 수 없습니다.');
+          navigate('/');
         }
       }
     );
