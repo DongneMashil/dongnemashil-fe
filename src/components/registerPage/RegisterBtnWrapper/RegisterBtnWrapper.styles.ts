@@ -9,9 +9,5 @@ export const StButtonWrapper = styled.div`
   @media screen and (min-width: 360px) {
     padding: 0 32px;
     margin: 54px auto 0;
-
-    & > button {
-      height: 47px !important;
-    }
   }
 `;

@@ -59,10 +59,8 @@ export const StLoginButtonWrapper = styled.div`
 
   & button {
     margin-bottom: 9px;
-
-    @media screen and (min-width: 360px) {
-      height: 47px !important;
-    }
+    height: 51px !important;
+    border-radius: 26px !important;
   }
 
   & button:last-of-type {

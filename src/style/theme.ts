@@ -38,7 +38,7 @@ const authLayout = css`
 
 const authButton = css`
   width: 100%;
-  height: 44px;
+  height: 47px;
   font-size: 16px;
   border: 0;
   box-sizing: border-box;
