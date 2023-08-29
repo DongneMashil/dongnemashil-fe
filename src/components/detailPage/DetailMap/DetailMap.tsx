@@ -53,6 +53,7 @@ interface KakaoSearchResult {
 }
 
 type KakaoSearchStatus = 'OK' | 'ZERO_RESULT' | 'ERROR';
+
 export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
   const [showCurrentLocation, setShowCurrentLocation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -212,3 +213,5 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
     </StMapContainer>
   );
 };
+
+export default DetailMap;

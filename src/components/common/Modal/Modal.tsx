@@ -83,3 +83,5 @@ export const Modal: FC<Props> = ({
       )
     : null;
 };
+
+export default Modal;

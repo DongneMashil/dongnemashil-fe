@@ -8,7 +8,11 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
-import { FooterSpacer, ImageModal, Modal, Tag } from 'components/common';
+import { FooterSpacer, ImageModal, Tag } from 'components/common';
+const DetailMap = React.lazy(
+  () => import('components/detailPage/DetailMap/DetailMap')
+);
+const Modal = React.lazy(() => import('components/common/Modal/Modal'));
 import {
   // StContentGridBox,
   StCreatedTime,
@@ -23,10 +27,9 @@ import {
 } from './DetailPage.styles';
 import noUser from 'assets/images/NoUser.jpg';
 import timeAgo from 'utils/timeAgo';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
-import { userProfileSelector } from 'recoil/userInfo';
-import { useVerifyUser } from 'hooks';
-import { DetailMap } from 'components/detailPage';
+import { useSetRecoilState } from 'recoil';
+import { useUpdateUserInfo } from 'hooks';
+// import { DetailMap } from 'components/detailPage';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 import { MasonryGrid } from '@egjs/react-grid';
 import { MasonryGridOptions } from '@egjs/grid';
@@ -51,14 +54,7 @@ export const DetailPage = () => {
   }
 
   //유저정보조회 및 업데이트
-  const { data: userData } = useVerifyUser(true);
-  const userState = useRecoilValue(userProfileSelector); //업데이트 후 조회
-  useEffect(() => {
-    console.log('current user state: ', userState);
-    if (userData) {
-      console.log('useVerifyUser data: ', userData);
-    }
-  }, [userState]);
+  const { data: userData } = useUpdateUserInfo();
 
   //리뷰 상세 조회
   const { data } = useQuery<ReviewDetailResponse, Error>({
