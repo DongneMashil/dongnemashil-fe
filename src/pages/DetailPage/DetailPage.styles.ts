@@ -83,17 +83,16 @@ export const StDetailPageContent = styled.main`
   flex-direction: column;
   justify-content: space-between;
   gap: 0.3rem;
-  // .detailimg {
-  //   width: 100%;
-  //   object-fit: contain;
-  //   // z-index: 1;
-  // }
+
   .content {
     margin: 1rem 0.5rem 1rem 0.5rem;
 
     height: fit-content;
     font-size: 16px;
     line-height: 1.5;
+  }
+  img {
+    cursor: pointer;
   }
 `;
 

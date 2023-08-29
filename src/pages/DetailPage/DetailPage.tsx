@@ -8,9 +8,9 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
-import { FooterSpacer, Modal, Tag } from 'components/common';
+import { FooterSpacer, ImageModal, Modal, Tag } from 'components/common';
 import {
-  StContentGridBox,
+  // StContentGridBox,
   StCreatedTime,
   StDetailPageContainer,
   StDetailPageContent,
@@ -21,7 +21,6 @@ import {
   StNavTitle,
   StTagWrapper,
 } from './DetailPage.styles';
-import noImage from 'assets/images/NoImage.png';
 import noUser from 'assets/images/NoUser.jpg';
 import timeAgo from 'utils/timeAgo';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
@@ -29,6 +28,8 @@ import { userProfileSelector } from 'recoil/userInfo';
 import { useVerifyUser } from 'hooks';
 import { DetailMap } from 'components/detailPage';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
+import { MasonryGrid } from '@egjs/react-grid';
+import { MasonryGridOptions } from '@egjs/grid';
 
 export const DetailPage = () => {
   const [isMapOpen, setIsMapOpen] = useState(false);
@@ -38,6 +39,7 @@ export const DetailPage = () => {
 
   const setCommentCount = useSetRecoilState(commentCountAtom);
   const navigate = useNavigate();
+  const [columns, setColumns] = useState(2);
   const defaultAddress = '서울특별시 마포구 와우산로 94'; //정보가 없을시 기본 주소
 
   //리뷰 아이디 없이 접근시 홈으로 이동
@@ -91,7 +93,7 @@ export const DetailPage = () => {
     }
     navigate(`/write/${data.id}`, { state: { reviewId: data.id } });
   };
-
+  //지도 설정
   const initMapHandler = (
     map: kakao.maps.Map,
     setMapCenterByAddress: (address: string, map: kakao.maps.Map) => void
@@ -101,6 +103,55 @@ export const DetailPage = () => {
     } else {
       setMapCenterByAddress(defaultAddress, map);
     }
+  };
+  //창 크기에 따른 MasonryGrid 컬럼 설정
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setColumns(1);
+      } else if (window.innerWidth < 1024) {
+        setColumns(2);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const masonryGridOptions: MasonryGridOptions = {
+    column: columns,
+    gap: 14,
+    defaultDirection: 'end',
+    align: 'stretch',
+  };
+
+  //이미지 srcset 설정
+  const [mainImageUrl, setMainImageUrl] = useState<(string | null)[]>([]);
+  const [subImgUrl, setSubImgUrl] = useState<(string | null)[][]>([]);
+  useEffect(() => {
+    if (data) {
+      setMainImageUrl([
+        data.mainImgUrl,
+        data.middleMainImgUrl,
+        data.smallMainImgUrl,
+      ]);
+      if (data.subImgUrl && data.subImgUrl[0] !== '') {
+        const subImgUrlArr = data.subImgUrl.map((img, index) => {
+          return [img, data.middleSubImgUrl[index], data.smallSubImgUrl[index]];
+        });
+        setSubImgUrl(subImgUrlArr);
+      }
+    }
+  }, [data]);
+  console.log(mainImageUrl);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [imageSrc, setImageSrc] = useState('');
+  const onClickImage = (imgSrc: string) => {
+    setImageSrc(imgSrc);
+    setIsImageModalOpen(true);
   };
 
   return (
@@ -149,35 +200,37 @@ export const DetailPage = () => {
                 </StDetailPageHeader>
                 <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>
                 <StDetailPageContent>
-                  <StContentGridBox>
+                  <MasonryGrid {...masonryGridOptions}>
                     {' '}
                     <img
-                      className="detailimg"
-                      src={data.mainImgUrl || noImage}
+                      src={mainImageUrl[0]!}
+                      srcSet={`${mainImageUrl[0]} 1440w, ${mainImageUrl[1]} 768w, ${mainImageUrl[2]} 360w`}
+                      sizes={`(min-width:768px) 360px, (min-width:500px) 768px, 360px`}
                       alt={`${data.address}의 메인 사진`}
+                      onClick={() => onClickImage(mainImageUrl[0]!)}
                     />
-                    {data.subImgUrl.map((img, index) =>
-                      img !== '' ? (
+                    {subImgUrl &&
+                      subImgUrl.map((img, index) => (
                         <img
                           key={index}
-                          src={img}
+                          src={img[0]!}
+                          srcSet={`${img[0]} 1440w, ${img[1]} 768w, ${img[2]} 360w`}
+                          sizes={`(min-width:768px) 360px, (min-width:500px) 768px, 360px`}
                           alt={`${data.address}의 ${index}번째 서브 사진`}
+                          onClick={() => onClickImage(img[0]!)}
                         />
-                      ) : null
-                    )}
+                      ))}
                     {data.videoUrl && (
                       <>
-                        {/* <VideoPlayer videoUrl={data.videoUrl} /> */}
                         <video
                           controls
                           width={'100%'}
-                          height={'100%'}
                           src={data.videoUrl}
                           aria-label={`${data.address}의 비디오`}
                         />
                       </>
                     )}
-                  </StContentGridBox>
+                  </MasonryGrid>
 
                   <p className="content" aria-label="본문">
                     {data.content}
@@ -207,6 +260,11 @@ export const DetailPage = () => {
                     title="완료"
                     firstLine="삭제가 완료되었습니다."
                     onCloseHandler={() => navigate('/')}
+                  />
+                  <ImageModal
+                    isOpen={isImageModalOpen}
+                    onCloseHandler={() => setIsImageModalOpen(false)}
+                    imageSrc={imageSrc}
                   />
                 </StDetailPageContent>
               </>
