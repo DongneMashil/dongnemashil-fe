@@ -8,11 +8,14 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
-import { FooterSpacer, ImageModal, Tag } from 'components/common';
+import { BackButton, FooterSpacer, Tag } from 'components/common';
 const DetailMap = React.lazy(
   () => import('components/detailPage/DetailMap/DetailMap')
 );
 const Modal = React.lazy(() => import('components/common/Modal/Modal'));
+const ImageModal = React.lazy(
+  () => import('components/common/ImageModal/ImageModal')
+);
 import {
   // StContentGridBox,
   StCreatedTime,
@@ -149,16 +152,15 @@ export const DetailPage = () => {
     setImageSrc(imgSrc);
     setIsImageModalOpen(true);
   };
-
+  const onMapCloseHandler = () => {
+    setIsMapOpen(false);
+  };
   return (
     <>
       {isMapOpen ? (
         <>
-          <NavBar
-            btnLeft="closeModal"
-            onClickLeft={() => setIsMapOpen(false)}
-          />
           <Suspense fallback={<div>loading...</div>}>
+            <BackButton onClick={onMapCloseHandler} />
             <DetailMap height="100%" width="100%" initMap={initMapHandler} />
           </Suspense>
         </>

@@ -46,3 +46,4 @@ export const ImageModal: FC<Props> = ({ isOpen, onCloseHandler, imageSrc }) => {
       )
     : null;
 };
+export default ImageModal;
