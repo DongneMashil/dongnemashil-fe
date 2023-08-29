@@ -1,11 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import { submitReview, updateReview } from 'api/reviews';
-import { MediaFile } from 'recoil/mediaFile/mediaFileAtom';
+import { MediaFile, mediaFilesAtom } from 'recoil/mediaFile/mediaFileAtom';
 import { getExtensionName } from 'components/myProfilePage';
 import { getImageMimeType, getVideoMimeType } from 'utils';
 import { useNavigate } from 'react-router-dom';
 import { getStringByteSize } from '../getStirngByTeSize/getStringBySize';
 import { useEffect, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 
 type UseSubmitHandlerProps = {
   reviewId: number;
@@ -29,6 +30,8 @@ export const useSubmitHandler = ({
   const navigate = useNavigate();
   const mutation = useMutation(submitReview);
   const [isLoading, setIsLoading] = useState(false);
+
+  const setStoredMediaFiles = useSetRecoilState(mediaFilesAtom);
 
   const updateMutation = useMutation((formData: FormData) =>
     updateReview(reviewId, formData)
@@ -167,6 +170,7 @@ export const useSubmitHandler = ({
         onSuccess: (response) => {
           console.log('수정 성공', response);
           navigate(`/review/${response.id}`);
+          setStoredMediaFiles([]);
           setIsLoading(false);
         },
         onError: (error: unknown) => {
@@ -185,6 +189,7 @@ export const useSubmitHandler = ({
         onSuccess: (response) => {
           console.log('등록성공', response);
           navigate(`/review/${response.id}`);
+          setStoredMediaFiles([]);
           setIsLoading(false);
         },
         onError: (error: unknown) => {

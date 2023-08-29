@@ -33,6 +33,10 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   files,
   onDeleteImage,
 }) => {
+  const wrapperRef = useRef(null);
+  
+  useHorizontalDragScroll(wrapperRef);
+
   const onImageClick = useCallback((image: MediaFileType) => {
     onSelectedCoverImage && onSelectedCoverImage(image);
   }, []);
@@ -44,9 +48,6 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   const onImageDelete = useCallback((file: MediaFileType) => {
     onDeleteImage(file);
   }, []);
-
-  const wrapperRef = useRef(null);
-  useHorizontalDragScroll(wrapperRef);
 
   return (
     <StSlideContainer ref={wrapperRef}>
