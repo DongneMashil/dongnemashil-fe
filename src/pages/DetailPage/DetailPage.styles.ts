@@ -9,7 +9,7 @@ export const StNavTitle = styled.h1`
   overflow: hidden; // 넘치면 숨김
   text-overflow: ellipsis; //넘치면 ...
 
-  direction: rtl; //...을 앞에 붙임
+  // direction: rtl; //...을 앞에 붙임
 `;
 
 export const StTagWrapper = styled.ul`

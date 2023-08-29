@@ -3,6 +3,8 @@ import { styled } from 'styled-components';
 
 export const StModalOverlay = styled.div`
   ${theme.overlayBackground}
+  display: flex;
+  flex-direction: column;
 
   p {
     font-size: 0.8rem;

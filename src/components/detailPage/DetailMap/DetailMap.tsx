@@ -129,8 +129,8 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
             position: locPosition,
             content: `
             <div style="
-              width:10px;
-              height:10px;
+              width:15px;
+              height:15px;
               border-radius:50%;
               background:#FF0000;
               animation: blink 1s infinite;
