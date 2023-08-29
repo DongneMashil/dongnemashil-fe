@@ -221,3 +221,4 @@ export const Comments = ({
     </StDetailPageComment>
   );
 };
+export default Comments;

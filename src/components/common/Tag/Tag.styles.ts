@@ -51,4 +51,8 @@ export const StTagContainer = styled.div<StTagProps>`
     line-height: normal;
     margin: 0.6rem 0;
   }
+  img {
+    width: 100%;
+    height: auto;
+  }
 `;
