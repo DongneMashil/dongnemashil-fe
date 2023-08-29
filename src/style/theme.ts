@@ -85,6 +85,7 @@ export const theme = {
     tablet: `(min-width: ${size.mobile}) and (max-width: ${size.tablet})`,
     desktop: `(min-width: ${size.tablet})`,
   },
+  size,
   floatingBox: {
     width: '100%',
     backgroundColor: 'white',

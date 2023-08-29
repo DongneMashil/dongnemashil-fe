@@ -15,6 +15,7 @@ import {
   StDetailPageContainer,
   StDetailPageContent,
   StDetailPageHeader,
+  StDetailPageLayout,
   StDetailTitle,
   StEditButtonWrapper,
   StNavTitle,
@@ -108,7 +109,7 @@ export const DetailPage = () => {
           />
         </>
       ) : (
-        <>
+        <StDetailPageLayout>
           <NavBar
             btnLeft={'back'}
             btnRight={'map'}
@@ -213,7 +214,7 @@ export const DetailPage = () => {
               isLiked={data.likebool}
             ></Footer>
           )}
-        </>
+        </StDetailPageLayout>
       )}
     </>
   );

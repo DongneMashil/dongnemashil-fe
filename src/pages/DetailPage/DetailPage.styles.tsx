@@ -1,3 +1,4 @@
+import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StNavTitle = styled.h1`
@@ -28,6 +29,8 @@ export const StDetailPageContainer = styled.div`
   flex-direction: column;
   position: relative;
   padding: 1rem;
+  // ${theme.floatingBox}
+  ${theme.responsiveContainer}
 `;
 
 export const StDetailTitle = styled.h1`
@@ -166,4 +169,11 @@ export const StContentGridBox = styled.div`
     //   margin: 0.5rem;
     // }
   }
+`;
+
+export const StDetailPageLayout = styled.div`
+  ${theme.responsiveLayout}
+  // background: #F7F7F7;
+  background:#ffffff;
+  min-height: 100vh;
 `;
