@@ -5,6 +5,7 @@ import {
   StCurrentLocationTitle,
   StInputWrapper,
   StMarker,
+  StMaxSize,
   StPostButton,
   StTablet,
   StWirteMapContainer,
@@ -50,18 +51,20 @@ export const WriteMapPage = () => {
     <StWirteMapContainer>
       <BackButton onClick={onGoBackHandler} />
       <StCurrentLocationContainer>
-        <StCurrentLocationTitle>
-          산책 지점을 먼저 선택해주세요!
-        </StCurrentLocationTitle>
-        <StTablet>
-          <StInputWrapper>
-            <StMarker />
-            <StCurrentLocationText onClick={onGoWriteMapSearchPageHandler}>
-              현위치: {addressData.fullAddress}
-            </StCurrentLocationText>
-          </StInputWrapper>
-          <StPostButton onClick={onGoWritePageHandler}>글 작성</StPostButton>
-        </StTablet>
+        <StMaxSize>
+          <StCurrentLocationTitle>
+            산책 지점을 먼저 선택해주세요!
+          </StCurrentLocationTitle>
+          <StTablet>
+            <StInputWrapper>
+              <StMarker />
+              <StCurrentLocationText onClick={onGoWriteMapSearchPageHandler}>
+                현위치: {addressData.fullAddress}
+              </StCurrentLocationText>
+            </StInputWrapper>
+            <StPostButton onClick={onGoWritePageHandler}>글 작성</StPostButton>
+          </StTablet>
+        </StMaxSize>
       </StCurrentLocationContainer>
       <Geolocation
         selectedAddress={selectedAddress}

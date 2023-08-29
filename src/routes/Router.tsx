@@ -30,29 +30,24 @@ const Router = () => {
         <Route path="/login/common" element={<CommonLoginPage />} />
         <Route path="/login/kakao" element={<KakaoCallbackPage />} />
         <Route path="/review/:reviewId" element={<DetailPage />} />
-        {/* <Route
+        <Route
           path="/writemap"
           element={<ProtectedRoute element={<WriteMapPage />} />}
-        /> */}
-        <Route path="/writemap" element={<WriteMapPage />} />
-        {/* <Route
+        />
+        <Route
           path="/writemap/search"
           element={<ProtectedRoute element={<WriteMapSearchPage />} />}
-        /> */}
-        <Route path="/writemap/search" element={<WriteMapSearchPage />} />
-        {/* <Route
-          path="/write/:id"
-          element={<ProtectedRoute element={ element={
-            <StableNavigateContextProvider>
-              <WritePage />
-            </StableNavigateContextProvider>} />}
-        /> */}
+        />
         <Route
           path="/write/:id"
           element={
-            <StableNavigateContextProvider>
-              <WritePage />
-            </StableNavigateContextProvider>
+            <ProtectedRoute
+              element={
+                <StableNavigateContextProvider>
+                  <WritePage />
+                </StableNavigateContextProvider>
+              }
+            />
           }
         />
         <Route
@@ -70,16 +65,16 @@ const Router = () => {
         <Route path="/temp/mypage" element={<MyPage />} />
         <Route path="/temp/mypage/profile" element={<MyProfilePage />} />
         <Route path="/temp/mypage/comments" element={<MyCommentsPage />} />
-        {/* <Route
-          path="/write"
-          element={<ProtectedRoute element={<WritePage />} />}
-        /> */}
         <Route
           path="/write"
           element={
-            <StableNavigateContextProvider>
-              <WritePage />
-            </StableNavigateContextProvider>
+            <ProtectedRoute
+              element={
+                <StableNavigateContextProvider>
+                  <WritePage />
+                </StableNavigateContextProvider>
+              }
+            />
           }
         />
         <Route path="/search" element={<SearchPage />} />

@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
 import { ReactComponent as MarkerIcon } from 'assets/icons/Marker.svg';
+import { theme } from 'style/theme';
 
 export const StWirteMapContainer = styled.div`
   width: 100%;
@@ -27,7 +28,12 @@ export const StCurrentLocationContainer = styled.div`
   padding-left: 1.5rem;
   @media ${(props) => props.theme.device.desktop} {
     height: 12.1rem;
+    padding-left: 6.5rem;
   }
+`;
+
+export const StMaxSize = styled.div`
+  ${theme.responsiveContainer}
 `;
 
 export const StCurrentLocationTitle = styled.span`
@@ -41,6 +47,7 @@ export const StCurrentLocationTitle = styled.span`
 
 export const StTablet = styled.div`
   width: 100%;
+  margin-top: 1rem;
   @media ${(props) => props.theme.device.desktop} {
     display: flex;
     flex-direction: row;
@@ -52,9 +59,10 @@ export const StInputWrapper = styled.div`
   height: 2rem;
   border-bottom: 1px solid #dbdbdb;
   @media ${(props) => props.theme.device.desktop} {
-    width: 22.4375rem;
+    width: 23.6rem;
     height: 3.625rem;
     border-radius: 1.88rem;
+    border: 1px solid #dbdbdb;
   }
 `;
 
@@ -62,6 +70,10 @@ export const StMarker = styled(MarkerIcon)`
   width: 0.8125rem;
   height: 1.08331rem;
   margin: 0 0.44rem;
+  @media ${(props) => props.theme.device.desktop} {
+    margin-top: 1rem;
+    margin-left: 1.3rem;
+  }
 `;
 
 export const StCurrentLocationText = styled.span`
@@ -72,6 +84,10 @@ export const StCurrentLocationText = styled.span`
   font-weight: 600;
   line-height: normal;
   cursor: pointer;
+  @media ${(props) => props.theme.device.desktop} {
+    margin-bottom: 1.12rem;
+    font-size: 1rem;
+  }
 `;
 
 export const StPostButton = styled.button`
@@ -87,10 +103,11 @@ export const StPostButton = styled.button`
   font-size: 1.125rem;
   font-style: normal;
   font-weight: 700;
+  box-sizing: border-box;
   @media ${(props) => props.theme.device.desktop} {
     width: 11.5rem;
     height: 3.625rem;
     border-radius: 1.88rem;
-    margin: 4.64rem 6rem 3.81rem;
+    margin: 0 0 3.81rem 2rem;
   }
 `;
