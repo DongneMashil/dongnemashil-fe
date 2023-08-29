@@ -33,9 +33,6 @@ export const StNavBar = styled.div<{
   top: 0;
   will-change: transform;
   z-index: 100;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: 100%;
   height: 50px;
   padding: 0 10px;
@@ -43,10 +40,18 @@ export const StNavBar = styled.div<{
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.06);
   transition: all 0.4s ease-in-out;
 
-  > div {
+  > div > div {
     display: flex;
     gap: 12px;
   }
+`;
+
+export const StNavBarContainer = styled.div`
+  ${theme.responsiveContainer}
+  max-width: 746px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const StCenterWrapper = styled.div`

@@ -4,6 +4,7 @@ import {
   StCenterWrapper,
   StLeftWrapper,
   StNavBar,
+  StNavBarContainer,
   StRighttWrapper,
 } from './NavBar.styles';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -71,9 +72,11 @@ export const NavBar = ({
   const navigate = useNavigate();
   const location = useLocation();
   const [historyStack, setHistoryStack] = useRecoilState(historyStackState);
+  const regex = /write/;
 
   useEffect(() => {
     console.log(historyStack);
+    console.log(location.state?.from);
     setHistoryStack([location.pathname, ...historyStack]);
     if (location.pathname === '/') {
       setHistoryStack([location.pathname]);
@@ -81,11 +84,11 @@ export const NavBar = ({
   }, [location.pathname]);
 
   const goBack = () => {
-    location.pathname === '/write' && historyStack[0] === '/writemap/search'
+    location.pathname === '/write' && historyStack[1] === '/writemap/search'
       ? navigate(-4)
       : location.pathname === '/write'
       ? navigate(-2)
-      : location.state?.from === '/write'
+      : regex.test(historyStack[1])
       ? navigate('/')
       : navigate(-1);
   };
@@ -169,12 +172,14 @@ export const NavBar = ({
       prevScrollY={prevScrollY}
       $isWritePage={$isWritePage}
     >
-      <StLeftWrapper>{leftButtons[btnLeft]}</StLeftWrapper>
-      {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
-      <StRighttWrapper>
-        {btnSecondRight ? secondRightButtons[btnSecondRight] : null}
-        {btnRight ? rightButtons[btnRight] : null}
-      </StRighttWrapper>
+      <StNavBarContainer>
+        <StLeftWrapper>{leftButtons[btnLeft]}</StLeftWrapper>
+        {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
+        <StRighttWrapper>
+          {btnSecondRight ? secondRightButtons[btnSecondRight] : null}
+          {btnRight ? rightButtons[btnRight] : null}
+        </StRighttWrapper>
+      </StNavBarContainer>
     </StNavBar>
   );
 };
