@@ -4,6 +4,7 @@ import {
   StCenterWrapper,
   StLeftWrapper,
   StNavBar,
+  StNavBarContainer,
   StRighttWrapper,
 } from './NavBar.styles';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -169,12 +170,14 @@ export const NavBar = ({
       prevScrollY={prevScrollY}
       $isWritePage={$isWritePage}
     >
-      <StLeftWrapper>{leftButtons[btnLeft]}</StLeftWrapper>
-      {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
-      <StRighttWrapper>
-        {btnSecondRight ? secondRightButtons[btnSecondRight] : null}
-        {btnRight ? rightButtons[btnRight] : null}
-      </StRighttWrapper>
+      <StNavBarContainer>
+        <StLeftWrapper>{leftButtons[btnLeft]}</StLeftWrapper>
+        {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
+        <StRighttWrapper>
+          {btnSecondRight ? secondRightButtons[btnSecondRight] : null}
+          {btnRight ? rightButtons[btnRight] : null}
+        </StRighttWrapper>
+      </StNavBarContainer>
     </StNavBar>
   );
 };
