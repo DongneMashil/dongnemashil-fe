@@ -20,7 +20,7 @@ export const LocationButton: React.FC<BackButtonProps> = ({
     <StLocationButton onClick={onClick}>
       {isLoading ? (
         <StLoadingSpinner />
-      ) : isDistanceVisible ? (
+      ) : isDistanceVisible && distance ? (
         `${distance}km`
       ) : (
         <Location />
