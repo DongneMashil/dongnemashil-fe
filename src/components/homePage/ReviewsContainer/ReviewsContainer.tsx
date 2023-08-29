@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import { Thumbnail } from '../Thumbnail/Thumbnail';
 import {
@@ -7,13 +7,14 @@ import {
   StReviewsContainer,
   StSort,
   StTarget,
-  StThumbnailWrapper,
   StTopWrapper,
 } from './ReviewsContainer.styles';
 import { useIntersect } from 'hooks/useIntersect';
 import { Button } from 'components/common';
 import { ReviewsList } from 'api/reviewsApi';
 import { StLoadingSpinner } from 'components/common/LoadingSpinner/LoadingSpinner.styles';
+import { MasonryGrid } from '@egjs/react-grid';
+import { MasonryGridOptions } from '@egjs/grid';
 
 export interface ReviewsProps {
   type: string;
@@ -46,6 +47,31 @@ export const ReviewsContainer = ({
     }
   );
 
+  const [columns, setColumns] = useState(1);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setColumns(1);
+      } else if (window.innerWidth < 1024) {
+        setColumns(2);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const masonryGridOptions: MasonryGridOptions = {
+    column: columns,
+    gap: 14,
+    defaultDirection: 'end',
+    align: 'stretch',
+  };
+
   return (
     <StReviewsContainer>
       <StTopWrapper>
@@ -76,7 +102,7 @@ export const ReviewsContainer = ({
       {!isFetching && reviews.length === 0 ? (
         <StNoReviews>검색된 글이 없습니다.</StNoReviews>
       ) : (
-        <StThumbnailWrapper>
+        <MasonryGrid {...masonryGridOptions}>
           {reviews?.map((review) => (
             <Thumbnail
               key={review.id}
@@ -90,7 +116,7 @@ export const ReviewsContainer = ({
               likebool={review.likebool}
             />
           ))}
-        </StThumbnailWrapper>
+        </MasonryGrid>
       )}
       {isFetching && (
         <StNoReviews>

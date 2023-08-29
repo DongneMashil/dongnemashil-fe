@@ -64,6 +64,21 @@ export const FixFooter = ({
     ),
     goTop: (
       <>
+        <div className="rightMap">
+          <Button
+            ariaLabel="지도보기"
+            onClick={onClickCenter}
+            type="borderRound"
+            $width={'48px'}
+            $height={'48px'}
+            $round={'50%'}
+            $stroke={'1px'}
+            $shadow={true}
+          >
+            <PurpleMarker />
+            <span>지도</span>
+          </Button>
+        </div>
         <Button
           ariaLabel="맨 위로"
           onClick={onClickRight}

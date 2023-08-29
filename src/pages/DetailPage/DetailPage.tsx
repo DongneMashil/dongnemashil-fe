@@ -10,15 +10,16 @@ import { NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
 import { FooterSpacer, Modal, Tag } from 'components/common';
 import {
+  StContentGridBox,
   StCreatedTime,
   StDetailPageContainer,
   StDetailPageContent,
   StDetailPageHeader,
+  StDetailPageLayout,
   StDetailTitle,
   StEditButtonWrapper,
   StNavTitle,
   StTagWrapper,
-  StVideoPlayerBox,
 } from './DetailPage.styles';
 import noImage from 'assets/images/NoImage.png';
 import noUser from 'assets/images/NoUser.jpg';
@@ -34,6 +35,7 @@ export const DetailPage = () => {
   const [isDeleteDetailModalOpen, setIsDeleteDetailModalOpen] = useState(false);
   const [isDeleteCompleteModalOpen, setIsDeleteCompleteModalOpen] =
     useState(false);
+
   const setCommentCount = useSetRecoilState(commentCountAtom);
   const navigate = useNavigate();
   const defaultAddress = '서울특별시 마포구 와우산로 94'; //정보가 없을시 기본 주소
@@ -90,6 +92,17 @@ export const DetailPage = () => {
     navigate(`/write/${data.id}`, { state: { reviewId: data.id } });
   };
 
+  const initMapHandler = (
+    map: kakao.maps.Map,
+    setMapCenterByAddress: (address: string, map: kakao.maps.Map) => void
+  ) => {
+    if (data) {
+      setMapCenterByAddress(data.address, map);
+    } else {
+      setMapCenterByAddress(defaultAddress, map);
+    }
+  };
+
   return (
     <>
       {isMapOpen ? (
@@ -98,16 +111,10 @@ export const DetailPage = () => {
             btnLeft="closeModal"
             onClickLeft={() => setIsMapOpen(false)}
           />
-          <DetailMap
-            height="100%"
-            width="100%"
-            initMap={(map, setMapCenterByAddress) => {
-              setMapCenterByAddress(data ? data.address : defaultAddress, map);
-            }}
-          />
+          <DetailMap height="100%" width="100%" initMap={initMapHandler} />
         </>
       ) : (
-        <>
+        <StDetailPageLayout>
           <NavBar
             btnLeft={'back'}
             btnRight={'map'}
@@ -142,33 +149,35 @@ export const DetailPage = () => {
                 </StDetailPageHeader>
                 <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>
                 <StDetailPageContent>
-                  <img
-                    className="detailimg"
-                    src={data.mainImgUrl || noImage}
-                    alt={`${data.address}의 메인 사진`}
-                  />
-                  {data.subImgUrl.map((img, index) =>
-                    img !== '' ? (
-                      <img
-                        key={index}
-                        src={img}
-                        alt={`${data.address}의 ${index}번째 서브 사진`}
-                      />
-                    ) : null
-                  )}
-
-                  {data.videoUrl && (
-                    <StVideoPlayerBox>
-                      {/* <VideoPlayer videoUrl={data.videoUrl} /> */}
-                      <video
-                        controls
-                        width={'100%'}
-                        height={'100%'}
-                        src={data.videoUrl}
-                        aria-label={`${data.address}의 비디오`}
-                      />
-                    </StVideoPlayerBox>
-                  )}
+                  <StContentGridBox>
+                    {' '}
+                    <img
+                      className="detailimg"
+                      src={data.mainImgUrl || noImage}
+                      alt={`${data.address}의 메인 사진`}
+                    />
+                    {data.subImgUrl.map((img, index) =>
+                      img !== '' ? (
+                        <img
+                          key={index}
+                          src={img}
+                          alt={`${data.address}의 ${index}번째 서브 사진`}
+                        />
+                      ) : null
+                    )}
+                    {data.videoUrl && (
+                      <>
+                        {/* <VideoPlayer videoUrl={data.videoUrl} /> */}
+                        <video
+                          controls
+                          width={'100%'}
+                          height={'100%'}
+                          src={data.videoUrl}
+                          aria-label={`${data.address}의 비디오`}
+                        />
+                      </>
+                    )}
+                  </StContentGridBox>
 
                   <p className="content" aria-label="본문">
                     {data.content}
@@ -210,7 +219,7 @@ export const DetailPage = () => {
               isLiked={data.likebool}
             ></Footer>
           )}
-        </>
+        </StDetailPageLayout>
       )}
     </>
   );

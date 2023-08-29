@@ -1,3 +1,4 @@
+import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StNavTitle = styled.h1`
@@ -28,6 +29,8 @@ export const StDetailPageContainer = styled.div`
   flex-direction: column;
   position: relative;
   padding: 1rem;
+  // ${theme.floatingBox}
+  ${theme.responsiveContainer}
 `;
 
 export const StDetailTitle = styled.h1`
@@ -75,11 +78,11 @@ export const StDetailPageContent = styled.main`
   flex-direction: column;
   justify-content: space-between;
   gap: 0.3rem;
-  .detailimg {
-    width: 100%;
-    object-fit: contain;
-    // z-index: 1;
-  }
+  // .detailimg {
+  //   width: 100%;
+  //   object-fit: contain;
+  //   // z-index: 1;
+  // }
   .content {
     margin: 1rem 0.5rem 1rem 0.5rem;
 
@@ -123,4 +126,54 @@ export const StEditButtonWrapper = styled.div`
     display: flex;
     align-items: center;
   }
+`;
+
+// export const StContentGridBox = styled.div`
+//   width: 100%;
+//   display: grid;
+//   grid-template-columns: repeat(1, 1fr);
+//   @media (min-width: 580px) {
+//     grid-template-columns: repeat(2, 1fr);
+//   }
+
+//   gap: 0.5rem;
+//   margin-bottom: 1rem;
+//   img {
+//     width: 100%;
+//     height: 100%;
+//     object-fit: contain;
+//   }
+// `;
+export const StContentGridBox = styled.div`
+  // width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  grid-auto-rows: 1fr;
+
+  img,
+  video {
+    height: fit-content;
+    width: 100%; // 모바일 기본값으로 100% 폭 설정
+    margin: 0.5rem 0; // 상하 간격 설정
+
+    // 태블릿 뷰
+    @media (min-width: 768px) {
+      width: calc(50% - 1rem); // 2개의 열로 나누기 위해 50% 폭 지정
+      margin: 0.5rem;
+    }
+
+    // // 데스크톱 뷰
+    // @media (min-width: 1024px) {
+    //   width: calc(33.33% - 0.5rem); // 3개의 열로 나누기 위해 33.33% 폭 지정
+    //   margin: 0.5rem;
+    // }
+  }
+`;
+
+export const StDetailPageLayout = styled.div`
+  ${theme.responsiveLayout}
+  // background: #F7F7F7;
+  background:#ffffff;
+  min-height: 100vh;
 `;

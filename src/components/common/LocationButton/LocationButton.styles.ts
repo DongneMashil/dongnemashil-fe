@@ -1,13 +1,16 @@
 import { styled } from 'styled-components';
 
 export const StLocationButton = styled.button`
+  width: 53px;
+  height: 53px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 0.5px solid #cecece;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 3.3125rem;
-  height: 3.3125rem;
-  z-index: 10;
-  background-color: #fff;
-  border-radius: 100%;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  bottom: 50px;
+  right: 20px;
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.2);
 `;
