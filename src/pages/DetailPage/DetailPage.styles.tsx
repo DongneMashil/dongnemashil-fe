@@ -163,7 +163,7 @@ export const StContentGridBox = styled.div`
     margin: 0.5rem 0; // 상하 간격 설정
 
     // 태블릿 뷰
-    @media (min-width: 670px) {
+    @media (min-width: 640px) {
       width: calc(50% - 1rem); // 2개의 열로 나누기 위해 50% 폭 지정
       margin: 0.5rem;
     }
