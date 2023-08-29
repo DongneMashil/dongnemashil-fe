@@ -335,20 +335,20 @@ export const RegisterPage = React.memo(() => {
               </AuthErrorMsg>
             </StErrorMsgBox>
           )}
+          <RegisterBtnWrapper
+            type="authNormal"
+            onClick={onSubmitHandler}
+            $active={
+              emailMsg.isValid &&
+              nicknameMsg.isValid &&
+              passwordMsg.isValid &&
+              passwordVerifyMsg.isValid &&
+              isNotDuplicated.email &&
+              isNotDuplicated.nickname
+            }
+            label="회원가입"
+          />
         </StLoginWrapper>
-        <RegisterBtnWrapper
-          type="authNormal"
-          onClick={onSubmitHandler}
-          $active={
-            emailMsg.isValid &&
-            nicknameMsg.isValid &&
-            passwordMsg.isValid &&
-            passwordVerifyMsg.isValid &&
-            isNotDuplicated.email &&
-            isNotDuplicated.nickname
-          }
-          label="회원가입"
-        />
       </StLoginContainer>
       <Modal
         isOpen={isModalOpen}
