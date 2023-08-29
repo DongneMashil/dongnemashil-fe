@@ -1,15 +1,9 @@
+import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StModalOverlay = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
+  ${theme.overlayBackground}
+
   p {
     font-size: 0.8rem;
     color: white;

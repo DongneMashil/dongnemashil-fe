@@ -29,7 +29,7 @@ export const StDetailPageContainer = styled.div`
   flex-direction: column;
   position: relative;
   background: ${theme.windowBackgroundColor};
-  padding: 3rem;
+  padding: 1rem;
   @media (min-width: ${theme.size.tablet}) {
     ${theme.floatingBox}
     padding:3rem;

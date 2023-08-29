@@ -1,3 +1,4 @@
+import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StModalButtonWrpper = styled.div`
@@ -35,14 +36,7 @@ export const StModalButtonWrpper = styled.div`
 `;
 
 export const StModalOverlay = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.35);
-  z-index: 9999;
+  ${theme.overlayBackground}
 `;
 
 export const StModalWindow = styled.div`
@@ -52,6 +46,7 @@ export const StModalWindow = styled.div`
   align-items: center;
   width: 21.875rem;
   height: fit-content;
+  min-height: 15.625rem;
   flex-shrink: 0;
   background-color: white;
   border-radius: 0.625rem;
@@ -64,7 +59,7 @@ export const StModalWindow = styled.div`
     margin: 3rem 0 2rem 0;
   }
   .cropper {
-    height: 100%;
-    width: 100%;
+    height: fit-content;
+    width: fit-content;
   }
 `;

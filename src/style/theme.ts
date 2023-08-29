@@ -77,6 +77,17 @@ const responsiveContainer = css`
   max-width: ${size.tablet};
   margin: 0 auto;
 `;
+
+const overlayBackground = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+`;
 export const theme = {
   ...colors,
   ...maxSizes,
@@ -98,6 +109,7 @@ export const theme = {
   getAuthViewPoint,
   responsiveLayout,
   responsiveContainer,
+  overlayBackground,
 };
 
 // 사용법
