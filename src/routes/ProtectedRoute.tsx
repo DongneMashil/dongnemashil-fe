@@ -1,16 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useVerifyUser } from 'hooks';
 import { LoadingPage } from 'pages';
 
 const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
   const { isLoading, isError, isSuccess } = useVerifyUser(true);
-
-  useEffect(() => {
-    if (!isLoading && isError) {
-      window.alert('로그인이 필요합니다.');
-    }
-  }, [isLoading, isError]);
 
   if (isLoading) {
     console.log('useVerifyUser Loading');

@@ -38,7 +38,7 @@ export const HomePage = () => {
   return (
     <>
       <NavBar btnLeft={'logo'} btnSecondRight={'search'} btnRight={'mypage'}>
-        <h1>서울 전체</h1>
+        <h1>전체 보기</h1>
       </NavBar>
       <ToggleTagButton onTagChange={handleTagChange} />
       <ReviewsContainer

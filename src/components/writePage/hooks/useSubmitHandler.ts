@@ -5,6 +5,7 @@ import { getExtensionName } from 'components/myProfilePage';
 import { getImageMimeType, getVideoMimeType } from 'utils';
 import { useNavigate } from 'react-router-dom';
 import { getStringByteSize } from '../getStirngByTeSize/getStringBySize';
+import { useEffect, useState } from 'react';
 
 type UseSubmitHandlerProps = {
   reviewId: number;
@@ -27,12 +28,14 @@ export const useSubmitHandler = ({
 }: UseSubmitHandlerProps) => {
   const navigate = useNavigate();
   const mutation = useMutation(submitReview);
+  const [isLoading, setIsLoading] = useState(false);
 
   const updateMutation = useMutation((formData: FormData) =>
     updateReview(reviewId, formData)
   );
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     if (formValues.title.trim() === '') {
       setModalMessage('제목을 입력해주세요.');
       setIsModalOpen(true);
@@ -121,7 +124,9 @@ export const useSubmitHandler = ({
         }
       }
 
+      let i = 0;
       for (const file of mediaFiles) {
+        i++;
         if (typeof file.file === 'string') {
           const response = await fetch(`${file.file}?timestamp=${Date.now()}`);
           if (!response.ok) {
@@ -135,14 +140,14 @@ export const useSubmitHandler = ({
             file.type === 'image'
               ? getImageMimeType(finalFileName)
               : getVideoMimeType(finalFileName);
-          const fileObject = new File([blob], `file.${finalFileName}`, {
+          const fileObject = new File([blob], `file${i}}.${finalFileName}`, {
             type: fileMimeType,
           });
 
           if (file.type === 'image' && !file.isCover) {
-            formData.append('subImgUrl', fileObject, finalFileName);
+            formData.append('subImgUrl', fileObject);
           } else if (file.type === 'video') {
-            formData.append('videoUrl', fileObject, finalFileName);
+            formData.append('videoUrl', fileObject);
           }
         } else {
           if (file.type === 'image' && !file.isCover) {
@@ -162,6 +167,7 @@ export const useSubmitHandler = ({
         onSuccess: (response) => {
           console.log('수정 성공', response);
           navigate(`/review/${response.id}`);
+          setIsLoading(false);
         },
         onError: (error: unknown) => {
           if (typeof error === 'string') {
@@ -171,6 +177,7 @@ export const useSubmitHandler = ({
           } else {
             console.log('수정 실패', error);
           }
+          setIsLoading(false);
         },
       });
     } else {
@@ -178,6 +185,7 @@ export const useSubmitHandler = ({
         onSuccess: (response) => {
           console.log('등록성공', response);
           navigate(`/review/${response.id}`);
+          setIsLoading(false);
         },
         onError: (error: unknown) => {
           if (typeof error === 'string') {
@@ -187,10 +195,16 @@ export const useSubmitHandler = ({
           } else {
             console.log('실패', error);
           }
+          setIsLoading(false);
         },
       });
     }
   };
+  useEffect(() => {
+    return () => {
+      setIsLoading(false);
+    };
+  }, []);
 
-  return { handleSubmit };
+  return { handleSubmit, isLoading };
 };

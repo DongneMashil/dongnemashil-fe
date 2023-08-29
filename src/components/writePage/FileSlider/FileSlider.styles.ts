@@ -11,7 +11,7 @@ export const StSlideContainer = styled.div`
   align-items: center;
   margin: 0 auto;
   @media ${(props) => props.theme.device.desktop} {
-    width: 85%;
+    width: 100%;
     padding: 1rem;
     overflow-x: auto;
     white-space: nowrap;
@@ -41,7 +41,7 @@ export const StCenteredBox = styled.div`
   padding: 5rem;
   @media ${(props) => props.theme.device.desktop} {
     margin: auto;
-    width: 50%;
+    width: 46%;
   }
 `;
 
@@ -69,7 +69,7 @@ export const StImageContainer = styled.div`
   width: 90%;
   height: 100%;
   @media ${(props) => props.theme.device.desktop} {
-    width: 50%;
+    width: 46%;
   }
 `;
 
