@@ -94,7 +94,7 @@ export const CropModal: FC<Props> = ({ isOpen, onCloseHandler }) => {
 
   return isOpen
     ? ReactDOM.createPortal(
-        <StModalOverlay onClick={onCloseHandler}>
+        <StModalOverlay>
           <StModalWindow onClick={(e) => e.stopPropagation()}>
             {!localSrc && (
               <p className="message">
