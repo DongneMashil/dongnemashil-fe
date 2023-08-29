@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useEffect, useState, Suspense, useLayoutEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   deleteReviewDetail,
@@ -104,7 +104,7 @@ export const DetailPage = () => {
     }
   };
   //창 크기에 따른 MasonryGrid 컬럼 설정
-  useEffect(() => {
+  useLayoutEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setColumns(1);
@@ -118,7 +118,7 @@ export const DetailPage = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [window.innerWidth]);
 
   const masonryGridOptions: MasonryGridOptions = {
     column: columns,
