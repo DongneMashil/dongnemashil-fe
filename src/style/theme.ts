@@ -14,6 +14,9 @@ const colors = {
 
   mainTextColor: '#333333',
   titleTextColor: '#060606',
+
+  backgroundColor: '#F7F7F7',
+  windowBackgroundColor: '#FFFFFF',
 };
 
 const size = {
@@ -88,7 +91,7 @@ export const theme = {
   size,
   floatingBox: {
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: `${colors.windowBackgroundColor}`,
 
     boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
     borderRadius: '0.8rem',
