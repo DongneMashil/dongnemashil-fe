@@ -30,3 +30,9 @@ export const StMapLoadingSpinner = styled.div`
     -9.7px 7.1px 0 0 ${theme.mainColor};
   animation: ${spinnerAnimation} 1s infinite linear;
 `;
+
+export const StMapContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+`;

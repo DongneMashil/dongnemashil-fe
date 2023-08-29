@@ -1,3 +1,4 @@
+import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StFooterWrapper = styled.form`
@@ -19,4 +20,5 @@ export const StFooterContatiner = styled.footer<{ $isCommentShow: boolean }>`
   justify-content: space-between;
   width: 100%;
   border-top: 0.6px solid #e2e2e2;
+  max-width: ${theme.size.tablet};
 `;
