@@ -9,6 +9,16 @@ export const StThumbnail = styled.li`
 
   padding: 26px 0 8px;
   border-bottom: 1px solid ${theme.whiteGrayColor};
+
+  &:nth-last-child(1) {
+    border-bottom: 0px;
+  }
+
+  @media ${theme.device.desktop} {
+    &:nth-last-child(2) {
+      border-bottom: 0px;
+    }
+  }
 `;
 
 export const StThumbnailTitle = styled.div`

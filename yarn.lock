@@ -1193,13 +1193,6 @@
   dependencies:
     "@egjs/component" "^3.0.4"
 
-"@cfcs/core@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@cfcs/core/-/core-0.0.5.tgz#b3d3ce36630016e0c0bb10848e1205fc216493e3"
-  integrity sha512-TZ/RXKV7MUrqFpiX+16uaaptv5jgChWNsuE6w8Rn3eJbO1PFd4Wpn25zeJbii7ch46ck8/ZIIYCcW3pHiYtm4Q==
-  dependencies:
-    "@egjs/component" "^3.0.2"
-
 "@csstools/normalize.css@*":
   version "12.0.0"
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-12.0.0.tgz#a9583a75c3f150667771f30b60d9f059473e62c4"
@@ -1318,12 +1311,12 @@
   dependencies:
     "@egjs/list-differ" "^1.0.0"
 
-"@egjs/component@^3.0.0", "@egjs/component@^3.0.1", "@egjs/component@^3.0.2", "@egjs/component@^3.0.4":
+"@egjs/component@^3.0.0", "@egjs/component@^3.0.1", "@egjs/component@^3.0.4":
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@egjs/component/-/component-3.0.4.tgz#ad7b53794b2a612806179a188ad828acb9525f61"
   integrity sha512-sXA7bGbIeLF2OAw/vpka66c6QBBUPcA4UUhR4WGJfnp2XWdiI8QrnJGJMr/UxpE/xnevX9tN3jvNPlW8WkHl3g==
 
-"@egjs/grid@^1.14.2":
+"@egjs/grid@~1.14.2":
   version "1.14.2"
   resolved "https://registry.yarnpkg.com/@egjs/grid/-/grid-1.14.2.tgz#b92c91298a808c7549219904ed2396361c4cc1b8"
   integrity sha512-MOIL6zdFmEFYVmlsrPr8eNPybDZqRKzJo1sceFiamAvxWJ+5yG17tVRP9zMSeXogjsShWhNUKqoPOUC4rClFAQ==
@@ -1340,21 +1333,17 @@
     "@cfcs/core" "^0.0.24"
     "@egjs/component" "^3.0.1"
 
-"@egjs/infinitegrid@^4.10.1":
-  version "4.10.1"
-  resolved "https://registry.yarnpkg.com/@egjs/infinitegrid/-/infinitegrid-4.10.1.tgz#02dda423f29775b972eda449755ef25cb6aa2854"
-  integrity sha512-hucrUJgSGeze6jH9HdWtLmDKR0ssx42JyXFDGQ2MrOZDmf6WQlky0fXer8FJzBaKQdraODH9bz0TKjIWzG7gaA==
-  dependencies:
-    "@cfcs/core" "^0.0.5"
-    "@egjs/children-differ" "^1.0.1"
-    "@egjs/component" "^3.0.0"
-    "@egjs/grid" "^1.14.2"
-    "@egjs/list-differ" "^1.0.0"
-
 "@egjs/list-differ@^1.0.0":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@egjs/list-differ/-/list-differ-1.0.1.tgz#5772b0f8b87973bb67827f6c7d7df8d7f64a22eb"
   integrity sha512-OTFTDQcWS+1ZREOdCWuk5hCBgYO4OsD30lXcOCyVOAjXMhgL5rBRDnt/otb6Nz8CzU0L/igdcaQBDLWc4t9gvg==
+
+"@egjs/react-grid@^1.15.2":
+  version "1.15.2"
+  resolved "https://registry.yarnpkg.com/@egjs/react-grid/-/react-grid-1.15.2.tgz#43516ac59c3f2ebdb3c126c71139c43c9baa7e44"
+  integrity sha512-5yai5v7a+nOZR6yQ4ByLFAgFHeFCVqb17wQxbw7mWGO2CTcm5IxkJnaujy96ikEdKrCwpI3SM5fK7iZAnREnpw==
+  dependencies:
+    "@egjs/grid" "~1.14.2"
 
 "@emotion/is-prop-valid@^1.2.1":
   version "1.2.1"
