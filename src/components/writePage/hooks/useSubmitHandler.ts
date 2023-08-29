@@ -121,7 +121,10 @@ export const useSubmitHandler = ({
         }
       }
 
+      let i = 0;
       for (const file of mediaFiles) {
+        i++;
+
         if (typeof file.file === 'string') {
           const response = await fetch(`${file.file}?timestamp=${Date.now()}`);
           if (!response.ok) {
@@ -135,14 +138,14 @@ export const useSubmitHandler = ({
             file.type === 'image'
               ? getImageMimeType(finalFileName)
               : getVideoMimeType(finalFileName);
-          const fileObject = new File([blob], `file.${finalFileName}`, {
+          const fileObject = new File([blob], `file${i}}.${finalFileName}`, {
             type: fileMimeType,
           });
 
           if (file.type === 'image' && !file.isCover) {
-            formData.append('subImgUrl', fileObject, finalFileName);
+            formData.append('subImgUrl', fileObject);
           } else if (file.type === 'video') {
-            formData.append('videoUrl', fileObject, finalFileName);
+            formData.append('videoUrl', fileObject);
           }
         } else {
           if (file.type === 'image' && !file.isCover) {
