@@ -6,10 +6,30 @@ export const StSlideContainer = styled.div`
   overflow: hidden;
   position: relative;
   min-height: 200px;
-  width: 18.75rem;
+  width: 85%;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+  @media ${(props) => props.theme.device.desktop} {
+    width: 85%;
+    padding: 1rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: row;
+    & > * {
+      flex-shrink: 0;
+      margin-right: 0.75rem;
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 `;
 
 export const StCenteredBox = styled.div`
@@ -19,6 +39,10 @@ export const StCenteredBox = styled.div`
   width: 90%;
   height: 100%;
   padding: 5rem;
+  @media ${(props) => props.theme.device.desktop} {
+    margin: auto;
+    width: 50%;
+  }
 `;
 
 export const StPlusButton = styled.div`
@@ -40,23 +64,13 @@ export const StPlusButton = styled.div`
   }
 `;
 
-export const StImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  margin: 0.5rem 0;
-`;
-
-export const StVideo = styled.video`
-  width: 100%;
-  height: 100%;
-  margin-bottom: 0.5rem 0;
-`;
-
 export const StImageContainer = styled.div`
   position: relative;
   width: 90%;
   height: 100%;
+  @media ${(props) => props.theme.device.desktop} {
+    width: 50%;
+  }
 `;
 
 export const StCoverImageButton = styled.button<{ isActive: boolean }>`

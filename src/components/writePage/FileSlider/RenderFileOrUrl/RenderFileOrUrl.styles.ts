@@ -1,10 +1,13 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 export const StImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
   margin: 0.5rem 0;
+  @media ${(props) => props.theme.device.desktop} {
+    aspect-ratio: 1/1;
+  }
 `;
 
 export const StVideo = styled.video`

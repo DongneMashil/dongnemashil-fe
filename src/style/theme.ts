@@ -77,7 +77,6 @@ const responsiveContainer = css`
   max-width: ${size.tablet};
   margin: 0 auto;
 `;
-
 export const theme = {
   ...colors,
   ...maxSizes,
