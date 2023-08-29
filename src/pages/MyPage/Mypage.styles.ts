@@ -1,3 +1,4 @@
+import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StToProfileButton = styled.button`
@@ -51,4 +52,5 @@ export const StMyPageContainer = styled.div`
     font-style: normal;
     font-weight: 500;
   }
+  ${theme.responsiveContainer};
 `;
