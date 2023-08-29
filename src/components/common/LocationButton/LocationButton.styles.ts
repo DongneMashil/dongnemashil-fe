@@ -13,4 +13,5 @@ export const StLocationButton = styled.button`
   bottom: 50px;
   right: 20px;
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
 `;

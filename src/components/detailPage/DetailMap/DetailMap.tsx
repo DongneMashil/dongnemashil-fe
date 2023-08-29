@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
 import React from 'react';
 import Marker from 'assets/icons/Marker.svg';
-import {
-  StMapContainer,
-  StMapLoadingSpinner,
-  StMyLocationButton,
-} from './DetailMap.styles';
+import { StMapContainer, StMyLocationButton } from './DetailMap.styles';
 import { LocationButton, Map } from 'components/common';
+import { calculateDistance } from 'utils';
 
 interface DetailMapProps {
   width: string;
@@ -61,6 +58,9 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
   const [reviewAddress, setReviewAddress] = useState<kakao.maps.LatLng | null>(
     null
   );
+  const [currentLocation, setCurrentLocation] =
+    useState<kakao.maps.LatLng | null>(null);
+  const [distance, setDistance] = useState<number | null>(null); // 상태 추가
 
   const setMapCenterByAddress = async (
     address: string,
@@ -117,6 +117,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
             position.coords.latitude,
             position.coords.longitude
           );
+          setCurrentLocation(locPosition);
 
           // 빨간 점을 표시하는 CustomOverlay 생성
           const customOverlay = new kakao.maps.CustomOverlay({
@@ -140,8 +141,6 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
           `,
           });
           customOverlay.setMap(map);
-
-          // const markerPosition = new kakao.maps.LatLng(37.545043, 127.039245);
 
           fitBoundsToMarkers(map, [locPosition, reviewAddress!]);
           setIsLoading(false); // 로딩 완료
@@ -182,18 +181,30 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
     setShowCurrentLocation(true);
   };
 
+  useEffect(() => {
+    // currentLocation와 reviewAddress가 모두 설정되었을 때만 거리를 계산합니다.
+    if (currentLocation && reviewAddress) {
+      const calculatedDistance = calculateDistance(
+        currentLocation.getLat(),
+        currentLocation.getLng(),
+        reviewAddress.getLat(),
+        reviewAddress.getLng()
+      );
+      setDistance(Number(calculatedDistance.toFixed(0)));
+    }
+  }, [currentLocation, reviewAddress]);
+
   return (
     <StMapContainer>
       <Map width={width} height={height} initMap={initializeMap} />
-      {isLoading ? (
-        <StMapLoadingSpinner />
-      ) : (
-        !showCurrentLocation && (
-          <StMyLocationButton>
-            <LocationButton onClick={onClickMyLocation}></LocationButton>
-          </StMyLocationButton>
-        )
-      )}
+      <StMyLocationButton>
+        <LocationButton
+          isDistanceVisible={showCurrentLocation}
+          distance={distance}
+          onClick={onClickMyLocation}
+          isLoading={isLoading}
+        ></LocationButton>
+      </StMyLocationButton>
     </StMapContainer>
   );
 };
