@@ -47,7 +47,7 @@ export const ReviewsContainer = ({
     }
   );
 
-  const [columns, setColumns] = useState(1);
+  const [columns, setColumns] = useState(window.innerWidth < 768 ? 1 : 2);
 
   useEffect(() => {
     const handleResize = () => {
