@@ -1,12 +1,12 @@
 import React from 'react';
 import {
+  StCurrentAddress,
   StCurrentAddressWrapper,
+  StPurpleMarker,
   StTagContainer,
   StTotalTag,
 } from './TagContainer.styles';
-import { StCurrentAddress } from 'pages/WritePage/WritePage.styles';
 import { ToggleTagButton } from 'components/common';
-import { ReactComponent as PurpleMarker } from 'assets/icons/PurpleMarker.svg';
 
 interface TagProps {
   selectedTags: string[];
@@ -25,7 +25,7 @@ export const TagContainer: React.FC<TagProps> = ({
     <StTagContainer>
       <StCurrentAddressWrapper>
         <div onClick={onGoToWriteMapPageHandler}>
-          <PurpleMarker />
+          <StPurpleMarker />
           <StCurrentAddress>{addressData.roadName}</StCurrentAddress>
         </div>
         <StTotalTag>{selectedTags.length}개 선택</StTotalTag>

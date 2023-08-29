@@ -15,6 +15,7 @@ import {
   SearchResultPage,
   MyCommentsPage,
   NotFoundPage,
+  StableNavigateContextProvider,
 } from 'pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
@@ -39,7 +40,15 @@ const Router = () => {
         />
         <Route
           path="/write/:id"
-          element={<ProtectedRoute element={<WritePage />} />}
+          element={
+            <ProtectedRoute
+              element={
+                <StableNavigateContextProvider>
+                  <WritePage />
+                </StableNavigateContextProvider>
+              }
+            />
+          }
         />
         <Route
           path="/mypage"
@@ -56,11 +65,18 @@ const Router = () => {
         <Route path="/temp/mypage" element={<MyPage />} />
         <Route path="/temp/mypage/profile" element={<MyProfilePage />} />
         <Route path="/temp/mypage/comments" element={<MyCommentsPage />} />
-        {/* <Route
+        <Route
           path="/write"
-          element={<ProtectedRoute element={<WritePage />} />}
-        /> */}
-        <Route path="/write" element={<WritePage />} />
+          element={
+            <ProtectedRoute
+              element={
+                <StableNavigateContextProvider>
+                  <WritePage />
+                </StableNavigateContextProvider>
+              }
+            />
+          }
+        />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search/result" element={<SearchResultPage />} />
         <Route path="/*" element={<NotFoundPage />} />

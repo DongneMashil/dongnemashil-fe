@@ -5,20 +5,17 @@ export const StHiddenButton = styled.input`
 `;
 
 export const StContentBox = styled.textarea`
-  width: 90%;
+  width: 100%;
   height: 17rem;
   margin: 2rem auto;
   resize: none;
-  padding: 0.45rem;
+  padding: 1.13rem;
   border: none;
   font-family: Pretendard;
   border-top: 1px solid #e2e2e2;
   font-size: 1rem;
+  position: relative;
   outline: none;
-  &:focus {
-    outline: 1px solid #9a7b9a;
-    border-radius: 1rem;
-  }
 `;
 
 export const StTitle = styled.input`
@@ -47,4 +44,22 @@ export const StFormWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+export const StContentWrapper = styled.div`
+  position: relative;
+  width: 90%;
+`;
+
+export const StByteSizeTag = styled.p`
+  position: absolute;
+  bottom: 3.69rem;
+  right: 1.44rem;
+  color: #a9a9a9;
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;
