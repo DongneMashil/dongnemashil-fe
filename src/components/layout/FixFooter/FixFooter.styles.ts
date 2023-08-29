@@ -31,7 +31,8 @@ export const StRightBtnWrapper = styled.div<{
   }
 
   @media ${theme.device.desktop} {
-    right: 17px;
+    right: 50%;
+    transform: translateX(360px);
 
     .rightMap {
       display: ${(props) => (props.type === 'goTop' ? 'flex' : 'none')};
