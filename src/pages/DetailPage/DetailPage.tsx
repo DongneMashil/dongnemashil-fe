@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   deleteReviewDetail,
@@ -162,7 +162,9 @@ export const DetailPage = () => {
             btnLeft="closeModal"
             onClickLeft={() => setIsMapOpen(false)}
           />
-          <DetailMap height="100%" width="100%" initMap={initMapHandler} />
+          <Suspense fallback={<div>loading...</div>}>
+            <DetailMap height="100%" width="100%" initMap={initMapHandler} />
+          </Suspense>
         </>
       ) : (
         <StDetailPageLayout>
@@ -201,8 +203,9 @@ export const DetailPage = () => {
                 <StDetailTitle>{data.title || '제목없음'}</StDetailTitle>
                 <StDetailPageContent>
                   <MasonryGrid {...masonryGridOptions}>
-                    {' '}
+                    {/* <StContentGridBox> */}
                     <img
+                      fetchpriority="high"
                       src={mainImageUrl[0]!}
                       srcSet={`${mainImageUrl[0]} 1440w, ${mainImageUrl[1]} 768w, ${mainImageUrl[2]} 360w`}
                       sizes={`(min-width:768px) 360px, (min-width:500px) 768px, 360px`}
@@ -212,6 +215,7 @@ export const DetailPage = () => {
                     {subImgUrl &&
                       subImgUrl.map((img, index) => (
                         <img
+                          fetchpriority="high"
                           key={index}
                           src={img[0]!}
                           srcSet={`${img[0]} 1440w, ${img[1]} 768w, ${img[2]} 360w`}
@@ -231,6 +235,7 @@ export const DetailPage = () => {
                       </>
                     )}
                   </MasonryGrid>
+                  {/* </StContentGridBox> */}
 
                   <p className="content" aria-label="본문">
                     {data.content}
@@ -246,26 +251,28 @@ export const DetailPage = () => {
                     ))}
                   </StTagWrapper>
                   <FooterSpacer />
-                  <Modal
-                    isOpen={isDeleteDetailModalOpen}
-                    onSubmitText="삭제"
-                    title="삭제"
-                    firstLine="삭제된 글은 복구할 수 없습니다."
-                    secondLine="삭제하시겠습니까?"
-                    onSubmitHandler={() => handleDeleteDetail()}
-                    onCloseHandler={() => setIsDeleteDetailModalOpen(false)}
-                  />
-                  <Modal
-                    isOpen={isDeleteCompleteModalOpen}
-                    title="완료"
-                    firstLine="삭제가 완료되었습니다."
-                    onCloseHandler={() => navigate('/')}
-                  />
-                  <ImageModal
-                    isOpen={isImageModalOpen}
-                    onCloseHandler={() => setIsImageModalOpen(false)}
-                    imageSrc={imageSrc}
-                  />
+                  <Suspense fallback={<div>loading...</div>}>
+                    <Modal
+                      isOpen={isDeleteDetailModalOpen}
+                      onSubmitText="삭제"
+                      title="삭제"
+                      firstLine="삭제된 글은 복구할 수 없습니다."
+                      secondLine="삭제하시겠습니까?"
+                      onSubmitHandler={() => handleDeleteDetail()}
+                      onCloseHandler={() => setIsDeleteDetailModalOpen(false)}
+                    />
+                    <Modal
+                      isOpen={isDeleteCompleteModalOpen}
+                      title="완료"
+                      firstLine="삭제가 완료되었습니다."
+                      onCloseHandler={() => navigate('/')}
+                    />
+                    <ImageModal
+                      isOpen={isImageModalOpen}
+                      onCloseHandler={() => setIsImageModalOpen(false)}
+                      imageSrc={imageSrc}
+                    />
+                  </Suspense>
                 </StDetailPageContent>
               </>
             )}
