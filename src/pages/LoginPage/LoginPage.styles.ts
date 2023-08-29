@@ -7,10 +7,8 @@ export interface StLoginButtonProps {
 }
 
 export const StLoginContainer = styled.div`
-  width: 100%;
-  height: 100%;
+  ${theme.authLayout};
   padding: 104px 25px 25px;
-  margin: 0 auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -40,7 +38,7 @@ export const StLogoWrapper = styled.div`
 `;
 
 export const StLoginButtonWrapper = styled.div`
-  width: 100%;
+  ${theme.responsiveContainer};
   max-width: 406px;
   display: flex;
   flex-direction: column;
@@ -54,14 +52,17 @@ export const StLoginButtonWrapper = styled.div`
     border: 0;
     margin: 19px 0 13px;
 
-    @media ${(props) => props.theme.device.tablet} {
+    @media screen and (min-width: 408px) {
       margin: 26px 0 12px;
     }
   }
 
   & button {
     margin-bottom: 9px;
+    height: 51px !important;
+    border-radius: 26px !important;
   }
+
   & button:last-of-type {
     margin-bottom: 4px;
   }

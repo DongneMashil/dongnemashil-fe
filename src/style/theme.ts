@@ -30,7 +30,7 @@ const maxSizes = {
 
 const authLayout = css`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: #ffffff;
   padding: 43px 28px;
   margin: 0 auto;
@@ -38,17 +38,13 @@ const authLayout = css`
 
 const authButton = css`
   width: 100%;
-  height: 44px;
+  height: 47px;
   font-size: 16px;
   border: 0;
   box-sizing: border-box;
   font-weight: 700;
   border-radius: 20px;
   position: relative;
-
-  @media screen and (max-width: ${size.tablet}) {
-    height: 47px;
-  }
 `;
 
 const getAuthViewPoint = (page: string) => {

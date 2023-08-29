@@ -233,7 +233,7 @@ export const RegisterPage = React.memo(() => {
     if (email === '') {
       onOpenModalHandler('이메일을 입력한 뒤 실행해주세요.');
     } else if (emailMsg.isValid === false) {
-      onOpenModalHandler('올바른 /양식의 이메일을 입력해주세요.');
+      onOpenModalHandler('올바른 양식의 이메일을 입력해주세요.');
     } else confirmIdMutate(email);
   }, [email]);
 
@@ -335,20 +335,20 @@ export const RegisterPage = React.memo(() => {
               </AuthErrorMsg>
             </StErrorMsgBox>
           )}
+          <RegisterBtnWrapper
+            type="authNormal"
+            onClick={onSubmitHandler}
+            $active={
+              emailMsg.isValid &&
+              nicknameMsg.isValid &&
+              passwordMsg.isValid &&
+              passwordVerifyMsg.isValid &&
+              isNotDuplicated.email &&
+              isNotDuplicated.nickname
+            }
+            label="회원가입"
+          />
         </StLoginWrapper>
-        <RegisterBtnWrapper
-          type="authNormal"
-          onClick={onSubmitHandler}
-          $active={
-            emailMsg.isValid &&
-            nicknameMsg.isValid &&
-            passwordMsg.isValid &&
-            passwordVerifyMsg.isValid &&
-            isNotDuplicated.email &&
-            isNotDuplicated.nickname
-          }
-          label="회원가입"
-        />
       </StLoginContainer>
       <Modal
         isOpen={isModalOpen}
