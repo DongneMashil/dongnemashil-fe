@@ -19,11 +19,11 @@ export const CommonLoginPage = () => {
   const { isSuccess } = useVerifyUser(shouldVerify);
   const { mutate } = useMutation(login, {
     onSuccess: () => {
-      console.log('Common Login Success');
+      // console.log('Common Login Success');
       setShouldVerify(true);
     },
     onError: (err: Error) => {
-      console.log('Common Login Error:', err);
+      // console.log('Common Login Error:', err);
       setErrorMsg(err.message);
     },
   });
@@ -52,12 +52,12 @@ export const CommonLoginPage = () => {
   );
 
   if (isSuccess) {
-    console.log('로그인 성공');
+    // console.log('로그인 성공');
     navigate({
       pathname: `/`,
     });
   }
-  console.log('errmsg', errorMsg);
+  // console.log('errmsg', errorMsg);
   return (
     <StCommonLoginLayout>
       <AuthNavButton type="exit" page="commonLogin" />
