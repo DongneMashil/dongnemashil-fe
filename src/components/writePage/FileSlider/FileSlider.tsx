@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import {
   StCenteredBox,
   StSlideContainer,
@@ -33,8 +33,25 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
   files,
   onDeleteImage,
 }) => {
-  const wrapperRef = useRef(null);
-  
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (divRef.current !== null && wrapperRef.current !== null) {
+      divRef.current.focus();
+      const imageMargin = 0.5 * 2;
+      const imageWidth = wrapperRef.current.offsetWidth;
+      const centeredBoxWidth = divRef.current.offsetWidth;
+
+      const totalWidthOfItems =
+        files.length * (imageWidth + imageMargin) + centeredBoxWidth;
+      const newScrollPosition =
+        totalWidthOfItems - wrapperRef.current.offsetWidth;
+
+      wrapperRef.current.scrollLeft = newScrollPosition;
+    }
+  }, [onAddImage]);
+
   useHorizontalDragScroll(wrapperRef);
 
   const onImageClick = useCallback((image: MediaFileType) => {
@@ -66,7 +83,7 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
           </StDelete>
         </StImageContainer>
       ))}
-      <StCenteredBox>
+      <StCenteredBox ref={divRef}>
         <StPlusButton onClick={onAddImage}>
           <FileUpload />
           <p>{`${images.length} / 5`}</p>
