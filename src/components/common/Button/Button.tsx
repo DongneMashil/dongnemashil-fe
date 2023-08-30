@@ -22,7 +22,7 @@ export interface ButtonProps {
     | 'login';
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   url?: string;
-  inputType?: 'button' | 'submit';
+  inputType?: 'button' | 'submit' | 'profile';
   value?: string;
   $width?: string;
   $height?: string;
@@ -86,7 +86,7 @@ export const Button = ({
     setIsModalOpen(false);
   }, []);
 
-  return inputType === 'submit' ? (
+  return inputType === 'profile' ? (
     <>
       <Modal
         isOpen={isModalOpen}
