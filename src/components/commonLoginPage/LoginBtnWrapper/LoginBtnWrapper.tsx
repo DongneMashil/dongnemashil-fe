@@ -14,7 +14,7 @@ export const LoginBtnWrapper = React.memo(
           type={type}
           onClick={onClick}
           $active={$active}
-          ariaLabel="뒤로가기"
+          ariaLabel={label}
         >
           {label}
         </Button>
