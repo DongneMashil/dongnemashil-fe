@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import { Thumbnail } from '../Thumbnail/Thumbnail';
 import {
@@ -48,8 +48,19 @@ export const ReviewsContainer = ({
   );
 
   const [columns, setColumns] = useState(window.innerWidth < 768 ? 1 : 2);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [masonryOptions, setMasonryOptions] = useState<MasonryGridOptions>({
+    column: columns,
+    gap: 14,
+    defaultDirection: 'end',
+    align: 'stretch',
+  });
 
-  useLayoutEffect(() => {
+  const handleImageLoad = () => {
+    setImagesLoaded(true);
+  };
+
+  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setColumns(1);
@@ -59,18 +70,31 @@ export const ReviewsContainer = ({
     };
     handleResize();
     window.addEventListener('resize', handleResize);
+    window.addEventListener('load', handleImageLoad);
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('load', handleImageLoad);
     };
   }, [window.innerWidth]);
 
-  const masonryGridOptions: MasonryGridOptions = {
-    column: columns,
-    gap: 14,
-    defaultDirection: 'end',
-    align: 'stretch',
-  };
+  useLayoutEffect(() => {
+    if (imagesLoaded) {
+      setMasonryOptions({
+        column: columns,
+        gap: 14,
+        defaultDirection: 'end',
+        align: 'stretch',
+      });
+    }
+  }, [imagesLoaded, columns]);
+
+  // const masonryGridOptions: MasonryGridOptions = {
+  //   column: columns,
+  //   gap: 14,
+  //   defaultDirection: 'end',
+  //   align: 'stretch',
+  // };
 
   return (
     <StReviewsContainer>
@@ -102,7 +126,7 @@ export const ReviewsContainer = ({
       {!isFetching && reviews.length === 0 ? (
         <StNoReviews>검색된 글이 없습니다.</StNoReviews>
       ) : (
-        <MasonryGrid {...masonryGridOptions}>
+        <MasonryGrid {...masonryOptions}>
           {reviews?.map((review) => (
             <Thumbnail
               key={review.id}
