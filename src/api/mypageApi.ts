@@ -160,8 +160,6 @@ export const postProfile = async (post: {
       new Blob([post.nickname], { type: 'text/plain' })
     );
 
-    console.log(Array.from(formedData.entries()));
-
     const config = {
       method: 'patch',
       url: '/mypage',
@@ -171,18 +169,20 @@ export const postProfile = async (post: {
     };
 
     const response = await axiosInstance.request(config);
-    console.log(JSON.stringify(response) + '🏠');
+
     //⬇️새로운 토큰으로 교체
-    console.log('responseHEADERS📸:', response.headers);
-    const accessToken = response.headers['accesstoken'].replace('Bearer%', '');
-    const refreshToken = response.headers['refreshtoken'].replace(
-      'Bearer%',
+
+    const accessToken = response.headers['authorization'].replace(
+      'Bearer%20',
       ''
     );
-    console.log('Received Access Token: ', accessToken);
-    console.log('Received Refresh Token: ', refreshToken);
+    const refreshToken = response.headers['refreshtoken'].replace(
+      'Bearer%20',
+      ''
+    );
+
     tokenHandler(accessToken, refreshToken);
-    console.log('토큰교체성공🥁');
+
     return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
