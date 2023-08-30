@@ -16,7 +16,7 @@ export const tokenHandler = (accessToken: string, refreshToken?: string) => {
 
 export const setClientHeader = (accessToken: string) => {
   axiosInstance.defaults.headers.common[
-    'Accesstoken'
+    'Authorization'
   ] = `Bearer%20${accessToken}`;
   // console.log('setting access token to header: ', `Bearer%20${accessToken}`);
 };
@@ -41,7 +41,7 @@ export const loginKakaoCallback = async (code: string) => {
     .post(`/kakao?code=${code}`)
     .then((response) => {
       // console.log('response headers', response.headers);
-      const accessToken = response.headers['accesstoken'].replace(
+      const accessToken = response.headers['authorization'].replace(
         'Bearer%20',
         ''
       );
@@ -68,7 +68,7 @@ export const login = async (data: { email: string; password: string }) => {
     // console.log('Login Success, ', response.data);
 
     // 토큰 가져오기
-    const accessToken = response.headers['accesstoken'].replace(
+    const accessToken = response.headers['authorization'].replace(
       'Bearer%20',
       ''
     );
@@ -102,7 +102,7 @@ export const register = async (data: {
   // console.log('요청 데이터: ', data);
   try {
     const response: AxiosResponse = await axiosInstance.post(`/register`, data);
-    const accessToken = response.headers['accesstoken'].replace(
+    const accessToken = response.headers['authorization'].replace(
       'Bearer%20',
       ''
     );
@@ -184,7 +184,7 @@ export const getNewAccessToken = () => {
     axiosInstance.defaults.headers.common['Refreshtoken'] = refreshToken;
     return axiosInstance.get(`/refreshtoken`, retryConfig).then((response) => {
       // 새로 받은 액세스 토큰 넣어주기
-      const accessToken = response.headers['accesstoken'].replace(
+      const accessToken = response.headers['authorization'].replace(
         'Bearer%20',
         ''
       );
