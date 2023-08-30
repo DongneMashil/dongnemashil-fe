@@ -67,7 +67,7 @@ export const useFetchReviews = ({ q }: PaginationParams = {}) => {
 
   const queryFn = ({ pageParam = 1 }: QueryFunctionContext) =>
     axiosInstance.get<ReviewsAndPageable>(q ? '/search' : '/reviews', {
-      params: { type, page: pageParam, tag, q },
+      params: { size: 6, type, page: pageParam, tag, q },
     });
 
   return useInfiniteQuery(queryKey, queryFn, {
