@@ -16,7 +16,7 @@ export const KakaoCallbackPage = () => {
       setShouldVerify(true);
     },
     onError: (err) => {
-      console.log('Kakao login Error: ', err);
+      // console.log('Kakao login Error: ', err);
     },
   });
 
@@ -26,7 +26,7 @@ export const KakaoCallbackPage = () => {
   }, []);
 
   if (isSuccess) {
-    console.log('Kakao Login Success ', data);
+    // console.log('Kakao Login Success ', data);
     navigate({
       pathname: `/`,
     });

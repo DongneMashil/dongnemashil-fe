@@ -19,11 +19,11 @@ export const CommonLoginPage = () => {
   const { isSuccess } = useVerifyUser(shouldVerify);
   const { mutate } = useMutation(login, {
     onSuccess: () => {
-      console.log('Common Login Success');
+      // console.log('Common Login Success');
       setShouldVerify(true);
     },
     onError: (err: Error) => {
-      console.log('Common Login Error:', err);
+      // console.log('Common Login Error:', err);
       setErrorMsg(err.message);
     },
   });
@@ -40,24 +40,32 @@ export const CommonLoginPage = () => {
     [password]
   );
 
-  const onSubmitHandler = useCallback(
-    (e: React.MouseEvent<HTMLElement>) => {
+  const onSubmitHandler = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    submitLogin();
+  }, []);
+
+  const onKeyPressHandler = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
       e.preventDefault();
-      mutate({
-        email,
-        password,
-      });
-    },
-    [email, password]
-  );
+      submitLogin();
+    }
+  };
+
+  const submitLogin = () => {
+    mutate({
+      email,
+      password,
+    });
+  };
 
   if (isSuccess) {
-    console.log('로그인 성공');
+    // console.log('로그인 성공');
     navigate({
       pathname: `/`,
     });
   }
-  console.log('errmsg', errorMsg);
+  // console.log('errmsg', errorMsg);
   return (
     <StCommonLoginLayout>
       <AuthNavButton type="exit" page="commonLogin" />
@@ -83,6 +91,7 @@ export const CommonLoginPage = () => {
         <LoginBtnWrapper
           type="authNormal"
           onClick={onSubmitHandler}
+          onKeyPress={onKeyPressHandler}
           $active={email !== '' && password !== ''}
           label="로그인"
         />

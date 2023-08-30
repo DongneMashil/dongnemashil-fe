@@ -18,7 +18,7 @@ export const setClientHeader = (accessToken: string) => {
   axiosInstance.defaults.headers.common[
     'Accesstoken'
   ] = `Bearer%${accessToken}`;
-  console.log('setting access token to header: ', `Bearer%${accessToken}`);
+  // console.log('setting access token to header: ', `Bearer%${accessToken}`);
 };
 
 const resetHeader = () => {
@@ -36,11 +36,11 @@ export const loginKakao = () => {
 
 /** 카카오 로그인 후 코드 전송 */
 export const loginKakaoCallback = async (code: string) => {
-  console.log(code);
+  // console.log(code);
   await axiosInstance
     .post(`/kakao?code=${code}`)
     .then((response) => {
-      console.log('response headers', response.headers);
+      // console.log('response headers', response.headers);
       const accessToken = response.headers['accesstoken'].replace(
         'Bearer%',
         ''
@@ -49,14 +49,14 @@ export const loginKakaoCallback = async (code: string) => {
         'Bearer%',
         ''
       );
-      console.log('Received Access Token: ', accessToken);
-      console.log('Received Refresh Token: ', refreshToken);
+      // console.log('Received Access Token: ', accessToken);
+      // console.log('Received Refresh Token: ', refreshToken);
       tokenHandler(accessToken, refreshToken);
-      console.log('카카오 로그인 성공', response.data);
+      // console.log('카카오 로그인 성공', response.data);
     })
     .catch((err) => {
-      console.log('kakao 소셜 로그인 에러 : ', err);
-      window.alert('소셜 로그인에 실패하였습니다.');
+      // console.log('kakao 소셜 로그인 에러 : ', err);
+      // window.alert('소셜 로그인에 실패하였습니다.');
       window.location.href = `/login`;
     });
 };
@@ -65,7 +65,7 @@ export const loginKakaoCallback = async (code: string) => {
 export const login = async (data: { email: string; password: string }) => {
   try {
     const response: AxiosResponse = await axiosInstance.post(`/login`, data);
-    console.log('Login Success, ', response.data);
+    // console.log('Login Success, ', response.data);
 
     // 토큰 가져오기
     const accessToken = response.headers['accesstoken'].replace('Bearer%', '');
@@ -73,8 +73,8 @@ export const login = async (data: { email: string; password: string }) => {
       'Bearer%',
       ''
     );
-    console.log('Received Access Token: ', accessToken);
-    console.log('Received Refresh Token: ', refreshToken);
+    // console.log('Received Access Token: ', accessToken);
+    // console.log('Received Refresh Token: ', refreshToken);
     // 로컬스토리지 저장, 헤더에 세팅
     tokenHandler(accessToken, refreshToken);
 
@@ -104,8 +104,8 @@ export const register = async (data: {
       'Bearer%',
       ''
     );
-    console.log('Received accessToken: ', accessToken);
-    console.log('Received refreshToken: ', refreshToken);
+    // console.log('Received accessToken: ', accessToken);
+    // console.log('Received refreshToken: ', refreshToken);
     tokenHandler(accessToken, refreshToken);
 
     return response.data;
@@ -130,7 +130,7 @@ export const confirmId = async (email: string) => {
     );
     return response.data;
   } catch (e: unknown) {
-    console.log(e);
+    // console.log(e);
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data?.message || e.message);
     }
@@ -174,7 +174,7 @@ export const getNewAccessToken = () => {
     const refreshToken = `Bearer%${window.localStorage.getItem(
       'refresh_token'
     )}`;
-    console.log('setting refresh token to header', refreshToken);
+    // console.log('setting refresh token to header', refreshToken);
     axiosInstance.defaults.headers.common['Refreshtoken'] = refreshToken;
     return axiosInstance.get(`/refreshtoken`, retryConfig).then((response) => {
       // 새로 받은 액세스 토큰 넣어주기
@@ -184,11 +184,11 @@ export const getNewAccessToken = () => {
       );
       tokenHandler(accessToken);
       setClientHeader(accessToken);
-      console.log('Got new access token', response.data);
+      // console.log('Got new access token', response.data);
       return response.data;
     });
   } catch (e: unknown) {
-    console.log(e);
+    // console.log(e);
     resetHeader();
     if (e instanceof AxiosError) {
       throw new Error(e.response?.data || e.message);

@@ -70,7 +70,7 @@ export const RegisterPage = React.memo(() => {
       navigate(`/`);
     },
     onError: (err: AxiosError) => {
-      console.log('Register Error: ', err);
+      // console.log('Register Error: ', err);
       window.alert(err);
     },
   });
@@ -107,16 +107,16 @@ export const RegisterPage = React.memo(() => {
         ...isNotDuplicated,
         nickname: true,
       });
-      console.log(`confirm nickname success`, newData);
+      // console.log(`confirm nickname success`, newData);
     },
     onError: (err: Error) => {
-      console.log('confirmNicknameMutate error', err);
+      // console.log('confirmNicknameMutate error', err);
       const newData = {
         msg: err.message,
         isValid: false,
       };
       setNicknameMsg(newData);
-      console.log(`confirm nickname failed`, newData);
+      // console.log(`confirm nickname failed`, newData);
     },
   });
 
@@ -151,7 +151,7 @@ export const RegisterPage = React.memo(() => {
 
   const onEmailMsgHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      console.log('onEmailMsgHander triggered');
+      // console.log('onEmailMsgHander triggered');
       const newVeirfyMsg = emailRegex.test(e.target.value)
         ? {
             msg: `이메일 형식이 일치합니다.`,
@@ -199,8 +199,8 @@ export const RegisterPage = React.memo(() => {
   const onPasswordVerifyMsgHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (password !== '') {
-        console.log('onEmailMsgHander triggered');
-        console.log(e.target.value, password, e.target.value === password);
+        // console.log('onEmailMsgHander triggered');
+        // console.log(e.target.value, password, e.target.value === password);
         const newVeirfyMsg =
           e.target.value === password
             ? {
@@ -238,6 +238,7 @@ export const RegisterPage = React.memo(() => {
   }, [email]);
 
   const onConfirmNicknameHandler = useCallback(() => {
+    m;
     if (nickname === '') {
       onOpenModalHandler('닉네임을 입력한 뒤 실행해주세요.');
     } else if (nicknameMsg.isValid === false) {
@@ -256,7 +257,7 @@ export const RegisterPage = React.memo(() => {
 
   useEffect(() => {
     if (data) {
-      console.log('Register Success ', data);
+      // console.log('Register Success ', data);
       navigate('/');
     }
   }, []);
