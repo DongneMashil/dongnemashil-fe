@@ -81,7 +81,9 @@ export const MyCommentsPage = () => {
               >
                 <CommentS className="CommentS" />
                 <p className="comment">{item.comment}</p>
-                <img src={item.profileImgUrl || noUser} />
+                <img
+                  src={item.profileImgUrl || item.smallMainImgUrl || noUser}
+                />
                 <ChevronRight className="ChevronRight" />
               </StButton>
             ))
