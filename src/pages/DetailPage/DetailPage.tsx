@@ -42,7 +42,7 @@ export const DetailPage = () => {
   const [isDeleteDetailModalOpen, setIsDeleteDetailModalOpen] = useState(false);
   const [isDeleteCompleteModalOpen, setIsDeleteCompleteModalOpen] =
     useState(false);
-
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const setCommentCount = useSetRecoilState(commentCountAtom);
   const navigate = useNavigate();
   const [columns, setColumns] = useState(2);
@@ -51,7 +51,6 @@ export const DetailPage = () => {
   //리뷰 아이디 없이 접근시 홈으로 이동
   const { reviewId } = useParams<{ reviewId: string }>();
   if (!reviewId) {
-    alert('리뷰 아이디가 없습니다.');
     window.location.href = '/';
     throw new Error('Review ID is missing');
   }
@@ -65,7 +64,6 @@ export const DetailPage = () => {
     queryFn: () => getReviewDetail(reviewId),
     enabled: !!reviewId,
     onSuccess: (data) => {
-      console.log(data);
       setCommentCount(data.commentCnt); // Recoil 댓글 개수를 설정
     },
   });
@@ -76,10 +74,9 @@ export const DetailPage = () => {
     onSuccess: () => {
       setIsDeleteCompleteModalOpen(true);
     },
-    onError: (error) => {
-      console.log(error);
+    onError: () => {
       setIsDeleteDetailModalOpen(false);
-      alert('삭제에 실패했습니다.');
+      setIsErrorModalOpen(true);
     },
   });
   const handleDeleteDetail = () => {
@@ -145,7 +142,6 @@ export const DetailPage = () => {
       }
     }
   }, [data]);
-  console.log(mainImageUrl);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
   const onClickImage = (imgSrc: string) => {
@@ -267,6 +263,14 @@ export const DetailPage = () => {
                       title="완료"
                       firstLine="삭제가 완료되었습니다."
                       onCloseHandler={() => navigate('/')}
+                    />
+                    <Modal
+                      isOpen={isErrorModalOpen}
+                      title="알림"
+                      firstLine="삭제에 실패했습니다. 다시 로그인 해주세요!"
+                      onCloseHandler={() => setIsErrorModalOpen(false)}
+                      onSubmitHandler={() => navigate('/login')}
+                      onSubmitText="로그인"
                     />
                     <ImageModal
                       isOpen={isImageModalOpen}

@@ -8,7 +8,7 @@ export const userProfileSelector = selector<UserState>({
   get: ({ get }) => get(userState),
   set: ({ set }, newData) => {
     set(userState, newData);
-    console.log('new userState: ', userState);
+    // console.log('new userState: ', userState);
   },
 });
 
