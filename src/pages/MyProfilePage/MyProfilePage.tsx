@@ -55,7 +55,6 @@ export const MyProfilePage = () => {
           responseType: 'blob',
         }
       );
-      console.log(`Response Status: ${response.status}`);
 
       const blob = response.data;
       const extension = getExtensionName(data.profileImgUrl!);
@@ -65,8 +64,6 @@ export const MyProfilePage = () => {
       setNickname(data.nickname);
     } catch (error) {
       setImgUrl(DefaultImage); //이미지 다운로드 실패시 기본 이미지 삽입
-      console.log('✨defalultImage: ' + DefaultImage);
-      console.log('✨setimgUrl: ' + imgUrl);
 
       const defaultBlob = base64ToBlob(DefaultImage, 'image/jpg');
       const defaultFile = new File([defaultBlob], 'default.jpg', {
@@ -75,7 +72,6 @@ export const MyProfilePage = () => {
 
       setImgFile(defaultFile);
       setNickname(data.nickname);
-      console.error('이미지 다운로드 실패해서 기본 이미지 삽입:', error);
     }
   };
   useEffect(() => {
@@ -140,10 +136,8 @@ export const MyProfilePage = () => {
       setDoneMsg('프로필 등록에 성공했습니다.');
       queryClient.invalidateQueries([userID]);
       setUserState((prev) => ({ ...prev, nickname: nickname }));
-      console.log('🟢이제 곧 이동');
       navigate('/mypage');
     } catch (error) {
-      console.error('😀' + error);
       setErrorMsg(`프로필 등록에 실패했습니다. 오류코드:${error}`);
     }
   };
