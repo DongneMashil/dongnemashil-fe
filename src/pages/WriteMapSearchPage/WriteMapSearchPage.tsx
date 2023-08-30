@@ -8,7 +8,7 @@ import {
   StPlaceName,
   StRoadBox,
   StRoadName,
-  StSeacrhResultWrapper,
+  StSearchResultWrapper,
   StSearchBox,
   StSearchInput,
   StSearchResult,
@@ -97,7 +97,7 @@ export const WriteMapSearchPage = () => {
               onChange={onInputChangeHandler}
             />
           </StSearchBox>
-          <StSeacrhResultWrapper>
+          <StSearchResultWrapper>
             {responseData?.documents.map((result: Document, index: number) => (
               <StSearchResult key={index}>
                 <StRoadBox>
@@ -121,7 +121,7 @@ export const WriteMapSearchPage = () => {
                 {isLoading && <div>Loading...</div>}
               </StSearchResult>
             ))}
-          </StSeacrhResultWrapper>
+          </StSearchResultWrapper>
         </StSearchWrapper>
       </StLayoutContainer>
     </StLayout>
