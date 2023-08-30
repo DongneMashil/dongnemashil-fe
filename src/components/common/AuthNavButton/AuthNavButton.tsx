@@ -16,7 +16,12 @@ export const AuthNavButton = React.memo(
       navigate(-1);
     };
     return (
-      <StAuthNavButton type={type} page={page} onClick={onClickHandler}>
+      <StAuthNavButton
+        type={type}
+        page={page}
+        onClick={onClickHandler}
+        aria-label={type}
+      >
         {type === 'exit' ? <XButton /> : <BackButton />}
       </StAuthNavButton>
     );
