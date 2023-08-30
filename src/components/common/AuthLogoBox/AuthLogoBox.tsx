@@ -29,7 +29,9 @@ export const AuthLogoBox = React.memo(
 
     return (
       <StLogoBox $align={align} $page={page}>
-        <Link to="/">{width >= 340 ? <LogoImageLg /> : <LogoImage />}</Link>
+        <Link to="/" aria-label="홈으로">
+          {width >= 340 ? <LogoImageLg /> : <LogoImage />}
+        </Link>
       </StLogoBox>
     );
   }
