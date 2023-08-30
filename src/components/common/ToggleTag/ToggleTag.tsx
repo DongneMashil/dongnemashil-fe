@@ -25,13 +25,11 @@ export const ToggleTagButton: React.FC<ToggleTagButtonProps> = ({
   const wrapperRef = useRef(null);
   useHorizontalDragScroll(wrapperRef);
   useEffect(() => {
-    if (isWritePage) {
-      const updatedTags = tags.map((tag) => ({
-        ...tag,
-        isSelected: initialSelectedTags.includes(tag.label),
-      }));
-      setTags(updatedTags);
-    }
+    const updatedTags = tags.map((tag) => ({
+      ...tag,
+      isSelected: initialSelectedTags.includes(tag.label),
+    }));
+    setTags(updatedTags);
   }, [initialSelectedTags, isWritePage]);
 
   const initialTags: TagProps[] = [
