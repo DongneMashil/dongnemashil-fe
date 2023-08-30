@@ -75,8 +75,6 @@ export const NavBar = ({
   const regex = /write/;
 
   useEffect(() => {
-    console.log(historyStack);
-    console.log(location.state?.from);
     setHistoryStack([location.pathname, ...historyStack]);
     if (location.pathname === '/') {
       setHistoryStack([location.pathname]);
