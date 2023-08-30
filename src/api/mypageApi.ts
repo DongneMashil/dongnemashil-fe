@@ -86,6 +86,7 @@ export type Comment = {
   id: number;
   nickname: string;
   profileImgUrl: string | null;
+  smallMainImgUrl: string | null;
   comment: string;
   createdAt: string;
   modifiedAt: string;

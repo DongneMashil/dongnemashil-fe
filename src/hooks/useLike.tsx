@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userProfileSelector } from 'recoil/userInfo';
 import { useLogout } from './useLogout';
+import { queryClient } from 'queries/queryClient';
 
 interface UseLikeProps {
   initialIsLiked: boolean;
@@ -36,6 +37,7 @@ export const useLike = ({
     const optimisticLikeCnt = isLiked ? likeCnt - 1 : likeCnt + 1;
     setIsLiked(!isLiked);
     setLikeCnt(optimisticLikeCnt);
+    queryClient.invalidateQueries(['responseData']);
     //'responseData'
     try {
       const result = await postLikeOptimistic(reviewId, previousIsLiked);
