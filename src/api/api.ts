@@ -56,6 +56,7 @@ axiosInstance.interceptors.response.use(
       await setUserState(newData);
       window.localStorage.clear();
       alert(userState.isLoggedIn);
+      throw err;
     } else throw err;
   }
 );
