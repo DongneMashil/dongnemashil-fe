@@ -87,22 +87,22 @@ export const NavBar = ({
 
   const leftButtons = {
     back: (
-      <Button type={'iconLeft'} onClick={goBack}>
+      <Button type={'iconLeft'} onClick={goBack} ariaLabel="뒤로가기">
         <ChevronLeft />
       </Button>
     ),
     cancel: (
-      <Button type={'onlyText'} url={'/'}>
+      <Button type={'onlyText'} url={'/'} ariaLabel="취소">
         취소
       </Button>
     ),
     logo: (
-      <Button type={'icon'} url={'/'}>
+      <Button type={'icon'} url={'/'} ariaLabel="홈으로">
         <LogoHorizontal />
       </Button>
     ),
     closeModal: (
-      <Button type={'iconLeft'} onClick={onClickLeft}>
+      <Button type={'iconLeft'} onClick={onClickLeft} ariaLabel="뒤로가기">
         <ChevronLeft />
       </Button>
     ),
@@ -110,7 +110,7 @@ export const NavBar = ({
 
   const secondRightButtons = {
     search: (
-      <Button type={'icon'} url={'/search'}>
+      <Button type={'icon'} url={'/search'} ariaLabel="검색">
         <Search width="21" height="21" />
       </Button>
     ),
@@ -123,12 +123,13 @@ export const NavBar = ({
         inputType="button"
         onClick={onClickRight}
         $active={onClickActive}
+        ariaLabel="완료"
       >
         완료
       </Button>
     ),
     mypage: userData ? (
-      <Button type={'icon'} url={'/mypage'}>
+      <Button type={'icon'} url={'/mypage'} ariaLabel="마이페이지">
         <img
           src={userData.profileImgUrl || noUser}
           fetchpriority="high"
@@ -136,7 +137,7 @@ export const NavBar = ({
         />
       </Button>
     ) : (
-      <Button type={'login'} url={'/login'}>
+      <Button type={'login'} url={'/login'} ariaLabel="로그인">
         로그인
       </Button>
     ),
@@ -147,12 +148,13 @@ export const NavBar = ({
         $active={onClickActive}
         modal={modal}
         inputType="profile"
+        ariaLabel="완료"
       >
         완료
       </Button>
     ),
     map: (
-      <Button type={'onlyText'} onClick={onClickRight}>
+      <Button type={'onlyText'} onClick={onClickRight} ariaLabel="지도보기">
         지도보기 {'>'}
       </Button>
     ),
