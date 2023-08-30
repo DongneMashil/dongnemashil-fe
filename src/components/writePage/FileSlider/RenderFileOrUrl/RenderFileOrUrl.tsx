@@ -20,23 +20,16 @@ interface RenderFileOrUrlProps {
 export const RenderFileOrUrl: React.FC<RenderFileOrUrlProps> = React.memo(
   ({ file, index, onImageClick, isCoverImage, onCoverButtonClick, images }) => {
     const isFileObject = typeof file.file === 'object';
+
     const url = isFileObject
       ? URL.createObjectURL(file.file as File)
       : (file.file as string);
 
+    const isActive = isCoverImage(images[index]);
 
-      const handleButtonClick = () => {
-        onCoverButtonClick(file.file);
-        
-        const button = document.getElementById("coverImageButton");
-        if (button && isCoverImage(images[index])) {
-          button.style.background = '#9A7B9A';
-          button.style.border = 'none';
-        } else if (button) {
-          button.style.background = 'rgba(154, 123, 154, 0.35)';
-          button.style.border = '1.5px solid white';
-        }
-      };
+    const handleButtonClick = () => {
+      onCoverButtonClick(file.file);
+    };
 
     return file.type === 'image' ? (
       <>
@@ -45,9 +38,7 @@ export const RenderFileOrUrl: React.FC<RenderFileOrUrlProps> = React.memo(
           alt={`Upload Preview ${index}`}
           onClick={() => onImageClick(file.file)}
         />
-        <StCoverImageButton
-          onClick={handleButtonClick}
-        >
+        <StCoverImageButton isActive={isActive} onClick={handleButtonClick}>
           대표
         </StCoverImageButton>
       </>

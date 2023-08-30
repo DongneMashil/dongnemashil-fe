@@ -201,7 +201,7 @@ export const WritePage = () => {
   const determineIsCoverImage = useCallback((targetFile: MediaFileType) => {
     const file = mediaFiles.find((file) => file.file === targetFile);
     return file ? file.isCover : false;
-  }, []);
+  }, [mediaFiles]);
 
   const onGoToWriteMapPageHandler = () => {
     if (reviewId) {
