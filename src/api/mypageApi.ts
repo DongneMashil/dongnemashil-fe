@@ -174,9 +174,12 @@ export const postProfile = async (post: {
     console.log(JSON.stringify(response) + '🏠');
     //⬇️새로운 토큰으로 교체
     console.log('responseHEADERS📸:', response.headers);
-    const accessToken = response.headers['accesstoken'].replace('Bearer%', '');
+    const accessToken = response.headers['authorization'].replace(
+      'Bearer%20',
+      ''
+    );
     const refreshToken = response.headers['refreshtoken'].replace(
-      'Bearer%',
+      'Bearer%20',
       ''
     );
     console.log('Received Access Token: ', accessToken);
