@@ -74,7 +74,8 @@ const longerHight = css`
   & img {
     width: 100%;
     position: absolute;
-    transform: translateY(-10%);
+    top: 50%;
+    transform: translateY(-50%);
   }
 `;
 
@@ -101,4 +102,8 @@ export const StThumnailMain = styled.div<{
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
+
+  @media ${theme.device.desktop} {
+    max-width: 362px;
+  }
 `;

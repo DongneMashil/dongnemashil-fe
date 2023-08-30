@@ -16,6 +16,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useIntersect } from 'hooks/useIntersect';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import noUser from 'assets/images/NoUser.jpg';
 
 export const MyCommentsPage = () => {
   const userState = useRecoilValue(userProfileSelector);
@@ -80,7 +81,7 @@ export const MyCommentsPage = () => {
               >
                 <CommentS className="CommentS" />
                 <p className="comment">{item.comment}</p>
-                <img src={item.profileImgUrl || ''} />
+                <img src={item.profileImgUrl || noUser} />
                 <ChevronRight className="ChevronRight" />
               </StButton>
             ))
