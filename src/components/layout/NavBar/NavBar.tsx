@@ -1,19 +1,20 @@
-import { useQuery } from '@tanstack/react-query';
-import { MyProfile, getMyProfile } from 'api/mypageApi';
-
 import { Button } from 'components/common';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StCenterWrapper,
   StLeftWrapper,
   StNavBar,
+  StNavBarContainer,
   StRighttWrapper,
 } from './NavBar.styles';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ReactComponent as Search } from 'assets/icons/Search.svg';
-import noUser from 'assets/images/NoUser.gif';
-import { useVerifyUser } from 'hooks';
 import { ReactComponent as ChevronLeft } from 'assets/icons/ChevronLeft.svg';
+import { ReactComponent as LogoHorizontal } from 'assets/logo/LogoHorizontal.svg';
+import noUser from 'assets/images/NoUser.jpg';
+import { useUpdateUserInfo } from 'hooks';
+import { useRecoilState } from 'recoil';
+import { historyStackState } from 'recoil/historyStack/historyStack';
 
 export interface NavBarProps {
   children?: React.ReactNode | null;
@@ -29,6 +30,7 @@ export interface NavBarProps {
     firstLine?: string;
     secondLine?: string;
   };
+  $isWritePage?: boolean;
 }
 
 export const NavBar = ({
@@ -41,37 +43,46 @@ export const NavBar = ({
   onClickLeft,
   onClickActive = true,
   modal,
+  $isWritePage = false,
 }: NavBarProps) => {
-  const { data: userData } = useVerifyUser(true);
-  const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
+  const { data: userData } = useUpdateUserInfo(true);
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
+  const [prevScrollY, setPrevScrollY] = useState<number>(0);
 
-  const { data } = useQuery<MyProfile, Error>({
-    queryKey: ['myPage', userData?.nickname],
-    queryFn: () => getMyProfile(),
-    // enabled: !!userData?.nickname,
-    onSuccess: (data) => {
-      console.log(data);
-      setFileUrl(data.profileImgUrl);
-    },
-    onError: (error) => {
-      console.log('🔴' + error);
-    },
-  });
-  console.log(data);
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > prevScrollY) {
+        setScrollDirection('down');
+      } else {
+        setScrollDirection('up');
+      }
+      setPrevScrollY(currentScrollY);
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollY]);
+
+  const isNavBarVisible = scrollDirection === 'up' || window.scrollY <= 50;
 
   const navigate = useNavigate();
   const location = useLocation();
+  const [historyStack, setHistoryStack] = useRecoilState(historyStackState);
+  const regex = /write/;
+
+  useEffect(() => {
+    setHistoryStack([location.pathname, ...historyStack]);
+    if (location.pathname === '/') {
+      setHistoryStack([location.pathname]);
+    }
+  }, [location.pathname]);
 
   const goBack = () => {
-    // if (location.state && location.state.prevPath === '/write/search') {
-    //   navigate(-4);
-    // }
-    // if (location.pathname === '/write') {
-    //   navigate(-2);
-    // }
-    location.state && location.state.from === '/write'
-      ? navigate('/')
-      : navigate(-1);
+    regex.test(historyStack[1]) ? navigate('/') : navigate(-1);
   };
 
   const leftButtons = {
@@ -87,7 +98,7 @@ export const NavBar = ({
     ),
     logo: (
       <Button type={'icon'} url={'/'}>
-        🏃🏻‍♀️
+        <LogoHorizontal />
       </Button>
     ),
     closeModal: (
@@ -118,10 +129,14 @@ export const NavBar = ({
     ),
     mypage: userData ? (
       <Button type={'icon'} url={'/mypage'}>
-        <img src={fileUrl || noUser} alt="프로필 이미지" />
+        <img
+          src={userData.profileImgUrl || noUser}
+          fetchpriority="high"
+          alt="프로필 이미지"
+        />
       </Button>
     ) : (
-      <Button type={'onlyText'} url={'/login'}>
+      <Button type={'login'} url={'/login'}>
         로그인
       </Button>
     ),
@@ -131,7 +146,7 @@ export const NavBar = ({
         onClick={onClickSubmit}
         $active={onClickActive}
         modal={modal}
-        inputType="submit"
+        inputType="profile"
       >
         완료
       </Button>
@@ -144,13 +159,19 @@ export const NavBar = ({
   };
 
   return (
-    <StNavBar>
-      <StLeftWrapper>{leftButtons[btnLeft]}</StLeftWrapper>
-      {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
-      <StRighttWrapper>
-        {btnSecondRight ? secondRightButtons[btnSecondRight] : null}
-        {btnRight ? rightButtons[btnRight] : null}
-      </StRighttWrapper>
+    <StNavBar
+      isNavBarVisible={isNavBarVisible}
+      prevScrollY={prevScrollY}
+      $isWritePage={$isWritePage}
+    >
+      <StNavBarContainer>
+        <StLeftWrapper>{leftButtons[btnLeft]}</StLeftWrapper>
+        {children ? <StCenterWrapper>{children}</StCenterWrapper> : null}
+        <StRighttWrapper>
+          {btnSecondRight ? secondRightButtons[btnSecondRight] : null}
+          {btnRight ? rightButtons[btnRight] : null}
+        </StRighttWrapper>
+      </StNavBarContainer>
     </StNavBar>
   );
 };

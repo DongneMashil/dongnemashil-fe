@@ -1,29 +1,26 @@
-import { CommonLayout, NavBar } from 'components/layout';
+import { NavBar } from 'components/layout';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { userProfileSelector } from 'recoil/userExample';
+import { userProfileSelector } from 'recoil/userInfo';
 import { Comment, getMyComments } from 'api/mypageApi';
 import { ReactComponent as ChevronRight } from 'assets/icons/ChevronRight.svg';
 import { ReactComponent as CommentS } from 'assets/icons/CommentS.svg';
 import {
   StButton,
+  StCounterWrapper,
   StMyCommentContainer,
   StMyCommentCounter,
+  StMyCommentsLayout,
+  StTarget,
 } from './MyCommentsPage.styles';
 import { useNavigate } from 'react-router-dom';
 import { useIntersect } from 'hooks/useIntersect';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import noUser from 'assets/images/NoUser.jpg';
 
 export const MyCommentsPage = () => {
   const userState = useRecoilValue(userProfileSelector);
   const navigate = useNavigate();
-
-  //useInfinityScroll 커스텀훅 사용시 (하지만 이 방법은 의존성 문제가 있어서 사용하지 않음)
-  // const { data, hasNextPage, loaderRef, isLoading } =
-  //   useInfinityScroll<GetMyCommentResponse>({
-  //     getAPI: (params) => getMyComments(params?.page),
-  //     queryKey: ['myComment', userState.nickName],
-  //   });
 
   const useInfinityScroll = () => {
     const fetchItems = async ({ pageParam = 1 }) => {
@@ -62,11 +59,15 @@ export const MyCommentsPage = () => {
   });
 
   return (
-    <CommonLayout header={<NavBar btnLeft="back" />} backgroundColor="#f5f5f5">
+    <StMyCommentsLayout>
+      <NavBar btnLeft="back" />
       {data ? (
-        <StMyCommentCounter>
-          {data.pages[0].totalElements}개의 댓글
-        </StMyCommentCounter>
+        <StCounterWrapper>
+          {' '}
+          <StMyCommentCounter>
+            {data.pages[0].totalElements}개의 댓글
+          </StMyCommentCounter>
+        </StCounterWrapper>
       ) : (
         <StMyCommentCounter>댓글이 없습니다🫥</StMyCommentCounter>
       )}
@@ -80,7 +81,7 @@ export const MyCommentsPage = () => {
               >
                 <CommentS className="CommentS" />
                 <p className="comment">{item.comment}</p>
-                <img src={item.profileImgUrl || ''} />
+                <img src={item.profileImgUrl || noUser} />
                 <ChevronRight className="ChevronRight" />
               </StButton>
             ))
@@ -88,12 +89,12 @@ export const MyCommentsPage = () => {
         {isLoading && <div>로딩중...</div>}
         {hasNextPage ? (
           <>
-            <div style={{ height: '300px' }} ref={loaderRef} />
+            <StTarget ref={loaderRef} />
           </>
         ) : (
-          <div>마지막 댓글입니다.</div>
+          data && <StMyCommentCounter>마지막 댓글입니다.</StMyCommentCounter>
         )}
       </StMyCommentContainer>
-    </CommonLayout>
+    </StMyCommentsLayout>
   );
 };

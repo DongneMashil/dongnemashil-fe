@@ -1,22 +1,26 @@
 import { styled } from 'styled-components';
 
-export const StReviewBox = styled.div`
+export const StReviewBox = styled.button<{ $imgUrl?: string }>`
+  background: none;
   display: flex;
   flex-direction: column;
   align-items: center;
 
+  height: fit-content;
   margin-bottom: 1rem;
-  padding-top: 0.5rem;
   gap: 0.8rem;
-
   cursor: pointer;
 
-  img {
+  .imgWrapper {
     width: 100%;
     aspect-ratio: 1/1;
-    object-fit: cover;
+    overflow: hidden;
     border-radius: 0.875rem;
+    background-image: url(${(props) => props.$imgUrl});
+    background-position: center;
+    background-size: cover;
   }
+
   .contentWrapper {
     display: flex;
     flex-direction: column;
@@ -46,14 +50,14 @@ export const StReviewBox = styled.div`
 
 export const StTabContentBox = styled.div<{ $empty?: boolean }>`
   width: 100%;
-  height: 100%;
+  // height: 100%; 이거 사파리에서 오류발생
   background-color: #fff;
-  padding: 10px;
+  padding: 15px 18px;
 
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.03);
   border-radius: 0.875rem;
 
-  gap: 10px;
+  gap: 18px;
 
   ${({ $empty }) =>
     $empty
@@ -65,14 +69,13 @@ export const StTabContentBox = styled.div<{ $empty?: boolean }>`
   grid-template-columns: repeat(1, 1fr);
   @media (min-width: 300px) {
     grid-template-columns: repeat(2, 1fr);
-  }`}
-
-  img {
-    width: 100%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-    border-radius: 0.875rem;
   }
+  @media(min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  
+  `}
 `;
 
 export const StTabContainer = styled.div`
@@ -93,7 +96,7 @@ export const StTabButtonWrapper = styled.div`
 export const StTabButtonBox = styled.div`
   display: flex;
 `;
-export const StText = styled.div`
+export const StText = styled.h2`
   display: flex;
   align-items: center;
 
@@ -120,6 +123,7 @@ export const StEmptyBox = styled.div`
   align-items: flex-end;
   justify-content: center;
   margin-top: 100px;
+  margin-bottom: 100px; // 높이 매우 낮아질때 반응형 적용 예정
 `;
 export const StRefBox = styled.div`
   height: 200px;

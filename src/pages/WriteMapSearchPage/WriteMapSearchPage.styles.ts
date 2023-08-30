@@ -1,5 +1,14 @@
 import { styled } from 'styled-components';
 import { ReactComponent as MarkerIcon } from 'assets/icons/Marker.svg';
+import { theme } from 'style/theme';
+
+export const StLayout = styled.div`
+  ${theme.responsiveLayout}
+`
+
+export const StLayoutContainer = styled.div`
+  ${theme.responsiveContainer}
+`
 
 export const StSearchBox = styled.div`
   width: 22.25rem;
@@ -40,12 +49,14 @@ export const StSearchInput = styled.input`
   outline: none;
 `;
 
-export const StSeacrhResultWrapper = styled.div`
+export const StSearchResultWrapper = styled.div`
   width: 24rem;
-  border-top: 1px solid #e3e3e3;
   margin-top: 0.44rem;
   box-sizing: border-box;
   background-color: #fff;
+  @media ${(props) => props.theme.device.desktop} {
+    width: 31.9rem;
+  }
 `;
 
 export const StSearchResult = styled.div`
@@ -57,6 +68,9 @@ export const StSearchResult = styled.div`
   padding-left: 1.56rem;
   padding-top: 1.25rem;
   box-sizing: border-box;
+  @media ${(props) => props.theme.device.desktop} {
+    width: 31.9rem;
+  }
 `;
 
 export const StPlaceName = styled.span`

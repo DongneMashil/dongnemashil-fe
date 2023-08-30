@@ -4,8 +4,8 @@ import {
   selectedTagsState,
   sortTypeState,
 } from 'recoil/reviewsQuery/reviewsQuery';
-import { CommonLayout, FixFooter, NavBar } from 'components/layout';
-import { ThumbnailWrapper } from 'components/homePage';
+import { FixFooter, NavBar } from 'components/layout';
+import { ReviewsContainer } from 'components/homePage';
 import { ToggleTagButton } from 'components/common/ToggleTag/ToggleTag';
 import { useFetchReviews } from 'api/reviewsApi';
 
@@ -34,26 +34,14 @@ export const HomePage = () => {
   const handleTagChange = (tags: string[]) => {
     setSelectedTags(tags);
   };
-  console.log(selectedTags);
-  console.log(hasNextPage, isFetching);
 
   return (
-    <CommonLayout
-      header={
-        <>
-          <NavBar
-            btnLeft={'logo'}
-            btnSecondRight={'search'}
-            btnRight={'mypage'}
-          >
-            <h1>전체 보기</h1>
-          </NavBar>
-        </>
-      }
-      footer={<FixFooter rightButtons={'write'} />}
-    >
+    <>
+      <NavBar btnLeft={'logo'} btnSecondRight={'search'} btnRight={'mypage'}>
+        <h1>전체 보기</h1>
+      </NavBar>
       <ToggleTagButton onTagChange={handleTagChange} />
-      <ThumbnailWrapper
+      <ReviewsContainer
         type={type}
         reviews={reviews}
         hasNextPage={hasNextPage}
@@ -61,6 +49,7 @@ export const HomePage = () => {
         fetchNextPage={fetchNextPage}
         onClickSort={onClickSort}
       />
-    </CommonLayout>
+      <FixFooter rightButtons={'write'} />
+    </>
   );
 };

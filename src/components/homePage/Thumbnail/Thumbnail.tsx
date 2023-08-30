@@ -13,14 +13,15 @@ import { ReviewsList } from 'api/reviewsApi';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { useLike } from 'hooks';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import { numberWithCommas } from 'utils';
 import timeAgo from 'utils/timeAgo';
 
 export const Thumbnail = ({
   id,
   roadName,
-  mainImgUrl,
+  middleMainImgUrl,
+  smallMainImgUrl,
   profileImgUrl,
   createdAt,
   likeCnt: initialLikeCnt,
@@ -28,7 +29,7 @@ export const Thumbnail = ({
 }: ReviewsList) => {
   const navigate = useNavigate();
   const [imgRatio, setImgRatio] = useState<
-    'LongerHeight' | 'LongerWidth' | null
+    'longerHeight' | 'longerWidth' | null
   >(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
@@ -42,9 +43,9 @@ export const Thumbnail = ({
       const imageHeight = imageRef.current.naturalHeight;
 
       if (imageWidth < imageHeight) {
-        setImgRatio('LongerHeight');
+        setImgRatio('longerHeight');
       } else {
-        setImgRatio('LongerWidth');
+        setImgRatio('longerWidth');
       }
     }
   };
@@ -58,14 +59,19 @@ export const Thumbnail = ({
   return (
     <StThumbnail>
       <StThumnailMain onClick={onClickThumbnail} $imgRatio={imgRatio}>
-        {mainImgUrl ? (
-          <img ref={imageRef} src={mainImgUrl} onLoad={handleImageLoad} />
+        {middleMainImgUrl ? (
+          <img
+            ref={imageRef}
+            src={middleMainImgUrl}
+            srcSet={`${smallMainImgUrl} 360w, ${middleMainImgUrl} 768w`}
+            onLoad={handleImageLoad}
+            alt="썸네일 이미지"
+          />
         ) : null}
       </StThumnailMain>
       <StThumbnailTitle>
         <StThumbnailTitleLeft>
           <img src={profileImgUrl || noUser} alt="프로필 이미지" />
-
           <StTitleText onClick={onClickThumbnail}>
             <Span size={'title'}>
               <strong>{roadName}</strong>

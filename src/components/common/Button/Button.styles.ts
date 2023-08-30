@@ -1,5 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { theme } from 'style/theme';
+
+const btnShadow = css`
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
+`;
 
 export const StButton = styled.button<{
   $width?: string;
@@ -7,7 +11,9 @@ export const StButton = styled.button<{
   $stroke?: string;
   $round?: string;
   $active?: boolean;
+  $shadow?: boolean;
 }>`
+  ${(props) => (props.$shadow ? btnShadow : null)}
   background: none;
   display: flex;
   justify-content: center;
@@ -37,7 +43,6 @@ export const StButton = styled.button<{
     border-radius: ${(props) => props.$round};
     border: ${(props) => props.$stroke} solid ${theme.mainColor};
     background: rgba(247, 246, 246, 0.8);
-    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
 
     & span {
       color: ${theme.pointColor};
@@ -52,7 +57,6 @@ export const StButton = styled.button<{
     border-radius: 50%;
     background: ${theme.mainColor};
     opacity: 0.9;
-    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25));
 
     color: ${theme.whiteColor};
     font-weight: 500;
@@ -133,9 +137,19 @@ export const StButton = styled.button<{
       top: calc(50% - 11.5px);
     }
   }
+
+  &.login {
+    width: 50px;
+    height: 22px;
+    border-radius: 16px;
+    border: 1px solid ${theme.mainColor};
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: ${theme.mainColor};
+  }
 `;
 
-export const StSubmitButton = styled.button<{
+export const StProfileButton = styled.button<{
   $active?: boolean;
 }>`
   background: none;

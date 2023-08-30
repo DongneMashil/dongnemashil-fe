@@ -3,7 +3,7 @@ interface StTagProps {
   readonly $isSelected: boolean;
   $isHoverEnabled?: boolean;
 }
-export const StTagContainer = styled.li<StTagProps>`
+export const StTagContainer = styled.div<StTagProps>`
   -ms-user-select: none;
   -moz-user-select: -moz-none;
   -webkit-user-select: none;
@@ -50,5 +50,9 @@ export const StTagContainer = styled.li<StTagProps>`
     font-weight: ${(props) => (props.$isSelected ? '600' : '400')};
     line-height: normal;
     margin: 0.6rem 0;
+  }
+  img {
+    width: 100%;
+    height: auto;
   }
 `;

@@ -1,11 +1,12 @@
 import { Button } from 'components/common';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, Suspense } from 'react';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/CommentS.svg';
-import { ReactComponent as ContentIcon } from 'assets/icons/Content.svg';
+import { ReactComponent as ChevronTop } from 'assets/icons/ChevronTop.svg';
 import { ReactComponent as Close } from 'assets/icons/Close.svg';
-import { Comments } from '../Comments/Comments';
+// import { Comments } from '../Comments/Comments';
+const Comments = React.lazy(() => import('../Comments/Comments'));
 import { CommentInput } from '../CommentInput/CommentInput';
 import { useLike } from 'hooks';
 import { useRecoilValue } from 'recoil';
@@ -21,13 +22,11 @@ import {
 interface FooterProps {
   reviewId: string;
   likeCnt: number;
-  onClick?: () => void;
   isLiked: boolean;
 }
 export const Footer = ({
   reviewId,
   likeCnt: initialLikeCnt,
-  onClick,
   isLiked: initialIsLiked,
 }: FooterProps) => {
   const commentCount = useRecoilValue(commentCountAtom);
@@ -45,6 +44,14 @@ export const Footer = ({
     }
   }, [isCommentOpen]);
 
+  const onClickHandler = useCallback(() => {
+    if (isCommentOpen) {
+      setIsCommentOpen(false);
+    } else {
+      setIsCommentOpen(true);
+    }
+  }, []);
+
   const { isLiked, likeCnt, toggleLikeHandler } = useLike({
     reviewId,
     initialIsLiked,
@@ -54,20 +61,32 @@ export const Footer = ({
   return (
     <StFooterContatiner $isCommentOpen={isCommentOpen}>
       <StFooterButtonWrapper>
-        <StLike onClick={() => toggleLikeHandler()}>
+        <StLike onClick={() => toggleLikeHandler()} aria-label="좋아요">
           {isLiked ? <FilledHeart /> : <Heart />}
-          {likeCnt}
+          <p aria-label="좋아요수">{likeCnt}</p>
         </StLike>
-        <StComment onClick={() => setIsCommentOpen(!isCommentOpen)}>
-          <CommentIcon className="CommentIcon" /> {commentCount}
+        <StComment
+          onClick={() => setIsCommentOpen(!isCommentOpen)}
+          aria-label="댓글"
+        >
+          <CommentIcon className="CommentIcon" />{' '}
+          <p aria-label="댓글수">{commentCount}</p>
         </StComment>
         {isCommentOpen ? (
-          <Button type={'onlyText'} onClick={() => setIsCommentOpen(false)}>
+          <Button
+            type={'onlyText'}
+            onClick={() => setIsCommentOpen(false)}
+            aria-label="댓글닫기"
+          >
             <Close />
           </Button>
         ) : (
-          <Button type={'onlyText'} onClick={onClick}>
-            <ContentIcon /> 본문으로
+          <Button
+            type={'onlyText'}
+            onClick={onClickHandler}
+            aria-label="댓글보기"
+          >
+            <ChevronTop /> 댓글보기
           </Button>
         )}
       </StFooterButtonWrapper>
@@ -75,7 +94,9 @@ export const Footer = ({
       {isCommentOpen && (
         <>
           <StFooterCommentSection>
-            <Comments reviewId={reviewId} $isCommentShow={isCommentShow} />
+            <Suspense fallback={<div>loading...</div>}>
+              <Comments reviewId={reviewId} $isCommentShow={isCommentShow} />
+            </Suspense>
           </StFooterCommentSection>
           <CommentInput reviewId={reviewId} $isCommentShow={isCommentShow} />
         </>

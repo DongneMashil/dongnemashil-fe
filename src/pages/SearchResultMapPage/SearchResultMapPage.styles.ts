@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const StResultMapContainer = styled.div`
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
@@ -17,14 +17,6 @@ export const StResultMapContainer = styled.div`
       height: 38px;
       top: 20px;
       left: 20px;
-    }
-
-    // 현위치 버튼
-    &:last-of-type {
-      width: 50px;
-      height: 50px;
-      bottom: 50px;
-      right: 20px;
     }
   }
 `;

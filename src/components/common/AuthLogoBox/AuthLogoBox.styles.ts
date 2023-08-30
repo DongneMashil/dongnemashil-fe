@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { theme } from 'style/theme';
 
 export interface AuthLogoBoxProps {
   $align: 'left' | 'center' | 'right';
+  $page: 'login' | 'register' | 'commonLogin';
 }
 
 export const StLogoBox = styled.div<AuthLogoBoxProps>`
@@ -27,11 +27,5 @@ export const StLogoBox = styled.div<AuthLogoBoxProps>`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-  }
-  & span {
-    color: ${theme.mainTextColor};
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12px;
   }
 `;

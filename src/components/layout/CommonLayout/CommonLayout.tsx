@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   StLayoutBody,
   StLayoutOuter,
@@ -7,7 +7,7 @@ import {
   StSlidingHeader,
 } from './CommonLayout.styles';
 import { FloatingFooter } from './components/FloatingFooter/FloatingFooter';
-import { StTarget } from 'components/homePage/ThumbnailWrapper/ThumbnailWrapper.styles';
+import { StTarget } from 'components/homePage/ReviewsContainer/ReviewsContainer.styles';
 
 interface CommonLayoutProps {
   children: React.ReactNode;
@@ -38,25 +38,25 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
   backgroundColor = '#F7F7F7',
   scrollToTopRef,
 }) => {
-  const [isShow, setIsShow] = React.useState(true);
+  const [isShow, setIsShow] = useState(true);
   const [prevPosition, setPrevPosition] = React.useState(0);
-  console.log(scrollToTopRef);
-  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   headerHeight = header ? headerHeight : '0px';
-  useEffect(() => {
-    const onScroll = () => {
-      if (scrollRef.current) {
-        const { scrollTop } = scrollRef.current;
-        // console.log(scrollTop + '❤️‍🩹');
-        if (scrollTop > prevPosition) {
-          setIsShow(false);
-        } else {
-          setIsShow(true);
-        }
-        setPrevPosition(scrollTop);
+
+  const onScroll = useCallback(() => {
+    if (scrollRef.current) {
+      const { scrollTop } = scrollRef.current;
+      // console.log(scrollTop + '❤️‍🩹');
+      if (scrollTop > prevPosition) {
+        setIsShow(false);
+      } else {
+        setIsShow(true);
       }
-    };
-    if (scrollRef.current && hideHeader) {
+      setPrevPosition(scrollTop);
+    }
+  }, [prevPosition]);
+  useEffect(() => {
+    if (scrollRef.current && hideHeader && location.pathname !== '/write') {
       scrollRef.current.addEventListener('scroll', onScroll);
     }
     return () => {
@@ -66,10 +66,18 @@ export const CommonLayout: React.FC<CommonLayoutProps> = ({
     };
   }, [prevPosition]);
 
+  //iOS vh 문제 해결
+  const setVH = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  };
+
+  window.addEventListener('resize', setVH);
+  setVH();
   return (
     <StLayoutOuter>
       <StLayoutBody>
-        <StModalPotal id="modal"></StModalPotal>
+        <StModalPotal></StModalPotal>
         {header && <StSlidingHeader $isShow={isShow}>{header}</StSlidingHeader>}
         <StLayoutSection
           ref={scrollRef}

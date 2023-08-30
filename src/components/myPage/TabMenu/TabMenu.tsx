@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TabButton } from '../TabButton/TabButton';
 import { getMyReviews } from 'api/mypageApi';
 import { useNavigate } from 'react-router-dom';
@@ -51,7 +51,9 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
       fetchNextPage();
     }
   };
-
+  useEffect(() => {
+    console.log('🐬' + JSON.stringify(data?.pages, null, 2));
+  }, [data?.pages]);
   // 커스텀훅 사용
   const loaderRef = useIntersect(onIntersectCallback, {
     root: null,
@@ -80,30 +82,38 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
           </TabButton>
         </StTabButtonBox>
       </StTabButtonWrapper>
-      <StTabContentBox $empty={!data}>
-        {data ? (
-          data.pages.map((page) =>
-            page.content.map(
-              (item, index) =>
-                item.imgUrl && (
-                  <StReviewBox
-                    key={index}
-                    onClick={() => navigate(`/review/${item.reviewId}`)}
-                  >
-                    <img src={item.imgUrl} alt="img" />
-                    <div className="contentWrapper">
-                      <div className="title">{item.roadName}</div>
-                      {selectedTab === 'reviews' && (
-                        <div className="date">
-                          {timeFormatWithoutTime(item.createdAt)}
-                        </div>
-                      )}
-                    </div>
+      <StTabContentBox $empty={!(data && data.pages[0].content.length > 0)}>
+        {data && data.pages[0].content.length > 0 ? (
+          data.pages.map(
+            (page) =>
+              page.content &&
+              page.content.map(
+                (item) =>
+                  item.imgUrl && (
+                    <StReviewBox
+                      key={item.reviewId}
+                      onClick={() => navigate(`/review/${item.reviewId}`)}
+                      $imgUrl={item.imgUrl}
+                      area-label={`${item.roadName}의 ${item.reviewId}번 리뷰로 이동하기`}
+                    >
+                      <div
+                        className="imgWrapper"
+                        role="img"
+                        aria-label={`${item.roadName}의 ${item.reviewId}번 리뷰 이미지`}
+                      />
+                      <div className="contentWrapper">
+                        <h2 className="title">{item.roadName}</h2>
+                        {selectedTab === 'reviews' && (
+                          <time className="date">
+                            {timeFormatWithoutTime(item.createdAt)}
+                          </time>
+                        )}
+                      </div>
 
-                    {isLoading && <div>로딩중...</div>}
-                  </StReviewBox>
-                )
-            )
+                      {isLoading && <h2>로딩중...</h2>}
+                    </StReviewBox>
+                  )
+              )
           )
         ) : (
           <StEmptyBox>
@@ -121,11 +131,7 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
             )}
           </StEmptyBox>
         )}
-        {hasNextPage && (
-          <>
-            <StRefBox ref={loaderRef} />
-          </>
-        )}
+        {hasNextPage && <StRefBox ref={loaderRef} />}
       </StTabContentBox>
     </StTabContainer>
   );

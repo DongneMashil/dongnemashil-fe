@@ -1,3 +1,4 @@
+import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StMyCommentCounter = styled.div`
@@ -40,9 +41,24 @@ export const StButton = styled.div`
 `;
 
 export const StMyCommentContainer = styled.div`
+  ${theme.responsiveContainer};
   ${(props) => props.theme.floatingBox}
   padding: 0rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+export const StTarget = styled.div`
+  height: 100px;
+`;
+
+export const StCounterWrapper = styled.div`
+  ${theme.responsiveContainer};
+`;
+
+export const StMyCommentsLayout = styled.div`
+  ${theme.responsiveLayout};
+  min-height: 100vh;
+  background-color: ${theme.backgroundColor};
 `;

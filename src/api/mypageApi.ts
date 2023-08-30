@@ -1,5 +1,6 @@
 import { AxiosResponse, AxiosError } from 'axios';
 import { axiosInstance } from './api';
+import { tokenHandler } from './loginApi';
 
 export type MyProfile = {
   email: string;
@@ -23,8 +24,7 @@ export const getMyProfile = async (): Promise<MyProfile> => {
 };
 
 export type Review = {
-  nickname: string;
-  userprofileImgUrl: string | null;
+  userprofileUrl: string | null;
   imgUrl: string | null;
   roadName: string;
   createdAt: string;
@@ -172,7 +172,17 @@ export const postProfile = async (post: {
 
     const response = await axiosInstance.request(config);
     console.log(JSON.stringify(response) + '🏠');
-
+    //⬇️새로운 토큰으로 교체
+    console.log('responseHEADERS📸:', response.headers);
+    const accessToken = response.headers['accesstoken'].replace('Bearer%', '');
+    const refreshToken = response.headers['refreshtoken'].replace(
+      'Bearer%',
+      ''
+    );
+    console.log('Received Access Token: ', accessToken);
+    console.log('Received Refresh Token: ', refreshToken);
+    tokenHandler(accessToken, refreshToken);
+    console.log('토큰교체성공🥁');
     return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {

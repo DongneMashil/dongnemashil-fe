@@ -1,5 +1,15 @@
 import { styled } from 'styled-components';
 import { ReactComponent as MarkerIcon } from 'assets/icons/Marker.svg';
+import { theme } from 'style/theme';
+
+export const StWirteMapContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+`;
 
 export const StCurrentLocationContainer = styled.div`
   height: 12.9rem;
@@ -16,6 +26,14 @@ export const StCurrentLocationContainer = styled.div`
   background-color: #fff;
   padding-top: 1.37rem;
   padding-left: 1.5rem;
+  @media ${(props) => props.theme.device.desktop} {
+    height: 12.1rem;
+    padding-left: 6.5rem;
+  }
+`;
+
+export const StMaxSize = styled.div`
+  ${theme.responsiveContainer}
 `;
 
 export const StCurrentLocationTitle = styled.span`
@@ -27,26 +45,53 @@ export const StCurrentLocationTitle = styled.span`
   margin-bottom: 1.4rem;
 `;
 
+export const StTablet = styled.div`
+  width: 100%;
+  margin-top: 1rem;
+  @media ${(props) => props.theme.device.desktop} {
+    display: flex;
+    flex-direction: row;
+  }
+`;
+
 export const StInputWrapper = styled.div`
   width: 90%;
   height: 2rem;
   border-bottom: 1px solid #dbdbdb;
+  display: flex;
+  @media ${(props) => props.theme.device.desktop} {
+    width: 23.6rem;
+    height: 3.625rem;
+    border-radius: 1.88rem;
+    border: 1px solid #dbdbdb;
+    padding-top: 1rem;
+  }
 `;
 
 export const StMarker = styled(MarkerIcon)`
   width: 0.8125rem;
   height: 1.08331rem;
   margin: 0 0.44rem;
+  @media ${(props) => props.theme.device.desktop} {
+    margin-left: 1.3rem;
+  }
 `;
 
 export const StCurrentLocationText = styled.span`
-  width: 11.125rem;
   height: 1.1875rem;
   color: #5f5f5f;
   font-size: 0.89rem;
   font-weight: 600;
   line-height: normal;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-right: 1.3rem;
+  text-overflow: ellipsis;
+  @media ${(props) => props.theme.device.desktop} {
+    margin-bottom: 1.12rem;
+    font-size: 1rem;
+  }
 `;
 
 export const StPostButton = styled.button`
@@ -62,4 +107,11 @@ export const StPostButton = styled.button`
   font-size: 1.125rem;
   font-style: normal;
   font-weight: 700;
+  box-sizing: border-box;
+  @media ${(props) => props.theme.device.desktop} {
+    width: 11.5rem;
+    height: 3.625rem;
+    border-radius: 1.88rem;
+    margin: 0 0 3.81rem 2rem;
+  }
 `;

@@ -5,8 +5,20 @@ export const StThumbnail = styled.li`
   display: flex;
   flex-direction: column;
 
+  width: 100%;
+
   padding: 26px 0 8px;
   border-bottom: 1px solid ${theme.whiteGrayColor};
+
+  &:nth-last-child(1) {
+    border-bottom: 0px;
+  }
+
+  @media ${theme.device.desktop} {
+    &:nth-last-child(2) {
+      border-bottom: 0px;
+    }
+  }
 `;
 
 export const StThumbnailTitle = styled.div`
@@ -31,6 +43,7 @@ export const StThumbnailTitleLeft = styled.div`
 export const StTitleText = styled.div`
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 `;
 
 export const StThumbnailLike = styled.div`
@@ -49,7 +62,7 @@ export const StThumbnailLike = styled.div`
   }
 `;
 
-const LongerHight = css`
+const longerHight = css`
   position: relative;
 
   &::after {
@@ -61,11 +74,12 @@ const LongerHight = css`
   & img {
     width: 100%;
     position: absolute;
-    transform: translateY(-10%);
+    top: 50%;
+    transform: translateY(-50%);
   }
 `;
 
-const LongerWidth = css`
+const longerWidth = css`
   & img {
     width: 100%;
     height: 100%;
@@ -75,17 +89,21 @@ const LongerWidth = css`
 `;
 
 export const StThumnailMain = styled.div<{
-  $imgRatio?: 'LongerHeight' | 'LongerWidth' | null;
+  $imgRatio?: 'longerHeight' | 'longerWidth' | null;
 }>`
   ${(props) =>
-    props.$imgRatio === 'LongerHeight'
-      ? LongerHight
-      : props.$imgRatio === 'LongerWidth'
-      ? LongerWidth
+    props.$imgRatio === 'longerHeight'
+      ? longerHight
+      : props.$imgRatio === 'longerWidth'
+      ? longerWidth
       : null}
 
   width: 100%;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
+
+  @media ${theme.device.desktop} {
+    max-width: 362px;
+  }
 `;

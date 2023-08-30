@@ -1,7 +1,6 @@
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { deleteComment, editComment, getComment } from 'api/detailApi';
-import SkeletonUI from 'components/common/SkeletonUI/SkeletonUI';
-import noUser from 'assets/images/NoUser.gif';
+import noUser from 'assets/images/NoUser.jpg';
 import React, { useEffect, useRef, useState } from 'react';
 import timeAgo from 'utils/timeAgo';
 import {
@@ -10,12 +9,12 @@ import {
   StDetailPageCommentList,
 } from './Comments.styles';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { userProfileSelector } from 'recoil/userExample';
+import { userProfileSelector } from 'recoil/userInfo';
 import { queryClient } from 'queries/queryClient';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
 import { useIntersect } from 'hooks/useIntersect';
-import { Modal } from 'components/common';
+import { Modal, StLoadingSpinner } from 'components/common';
 
 interface CommentsProps {
   reviewId: string;
@@ -34,6 +33,7 @@ export const Comments = ({
     useState(false);
   const latestCommentRef = useRef(null);
   // const loader = useRef(null);
+  const [deleteCommentId, setDeleteCommentId] = useState<number>(0);
   const useInfinityScroll = () => {
     const fetchComment = async ({ pageParam = 1 }) => {
       const response = await getComment({
@@ -58,7 +58,8 @@ export const Comments = ({
       refetchOnMount: false,
       refetchOnReconnect: true,
       retry: false,
-      staleTime: 3000, // 3초 동안 데이터는 fresh 상태를 유지, 무분별한 요청을 막기 위함.
+      staleTime: 10000, // 10초 동안 데이터는 fresh 상태를 유지, 무분별한 요청을 막기 위함.
+      cacheTime: 600000, // 10분 동안 데이터를 캐시에 저장
     });
     return query;
   };
@@ -99,12 +100,14 @@ export const Comments = ({
       queryClient.invalidateQueries(['comment', reviewId]);
     },
   });
-  const onDeleteCommentHandler = (commentId: number) => {
-    deleteCommentMutation.mutate(String(commentId)); // API 요청을 발생시키기 위해 mutate를 호출합니다.
-  };
+  // const onDeleteCommentHandler = (commentId: number) => {
+  //   deleteCommentMutation.mutate(String(commentId)); // API 요청을 발생시키기 위해 mutate를 호출합니다.
+  // };
   const [isEdit, setIsEdit] = useState({ state: false, id: 0, comment: '' });
   const onEditCommentHandler = (commentId: number, comment: string) => {
     setIsEdit({ state: true, id: commentId, comment });
+    console.log('commentId', commentId);
+    console.log('comment', comment);
   };
   const onChangeCommentHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsEdit({ ...isEdit, comment: e.target.value });
@@ -122,6 +125,11 @@ export const Comments = ({
       onEditEndHandler();
       queryClient.invalidateQueries(['comment', reviewId]);
     });
+  };
+
+  const onDeleteCommentHandler = (commentId: number) => {
+    setDeleteCommentId(commentId);
+    setIsDeleteCommentModalOpen(true);
   };
 
   return (
@@ -150,10 +158,6 @@ export const Comments = ({
                       <>
                         {isEdit.state && isEdit.id === comment.id ? (
                           <>
-                            {/* <button className="left" onClick={onEditEndHandler}>
-                              취소
-                            </button>
-                            <div className="divider">|</div> */}
                             <button
                               className="center"
                               onClick={onEditSubmitHandler}
@@ -179,7 +183,7 @@ export const Comments = ({
                             <button
                               className="right"
                               disabled={isEdit.state}
-                              onClick={() => setIsDeleteCommentModalOpen(true)}
+                              onClick={() => onDeleteCommentHandler(comment.id)}
                             >
                               삭제
                             </button>
@@ -190,7 +194,9 @@ export const Comments = ({
                               firstLine="삭제된 댓글은 복구할 수 없습니다."
                               secondLine="삭제하시겠습니까?"
                               onSubmitHandler={() => {
-                                onDeleteCommentHandler(comment.id);
+                                deleteCommentMutation.mutate(
+                                  String(deleteCommentId)
+                                );
                                 setIsDeleteCommentModalOpen(false);
                               }}
                               onCloseHandler={() =>
@@ -219,16 +225,10 @@ export const Comments = ({
 
           {isLoading && <div>로딩중...</div>}
 
-          {hasNextPage && (
-            <>
-              <SkeletonUI ref={loaderRef} width="100%" height="80px" />
-              <SkeletonUI width="100%" height="80px" />
-              <SkeletonUI width="100%" height="80px" />
-              <SkeletonUI width="100%" height="80px" />
-            </>
-          )}
+          {hasNextPage && <StLoadingSpinner ref={loaderRef} />}
         </StDetailPageCommentList>
       )}
     </StDetailPageComment>
   );
 };
+export default Comments;

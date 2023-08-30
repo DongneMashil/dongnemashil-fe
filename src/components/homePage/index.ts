@@ -1,2 +1,2 @@
 export * from './Thumbnail/Thumbnail';
-export * from './ThumbnailWrapper/ThumbnailWrapper';
+export * from './ReviewsContainer/ReviewsContainer';

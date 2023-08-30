@@ -1,0 +1,50 @@
+name: Dongnemashil CICD
+on:
+  push:
+    branches: ['main', 'feat/#94']
+  #pull_request:
+  #  branches: ['feat/#94']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 코드 작업환경으로 가져오기
+      - uses: actions/checkout@v3
+      # Node 설치
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      # 환경변수 설정
+      - name: Setting .env
+        run: |
+          echo "REACT_APP_SERVER_API_URL=$REACT_APP_SERVER_API_URL" >> .env
+          echo "REACT_APP_CLIENT_API_URL=$REACT_APP_CLIENT_API_URL" >> .env 
+          echo "REACT_APP_KAKAO_REST_API_KEY=$REACT_APP_KAKAO_REST_API_KEY" >> .env
+          echo "REACT_APP_KAKAO_KEY=$REACT_APP_KAKAO_KEY" >> .env
+          cat .env 
+          ls -al
+        env:
+          REACT_APP_SERVER_API_URL: ${{secrets.REACT_APP_SERVER_API_URL}}
+          REACT_APP_CLIENT_API_URL: ${{secrets.REACT_APP_CLIENT_API_URL}}
+          REACT_APP_KAKAO_REST_API_KEY: ${{secrets.REACT_APP_KAKAO_REST_API_KEY}}
+          REACT_APP_KAKAO_KEY: ${{secrets.REACT_APP_KAKAO_KEY}}
+      # yarn install
+      - name: Run install
+        uses: borales/actions-yarn@v4.2.0
+        with:
+          cmd: install # will run `yarn install` command
+      # yarn build
+      - name: Run build
+        uses: borales/actions-yarn@v4.2.0
+        with:
+          cmd: build
+      - name: Configure AWS profile
+        run: |
+          aws configure set profile.${{secrets.AWS_PROFILE_NAME}}.aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set profile.${{secrets.AWS_PROFILE_NAME}}.aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set profile.${{secrets.AWS_PROFILE_NAME}}.region ap-northeast-2
+          aws configure set profile.${{secrets.AWS_PROFILE_NAME}}.output json
+      - name: Deploy to S3
+        run: aws s3 sync ./build s3://dongnemashil --profile=${{secrets.AWS_PROFILE_NAME}}

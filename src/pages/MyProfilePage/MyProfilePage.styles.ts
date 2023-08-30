@@ -1,3 +1,4 @@
+import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StNickNameTitle = styled.div`
@@ -23,6 +24,8 @@ export const StNickNameWrapper = styled.div`
   }
 `;
 export const StMyProfileContainer = styled.div`
+  ${theme.responsiveContainer};
+  max-width: 360px;
   width: 100%;
   padding: 0 1.5rem;
   display: flex;
@@ -44,7 +47,8 @@ export const StProfileImage = styled.div`
     border-radius: 50px;
     object-fit: cover;
   }
-  label {
+  .loadimg {
+    background: none;
     color: var(--strokepurple, #9a7b9a);
     text-align: center;
     font-family: Pretendard;
@@ -55,13 +59,10 @@ export const StProfileImage = styled.div`
     cursor: pointer;
     height: 40px;
   }
+`;
 
-  input[type='file'] {
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
-  }
+export const StMyProfileLayout = styled.div`
+  ${theme.responsiveLayout};
+  min-height: 100vh;
+  background-color: ${theme.whiteColor};
 `;

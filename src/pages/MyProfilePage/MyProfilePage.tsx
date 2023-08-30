@@ -1,281 +1,220 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { MyProfile, getMyProfile, postProfile } from 'api/mypageApi';
-import { CommonLayout, NavBar } from 'components/layout';
-import { useVerifyUser } from 'hooks';
-import React, { useEffect, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { userProfileSelector } from 'recoil/userExample';
-import noUser from 'assets/images/NoUser.gif';
-import imageCompression from 'browser-image-compression';
-import { AuthInputBox, AuthErrorMsg, Modal } from 'components/common';
-import { confirmNickname } from 'api/loginApi';
-import { getExtensionName } from 'components/myProfilePage';
+import { MyProfile, postProfile } from 'api/mypageApi';
+import { NavBar } from 'components/layout';
+import { useUpdateUserInfo } from 'hooks';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { userIdSelector, userProfileSelector } from 'recoil/userInfo';
+import noUser from 'assets/images/NoUser.jpg';
+import { AuthErrorMsg, Modal } from 'components/common';
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from 'queries/queryClient';
 import {
   StMyProfileContainer,
+  StMyProfileLayout,
   StNickNameTitle,
   StNickNameWrapper,
   StProfileImage,
 } from './MyProfilePage.styles';
+import { CropModal } from 'components/common/CropModal/CropModal';
+import { ProfileNicknameCheck } from 'components/myProfilePage/ProfileNicknameCheck/ProfileNicknameCheck';
 import axios from 'axios';
+import { getExtensionName } from 'components/myProfilePage';
+import DefaultImage from 'assets/images/NoUser.jpg';
+import { base64ToBlob } from 'utils';
+import { croppedImageFileSelector } from 'recoil/cropProfileImage/cropProfileImageSelector';
+import imageCompression from 'browser-image-compression';
+
 export const MyProfilePage = () => {
-  const [fileUrl, setFileUrl] = useState<string | null | undefined>(null);
-  const fileUpload = useRef();
   const navigate = useNavigate();
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false); //오류시 모달창
-  const [postData, setPostData] = useState<{
-    nickname?: string;
-    imgUrl?: File | null;
-    validation: {
-      isValid: boolean;
-      isVerified: boolean;
-      msg: string;
-      alertMsg: string;
-    };
-  }>({
-    nickname: '',
-    imgUrl: null,
-    validation: {
-      isValid: true,
-      isVerified: false,
-      msg: '',
-      alertMsg: '닉네임을 중복확인을 해주세요!',
-    },
-  });
-
+  const [errorMsg, setErrorMsg] = useState(''); // 에러 메시지를 저장하는 상태
+  const [doneMsg, setDoneMsg] = useState(''); // 완료 메시지를 저장하는 상태
+  const [imgFile, setImgFile] = useState<File | null>(null); //이미지 파일
+  const [imgUrl, setImgUrl] = useState<string | null | undefined>(null); //이미지 url
+  const [nickname, setNickname] = useState<string>(''); //닉네임
+  const [validation, setValidation] = useState<{
+    isValid: boolean;
+    msg: string;
+  }>({ isValid: true, msg: '' }); //닉네임 유효성 여부
+  const [cropModal, setCropModal] = useState(false);
+  const userID = useRecoilValue(userIdSelector);
   //유저정보 조회 및 업데이트
-  const { data: userData } = useVerifyUser(true);
-  const [userState, setUserState] = useRecoilState(userProfileSelector);
-  const [isAxiosErrorModalOpen, setIsAxiosErrorModalOpen] = useState(false); //사진 초기 다운로드 실패시 모달창
-  useEffect(() => {
-    console.log('current user state: ', userState);
-    if (userData) {
-      console.log('useVerifyUser data: ', userData);
-    }
-  }, [userState]);
+
+  const { isSuccess, data } = useUpdateUserInfo(true);
+  const setUserState = useSetRecoilState(userProfileSelector);
+
   // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
-  useQuery<MyProfile, Error>({
-    queryKey: ['myPage', userData?.nickname],
-    queryFn: () => getMyProfile(),
-    onSuccess: async (data) => {
-      console.log(data);
-      setFileUrl(data.profileImgUrl);
 
-      try {
-        const response = await axios.get(data.profileImgUrl!, {
+  //---------------------------------------------
+
+  const getProfileImg = async (data: MyProfile) => {
+    //
+    try {
+      const response = await axios.get(
+        `${data.profileImgUrl!}?timestamp=${Date.now()}`,
+        {
           responseType: 'blob',
-        });
-        console.log(`Response Status: ${response.status}`);
+        }
+      );
+      console.log(`Response Status: ${response.status}`);
 
-        const blob = response.data;
-        const extension = getExtensionName(data.profileImgUrl!);
-        const finalFilename = 'prev.' + extension;
-        const prevImage = new File([blob], finalFilename, { type: blob.type });
-        setPostData((prev) => ({
-          ...prev,
-          imgUrl: prevImage,
-          nickname: data.nickname,
-        }));
-      } catch (error) {
-        console.error('Error fetching the image:', error);
-        setIsAxiosErrorModalOpen(true);
-      }
-    },
-    onError: (error) => {
-      console.log('🔴' + error);
-    },
-  });
+      const blob = response.data;
+      const extension = getExtensionName(data.profileImgUrl!);
+      const finalFilename = 'prev.' + extension;
+      const prevImage = new File([blob], finalFilename, { type: blob.type });
+      setImgFile(prevImage);
+      setNickname(data.nickname);
+    } catch (error) {
+      setImgUrl(DefaultImage); //이미지 다운로드 실패시 기본 이미지 삽입
+      console.log('✨defalultImage: ' + DefaultImage);
+      console.log('✨setimgUrl: ' + imgUrl);
 
-  // ⬇️ 이미지 압축 옵션
+      const defaultBlob = base64ToBlob(DefaultImage, 'image/jpg');
+      const defaultFile = new File([defaultBlob], 'default.jpg', {
+        type: 'image/jpg',
+      });
+
+      setImgFile(defaultFile);
+      setNickname(data.nickname);
+      console.error('이미지 다운로드 실패해서 기본 이미지 삽입:', error);
+    }
+  };
+  useEffect(() => {
+    if (isSuccess) {
+      setImgUrl(data.profileImgUrl);
+      getProfileImg(data);
+    }
+  }, []); //이걸 안하니깐 52번씩 랜더링되다가 멈춤
+
+  //프로필 사진 업로드
+  const onClickChangeImageHandler = () => {
+    setCropModal(true);
+  };
+
+  //압축하기
+  const croppedFile = useRecoilValue(croppedImageFileSelector);
+
   const options = {
-    maxSizeMB: 0.8,
-    maxWidthOrHeight: 500,
+    maxSizeMB: 0.1,
+    maxWidthOrHeight: 100,
     useWebWorker: true,
   };
-  //⬇️ 이미지 압축 (fileUrl -> imgUrl)
-  const onChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const imageFile = e.target.files?.[0];
-    if (!imageFile) return;
-    try {
-      const compressedFile = await imageCompression(imageFile, options);
-      const imgUrl = URL.createObjectURL(compressedFile);
-      setFileUrl(imgUrl);
-      setPostData((prev) => ({ ...prev, imgUrl: imageFile }));
-      console.log(postData + '이미지 압축');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
+  useEffect(() => {
+    const onChangeImage = async () => {
+      if (!croppedFile) return;
+
+      try {
+        const compressedFile = await imageCompression(croppedFile, options);
+        const imgUrl = URL.createObjectURL(compressedFile);
+        setImgUrl(imgUrl);
+        setImgFile(compressedFile);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    onChangeImage();
+  }, [croppedFile]);
+
   //닉네임 입력
-  const onChangeValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setPostData({
-      ...postData,
-      [name]: value,
-      validation: {
-        ...postData.validation,
-        alertMsg: '닉네임 중복확인을 해주세요!',
-        isVerified: false,
-        isValid: false,
-      },
-    });
-  };
+  const onChangeValueHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      setValidation({ isValid: false, msg: '' });
+      setNickname(value);
+    },
+    []
+  );
 
   //프로필 업로드
   const onSubmitHandler = async () => {
-    console.log('👦🏾' + JSON.stringify(postData));
-    console.log('⚠️👀');
-    //변경내용 없는경우
-    if (
-      postData.imgUrl === fileUrl &&
-      postData.nickname === userData?.nickname
-    ) {
-      setPostData((prev) => ({
-        ...prev,
-        validation: {
-          ...prev.validation,
-          alertMsg: '변경된 내용이 없습니다.',
-        },
-      }));
-      setIsErrorModalOpen(true);
-      return;
-    } //닉네임 미입력시
-    if (postData.nickname === '') {
-      setPostData((prev) => ({
-        ...prev,
-        validation: {
-          ...prev.validation,
-          alertMsg: '닉네임을 입력해주세요.',
-        },
-      }));
-      setIsErrorModalOpen(true);
+    //닉네임 미입력시
+    if (nickname === '') {
+      setErrorMsg('닉네임을 입력해주세요.');
       return;
     }
     try {
-      const response = await postProfile({
-        imgUrl: (postData.imgUrl as File)!, // 무조건 들어감
-        nickname: postData.nickname!, // 무조건 들어감
+      await postProfile({
+        imgUrl: imgFile,
+        nickname: nickname,
       });
-      console.log('👁️' + JSON.stringify(response));
-      alert('성공적으로 등록되었습니다.');
-      queryClient.invalidateQueries(['myPage']);
-      setUserState((prev) => ({ ...prev, nickname: postData.nickname }));
-      navigate('/');
+      setDoneMsg('프로필 등록에 성공했습니다.');
+      queryClient.invalidateQueries([userID]);
+      setUserState((prev) => ({ ...prev, nickname: nickname }));
+      console.log('🟢이제 곧 이동');
+      navigate('/mypage');
     } catch (error) {
       console.error('😀' + error);
-      alert('프로필 등록에 실패했습니다.');
+      setErrorMsg(`프로필 등록에 실패했습니다. 오류코드:${error}`);
     }
   };
 
-  //닉네임 중복확인 함수
-  const { mutate: confirmNicknameMutate } = useMutation(confirmNickname, {
-    onSuccess: () => {
-      const newData = {
-        ...postData,
-        validation: {
-          msg: `*사용가능한 닉네임 입니다.`,
-          isValid: true, // 닉네임 유효 여부 (기존 닉네임 유지 or 변경후 성공시 true)
-          isVerified: true, // 닉네임 중복확인 여부 (변경후 성공시 true)
-          alertMsg: '사진을 등록해주세요!',
-        },
-      };
-      setPostData(newData); //닉네임 중복확인 성공여부 상태 업데이트
-      console.log(`confirm id success`, newData);
-    },
-    onError: (err: Error) => {
-      console.log('confirmIdMutate error', err);
-      const newData = {
-        ...postData,
-        validation: {
-          msg: '*' + err.message,
-          isValid: false,
-          isVerified: false,
-          alertMsg: '닉네임 중복확인 실패',
-        },
-      };
-      setPostData(newData);
-      console.log(`닉네임 중복확인 실패`, newData);
-    },
-  });
-
-  //닉네임 중복확인 버튼 클릭
-  const onDuplicateCheckHandler = async () => {
-    if (!postData.nickname) {
-      window.alert('닉네임을 입력한 뒤 실행해주세요.');
-    } else if (userData?.nickname === postData.nickname) {
-      window.alert('변경된 닉네임이 없습니다.');
-    } else if (postData.nickname) {
-      confirmNicknameMutate(postData.nickname);
-    }
+  const onValidHandler = (isValid: boolean, msg: string) => {
+    setValidation({ isValid: isValid, msg: msg });
+  };
+  const onCloseErrorModalHandler = () => {
+    setErrorMsg('');
+  };
+  const onCloseDoneModalHandler = () => {
+    () => navigate('/mypage');
+  };
+  const onCloseCropModalHandler = () => {
+    setCropModal(false);
   };
 
   return (
-    <CommonLayout
-      header={
-        <NavBar
-          btnLeft="back"
-          btnRight="submit"
-          onClickSubmit={onSubmitHandler}
-          onClickActive={
-            postData.imgUrl !== null && postData.validation.isValid
-          }
-          modal={{
-            title: '알림',
-            firstLine: postData.validation.alertMsg,
-          }}
-        >
-          회원정보수정
-        </NavBar>
-      }
-      backgroundColor="#fff"
-    >
+    <StMyProfileLayout>
+      <NavBar
+        btnLeft="back"
+        btnRight="submit"
+        onClickSubmit={onSubmitHandler}
+        onClickActive={validation.isValid}
+        modal={{
+          title: '알림',
+          firstLine: '닉네임을 중복확인 해주세요.',
+        }}
+      >
+        회원정보수정
+      </NavBar>
       <StMyProfileContainer>
         <StProfileImage>
-          <img src={fileUrl || noUser} alt="프로필 이미지" />
-          <label htmlFor="file" className="pcload">
+          <img src={imgUrl || noUser} alt="프로필 이미지" />
+          <button className="loadimg" onClick={onClickChangeImageHandler}>
             사진 수정
-          </label>
-          <input
-            type="file"
-            id="file"
-            accept="image/*"
-            onChange={onChangeImage}
-            ref={fileUpload.current}
-          />
+          </button>
         </StProfileImage>
         <StNickNameTitle>닉네임</StNickNameTitle>
         <StNickNameWrapper>
-          <AuthInputBox
-            type="text"
-            name="nickname"
-            id="nickname"
-            value={postData.nickname}
-            placeholder="닉네임"
+          <ProfileNicknameCheck
+            nickname={nickname}
+            userData={data}
+            onValid={onValidHandler}
             onChange={onChangeValueHandler}
-            onClick={onDuplicateCheckHandler}
-            btnText="중복 확인"
           />
           <div className="error">
-            <AuthErrorMsg isValid={postData.validation.isValid}>
-              {postData.validation.msg}
+            <AuthErrorMsg isValid={validation.isValid}>
+              {validation.msg}
             </AuthErrorMsg>
+
             <Modal
-              isOpen={isErrorModalOpen}
-              title="오류"
-              firstLine={postData.validation.alertMsg}
-              onCloseHandler={() => setIsErrorModalOpen(false)}
+              isOpen={!!errorMsg}
+              title="알림"
+              firstLine={errorMsg}
+              onCloseHandler={onCloseErrorModalHandler}
             />
+
             <Modal
-              isOpen={isAxiosErrorModalOpen}
-              title="재 로그인 필요"
-              firstLine="사진 다운로드오류 👀  원인 파악중 "
-              secondLine="분석을 위해 관리자에게 알려주세요!"
-              onCloseHandler={() => setIsAxiosErrorModalOpen(false)}
+              isOpen={!!doneMsg}
+              title="알림"
+              firstLine={doneMsg}
+              onCloseHandler={onCloseDoneModalHandler}
+            />
+            <CropModal
+              isOpen={cropModal}
+              onCloseHandler={onCloseCropModalHandler}
             />
           </div>
         </StNickNameWrapper>
       </StMyProfileContainer>
-    </CommonLayout>
+    </StMyProfileLayout>
   );
 };

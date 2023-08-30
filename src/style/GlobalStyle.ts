@@ -40,7 +40,13 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+#root {  
   background: #F7F7F7;
+
+  @media ${theme.device.desktop} {
+    min-height: 100vh;
+  }
 }
 ol, ul {
 	list-style: none;
