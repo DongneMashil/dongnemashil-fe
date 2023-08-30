@@ -1,4 +1,10 @@
-import React, { useEffect, useState, Suspense, useLayoutEffect } from 'react';
+import React, {
+  useEffect,
+  useState,
+  Suspense,
+  useLayoutEffect,
+  useCallback,
+} from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   deleteReviewDetail,
@@ -100,6 +106,23 @@ export const DetailPage = () => {
       setMapCenterByAddress(defaultAddress, map);
     }
   };
+
+  //
+  const pageShowHandler = useCallback(
+    (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    },
+    [location]
+  );
+
+  useEffect(() => {
+    window.addEventListener('pageshow', pageShowHandler);
+    return () => {
+      window.removeEventListener('pageshow', pageShowHandler);
+    };
+  }, [pageShowHandler]);
   //창 크기에 따른 MasonryGrid 컬럼 설정
   useLayoutEffect(() => {
     const handleResize = () => {
