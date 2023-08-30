@@ -55,6 +55,9 @@ export const StCurrentAddress = styled.span`
   @media ${(props) => props.theme.device.desktop} {
     margin-left: 0.69rem;
     margin-bottom: 0.19rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 

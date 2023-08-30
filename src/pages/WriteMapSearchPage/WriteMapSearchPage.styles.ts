@@ -49,9 +49,8 @@ export const StSearchInput = styled.input`
   outline: none;
 `;
 
-export const StSeacrhResultWrapper = styled.div`
+export const StSearchResultWrapper = styled.div`
   width: 24rem;
-  border-top: 1px solid #e3e3e3;
   margin-top: 0.44rem;
   box-sizing: border-box;
   background-color: #fff;

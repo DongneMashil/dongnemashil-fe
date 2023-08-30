@@ -53,6 +53,7 @@ export const useLike = ({
     } catch (error) {
       setTimeout(() => {
         console.log('좋아요 처리 중 오류가 발생했습니다.'); // 오류 처리
+        console.log(error);
         setIsLiked(previousIsLiked);
         setLikeCnt(likeCnt); // 원래의 좋아요 수로 되돌립니다. 롤백은 없앨것
       }, 500); // 1초 후에 실행 (테스트시 너무 안보여서)

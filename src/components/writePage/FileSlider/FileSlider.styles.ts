@@ -12,7 +12,8 @@ export const StSlideContainer = styled.div`
   margin: 0 auto;
   @media ${(props) => props.theme.device.desktop} {
     width: 100%;
-    padding: 1rem;
+    padding: 0;
+    margin: 0;
     overflow-x: auto;
     white-space: nowrap;
     display: flex;

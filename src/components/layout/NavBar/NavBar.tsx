@@ -148,7 +148,7 @@ export const NavBar = ({
         onClick={onClickSubmit}
         $active={onClickActive}
         modal={modal}
-        inputType="submit"
+        inputType="profile"
       >
         완료
       </Button>
