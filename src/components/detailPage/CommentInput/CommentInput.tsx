@@ -1,12 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
 import { postComment } from 'api/detailApi';
-import { Button, Input } from 'components/common';
+import { Button, Input, Modal } from 'components/common';
 import { queryClient } from 'queries/queryClient';
 import React, { useState } from 'react';
 import { StFooterContatiner, StFooterWrapper } from './CommentInput.styles';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userInfo';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
+import { useNavigate } from 'react-router-dom';
 
 interface FooterProps {
   reviewId: string;
@@ -19,9 +20,9 @@ export const CommentInput = ({
   const [comment, setComment] = useState('');
   const setCommentAddListener = useSetRecoilState(commentAddListenerAtom);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const userState = useRecoilValue(userProfileSelector);
-
+  const navigate = useNavigate();
   // 댓글 등록 함수
   const commentMutation = useMutation(
     (newComment: string) => postComment(reviewId, newComment),
@@ -34,7 +35,7 @@ export const CommentInput = ({
       onError: (err) => {
         console.log(err);
         setComment('');
-        alert('댓글 등록에 실패했습니다.');
+        setIsErrorModalOpen(true);
       },
     }
   );
@@ -86,6 +87,14 @@ export const CommentInput = ({
             <Button inputType="button" type={'commentInput'} url="/login">
               로그인
             </Button>
+            <Modal
+              isOpen={isErrorModalOpen}
+              onSubmitHandler={() => navigate('/login')}
+              onCloseHandler={() => setIsErrorModalOpen(false)}
+              title="댓글 등록 실패"
+              firstLine="다시 로그인 후 이용해주세요!"
+              onSubmitText="로그인"
+            />
           </>
         )}
       </StFooterWrapper>
