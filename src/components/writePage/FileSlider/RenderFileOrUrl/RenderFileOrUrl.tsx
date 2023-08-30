@@ -24,6 +24,20 @@ export const RenderFileOrUrl: React.FC<RenderFileOrUrlProps> = React.memo(
       ? URL.createObjectURL(file.file as File)
       : (file.file as string);
 
+
+      const handleButtonClick = () => {
+        onCoverButtonClick(file.file);
+        
+        const button = document.getElementById("coverImageButton");
+        if (button && isCoverImage(images[index])) {
+          button.style.background = '#9A7B9A';
+          button.style.border = 'none';
+        } else if (button) {
+          button.style.background = 'rgba(154, 123, 154, 0.35)';
+          button.style.border = '1.5px solid white';
+        }
+      };
+
     return file.type === 'image' ? (
       <>
         <StImage
@@ -32,8 +46,7 @@ export const RenderFileOrUrl: React.FC<RenderFileOrUrlProps> = React.memo(
           onClick={() => onImageClick(file.file)}
         />
         <StCoverImageButton
-          isActive={isCoverImage(images[index])}
-          onClick={() => onCoverButtonClick(file.file)}
+          onClick={handleButtonClick}
         >
           대표
         </StCoverImageButton>

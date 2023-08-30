@@ -50,7 +50,7 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
 
       wrapperRef.current.scrollLeft = newScrollPosition;
     }
-  }, [onAddImage]);
+  }, [files.length]);
 
   useHorizontalDragScroll(wrapperRef);
 
