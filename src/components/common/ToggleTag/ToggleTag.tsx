@@ -65,12 +65,8 @@ export const ToggleTagButton: React.FC<ToggleTagButtonProps> = ({
     onTagChange?.(updatedTags.filter((t) => t.isSelected).map((t) => t.label));
   };
 
-  const sortedTags = [...tags].sort(
-    (a, b) => (b.isSelected ? 1 : -1) - (a.isSelected ? 1 : -1)
-  );
-
-  const firstRowTags = sortedTags.slice(0, Math.ceil(sortedTags.length / 2));
-  const secondRowTags = sortedTags.slice(Math.ceil(sortedTags.length / 2));
+  const firstRowTags = tags.slice(0, Math.ceil(tags.length / 2));
+  const secondRowTags = tags.slice(Math.ceil(tags.length / 2));
 
   return (
     <StTagWrapper ref={wrapperRef}>
