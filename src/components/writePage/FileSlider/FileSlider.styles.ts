@@ -89,7 +89,6 @@ export const StCoverImageButton = styled.button<{ isActive: boolean }>`
   border: ${(props) => (props.isActive ? 'none' : '1.5px solid white')};
   border-radius: 100%;
   cursor: pointer;
-  opacity: 0.8;
 
   &:hover {
     opacity: 1;
@@ -100,7 +99,7 @@ export const StDelete = styled.button`
   width: 2.4rem;
   height: 2.4rem;
   position: absolute;
-  top: 0.69rem;
+  top: 1.19rem;
   right: 0.75rem;
   background-color: rgba(154, 123, 154, 0.35);
   border-radius: 100%;

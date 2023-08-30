@@ -5,6 +5,7 @@ import { addressSelector } from 'recoil/address/addressSelector';
 import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
 import { useQuery } from '@tanstack/react-query';
 import { getReview } from 'api/reviews';
+import { getStringByteSize } from '../getStirngByTeSize/getStringBySize';
 
 interface FormValues {
   title: string;
@@ -50,10 +51,15 @@ export const useWritePageState = () => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const name = e.target.name as keyof FormValues;
-    setFormValues({
-      ...formValues,
-      [name]: e.target.value,
-    });
+    const inputValue = e.target.value;
+    const inputByteSize = getStringByteSize(inputValue);
+
+    if (inputByteSize <= 500) {
+      setFormValues({
+        ...formValues,
+        [name]: inputValue,
+      });
+    }
   };
 
   return {
