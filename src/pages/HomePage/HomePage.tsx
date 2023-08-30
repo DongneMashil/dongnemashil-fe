@@ -37,9 +37,7 @@ export const HomePage = () => {
 
   return (
     <>
-      <NavBar btnLeft={'logo'} btnSecondRight={'search'} btnRight={'mypage'}>
-        <h1>전체 보기</h1>
-      </NavBar>
+      <NavBar btnLeft={'logo'} btnSecondRight={'search'} btnRight={'mypage'} />
       <ToggleTagButton onTagChange={handleTagChange} />
       <ReviewsContainer
         type={type}
