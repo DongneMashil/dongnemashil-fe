@@ -5,11 +5,9 @@ export const StNavTitle = styled.h1`
   max-width: 70vw;
   font-size: 1.2rem;
   font-weight: bold;
-  white-space: nowrap; // 한줄로
-  overflow: hidden; // 넘치면 숨김
-  text-overflow: ellipsis; //넘치면 ...
-
-  // direction: rtl; //...을 앞에 붙임
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const StTagWrapper = styled.ul`
@@ -32,7 +30,7 @@ export const StDetailPageContainer = styled.div`
   padding: 1rem;
   @media (min-width: ${theme.size.tablet}) {
     ${theme.floatingBox}
-    padding:3rem;
+    padding:1.5rem;
     top: 2rem;
   }
   ${theme.responsiveContainer}
@@ -86,10 +84,12 @@ export const StDetailPageContent = styled.main`
 
   .content {
     margin: 1rem 0.5rem 1rem 0.5rem;
-
     height: fit-content;
     font-size: 16px;
     line-height: 1.5;
+    border-top: 1px solid #e5e5e5;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
   }
   img {
     cursor: pointer;
