@@ -22,6 +22,8 @@ export const CommentInput = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const userState = useRecoilValue(userProfileSelector);
+  const [errorMsg, setErrorMsg] = useState(''); // 에러 메시지를 저장하는 상태
+
   const navigate = useNavigate();
   // 댓글 등록 함수
   const commentMutation = useMutation(
@@ -39,7 +41,9 @@ export const CommentInput = ({
       },
     }
   );
-
+  const onCloseErrorModalHandler = () => {
+    setErrorMsg('');
+  };
   // 댓글 입력
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
@@ -49,7 +53,7 @@ export const CommentInput = ({
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting || !comment) {
-      console.log('🟥댓글은 1초에 1개만 등록 가능합니다.');
+      setErrorMsg('댓글은 1초에 1개만 등록 가능합니다.');
       return;
     }
 
@@ -89,11 +93,18 @@ export const CommentInput = ({
             </Button>
             <Modal
               isOpen={isErrorModalOpen}
-              onSubmitHandler={() => navigate('/login')}
               onCloseHandler={() => setIsErrorModalOpen(false)}
               title="댓글 등록 실패"
-              firstLine="다시 로그인 후 이용해주세요!"
+              firstLine="댓글이 너무 길거나, 잘못된 요청입니다."
+              secondLine="짧았다면, 다시 로그인 해주세요."
+              onSubmitHandler={() => navigate('/login')}
               onSubmitText="로그인"
+            />{' '}
+            <Modal
+              isOpen={!!errorMsg}
+              title="알림"
+              firstLine={errorMsg}
+              onCloseHandler={onCloseErrorModalHandler}
             />
           </>
         )}
