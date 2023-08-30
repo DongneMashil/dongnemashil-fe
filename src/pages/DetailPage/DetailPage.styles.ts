@@ -42,6 +42,9 @@ export const StDetailTitle = styled.h1`
   border-bottom: 1px solid #e5e5e5;
   margin: 1rem 0;
   padding-bottom: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 export const StDetailPageHeader = styled.div`
   width: 100%;
@@ -90,6 +93,8 @@ export const StDetailPageContent = styled.main`
     border-top: 1px solid #e5e5e5;
     padding-top: 2rem;
     padding-bottom: 1rem;
+    word-wrap: break-word;
+    word-break: break-all;
   }
   img {
     cursor: pointer;
