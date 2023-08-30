@@ -40,17 +40,16 @@ export const CommonLoginPage = () => {
     [password]
   );
 
-  const onSubmitHandler = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    submitLogin();
-  }, []);
-
-  const submitLogin = () => {
-    mutate({
-      email,
-      password,
-    });
-  };
+  const onSubmitHandler = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      mutate({
+        email,
+        password,
+      });
+    },
+    [email, password]
+  );
 
   if (isSuccess) {
     // console.log('로그인 성공');
