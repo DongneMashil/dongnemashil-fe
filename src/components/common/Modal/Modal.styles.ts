@@ -1,3 +1,4 @@
+import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StModalContentWrapper = styled.div`
@@ -73,14 +74,7 @@ export const StModalButtonWrpper = styled.div`
 `;
 
 export const StModalOverlay = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.35);
-  z-index: 9999;
+  ${theme.overlayBackground}
 `;
 
 export const StModalWindow = styled.div`

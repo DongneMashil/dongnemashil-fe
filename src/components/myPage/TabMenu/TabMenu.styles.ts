@@ -51,7 +51,7 @@ export const StReviewBox = styled.button<{ $imgUrl?: string }>`
 
 export const StTabContentBox = styled.div<{ $empty?: boolean }>`
   width: 100%;
-  height: 100%;
+  // height: 100%; 이거 사파리에서 오류발생
   background-color: #fff;
   padding: 10px;
 

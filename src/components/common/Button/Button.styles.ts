@@ -149,7 +149,7 @@ export const StButton = styled.button<{
   }
 `;
 
-export const StSubmitButton = styled.button<{
+export const StProfileButton = styled.button<{
   $active?: boolean;
 }>`
   background: none;

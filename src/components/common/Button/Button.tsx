@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { StButton, StSubmitButton } from './Button.styles';
+import { StButton, StProfileButton } from './Button.styles';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from 'components/common';
 
@@ -95,7 +95,7 @@ export const Button = ({
         firstLine={modalFirstLine}
         secondLine={modalSecondLine || undefined}
       />
-      <StSubmitButton
+      <StProfileButton
         aria-label={ariaLabel}
         type="submit"
         className={type}
@@ -103,7 +103,7 @@ export const Button = ({
         $active={$active}
       >
         {children}
-      </StSubmitButton>
+      </StProfileButton>
     </>
   ) : (
     <StButton
