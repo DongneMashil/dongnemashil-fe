@@ -22,10 +22,10 @@ export const useVerifyUser = (shouldVerify: boolean = true) => {
         isLoggedIn: true,
       };
       setUserState(newData);
-      console.log('user is valid');
+      // console.log('user is valid');
     },
     onError: () => {
-      console.log('user is invalid');
+      // console.log('user is invalid');
     },
   });
 };
