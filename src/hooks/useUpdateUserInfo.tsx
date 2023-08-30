@@ -20,12 +20,7 @@ export const useUpdateUserInfo = (shouldUpdate: boolean = true) => {
     queryKey: [UserID, 'userData'],
     queryFn: getMyProfile,
     enabled: isSuccess && shouldUpdate,
-    onSuccess: (data) => {
-      console.log('🔆getMyProfile쿼리data :' + data);
-    },
-    onError: (error) => {
-      console.log('🔆getMyProfile쿼리오류 :' + error);
-    },
+
     refetchOnWindowFocus: true, // 필요시 true로 변경.
     refetchOnReconnect: true,
     refetchOnMount: true,
