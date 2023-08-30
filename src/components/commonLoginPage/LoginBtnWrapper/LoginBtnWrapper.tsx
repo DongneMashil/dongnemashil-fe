@@ -10,7 +10,12 @@ export const LoginBtnWrapper = React.memo(
   ({ type, onClick, $active, label }: LoginBtnWrapperProps) => {
     return (
       <StLoginButtonWrapper>
-        <Button type={type} onClick={onClick} $active={$active}>
+        <Button
+          type={type}
+          onClick={onClick}
+          $active={$active}
+          ariaLabel="뒤로가기"
+        >
           {label}
         </Button>
       </StLoginButtonWrapper>
