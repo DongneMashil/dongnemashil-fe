@@ -81,6 +81,6 @@ export const StLeftWrapper = styled.div`
 `;
 
 export const StRighttWrapper = styled.div`
-  justify-content: right;
+  justify-content: flex-end;
   flex: 0.8;
 `;
