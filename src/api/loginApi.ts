@@ -55,7 +55,7 @@ export const loginKakaoCallback = async (code: string) => {
       // console.log('카카오 로그인 성공', response.data);
     })
     .catch((err) => {
-      // console.log('kakao 소셜 로그인 에러 : ', err);
+      console.log('kakao 소셜 로그인 에러 : ', err);
       // window.alert('소셜 로그인에 실패하였습니다.');
       window.location.href = `/login`;
     });

@@ -238,7 +238,6 @@ export const RegisterPage = React.memo(() => {
   }, [email]);
 
   const onConfirmNicknameHandler = useCallback(() => {
-    m;
     if (nickname === '') {
       onOpenModalHandler('닉네임을 입력한 뒤 실행해주세요.');
     } else if (nicknameMsg.isValid === false) {

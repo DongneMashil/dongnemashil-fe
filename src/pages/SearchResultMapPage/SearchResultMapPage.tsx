@@ -8,10 +8,6 @@ import { StResultMapContainer } from './SearchResultMapPage.styles';
 import { ReviewsList } from 'api/reviewsApi';
 import Tooltip from 'assets/images/Tooltip.svg';
 
-// interface IEventInfo {
-//   target: kakao.maps.
-// }
-
 export const SearchResultMapPage = ({
   reviewList,
   onToggle,
@@ -76,8 +72,8 @@ export const SearchResultMapPage = ({
   };
 
   const initMap = async (map: kakao.maps.Map) => {
-    const selectedIdx: number = -1; //-1일 경우 미선택
-    const events: IEventInfo[] = [];
+    let selectedMarker: kakao.maps.Marker | null = null;
+    let selectedOverlay: kakao.maps.CustomOverlay | null = null;
 
     const markerImage = new kakao.maps.MarkerImage(
       Marker,

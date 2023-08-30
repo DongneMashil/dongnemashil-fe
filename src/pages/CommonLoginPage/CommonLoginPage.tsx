@@ -45,13 +45,6 @@ export const CommonLoginPage = () => {
     submitLogin();
   }, []);
 
-  const onKeyPressHandler = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      submitLogin();
-    }
-  };
-
   const submitLogin = () => {
     mutate({
       email,
@@ -91,7 +84,6 @@ export const CommonLoginPage = () => {
         <LoginBtnWrapper
           type="authNormal"
           onClick={onSubmitHandler}
-          onKeyPress={onKeyPressHandler}
           $active={email !== '' && password !== ''}
           label="로그인"
         />

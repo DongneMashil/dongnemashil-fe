@@ -10,13 +10,10 @@ import { ReactComponent as Logo } from 'assets/images/Dongdong.svg';
 export const KakaoCallbackPage = () => {
   const navigate = useNavigate();
   const [shouldVerify, setShouldVerify] = useState(false);
-  const { data, isSuccess } = useVerifyUser(shouldVerify);
+  const { isSuccess } = useVerifyUser(shouldVerify);
   const { mutate } = useMutation(loginKakaoCallback, {
     onSuccess: () => {
       setShouldVerify(true);
-    },
-    onError: (err) => {
-      // console.log('Kakao login Error: ', err);
     },
   });
 
@@ -26,7 +23,6 @@ export const KakaoCallbackPage = () => {
   }, []);
 
   if (isSuccess) {
-    // console.log('Kakao Login Success ', data);
     navigate({
       pathname: `/`,
     });
