@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import { Thumbnail } from '../Thumbnail/Thumbnail';
 import {
@@ -49,7 +49,7 @@ export const ReviewsContainer = ({
 
   const [columns, setColumns] = useState(window.innerWidth < 768 ? 1 : 2);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setColumns(1);
@@ -63,7 +63,7 @@ export const ReviewsContainer = ({
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [window.innerWidth]);
 
   const masonryGridOptions: MasonryGridOptions = {
     column: columns,
