@@ -158,7 +158,7 @@ export const SearchResultMapPage = ({
     if (mapInstance.current) {
       moveToCurrentLocation(mapInstance.current);
     } else {
-      console.log('no map instance found');
+      // console.log('no map instance found');
     }
   };
 

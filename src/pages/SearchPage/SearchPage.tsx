@@ -11,13 +11,13 @@ export const SearchPage = () => {
     setValue(e.target.value);
   };
   const search = () => {
-    console.log('Searching... 검색어: ', value);
+    // console.log('Searching... 검색어: ', value);
     navigate(`/search/result?q=${value}`);
   };
   const onKeyPressHandler = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      console.log('onKeyPressHandler');
+      // console.log('onKeyPressHandler');
       search();
     }
   };
