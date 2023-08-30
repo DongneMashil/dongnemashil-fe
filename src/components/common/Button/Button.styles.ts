@@ -82,6 +82,7 @@ export const StButton = styled.button<{
     color: ${(props) =>
       props.$active ? theme.blackColor : theme.mediumGrayColor};
     font-weight: 400;
+    padding: 8.5px 6.5px;
   }
 
   &.iconLeft {
