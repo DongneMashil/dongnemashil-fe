@@ -26,7 +26,7 @@ export const axiosInstance: AxiosInstance = axios.create({
 /** access token 갱신 interceptor */
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse): AxiosResponse => {
-    console.log('👀response interceptor 정상적으로 통과!');
+    // console.log('👀response interceptor 정상적으로 통과!');
     return response;
   },
   async (err) => {
