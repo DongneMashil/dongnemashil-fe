@@ -38,7 +38,10 @@ export const HomePage = () => {
   return (
     <>
       <NavBar btnLeft={'logo'} btnSecondRight={'search'} btnRight={'mypage'} />
-      <ToggleTagButton onTagChange={handleTagChange} />
+      <ToggleTagButton
+        initialSelectedTags={selectedTags}
+        onTagChange={handleTagChange}
+      />
       <ReviewsContainer
         type={type}
         reviews={reviews}
