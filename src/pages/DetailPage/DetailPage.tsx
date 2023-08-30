@@ -266,7 +266,7 @@ export const DetailPage = () => {
                       isOpen={isDeleteCompleteModalOpen}
                       title="완료"
                       firstLine="삭제가 완료되었습니다."
-                      onCloseHandler={() => navigate(-1)}
+                      onCloseHandler={() => navigate('/')}
                     />
                     <ImageModal
                       isOpen={isImageModalOpen}

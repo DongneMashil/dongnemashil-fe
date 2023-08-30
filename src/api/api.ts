@@ -5,8 +5,8 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import { getNewAccessToken, setClientHeader } from './loginApi';
-import { useRecoilState } from 'recoil';
-import { UserState, userProfileSelector } from 'recoil/userInfo';
+// import { useRecoilState } from 'recoil';
+// import { UserState, userProfileSelector } from 'recoil/userInfo';
 
 interface RetryConfig extends AxiosRequestConfig {
   _retry: boolean;
@@ -46,16 +46,16 @@ axiosInstance.interceptors.response.use(
 
       return axiosInstance(retryConfig);
     } else if (err.response.data.message === '유효한 토큰이 아닙니다.') {
-      const [userState, setUserState] = useRecoilState(userProfileSelector);
-      alert(userState.isLoggedIn);
-      const newData: UserState = {
-        userId: '',
-        nickName: '',
-        isLoggedIn: false,
-      };
-      await setUserState(newData);
-      window.localStorage.clear();
-      alert(userState.isLoggedIn);
+      // const [userState, setUserState] = useRecoilState(userProfileSelector);
+      // alert(userState.isLoggedIn);
+      // const newData: UserState = {
+      //   userId: '',
+      //   nickName: '',
+      //   isLoggedIn: false,
+      // };
+      // await setUserState(newData);
+      // window.localStorage.clear();
+      // alert(userState.isLoggedIn);
       throw err;
     } else throw err;
   }
