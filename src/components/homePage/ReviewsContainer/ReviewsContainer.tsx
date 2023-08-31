@@ -15,6 +15,8 @@ import { ReviewsList } from 'api/reviewsApi';
 import { StLoadingSpinner } from 'components/common/LoadingSpinner/LoadingSpinner.styles';
 import { MasonryGrid } from '@egjs/react-grid';
 import { MasonryGridOptions } from '@egjs/grid';
+import { useLocation } from 'react-router-dom';
+import { throttle } from 'lodash';
 
 export interface ReviewsProps {
   type: string;
@@ -49,19 +51,20 @@ export const ReviewsContainer = ({
 
   const [columns, setColumns] = useState(window.innerWidth < 768 ? 1 : 2);
 
+  const throttledHandleResize = throttle(() => {
+    if (window.innerWidth < 768) {
+      setColumns(1);
+    } else {
+      setColumns(2);
+    }
+  }, 200);
+
   useLayoutEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setColumns(1);
-      } else if (window.innerWidth < 1024) {
-        setColumns(2);
-      }
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
+    throttledHandleResize();
+    window.addEventListener('resize', throttledHandleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', throttledHandleResize);
     };
   }, [window.innerWidth]);
 
@@ -72,12 +75,18 @@ export const ReviewsContainer = ({
     align: 'stretch',
   };
 
+  const location = useLocation();
+
   return (
     <StReviewsContainer>
       <StTopWrapper>
         {totalElements && totalElements !== 0 ? (
           <span>
             <strong>{totalElements}</strong> 개
+          </span>
+        ) : location.pathname === '/search/result' ? (
+          <span>
+            <strong>0</strong> 개
           </span>
         ) : null}
 

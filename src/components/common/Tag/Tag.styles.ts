@@ -17,7 +17,7 @@ export const StTagContainer = styled.div<StTagProps>`
   width: fit-content;
   margin-right: 10px;
   gap: 0.5rem;
-  padding: 0rem 1rem;
+  padding: 0 1rem;
   border-radius: 1.5rem;
 
   white-space: nowrap;
@@ -52,7 +52,7 @@ export const StTagContainer = styled.div<StTagProps>`
     margin: 0.6rem 0;
   }
   img {
-    width: 100%;
+    width: fit-content;
     height: auto;
   }
 `;

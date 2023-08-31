@@ -22,7 +22,7 @@ export const HomePage = () => {
   );
 
   useEffect(() => {
-    refetch();
+    if (!isFetching) refetch();
   }, [type, selectedTags]);
 
   const onClickSort = (type: string) => {
@@ -37,10 +37,11 @@ export const HomePage = () => {
 
   return (
     <>
-      <NavBar btnLeft={'logo'} btnSecondRight={'search'} btnRight={'mypage'}>
-        <h1>전체 보기</h1>
-      </NavBar>
-      <ToggleTagButton onTagChange={handleTagChange} />
+      <NavBar btnLeft={'logo'} btnSecondRight={'search'} btnRight={'mypage'} />
+      <ToggleTagButton
+        initialSelectedTags={selectedTags}
+        onTagChange={handleTagChange}
+      />
       <ReviewsContainer
         type={type}
         reviews={reviews}
