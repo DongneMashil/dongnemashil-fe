@@ -55,7 +55,7 @@ interface PaginationParams {
 
 const reviewKeys = {
   all: ['responseData'] as const,
-  lists: () => [...reviewKeys.all, 'list'] as const,
+  // lists: () => [...reviewKeys.all, 'list'] as const,
   // list: (type: string) => [...reviewKeys.lists(), { type }] as const,
 };
 
