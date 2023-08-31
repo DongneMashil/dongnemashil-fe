@@ -14,7 +14,7 @@ export const SearchPage = () => {
     // console.log('Searching... 검색어: ', value);
     navigate(`/search/result?q=${value}`);
   };
-  const onKeyPressHandler = (e: React.KeyboardEvent) => {
+  const onKeyPressHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       // console.log('onKeyPressHandler');
@@ -31,7 +31,7 @@ export const SearchPage = () => {
         id="searchQuery"
         value={value}
         onChange={onChangeHandler}
-        onKeyPress={onKeyPressHandler}
+        onKeyDown={onKeyPressHandler}
         placeholder="예) 강남구"
       />
     </StSearchHeader>

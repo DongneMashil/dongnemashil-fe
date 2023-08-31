@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
+import { debounce } from 'lodash';
 import { AxiosError } from 'axios';
 import {
   HeaderText,
@@ -9,7 +10,6 @@ import {
 } from 'components/common';
 import { register, confirmId, confirmNickname } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
-import { useVerifyUser } from 'hooks';
 import { useNavigate } from 'react-router-dom';
 import { RegisterLabel } from 'components/registerPage/RegisterLabel/RegisterLabel';
 import {
@@ -27,9 +27,10 @@ interface VerifyMsgProps {
 
 export const RegisterPage = React.memo(() => {
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isValidModalOpen, setIsValidModalOpen] = useState<boolean>(false);
+  const [isFinishedModalOpen, setIsFinishedModalOpen] =
+    useState<boolean>(false);
   const [modalMsg, setModalMsg] = useState<string>('');
-  const [shouldVerify, setShouldVerify] = useState<boolean>(false);
   const [isNotDuplicated, setIsNotDuplicated] = useState({
     email: false,
     nickname: false,
@@ -56,6 +57,22 @@ export const RegisterPage = React.memo(() => {
     msg: '',
     isValid: false,
   });
+  const isButtonActive = useMemo(() => {
+    return (
+      emailMsg.isValid &&
+      nicknameMsg.isValid &&
+      passwordMsg.isValid &&
+      passwordVerifyMsg.isValid &&
+      isNotDuplicated.email &&
+      isNotDuplicated.nickname
+    );
+  }, [
+    emailMsg.isValid,
+    nicknameMsg.isValid,
+    passwordMsg.isValid,
+    passwordVerifyMsg.isValid,
+    isNotDuplicated,
+  ]);
 
   const emailRegex = new RegExp(`[a-z0-9]+@[a-z]+\\.[a-z]{2,3}`);
   const nicknameRegex = new RegExp(`^(?=.*[A-Za-z0-9가-힣]).{4,}$`);
@@ -63,11 +80,9 @@ export const RegisterPage = React.memo(() => {
     `^(?=.*[a-zA-Z])(?=.*[!@#$%^*])(?=.*[0-9]).{8,15}$`
   );
 
-  const { data } = useVerifyUser(shouldVerify);
   const { mutate: registerMutate } = useMutation(register, {
     onSuccess: () => {
-      setShouldVerify(true);
-      navigate(`/`);
+      setIsFinishedModalOpen(true);
     },
     onError: (err: AxiosError) => {
       // console.log('Register Error: ', err);
@@ -120,34 +135,53 @@ export const RegisterPage = React.memo(() => {
     },
   });
 
-  const onEmailChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setEmail(e.target.value);
+  //debouncing
+  const emailMsgHandler = useCallback(
+    debounce((e) => {
       onEmailMsgHandler(e);
-    },
-    [email]
+    }, 200),
+    []
   );
-  const onNicknameChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setNickname(e.target.value);
+
+  const nicknameMsgHandler = useCallback(
+    debounce((e) => {
       onNicknameMsgHandler(e);
-    },
-    [nickname]
+    }, 200),
+    []
   );
-  const onPasswordChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(e.target.value);
+
+  const passwordMsgHandler = useCallback(
+    debounce((e) => {
       onPasswordMsgHandler(e);
-    },
-    [password]
+    }, 200),
+    []
   );
-  const onPasswordVerifyChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPasswordVerify(e.target.value);
+
+  const passwordVerifyMsgHandler = useCallback(
+    debounce((e) => {
       onPasswordVerifyMsgHandler(e);
-    },
-    [password, passwordVerify]
+    }, 200),
+    []
   );
+
+  const onEmailChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    emailMsgHandler(e);
+  };
+  const onNicknameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value);
+    nicknameMsgHandler(e);
+  };
+  const onPasswordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    passwordMsgHandler(e);
+  };
+  const onPasswordVerifyChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPasswordVerify(e.target.value);
+    passwordVerifyMsgHandler(e);
+  };
 
   const onEmailMsgHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -199,8 +233,6 @@ export const RegisterPage = React.memo(() => {
   const onPasswordVerifyMsgHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (password !== '') {
-        // console.log('onEmailMsgHander triggered');
-        // console.log(e.target.value, password, e.target.value === password);
         const newVeirfyMsg =
           e.target.value === password
             ? {
@@ -217,48 +249,54 @@ export const RegisterPage = React.memo(() => {
     [password, passwordVerifyMsg]
   );
 
-  const onSubmitHandler = useCallback(
-    (e: React.MouseEvent<HTMLElement>) => {
+  const onSubmitHandler = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    registerHandler();
+  };
+
+  const onKeyDownHandler = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && isButtonActive) {
       e.preventDefault();
-      registerMutate({
-        email,
-        nickname,
-        password,
-      });
-    },
-    [email, nickname, password]
-  );
+      registerHandler();
+    }
+  };
+
+  const registerHandler = useCallback(() => {
+    registerMutate({
+      email,
+      nickname,
+      password,
+    });
+  }, [email, nickname, password]);
 
   const onConfirmIdHandler = useCallback(() => {
     if (email === '') {
-      onOpenModalHandler('이메일을 입력한 뒤 실행해주세요.');
+      onOpenValidModalHandler('이메일을 입력한 뒤 실행해주세요.');
     } else if (emailMsg.isValid === false) {
-      onOpenModalHandler('올바른 양식의 이메일을 입력해주세요.');
+      onOpenValidModalHandler('올바른 양식의 이메일을 입력해주세요.');
     } else confirmIdMutate(email);
   }, [email]);
 
   const onConfirmNicknameHandler = useCallback(() => {
     if (nickname === '') {
-      onOpenModalHandler('닉네임을 입력한 뒤 실행해주세요.');
+      onOpenValidModalHandler('닉네임을 입력한 뒤 실행해주세요.');
     } else if (nicknameMsg.isValid === false) {
-      onOpenModalHandler('올바른 양식의 닉네임을 입력해주세요.');
+      onOpenValidModalHandler('올바른 양식의 닉네임을 입력해주세요.');
     } else confirmNicknameMutate(nickname);
   }, [nickname]);
 
-  const onCloseModalHandler = useCallback(() => {
-    setIsModalOpen(false);
+  const onCloseValidModalHandler = useCallback(() => {
+    setIsValidModalOpen(false);
   }, []);
 
-  const onOpenModalHandler = (msg: string) => {
+  const onOpenValidModalHandler = useCallback((msg: string) => {
     setModalMsg(msg);
-    setIsModalOpen(true);
-  };
+    setIsValidModalOpen(true);
+  }, []);
 
-  useEffect(() => {
-    if (data) {
-      // console.log('Register Success ', data);
-      navigate('/');
-    }
+  const onCloseFinishedModalHandler = useCallback(() => {
+    setIsFinishedModalOpen(false);
+    navigate('/');
   }, []);
 
   return (
@@ -326,6 +364,7 @@ export const RegisterPage = React.memo(() => {
             id="passwordVerify"
             value={passwordVerify}
             onChange={onPasswordVerifyChangeHandler}
+            onKeyDown={onKeyDownHandler}
             placeholder="비밀번호 확인"
           />
           {passwordVerifyMsg.msg && (
@@ -338,22 +377,20 @@ export const RegisterPage = React.memo(() => {
           <RegisterBtnWrapper
             type="authNormal"
             onClick={onSubmitHandler}
-            $active={
-              emailMsg.isValid &&
-              nicknameMsg.isValid &&
-              passwordMsg.isValid &&
-              passwordVerifyMsg.isValid &&
-              isNotDuplicated.email &&
-              isNotDuplicated.nickname
-            }
+            $active={isButtonActive}
             label="회원가입"
           />
         </StLoginWrapper>
       </StLoginContainer>
       <Modal
-        isOpen={isModalOpen}
-        onCloseHandler={onCloseModalHandler}
+        isOpen={isValidModalOpen}
+        onCloseHandler={onCloseValidModalHandler}
         title={modalMsg}
+      />
+      <Modal
+        isOpen={isFinishedModalOpen}
+        onCloseHandler={onCloseFinishedModalHandler}
+        title="회원가입이 완료되었습니다!"
       />
     </>
   );
