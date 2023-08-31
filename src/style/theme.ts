@@ -45,6 +45,7 @@ const authButton = css`
   font-weight: 700;
   border-radius: 20px;
   position: relative;
+  flex-shrink: 0;
 `;
 
 const getAuthViewPoint = (page: string) => {
