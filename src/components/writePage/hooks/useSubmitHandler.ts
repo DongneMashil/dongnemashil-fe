@@ -68,13 +68,13 @@ export const useSubmitHandler = ({
     }
 
     if (getStringByteSize(formValues.title) > 500) {
-      setModalMessage('제목은 500바이트를 초과합니다.');
+      setModalMessage('제목은 500바이트를 초과할 수 없습니다.');
       setIsModalOpen(true);
       return;
     }
 
     if (getStringByteSize(formValues.content) > 500) {
-      setModalMessage('내용은 500바이트를 초과합니다.');
+      setModalMessage('내용은 500바이트를 초과할 수 없습니다.');
       setIsModalOpen(true);
       return;
     }
@@ -162,26 +162,25 @@ export const useSubmitHandler = ({
         }
       }
     } catch (error) {
-      console.error('Error fetching the media file:', error);
       return;
     }
 
     if (reviewId) {
       updateMutation.mutate(formData, {
         onSuccess: (response) => {
-          console.log('수정 성공', response);
           navigate(`/review/${response.id}`);
           setStoredMediaFiles([]);
           setIsLoading(false);
         },
         onError: (error: unknown) => {
-          if (typeof error === 'string') {
-            console.log('수정 실패', error);
-          } else if (error instanceof Error) {
-            console.log('수정 실패', error.message);
-          } else {
-            console.log('수정 실패', error);
-          }
+          error;
+          // if (typeof error === 'string') {
+          //   console.log('수정 실패', error);
+          // } else if (error instanceof Error) {
+          //   console.log('수정 실패', error.message);
+          // } else {
+          //   console.log('수정 실패', error);
+          // }
           setIsLoading(false);
         },
       });
