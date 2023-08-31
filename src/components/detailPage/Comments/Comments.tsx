@@ -190,28 +190,6 @@ export const Comments = ({
                             >
                               삭제
                             </button>
-                            <Modal
-                              isOpen={isDeleteCommentModalOpen}
-                              onSubmitText="삭제"
-                              title="삭제"
-                              firstLine="삭제된 댓글은 복구할 수 없습니다."
-                              secondLine="삭제하시겠습니까?"
-                              onSubmitHandler={() => {
-                                deleteCommentMutation.mutate(
-                                  String(deleteCommentId)
-                                );
-                                setIsDeleteCommentModalOpen(false);
-                              }}
-                              onCloseHandler={() =>
-                                setIsDeleteCommentModalOpen(false)
-                              }
-                            />{' '}
-                            <Modal
-                              isOpen={!!errorMsg}
-                              title="알림"
-                              firstLine={errorMsg}
-                              onCloseHandler={onCloseErrorModalHandler}
-                            />
                           </>
                         )}
                       </>
@@ -231,9 +209,25 @@ export const Comments = ({
                 </StDetailPageCommentItem>
               );
             })}
-
+          <Modal
+            isOpen={isDeleteCommentModalOpen}
+            onSubmitText="삭제"
+            title="삭제"
+            firstLine="삭제된 댓글은 복구할 수 없습니다."
+            secondLine="삭제하시겠습니까?"
+            onSubmitHandler={() => {
+              deleteCommentMutation.mutate(String(deleteCommentId));
+              setIsDeleteCommentModalOpen(false);
+            }}
+            onCloseHandler={() => setIsDeleteCommentModalOpen(false)}
+          />{' '}
+          <Modal
+            isOpen={!!errorMsg}
+            title="알림"
+            firstLine={errorMsg}
+            onCloseHandler={onCloseErrorModalHandler}
+          />
           {isLoading && <div>로딩중...</div>}
-
           {hasNextPage && <StLoadingSpinner ref={loaderRef} />}
         </StDetailPageCommentList>
       )}
