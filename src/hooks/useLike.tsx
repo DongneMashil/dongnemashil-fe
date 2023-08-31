@@ -1,9 +1,9 @@
 import { postLikeOptimistic } from 'api/detailApi';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { userProfileSelector } from 'recoil/userInfo';
-import { useLogout } from './useLogout';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { UserState, userProfileSelector } from 'recoil/userInfo';
+// import { useLogout } from './useLogout';
 import { queryClient } from 'queries/queryClient';
 
 interface UseLikeProps {
@@ -38,6 +38,7 @@ export const useLike = ({
     setIsLiked(!isLiked);
     setLikeCnt(optimisticLikeCnt);
     queryClient.invalidateQueries(['responseData']);
+    queryClient.invalidateQueries(['reviewDetail']);
     //'responseData'
     try {
       const result = await postLikeOptimistic(reviewId, previousIsLiked);
@@ -57,7 +58,14 @@ export const useLike = ({
       console.log('좋아요 처리 중 오류가 발생했습니다.'); // 오류 처리
       console.log(error);
       localStorage.clear();
-      useLogout();
+      // useLogout();
+      const newData: UserState = {
+        userId: '',
+        nickName: '',
+        isLoggedIn: false,
+      };
+      const setUserState = useSetRecoilState(userProfileSelector);
+      setUserState(newData);
       setIsLiked(previousIsLiked);
       setLikeCnt(likeCnt);
 

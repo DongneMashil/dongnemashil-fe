@@ -156,10 +156,18 @@ export const postProfile = async (post: {
         `userProfile.${profileExt}` // 파일이름을 영문 단어로 통일
       );
     }
-    formedData.append(
-      'nickname',
-      new Blob([post.nickname], { type: 'text/plain' })
-    );
+
+    const jsonData = {
+      nickname: post.nickname,
+    };
+    const blob = new Blob([JSON.stringify(jsonData)], {
+      type: 'application/json',
+    });
+    formedData.append('nickname', blob);
+    // formedData.append(
+    //   'nickname',
+    //   new Blob([post.nickname], { type: 'text/plain' })
+    // );
 
     const config = {
       method: 'patch',
