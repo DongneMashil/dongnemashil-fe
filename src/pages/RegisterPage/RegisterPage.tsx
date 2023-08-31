@@ -233,8 +233,6 @@ export const RegisterPage = React.memo(() => {
   const onPasswordVerifyMsgHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (password !== '') {
-        // console.log('onEmailMsgHander triggered');
-        // console.log(e.target.value, password, e.target.value === password);
         const newVeirfyMsg =
           e.target.value === password
             ? {
