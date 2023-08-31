@@ -3,7 +3,7 @@ import React, {
   useState,
   Suspense,
   useLayoutEffect,
-  useCallback,
+  // useCallback,
 } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
@@ -65,16 +65,21 @@ export const DetailPage = () => {
   const { data: userData } = useUpdateUserInfo();
 
   //리뷰 상세 조회
-  const { data } = useQuery<ReviewDetailResponse, Error>({
+  const { data, isError } = useQuery<ReviewDetailResponse, Error>({
     queryKey: ['reviewDetail', reviewId],
     queryFn: () => getReviewDetail(reviewId),
     enabled: !!reviewId,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    staleTime: 1000 * 60 * 5, //5 분
+    cacheTime: 1000 * 60 * 15, //15 분
     onSuccess: (data) => {
       setCommentCount(data.commentCnt); // Recoil 댓글 개수를 설정
     },
   });
 
-  //
+  //리뷰 삭제
   const deleteDetail = useMutation({
     mutationFn: () => deleteReviewDetail(reviewId),
     onSuccess: () => {
@@ -107,22 +112,19 @@ export const DetailPage = () => {
     }
   };
 
-  //
-  const pageShowHandler = useCallback(
-    (event: PageTransitionEvent) => {
-      if (event.persisted) {
-        window.location.reload();
-      }
-    },
-    [location]
-  );
+  // //페이지 리로드
+  // const pageShowHandler = useCallback((event: PageTransitionEvent) => {
+  //   if (event.persisted) {
+  //     window.location.reload();
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    window.addEventListener('pageshow', pageShowHandler);
-    return () => {
-      window.removeEventListener('pageshow', pageShowHandler);
-    };
-  }, [pageShowHandler]);
+  // useEffect(() => {
+  //   window.addEventListener('pageshow', pageShowHandler);
+  //   return () => {
+  //     window.removeEventListener('pageshow', pageShowHandler);
+  //   };
+  // }, [pageShowHandler]);
   //창 크기에 따른 MasonryGrid 컬럼 설정
   useLayoutEffect(() => {
     const handleResize = () => {
@@ -174,6 +176,14 @@ export const DetailPage = () => {
   const onMapCloseHandler = () => {
     setIsMapOpen(false);
   };
+
+  const [isLike, setIsLike] = useState(false);
+  useEffect(() => {
+    if (data) {
+      setIsLike(data.likebool);
+      console.log(data.likebool);
+    }
+  }, [data]);
   return (
     <>
       {isMapOpen ? (
@@ -193,6 +203,7 @@ export const DetailPage = () => {
             {data && <StNavTitle>{data.roadName}</StNavTitle>}
           </NavBar>
           <StDetailPageContainer>
+            {isError && <StNavTitle>게시글이 존재하지 않습니다!</StNavTitle>}
             {data && (
               <>
                 <StDetailPageHeader>
@@ -309,7 +320,7 @@ export const DetailPage = () => {
             <Footer
               reviewId={reviewId}
               likeCnt={data.likeCnt}
-              isLiked={data.likebool}
+              isLiked={isLike}
             ></Footer>
           )}
         </StDetailPageLayout>
