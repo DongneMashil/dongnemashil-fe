@@ -29,6 +29,8 @@ export const SearchPage = () => {
       search();
     }
   };
+
+  //e : React.MouseEvent<HTMLHtmlElement>
   return (
     <StSearchContainer>
       <StSearchWrapper>
