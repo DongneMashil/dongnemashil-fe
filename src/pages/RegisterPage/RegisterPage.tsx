@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
+import { debounce } from 'lodash';
 import { AxiosError } from 'axios';
 import {
   HeaderText,
@@ -79,7 +80,6 @@ export const RegisterPage = React.memo(() => {
     `^(?=.*[a-zA-Z])(?=.*[!@#$%^*])(?=.*[0-9]).{8,15}$`
   );
 
-  //const { data } = useVerifyUser(shouldVerify);
   const { mutate: registerMutate } = useMutation(register, {
     onSuccess: () => {
       setIsFinishedModalOpen(true);
@@ -135,34 +135,53 @@ export const RegisterPage = React.memo(() => {
     },
   });
 
-  const onEmailChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setEmail(e.target.value);
+  //debouncing
+  const emailMsgHandler = useCallback(
+    debounce((e) => {
       onEmailMsgHandler(e);
-    },
-    [email]
+    }, 200),
+    []
   );
-  const onNicknameChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setNickname(e.target.value);
+
+  const nicknameMsgHandler = useCallback(
+    debounce((e) => {
       onNicknameMsgHandler(e);
-    },
-    [nickname]
+    }, 200),
+    []
   );
-  const onPasswordChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(e.target.value);
+
+  const passwordMsgHandler = useCallback(
+    debounce((e) => {
       onPasswordMsgHandler(e);
-    },
-    [password]
+    }, 200),
+    []
   );
-  const onPasswordVerifyChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPasswordVerify(e.target.value);
+
+  const passwordVerifyMsgHandler = useCallback(
+    debounce((e) => {
       onPasswordVerifyMsgHandler(e);
-    },
-    [password, passwordVerify]
+    }, 200),
+    []
   );
+
+  const onEmailChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    emailMsgHandler(e);
+  };
+  const onNicknameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value);
+    nicknameMsgHandler(e);
+  };
+  const onPasswordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    passwordMsgHandler(e);
+  };
+  const onPasswordVerifyChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPasswordVerify(e.target.value);
+    passwordVerifyMsgHandler(e);
+  };
 
   const onEmailMsgHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
