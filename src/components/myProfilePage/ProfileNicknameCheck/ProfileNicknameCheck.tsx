@@ -16,14 +16,14 @@ const ProfileNicknameCheckComponent: React.FC<ProfileNicknameCheckProps> = ({
   onValid,
   onChange,
 }) => {
-  const nicknameRegex = new RegExp(`^(?=.*[A-Za-z0-9가-힣]).{4,}$`);
+  const nicknameRegex = new RegExp(`^(?=.*[A-Za-z0-9가-힣]).{2,10}$`);
 
   const { mutate: confirmNicknameMutate } = useMutation(confirmNickname, {
     onSuccess: () => {
       if (!nickname || !nicknameRegex.test(nickname)) {
         onValid(
           false,
-          '*닉네임은 4자 이상의 영문, 한글, 숫자만 사용 가능합니다.'
+          '*닉네임은 2자 이상, 10자 이하의 영문, 한글, 숫자만 사용 가능합니다.'
         );
         return;
       }
