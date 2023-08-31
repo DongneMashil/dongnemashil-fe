@@ -16,7 +16,7 @@ const ProfileNicknameCheckComponent: React.FC<ProfileNicknameCheckProps> = ({
   onValid,
   onChange,
 }) => {
-  const nicknameRegex = new RegExp(`^(?=.*[A-Za-z0-9가-힣]).{2,10}$`);
+  const nicknameRegex = new RegExp(`^[a-zA-Z0-9가-힣]{2,10}$`);
 
   const { mutate: confirmNicknameMutate } = useMutation(confirmNickname, {
     onSuccess: () => {
