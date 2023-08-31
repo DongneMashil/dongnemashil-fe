@@ -100,6 +100,8 @@ export const StDetailPageCommentItem = styled.div`
 
   .content {
     line-height: 1.3;
+    width: 100%;
+    overflow-wrap: break-word;
   }
   .left {
     margin-left: auto;

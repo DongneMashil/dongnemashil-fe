@@ -139,9 +139,9 @@ export const WritePage = () => {
               ];
 
               if (!prev.some((p) => p.isCover) || (prev[0].type === 'video' && prev.length === 1)) {
-                const index = updatedFiles.length - 1;
-                updatedFiles[index].isCover = true;
-              }
+              const index = updatedFiles.length - 1;
+              updatedFiles[index].isCover = true;
+            }
 
               return updatedFiles;
             });

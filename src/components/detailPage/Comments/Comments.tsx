@@ -34,6 +34,7 @@ export const Comments = ({
   const latestCommentRef = useRef(null);
   // const loader = useRef(null);
   const [deleteCommentId, setDeleteCommentId] = useState<number>(0);
+  const [errorMsg, setErrorMsg] = useState(''); // 에러 메시지를 저장하는 상태
   const useInfinityScroll = () => {
     const fetchComment = async ({ pageParam = 1 }) => {
       const response = await getComment({
@@ -118,7 +119,7 @@ export const Comments = ({
 
   const onEditSubmitHandler = () => {
     if (!isEdit.comment) {
-      alert('댓글을 입력해주세요');
+      setErrorMsg('댓글 내용을 입력해주세요.');
       return;
     }
     editComment(isEdit.id.toString(), isEdit.comment).then(() => {
@@ -126,7 +127,9 @@ export const Comments = ({
       queryClient.invalidateQueries(['comment', reviewId]);
     });
   };
-
+  const onCloseErrorModalHandler = () => {
+    setErrorMsg('');
+  };
   const onDeleteCommentHandler = (commentId: number) => {
     setDeleteCommentId(commentId);
     setIsDeleteCommentModalOpen(true);
@@ -187,22 +190,6 @@ export const Comments = ({
                             >
                               삭제
                             </button>
-                            <Modal
-                              isOpen={isDeleteCommentModalOpen}
-                              onSubmitText="삭제"
-                              title="삭제"
-                              firstLine="삭제된 댓글은 복구할 수 없습니다."
-                              secondLine="삭제하시겠습니까?"
-                              onSubmitHandler={() => {
-                                deleteCommentMutation.mutate(
-                                  String(deleteCommentId)
-                                );
-                                setIsDeleteCommentModalOpen(false);
-                              }}
-                              onCloseHandler={() =>
-                                setIsDeleteCommentModalOpen(false)
-                              }
-                            />
                           </>
                         )}
                       </>
@@ -222,9 +209,25 @@ export const Comments = ({
                 </StDetailPageCommentItem>
               );
             })}
-
+          <Modal
+            isOpen={isDeleteCommentModalOpen}
+            onSubmitText="삭제"
+            title="삭제"
+            firstLine="삭제된 댓글은 복구할 수 없습니다."
+            secondLine="삭제하시겠습니까?"
+            onSubmitHandler={() => {
+              deleteCommentMutation.mutate(String(deleteCommentId));
+              setIsDeleteCommentModalOpen(false);
+            }}
+            onCloseHandler={() => setIsDeleteCommentModalOpen(false)}
+          />{' '}
+          <Modal
+            isOpen={!!errorMsg}
+            title="알림"
+            firstLine={errorMsg}
+            onCloseHandler={onCloseErrorModalHandler}
+          />
           {isLoading && <div>로딩중...</div>}
-
           {hasNextPage && <StLoadingSpinner ref={loaderRef} />}
         </StDetailPageCommentList>
       )}

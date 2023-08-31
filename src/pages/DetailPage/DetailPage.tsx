@@ -1,4 +1,10 @@
-import React, { useEffect, useState, Suspense, useLayoutEffect } from 'react';
+import React, {
+  useEffect,
+  useState,
+  Suspense,
+  useLayoutEffect,
+  // useCallback,
+} from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   deleteReviewDetail,
@@ -42,7 +48,7 @@ export const DetailPage = () => {
   const [isDeleteDetailModalOpen, setIsDeleteDetailModalOpen] = useState(false);
   const [isDeleteCompleteModalOpen, setIsDeleteCompleteModalOpen] =
     useState(false);
-
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const setCommentCount = useSetRecoilState(commentCountAtom);
   const navigate = useNavigate();
   const [columns, setColumns] = useState(2);
@@ -51,7 +57,6 @@ export const DetailPage = () => {
   //리뷰 아이디 없이 접근시 홈으로 이동
   const { reviewId } = useParams<{ reviewId: string }>();
   if (!reviewId) {
-    alert('리뷰 아이디가 없습니다.');
     window.location.href = '/';
     throw new Error('Review ID is missing');
   }
@@ -60,26 +65,29 @@ export const DetailPage = () => {
   const { data: userData } = useUpdateUserInfo();
 
   //리뷰 상세 조회
-  const { data } = useQuery<ReviewDetailResponse, Error>({
+  const { data, isError } = useQuery<ReviewDetailResponse, Error>({
     queryKey: ['reviewDetail', reviewId],
     queryFn: () => getReviewDetail(reviewId),
     enabled: !!reviewId,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    staleTime: 1000 * 60 * 5, //5 분
+    cacheTime: 1000 * 60 * 15, //15 분
     onSuccess: (data) => {
-      console.log(data);
       setCommentCount(data.commentCnt); // Recoil 댓글 개수를 설정
     },
   });
 
-  //
+  //리뷰 삭제
   const deleteDetail = useMutation({
     mutationFn: () => deleteReviewDetail(reviewId),
     onSuccess: () => {
       setIsDeleteCompleteModalOpen(true);
     },
-    onError: (error) => {
-      console.log(error);
+    onError: () => {
       setIsDeleteDetailModalOpen(false);
-      alert('삭제에 실패했습니다.');
+      setIsErrorModalOpen(true);
     },
   });
   const handleDeleteDetail = () => {
@@ -103,6 +111,7 @@ export const DetailPage = () => {
       setMapCenterByAddress(defaultAddress, map);
     }
   };
+
   //창 크기에 따른 MasonryGrid 컬럼 설정
   useLayoutEffect(() => {
     const handleResize = () => {
@@ -145,7 +154,6 @@ export const DetailPage = () => {
       }
     }
   }, [data]);
-  console.log(mainImageUrl);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
   const onClickImage = (imgSrc: string) => {
@@ -155,6 +163,14 @@ export const DetailPage = () => {
   const onMapCloseHandler = () => {
     setIsMapOpen(false);
   };
+
+  const [isLike, setIsLike] = useState(false);
+  useEffect(() => {
+    if (data) {
+      setIsLike(data.likebool);
+      console.log(data.likebool);
+    }
+  }, [data]);
   return (
     <>
       {isMapOpen ? (
@@ -174,6 +190,7 @@ export const DetailPage = () => {
             {data && <StNavTitle>{data.roadName}</StNavTitle>}
           </NavBar>
           <StDetailPageContainer>
+            {isError && <StNavTitle>게시글이 존재하지 않습니다!</StNavTitle>}
             {data && (
               <>
                 <StDetailPageHeader>
@@ -268,6 +285,14 @@ export const DetailPage = () => {
                       firstLine="삭제가 완료되었습니다."
                       onCloseHandler={() => navigate('/')}
                     />
+                    <Modal
+                      isOpen={isErrorModalOpen}
+                      title="알림"
+                      firstLine="삭제에 실패했습니다. 다시 로그인 해주세요!"
+                      onCloseHandler={() => setIsErrorModalOpen(false)}
+                      onSubmitHandler={() => navigate('/login')}
+                      onSubmitText="로그인"
+                    />
                     <ImageModal
                       isOpen={isImageModalOpen}
                       onCloseHandler={() => setIsImageModalOpen(false)}
@@ -282,7 +307,7 @@ export const DetailPage = () => {
             <Footer
               reviewId={reviewId}
               likeCnt={data.likeCnt}
-              isLiked={data.likebool}
+              isLiked={isLike}
             ></Footer>
           )}
         </StDetailPageLayout>

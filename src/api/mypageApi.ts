@@ -86,6 +86,7 @@ export type Comment = {
   id: number;
   nickname: string;
   profileImgUrl: string | null;
+  smallMainImgUrl: string | null;
   comment: string;
   createdAt: string;
   modifiedAt: string;
@@ -155,12 +156,18 @@ export const postProfile = async (post: {
         `userProfile.${profileExt}` // 파일이름을 영문 단어로 통일
       );
     }
-    formedData.append(
-      'nickname',
-      new Blob([post.nickname], { type: 'text/plain' })
-    );
 
-    console.log(Array.from(formedData.entries()));
+    const jsonData = {
+      nickname: post.nickname,
+    };
+    const blob = new Blob([JSON.stringify(jsonData)], {
+      type: 'application/json',
+    });
+    formedData.append('nickname', blob);
+    // formedData.append(
+    //   'nickname',
+    //   new Blob([post.nickname], { type: 'text/plain' })
+    // );
 
     const config = {
       method: 'patch',
@@ -171,18 +178,20 @@ export const postProfile = async (post: {
     };
 
     const response = await axiosInstance.request(config);
-    console.log(JSON.stringify(response) + '🏠');
+
     //⬇️새로운 토큰으로 교체
-    console.log('responseHEADERS📸:', response.headers);
-    const accessToken = response.headers['accesstoken'].replace('Bearer%', '');
-    const refreshToken = response.headers['refreshtoken'].replace(
-      'Bearer%',
+
+    const accessToken = response.headers['authorization'].replace(
+      'Bearer%20',
       ''
     );
-    console.log('Received Access Token: ', accessToken);
-    console.log('Received Refresh Token: ', refreshToken);
+    const refreshToken = response.headers['refreshtoken'].replace(
+      'Bearer%20',
+      ''
+    );
+
     tokenHandler(accessToken, refreshToken);
-    console.log('토큰교체성공🥁');
+
     return response.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError) {
