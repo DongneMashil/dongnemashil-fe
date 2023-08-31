@@ -112,19 +112,6 @@ export const DetailPage = () => {
     }
   };
 
-  // //페이지 리로드
-  // const pageShowHandler = useCallback((event: PageTransitionEvent) => {
-  //   if (event.persisted) {
-  //     window.location.reload();
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   window.addEventListener('pageshow', pageShowHandler);
-  //   return () => {
-  //     window.removeEventListener('pageshow', pageShowHandler);
-  //   };
-  // }, [pageShowHandler]);
   //창 크기에 따른 MasonryGrid 컬럼 설정
   useLayoutEffect(() => {
     const handleResize = () => {
