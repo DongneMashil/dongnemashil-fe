@@ -34,7 +34,7 @@ export const SearchResultPage = () => {
   );
 
   useEffect(() => {
-    refetch();
+    if (!isFetching) refetch();
   }, [type, selectedTags]);
 
   const onClickSort = (type: string) => {
