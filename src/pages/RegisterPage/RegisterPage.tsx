@@ -9,7 +9,6 @@ import {
 } from 'components/common';
 import { register, confirmId, confirmNickname } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
-//import { useVerifyUser } from 'hooks';
 import { useNavigate } from 'react-router-dom';
 import { RegisterLabel } from 'components/registerPage/RegisterLabel/RegisterLabel';
 import {
@@ -31,7 +30,6 @@ export const RegisterPage = React.memo(() => {
   const [isFinishedModalOpen, setIsFinishedModalOpen] =
     useState<boolean>(false);
   const [modalMsg, setModalMsg] = useState<string>('');
-  //const [shouldVerify, setShouldVerify] = useState<boolean>(false);
   const [isNotDuplicated, setIsNotDuplicated] = useState({
     email: false,
     nickname: false,
@@ -84,7 +82,6 @@ export const RegisterPage = React.memo(() => {
   //const { data } = useVerifyUser(shouldVerify);
   const { mutate: registerMutate } = useMutation(register, {
     onSuccess: () => {
-      //setShouldVerify(true);
       setIsFinishedModalOpen(true);
     },
     onError: (err: AxiosError) => {
