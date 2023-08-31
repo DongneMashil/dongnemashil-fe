@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import { Thumbnail } from '../Thumbnail/Thumbnail';
 import {
@@ -15,6 +15,7 @@ import { ReviewsList } from 'api/reviewsApi';
 import { StLoadingSpinner } from 'components/common/LoadingSpinner/LoadingSpinner.styles';
 import { MasonryGrid } from '@egjs/react-grid';
 import { MasonryGridOptions } from '@egjs/grid';
+import { useLocation } from 'react-router-dom';
 
 export interface ReviewsProps {
   type: string;
@@ -48,19 +49,8 @@ export const ReviewsContainer = ({
   );
 
   const [columns, setColumns] = useState(window.innerWidth < 768 ? 1 : 2);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [masonryOptions, setMasonryOptions] = useState<MasonryGridOptions>({
-    column: columns,
-    gap: 14,
-    defaultDirection: 'end',
-    align: 'stretch',
-  });
 
-  const handleImageLoad = () => {
-    setImagesLoaded(true);
-  };
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setColumns(1);
@@ -70,31 +60,20 @@ export const ReviewsContainer = ({
     };
     handleResize();
     window.addEventListener('resize', handleResize);
-    window.addEventListener('load', handleImageLoad);
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('load', handleImageLoad);
     };
   }, [window.innerWidth]);
 
-  useLayoutEffect(() => {
-    if (imagesLoaded) {
-      setMasonryOptions({
-        column: columns,
-        gap: 14,
-        defaultDirection: 'end',
-        align: 'stretch',
-      });
-    }
-  }, [imagesLoaded, columns]);
+  const masonryGridOptions: MasonryGridOptions = {
+    column: columns,
+    gap: 14,
+    defaultDirection: 'end',
+    align: 'stretch',
+  };
 
-  // const masonryGridOptions: MasonryGridOptions = {
-  //   column: columns,
-  //   gap: 14,
-  //   defaultDirection: 'end',
-  //   align: 'stretch',
-  // };
+  const location = useLocation();
 
   return (
     <StReviewsContainer>
@@ -102,6 +81,10 @@ export const ReviewsContainer = ({
         {totalElements && totalElements !== 0 ? (
           <span>
             <strong>{totalElements}</strong> 개
+          </span>
+        ) : location.pathname === '/search/result' ? (
+          <span>
+            <strong>0</strong> 개
           </span>
         ) : null}
 
@@ -126,7 +109,7 @@ export const ReviewsContainer = ({
       {!isFetching && reviews.length === 0 ? (
         <StNoReviews>검색된 글이 없습니다.</StNoReviews>
       ) : (
-        <MasonryGrid {...masonryOptions}>
+        <MasonryGrid {...masonryGridOptions}>
           {reviews?.map((review) => (
             <Thumbnail
               key={review.id}
