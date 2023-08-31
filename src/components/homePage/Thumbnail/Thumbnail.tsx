@@ -63,7 +63,7 @@ export const Thumbnail = ({
           <img
             ref={imageRef}
             src={middleMainImgUrl}
-            srcSet={`${smallMainImgUrl} 360w, ${middleMainImgUrl} 768w`}
+            srcSet={`${smallMainImgUrl} x1, ${middleMainImgUrl} x1`}
             onLoad={handleImageLoad}
             alt="썸네일 이미지"
           />

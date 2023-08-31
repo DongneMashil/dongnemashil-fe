@@ -1,20 +1,23 @@
 import axios, {
   AxiosInstance,
   AxiosResponse,
+  AxiosError,
   AxiosRequestConfig,
   InternalAxiosRequestConfig,
 } from 'axios';
-import { getNewAccessToken, setClientHeader } from './loginApi';
+import {
+  getNewAccessToken,
+  setClientHeader,
+  resetHeader,
+  tokenHandler,
+} from './loginApi';
 // import { useRecoilState } from 'recoil';
 // import { UserState, userProfileSelector } from 'recoil/userInfo';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface RetryConfig extends AxiosRequestConfig {
   _retry: boolean;
 }
-
-export const retryConfig: RetryConfig = {
-  _retry: false,
-};
 
 const baseUrl = process.env.REACT_APP_SERVER_API_URL;
 
@@ -30,21 +33,40 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (err) => {
+    const originalRequest: RetryConfig = err.config;
     // console.log('👀response interceptor err ', err);
     // console.log('👀response interceptor err msg ', err.response.data.message);
-    // console.log('👀response interceptor config', retryConfig);
-    // console.log('👀response interceptor config _retry ', retryConfig._retry);
+    // console.log('👀response interceptor config', originalRequest);
+    // console.log( '👀response interceptor config _retry ', originalRequest._retry);
     if (
+      err.response &&
       err.response.data.message == '토큰 유효기간 만료.' &&
-      retryConfig._retry === false
+      !originalRequest._retry
     ) {
       // console.log('👀repsponse interceptor 분기 진입');
-      retryConfig._retry = true;
-      const refreshToken = window.localStorage.getItem('refresh_token');
-      axiosInstance.defaults.headers.common['Refreshtoken'] = refreshToken;
-      await getNewAccessToken();
+      originalRequest._retry = true;
 
-      return axiosInstance(retryConfig);
+      try {
+        const response: AxiosResponse = await getNewAccessToken();
+
+        // 새로 받은 액세스 토큰 넣어주기
+        const accessToken = response.headers['authorization'].replace(
+          'Bearer%20',
+          ''
+        );
+        tokenHandler(accessToken);
+        setClientHeader(accessToken);
+        // console.log('Got new access token', response.data);
+
+        return axiosInstance(originalRequest);
+      } catch (e) {
+        // console.log('getNewAccessToken Error', e);
+        resetHeader();
+        if (e instanceof AxiosError) {
+          throw new Error(e.response?.data || e.message);
+        }
+        throw e;
+      }
     } else if (err.response.data.message === '유효한 토큰이 아닙니다.') {
       // const [userState, setUserState] = useRecoilState(userProfileSelector);
       // alert(userState.isLoggedIn);

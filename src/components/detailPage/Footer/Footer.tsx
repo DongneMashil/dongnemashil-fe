@@ -32,22 +32,6 @@ export const Footer = ({
   const commentCount = useRecoilValue(commentCountAtom);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [isCommentShow, setIsCommentShow] = useState(false);
-  //
-  const pageShowHandler = useCallback(
-    (event: PageTransitionEvent) => {
-      if (event.persisted) {
-        window.location.reload();
-      }
-    },
-    [location]
-  );
-
-  useEffect(() => {
-    window.addEventListener('pageshow', pageShowHandler);
-    return () => {
-      window.removeEventListener('pageshow', pageShowHandler);
-    };
-  }, [pageShowHandler]);
 
   // 댓글창 보이는 애니메이션
   useEffect(() => {
