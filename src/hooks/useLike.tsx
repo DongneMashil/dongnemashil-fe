@@ -1,9 +1,8 @@
 import { postLikeOptimistic } from 'api/detailApi';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { UserState, userProfileSelector } from 'recoil/userInfo';
-// import { useLogout } from './useLogout';
 import { queryClient } from 'queries/queryClient';
 
 interface UseLikeProps {
@@ -19,13 +18,19 @@ export const useLike = ({
   isLiked: boolean;
   likeCnt: number;
   toggleLikeHandler: () => Promise<void>;
-  canClick: boolean; // 추가 상태값: 클릭 가능 여부를 반환
 } => {
   const [lastClickedTime, setLastClickedTime] = useState<number | null>(null);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCnt, setLikeCnt] = useState(initialLikeCnt);
   const userState = useRecoilValue(userProfileSelector);
   const navigate = useNavigate();
+  const setUserState = useSetRecoilState(userProfileSelector);
+
+  useEffect(() => {
+    setIsLiked(initialIsLiked);
+    setLikeCnt(initialLikeCnt);
+  }, [initialIsLiked, initialLikeCnt]); // 쓰로틀링이 걸려도 최신 데이터로 업데이트
+
   const toggleLikeHandler = async () => {
     if (Date.now() - (lastClickedTime || 0) < 500) return; // 마지막 클릭으로부터 0.5초 안에 재클릭을 방지
     setLastClickedTime(Date.now());
@@ -39,7 +44,6 @@ export const useLike = ({
     setLikeCnt(optimisticLikeCnt);
     queryClient.invalidateQueries(['responseData']);
     queryClient.invalidateQueries(['reviewDetail']);
-    //'responseData'
     try {
       const result = await postLikeOptimistic(reviewId, previousIsLiked);
       if (result !== !previousIsLiked) {
@@ -58,13 +62,12 @@ export const useLike = ({
       console.log('좋아요 처리 중 오류가 발생했습니다.'); // 오류 처리
       console.log(error);
       localStorage.clear();
-      // useLogout();
       const newData: UserState = {
         userId: '',
         nickName: '',
         isLoggedIn: false,
       };
-      const setUserState = useSetRecoilState(userProfileSelector);
+
       setUserState(newData);
       setIsLiked(previousIsLiked);
       setLikeCnt(likeCnt);
@@ -77,8 +80,8 @@ export const useLike = ({
       );
     }
   };
-  const canClick = !lastClickedTime || Date.now() - lastClickedTime >= 500;
-  return { isLiked, likeCnt, toggleLikeHandler, canClick };
+
+  return { isLiked, likeCnt, toggleLikeHandler };
 };
 
 /**
