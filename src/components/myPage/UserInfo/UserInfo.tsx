@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import noUser from 'assets/images/NoUser.jpg';
 import { ReactComponent as ChevronRight } from 'assets/icons/ChevronRight.svg';
 import { StUserInfoContainer } from './UserInfo.styles';
@@ -15,6 +15,16 @@ const UserInfo = React.memo(
     email = 'userId',
     setIsModalOpen,
   }: UserInfoProps) => {
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const [userID, setUserID] = useState<string>('');
+    useEffect(() => {
+      if (regex.test(email)) {
+        setUserID(email);
+      } else {
+        setUserID('카카오 회원');
+      }
+    }, [email]);
+
     return (
       <StUserInfoContainer
         aria-label="프로필 메뉴 열기"
@@ -27,7 +37,7 @@ const UserInfo = React.memo(
           />
           <div className="nameWrapper">
             <div className="nickname">{nickName}</div>
-            <div className="userId">{email}</div>
+            <div className="userId">{userID}</div>
           </div>
         </div>
         <ChevronRight aria-hidden="true" className="edit" />

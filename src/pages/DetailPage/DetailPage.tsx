@@ -69,11 +69,11 @@ export const DetailPage = () => {
     queryKey: ['reviewDetail', reviewId],
     queryFn: () => getReviewDetail(reviewId),
     enabled: !!reviewId,
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
-    refetchOnReconnect: true,
-    staleTime: 1000 * 60 * 5, //5 분
-    cacheTime: 1000 * 60 * 15, //15 분
+    // refetchOnWindowFocus: true,
+    // refetchOnMount: true,
+    // refetchOnReconnect: true,
+    // staleTime: 1000 * 60 * 5, //5 분
+    // cacheTime: 1000 * 60 * 15, //15 분
     onSuccess: (data) => {
       setCommentCount(data.commentCnt); // Recoil 댓글 개수를 설정
     },
@@ -164,13 +164,6 @@ export const DetailPage = () => {
     setIsMapOpen(false);
   };
 
-  const [isLike, setIsLike] = useState(false);
-  useEffect(() => {
-    if (data) {
-      setIsLike(data.likebool);
-      console.log(data.likebool);
-    }
-  }, [data]);
   return (
     <>
       {isMapOpen ? (
@@ -307,7 +300,7 @@ export const DetailPage = () => {
             <Footer
               reviewId={reviewId}
               likeCnt={data.likeCnt}
-              isLiked={isLike}
+              isLiked={data.likebool}
             ></Footer>
           )}
         </StDetailPageLayout>
