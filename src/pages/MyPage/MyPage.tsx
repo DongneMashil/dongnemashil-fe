@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useLogout, useUpdateUserInfo } from 'hooks';
 import { TabMenu, UserInfo } from 'components/myPage';
 import { FixFooter, NavBar } from 'components/layout';
@@ -13,6 +13,8 @@ export const MyPage = () => {
   const [shouldLogout, setShouldLogout] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  const { userNickname } = useParams<{ userNickname: string }>();
 
   //유저정보 조회 및 업데이트
   const { data } = useUpdateUserInfo(true);
@@ -94,8 +96,12 @@ export const MyPage = () => {
               nickName={data?.nickname}
               email={data?.email}
               setIsModalOpen={setIsModalOpen}
+              isMyPage={!userNickname}
             />
-            <TabMenu nickName={data?.nickname} />
+            <TabMenu
+              nickName={data?.nickname}
+              selectedNickName={userNickname}
+            />
           </>
         )}
       </StMyPageContainer>

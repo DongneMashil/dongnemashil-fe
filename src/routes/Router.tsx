@@ -54,6 +54,7 @@ const Router = () => {
           path="/mypage"
           element={<ProtectedRoute element={<MyPage />} />}
         />
+        <Route path="/userPage/:userNickname" element={<MyPage />} />
         <Route
           path="/mypage/profile"
           element={<ProtectedRoute element={<MyProfilePage />} />}

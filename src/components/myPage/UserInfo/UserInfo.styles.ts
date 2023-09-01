@@ -1,7 +1,8 @@
 import { styled } from 'styled-components';
 
-export const StUserInfoContainer = styled.button`
+export const StUserInfoContainer = styled.button<{ $isMyPage: boolean }>`
   ${(props) => props.theme.floatingBox}
+  cursor:${(props) => (props.$isMyPage ? 'pointer' : 'default')};
   text-align: left;
   padding: 1rem 1.5rem;
   display: flex;
