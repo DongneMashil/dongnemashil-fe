@@ -124,7 +124,8 @@ export const useSubmitHandler = ({
           });
           formData.append('mainImgUrl', imageFile);
         } else {
-          formData.append('mainImgUrl', coverImage.file);
+          console.log('coverImage.file', coverImage.file);
+          formData.append('mainImgUrl', coverImage.file, coverImage.file.name); // 이 부분 수정되었습니다(파일 이름을 넣어줌)
         }
       }
 
@@ -149,13 +150,13 @@ export const useSubmitHandler = ({
           });
 
           if (file.type === 'image' && !file.isCover) {
-            formData.append('subImgUrl', fileObject);
+            formData.append('subImgUrl', fileObject, fileObject.name); // 이 부분 수정되었습니다(파일 이름을 넣어줌)
           } else if (file.type === 'video') {
             formData.append('videoUrl', fileObject);
           }
         } else {
           if (file.type === 'image' && !file.isCover) {
-            formData.append('subImgUrl', file.file);
+            formData.append('subImgUrl', file.file, file.file.name); // 이 부분 수정되었습니다(파일 이름을 넣어줌)
           } else if (file.type === 'video') {
             formData.append('videoUrl', file.file);
           }
