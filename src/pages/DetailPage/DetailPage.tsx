@@ -164,13 +164,6 @@ export const DetailPage = () => {
     setIsMapOpen(false);
   };
 
-  const [isLike, setIsLike] = useState(false);
-  useEffect(() => {
-    if (data) {
-      setIsLike(data.likebool);
-      console.log(data.likebool);
-    }
-  }, [data]);
   return (
     <>
       {isMapOpen ? (
@@ -307,7 +300,7 @@ export const DetailPage = () => {
             <Footer
               reviewId={reviewId}
               likeCnt={data.likeCnt}
-              isLiked={isLike}
+              isLiked={data.likebool}
             ></Footer>
           )}
         </StDetailPageLayout>
