@@ -112,6 +112,13 @@ export const StRecentKeywordsBox = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    font-weight: 400;
+
+    & > button {
+      background-color: transparent;
+      font-size: 16px;
+      font-weight: 400;
+      cursor: pointer;
+      color: inherit;
+    }
   }
 `;
