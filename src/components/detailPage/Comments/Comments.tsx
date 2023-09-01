@@ -161,11 +161,17 @@ export const Comments = ({
                       <>
                         {isEdit.state && isEdit.id === comment.id ? (
                           <>
+                            {' '}
+                            <button className="left" onClick={onEditEndHandler}>
+                              취소
+                            </button>{' '}
+                            <div className="divider">|</div>
                             <button
-                              className="center"
+                              className="done"
                               onClick={onEditSubmitHandler}
+                              disabled={isEdit.comment === comment.comment}
                             >
-                              수정 완료
+                              완료
                             </button>
                           </>
                         ) : (
