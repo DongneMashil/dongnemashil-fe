@@ -21,7 +21,7 @@ const UserInfo = React.memo(
       if (regex.test(email)) {
         setUserID(email);
       } else {
-        setUserID('카카오 로그인 고객님 반갑습니다!');
+        setUserID('카카오 회원');
       }
     }, [email]);
 
