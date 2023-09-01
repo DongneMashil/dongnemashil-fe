@@ -1,6 +1,6 @@
 import React, {
   ChangeEvent,
-  // RefObject,  // 크롭모달에 내장되어있음
+  RefObject,
   useEffect,
   useMemo,
   useState,
@@ -8,7 +8,7 @@ import React, {
 import {
   StContentBox,
   StTitle,
-  // StHiddenButton,  //필요없음 // 크롭모달에 내장되어있음
+  StHiddenButton,
   StFormWrapper,
   StByteSizeTag,
   StContentWrapper,
@@ -26,28 +26,28 @@ interface ReviewFormProps {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   mediaFiles: MediaFile[];
-  // onFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   onAddImage: () => void;
   setCoverImage: (targetFile: MediaFileType) => void;
   onDeleteImage: (targetFile: MediaFileType) => void;
   determineIsCoverImage: (targetFile: MediaFileType) => boolean;
-  // fileInputRef: RefObject<HTMLInputElement>;
+  fileInputRef: RefObject<HTMLInputElement>;
 }
 
 export const ReviewForm: React.FC<ReviewFormProps> = ({
   formValues,
   onInputChange,
   mediaFiles,
-  // onFileChange,
+  onFileChange,
   currentPage,
   setCurrentPage,
   onAddImage,
   setCoverImage,
   onDeleteImage,
   determineIsCoverImage,
-  // fileInputRef,
+  fileInputRef,
 }) => {
   const [contentByteSize, setContentByteSize] = useState(0);
 
@@ -80,13 +80,13 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
         setCoverImage={setCoverImage}
         onDeleteImage={onDeleteImage}
       />
-      {/* <StHiddenButton
+      <StHiddenButton
         ref={fileInputRef}
         type="file"
         accept="image/*, video/*"
         multiple
         onChange={onFileChange}
-      /> */}
+      />
       <StContentWrapper>
         <StContentBox
           name="content"
