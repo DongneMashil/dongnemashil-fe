@@ -205,6 +205,7 @@ export const MyProfilePage = () => {
             <CropModal
               isOpen={cropModal}
               onCloseHandler={onCloseCropModalHandler}
+              fixedAspectRatio={true}
             />
           </div>
         </StNickNameWrapper>

@@ -14,9 +14,14 @@ import { ReactComponent as ArrowDown } from 'assets/icons/ArrowDown.svg';
 interface Props {
   isOpen: boolean;
   onCloseHandler?: () => void;
+  fixedAspectRatio?: boolean;
 }
 
-export const CropModal: FC<Props> = ({ isOpen, onCloseHandler }) => {
+export const CropModal: FC<Props> = ({
+  isOpen,
+  onCloseHandler,
+  fixedAspectRatio = false,
+}) => {
   const elRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const cropperRef = useRef<ReactCropperElement>(null);
@@ -108,7 +113,7 @@ export const CropModal: FC<Props> = ({ isOpen, onCloseHandler }) => {
               ready={setZoomToFit}
               zoomTo={1}
               initialAspectRatio={1}
-              aspectRatio={1}
+              aspectRatio={fixedAspectRatio ? 1 : undefined}
               preview=".img-preview"
               src={localSrc}
               viewMode={1}
@@ -131,7 +136,7 @@ export const CropModal: FC<Props> = ({ isOpen, onCloseHandler }) => {
               />
 
               <button className="left" onClick={onFileButtonClick}>
-                파일 선택
+                파일 다시 선택
               </button>
               <button className="right" onClick={onClickCloseHandler}>
                 완료
@@ -143,3 +148,5 @@ export const CropModal: FC<Props> = ({ isOpen, onCloseHandler }) => {
       )
     : null;
 };
+
+//이미지 사용 :  const croppedFile = useRecoilValue(croppedImageFileSelector);
