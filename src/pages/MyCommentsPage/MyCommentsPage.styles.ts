@@ -2,6 +2,8 @@ import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StMyCommentCounter = styled.div`
+  display: flex;
+  align-items: center;
   color: rgb(131, 131, 131);
   font-family: Pretendard;
   font-size: 0.875rem;
