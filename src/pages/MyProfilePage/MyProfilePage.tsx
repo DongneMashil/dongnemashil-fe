@@ -167,7 +167,7 @@ export const MyProfilePage = () => {
           firstLine: '닉네임을 중복확인 해주세요.',
         }}
       >
-        회원정보수정
+        프로필 수정
       </NavBar>
       <StMyProfileContainer>
         <StProfileImage>

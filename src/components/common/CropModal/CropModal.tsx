@@ -63,6 +63,12 @@ export const CropModal: FC<Props> = ({
       };
     }
   }, []);
+  // 모달이 열리면 파일 선택 창을 띄우기
+  useEffect(() => {
+    if (isOpen) {
+      fileInputRef.current?.click();
+    }
+  }, [isOpen]);
 
   const getCropData = () => {
     if (cropperRef.current?.cropper) {
