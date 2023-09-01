@@ -124,7 +124,7 @@ export const useSubmitHandler = ({
           });
           formData.append('mainImgUrl', imageFile);
         } else {
-          console.log('coverImage.file', coverImage.file);
+          // console.log('coverImage.file', coverImage.file);
           formData.append('mainImgUrl', coverImage.file, coverImage.file.name); // 이 부분 수정되었습니다(파일 이름을 넣어줌)
         }
       }
