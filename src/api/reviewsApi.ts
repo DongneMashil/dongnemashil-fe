@@ -61,7 +61,7 @@ export const useFetchReviews = ({ q }: PaginationParams = {}) => {
   const tag = useRecoilValue(selectedTagSelector);
   const type = useRecoilValue(sortTypeSelector);
 
-  const queryKey = reviewKeys.all;
+  const queryKey = q ? [reviewKeys.all, q] : [reviewKeys.all];
 
   const queryFn = ({ pageParam = 1 }: QueryFunctionContext) =>
     axiosInstance.get<ReviewsAndPageable>(q ? '/search' : '/reviews', {
@@ -71,5 +71,6 @@ export const useFetchReviews = ({ q }: PaginationParams = {}) => {
   return useInfiniteQuery(queryKey, queryFn, {
     getNextPageParam: ({ data: { last, number } }) =>
       last ? undefined : number + 2,
+    staleTime: 1000 * 20,
   });
 };
