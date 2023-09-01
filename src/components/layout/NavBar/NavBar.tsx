@@ -97,7 +97,11 @@ export const NavBar = ({
       </Button>
     ),
     logo: (
-      <Button type={'icon'} url={'/'} ariaLabel="홈으로">
+      <Button
+        type={'icon'}
+        onClick={() => window.location.replace('/')}
+        ariaLabel="홈으로"
+      >
         <LogoHorizontal />
       </Button>
     ),

@@ -7,6 +7,7 @@ export interface InputProps {
   id?: string; // undefined일 경우 name값으로 동일하게 할당
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   placeholder?: string;
   disabled?: boolean;
 }
@@ -18,6 +19,7 @@ export const Input = React.memo(
     id = name,
     value = '',
     onChange = () => {},
+    onKeyDown = () => {},
     placeholder = '',
     disabled = false,
   }: InputProps) => {
@@ -28,6 +30,7 @@ export const Input = React.memo(
         name={name}
         value={value}
         onChange={onChange}
+        onKeyDown={onKeyDown}
         placeholder={placeholder}
         disabled={disabled}
       />

@@ -5,6 +5,7 @@ import { StAuthInputBox } from './AuthInputBox.styles';
 
 interface AuthInputBoxProps extends InputProps {
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
   btnText?: string;
 }
 
@@ -17,7 +18,8 @@ export const AuthInputBox = React.memo(
     onChange,
     placeholder,
     disabled,
-    onClick = undefined,
+    onClick,
+    onKeyDown,
     btnText = '',
   }: AuthInputBoxProps) => {
     return (
@@ -28,6 +30,7 @@ export const AuthInputBox = React.memo(
           name={name}
           value={value}
           onChange={onChange}
+          onKeyDown={onKeyDown}
           placeholder={placeholder}
           disabled={disabled}
         />

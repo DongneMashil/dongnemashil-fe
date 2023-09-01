@@ -21,13 +21,14 @@ export const StTarget = styled.div`
 
 export const StTopWrapper = styled.div`
   display: flex;
-  padding-top: 16px;
+  padding-top: 7.5px;
   padding-left: 9px;
 
   & span {
     font-size: 0.875rem;
     color: ${theme.lightGrayColor};
     flex: 1;
+    padding: 8.5px 0;
 
     & strong {
       font-weight: 600;
@@ -46,8 +47,8 @@ export const StSort = styled.div`
 export const StLine = styled.div`
   background: ${theme.whiteGrayColor};
   height: 10px;
-  margin-left: 8.5px;
-  margin-right: 8.5px;
+  margin-left: 2px;
+  margin-right: 2px;
   width: 1px;
 `;
 

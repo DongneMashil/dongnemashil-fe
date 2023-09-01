@@ -17,7 +17,6 @@ export const AuthLogoBox = React.memo(
 
     const handleSize = throttle(() => {
       setWidth(window.innerWidth);
-      console.log(window.innerWidth);
     }, 200);
 
     useEffect(() => {
