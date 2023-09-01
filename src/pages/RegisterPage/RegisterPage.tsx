@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { debounce } from 'lodash';
 import { AxiosError } from 'axios';
 import {
   HeaderText,
@@ -10,6 +9,7 @@ import {
 } from 'components/common';
 import { register, confirmId, confirmNickname } from 'api/loginApi';
 import { useMutation } from '@tanstack/react-query';
+// import { useVerifyUser } from 'hooks';
 import { useNavigate } from 'react-router-dom';
 import { RegisterLabel } from 'components/registerPage/RegisterLabel/RegisterLabel';
 import {
@@ -31,6 +31,7 @@ export const RegisterPage = React.memo(() => {
   const [isFinishedModalOpen, setIsFinishedModalOpen] =
     useState<boolean>(false);
   const [modalMsg, setModalMsg] = useState<string>('');
+  // const [shouldVerify, setShouldVerify] = useState<boolean>(false);
   const [isNotDuplicated, setIsNotDuplicated] = useState({
     email: false,
     nickname: false,
@@ -80,8 +81,10 @@ export const RegisterPage = React.memo(() => {
     `^(?=.*[a-zA-Z])(?=.*[!@#$%^*])(?=.*[0-9]).{8,15}$`
   );
 
+  // const { data } = useVerifyUser(shouldVerify);
   const { mutate: registerMutate } = useMutation(register, {
     onSuccess: () => {
+      // setShouldVerify(true);
       setIsFinishedModalOpen(true);
     },
     onError: (err: AxiosError) => {
@@ -135,53 +138,34 @@ export const RegisterPage = React.memo(() => {
     },
   });
 
-  //debouncing
-  const emailMsgHandler = useCallback(
-    debounce((e) => {
+  const onEmailChangeHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(e.target.value);
       onEmailMsgHandler(e);
-    }, 200),
-    []
+    },
+    [email]
   );
-
-  const nicknameMsgHandler = useCallback(
-    debounce((e) => {
+  const onNicknameChangeHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setNickname(e.target.value);
       onNicknameMsgHandler(e);
-    }, 200),
-    []
+    },
+    [nickname]
   );
-
-  const passwordMsgHandler = useCallback(
-    debounce((e) => {
+  const onPasswordChangeHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(e.target.value);
       onPasswordMsgHandler(e);
-    }, 200),
-    []
+    },
+    [password]
   );
-
-  const passwordVerifyMsgHandler = useCallback(
-    debounce((e) => {
+  const onPasswordVerifyChangeHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPasswordVerify(e.target.value);
       onPasswordVerifyMsgHandler(e);
-    }, 200),
-    []
+    },
+    [password, passwordVerify]
   );
-
-  const onEmailChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    emailMsgHandler(e);
-  };
-  const onNicknameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
-    nicknameMsgHandler(e);
-  };
-  const onPasswordChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    passwordMsgHandler(e);
-  };
-  const onPasswordVerifyChangeHandler = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setPasswordVerify(e.target.value);
-    passwordVerifyMsgHandler(e);
-  };
 
   const onEmailMsgHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -233,6 +217,8 @@ export const RegisterPage = React.memo(() => {
   const onPasswordVerifyMsgHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (password !== '') {
+        // console.log('onEmailMsgHander triggered');
+        // console.log(e.target.value, password, e.target.value === password);
         const newVeirfyMsg =
           e.target.value === password
             ? {
