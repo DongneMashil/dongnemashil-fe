@@ -16,6 +16,8 @@ import {
 import { timeFormatWithoutTime } from 'utils';
 import { useIntersect } from 'hooks/useIntersect';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { Button } from 'components/common';
+import { ReactComponent as LogoHorizontal } from 'assets/logo/LogoHorizontal.svg';
 export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
   const [selectedTab, setSelectedTab] = useState('reviews');
   const navigate = useNavigate();
@@ -117,14 +119,19 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
             {selectedTab === 'reviews' ? (
               <>
                 <StText>
-                  하단 글쓰기 버튼을 눌러
+                  하단 글쓰기✏️ 버튼을 눌러
                   <br />
                   오늘의 산책을 기록할 수 있어요
                 </StText>
                 <ArrowDown />
               </>
             ) : (
-              <StText>아직 좋아요를 누른 게시물이 없으시네요!</StText>
+              <StText>
+                <Button type={'icon'} url={'/'} ariaLabel="홈으로">
+                  <LogoHorizontal />
+                </Button>
+                &nbsp; 👈 내가 좋아하는 사진을 찾으러 가볼까요?
+              </StText>
             )}
           </StEmptyBox>
         )}

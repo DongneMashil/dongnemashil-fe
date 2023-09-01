@@ -93,6 +93,7 @@ export const StDetailPageContent = styled.main`
     border-top: 1px solid #e5e5e5;
     padding-top: 2rem;
     padding-bottom: 1rem;
+    white-space: pre-wrap;
     word-wrap: break-word;
     word-break: break-all;
   }

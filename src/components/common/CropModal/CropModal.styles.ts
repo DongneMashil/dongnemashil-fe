@@ -39,16 +39,18 @@ export const StModalButtonWrpper = styled.div`
 
 export const StModalOverlay = styled.div`
   ${theme.overlayBackground}
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 8rem;
 `;
 
 export const StModalWindow = styled.div`
   display: flex;
   flex-direction: column;
-  // justify-content: space-between;
   align-items: center;
   width: 21.875rem;
   height: fit-content;
-  // min-height: 15.625rem;
   flex-shrink: 0;
   background-color: white;
   border-radius: 0.625rem;
@@ -60,6 +62,8 @@ export const StModalWindow = styled.div`
     align-items: center;
     width: 100%;
     height: 100%;
+    max-height: calc(100vh - 12rem);
+    max-width: 100vw;
   }
   .message {
     display: flex;

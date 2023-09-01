@@ -33,15 +33,8 @@ export const SearchResultPage = () => {
     [data]
   );
 
-  console.log(data, totalElements);
-
-  console.log(isFetching);
-  console.log(hasNextPage);
-
   useEffect(() => {
-    refetch();
-    console.log('data ', data);
-    console.log('isMapOpen ', isMapOpen);
+    if (!isFetching) refetch();
   }, [type, selectedTags]);
 
   const onClickSort = (type: string) => {
@@ -70,7 +63,10 @@ export const SearchResultPage = () => {
       <NavBar btnLeft={'logo'} btnSecondRight={'search'} btnRight={'mypage'}>
         <h1>{q}</h1>
       </NavBar>
-      <ToggleTagButton onTagChange={handleTagChange} />
+      <ToggleTagButton
+        initialSelectedTags={selectedTags}
+        onTagChange={handleTagChange}
+      />
       <ReviewsContainer
         type={type}
         reviews={reviews}

@@ -79,7 +79,7 @@ export const MyProfilePage = () => {
       setImgUrl(data.profileImgUrl);
       getProfileImg(data);
     }
-  }, []); //이걸 안하니깐 52번씩 랜더링되다가 멈춤
+  }, [data]); //이걸 안하니깐 52번씩 랜더링되다가 멈춤
 
   //프로필 사진 업로드
   const onClickChangeImageHandler = () => {
@@ -167,7 +167,7 @@ export const MyProfilePage = () => {
           firstLine: '닉네임을 중복확인 해주세요.',
         }}
       >
-        회원정보수정
+        프로필 수정
       </NavBar>
       <StMyProfileContainer>
         <StProfileImage>
@@ -205,6 +205,7 @@ export const MyProfilePage = () => {
             <CropModal
               isOpen={cropModal}
               onCloseHandler={onCloseCropModalHandler}
+              fixedAspectRatio={true}
             />
           </div>
         </StNickNameWrapper>
