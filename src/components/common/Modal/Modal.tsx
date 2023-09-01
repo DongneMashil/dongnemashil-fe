@@ -12,9 +12,9 @@ interface Props {
   onCloseHandler?: () => void;
   onSubmitHandler?: () => void;
   onSubmitText?: string;
-  title?: string;
-  firstLine?: string;
-  secondLine?: string;
+  title?: string | null;
+  firstLine?: string | null;
+  secondLine?: string | null;
 }
 
 export const Modal: FC<Props> = ({
