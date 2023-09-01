@@ -79,7 +79,7 @@ export const MyProfilePage = () => {
       setImgUrl(data.profileImgUrl);
       getProfileImg(data);
     }
-  }, []); //이걸 안하니깐 52번씩 랜더링되다가 멈춤
+  }, [data]); //이걸 안하니깐 52번씩 랜더링되다가 멈춤
 
   //프로필 사진 업로드
   const onClickChangeImageHandler = () => {
