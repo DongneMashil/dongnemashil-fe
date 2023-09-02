@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TabButton } from '../TabButton/TabButton';
-import { getMyReviews, getUserReviews } from 'api/mypageApi';
+import { getMyReviews, getOtherUserReviews } from 'api/mypageApi';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowDown } from 'assets/icons/ArrowDown.svg';
 import {
@@ -27,6 +27,17 @@ export const TabMenu = ({
 }) => {
   const [selectedTab, setSelectedTab] = useState('reviews');
   const navigate = useNavigate();
+  // const [isMyPage, setIsMyPage] = useState(true); // 내페이지인지 다른 유저의 페이지인지
+  // useEffect(() => {
+  //   if (paramNickName === undefined) {
+  //     setIsMyPage(true);
+  //     console.log('내페이지');
+  //   } else {
+  //     setIsMyPage(false);
+  //     console.log('다른 유저의 페이지');
+  //   }
+  // }, [paramNickName]);
+
   const useInfinityScroll = () => {
     const fetchItems = async ({ pageParam = 1 }) => {
       if (paramNickName === undefined) {
@@ -39,7 +50,7 @@ export const TabMenu = ({
         };
       } else {
         // 다른 유저의 마이페이지
-        const response = await getUserReviews(nickName, pageParam);
+        const response = await getOtherUserReviews(paramNickName, pageParam);
         return {
           ...response,
           isLast: response.last,
@@ -78,15 +89,18 @@ export const TabMenu = ({
   return (
     <StTabContainer>
       <StTabButtonWrapper>
-        <StText>
-          <span>{data ? data.pages[0].totalElements : '0'}</span>&nbsp;개의
-          게시물
-        </StText>
+        {' '}
+        {!paramNickName && (
+          <StText>
+            <span>{data ? data.pages[0].totalElements : '0'}</span>&nbsp;개의
+            게시물
+          </StText>
+        )}
         <StTabButtonBox>
           {paramNickName ? (
             <>
               {' '}
-              <TabButton selected={true}>유저가 작성한 글</TabButton>
+              <TabButton selected={true}>작성한 게시글</TabButton>
             </>
           ) : (
             <>

@@ -98,6 +98,7 @@ export const MyPage = () => {
               email={data?.email}
               setIsModalOpen={setIsModalOpen}
               isMyPage={typeof paramNickName === 'undefined'}
+              otherUserNickname={paramNickName}
             />
             <TabMenu nickName={data?.nickname} paramNickName={paramNickName} />
           </>
