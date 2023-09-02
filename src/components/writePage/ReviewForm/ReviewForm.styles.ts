@@ -28,7 +28,7 @@ export const StTitle = styled.input`
   color: #333;
   font-size: 1.33rem;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 700;
   line-height: normal;
   padding-top: 1.25rem;
   margin-bottom: 0.9375rem;
