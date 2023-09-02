@@ -23,6 +23,32 @@ export const getMyProfile = async (): Promise<MyProfile> => {
   }
 };
 
+export type OtherUserProfile = {
+  profileImgUrl: string | null | undefined;
+};
+
+export const getOtherUserProfile = async (
+  nickname: string
+): Promise<string> => {
+  // 마이페이지 조회
+  try {
+    const response: AxiosResponse<string> = await axiosInstance.get(
+      `/reviews/userimg`,
+      {
+        params: {
+          nickname,
+        },
+      }
+    );
+    return response.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
+  }
+};
+
 export type Review = {
   userprofileUrl: string | null;
   imgUrl: string | null;
@@ -82,7 +108,7 @@ export const getMyReviews = async (
   }
 };
 
-export const getUserReviews = async (
+export const getOtherUserReviews = async (
   nickname?: string,
   page?: number
 ): Promise<GetMyReviewsResponse> => {
