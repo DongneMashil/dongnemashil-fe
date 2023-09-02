@@ -60,6 +60,7 @@ export const StComment = styled.div`
 `;
 export const StFooterCommentSection = styled.div`
   display: flex;
+  justify-content: center;
   position: relative;
   gap: 0.5rem;
   width: 100%;
