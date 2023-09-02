@@ -8,6 +8,7 @@ export const StTagContainer = styled.div`
   background: #fff;
   box-sizing: border-box;
   padding: 0.1rem;
+  margin-top: 0.75rem;
   @media ${(props) => props.theme.device.desktop} {
     display: flex;
     justify-content: row;
@@ -39,7 +40,7 @@ export const StTotalTag = styled.p`
   font-weight: 400;
   line-height: normal;
   @media ${(props) => props.theme.device.desktop} {
-    margin-left: 0.8rem;
+    margin-left: 0.625rem;
   }
 `;
 
@@ -53,7 +54,7 @@ export const StCurrentAddress = styled.span`
   margin-left: 0.33rem;
   cursor: pointer;
   @media ${(props) => props.theme.device.desktop} {
-    margin-left: 0.69rem;
+    margin-left: 0.5625rem;
     margin-bottom: 0.19rem;
     white-space: nowrap;
     overflow: hidden;
@@ -65,7 +66,7 @@ export const StPurpleMarker = styled(PurpleMarker)`
   @media ${(props) => props.theme.device.desktop} {
     width: 1.5rem;
     height: 2rem;
-    margin-left: 3.19rem;
+    margin-left: 3.15rem;
     margin-bottom: 0.25rem;
   }
 `;

@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  Suspense,
-  useLayoutEffect,
-  // useCallback,
-} from 'react';
+import React, { useEffect, useState, Suspense, useLayoutEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   deleteReviewDetail,
@@ -12,18 +6,16 @@ import {
   ReviewDetailResponse,
 } from 'api/detailApi';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ReactComponent as DongDong } from 'assets/logo/DongDong.svg';
 import { NavBar } from 'components/layout';
-import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
+import { Footer } from 'components/detailPage';
 import { BackButton, FooterSpacer, Tag } from 'components/common';
-const DetailMap = React.lazy(
-  () => import('components/detailPage/DetailMap/DetailMap')
-);
+
 const Modal = React.lazy(() => import('components/common/Modal/Modal'));
 const ImageModal = React.lazy(
   () => import('components/common/ImageModal/ImageModal')
 );
 import {
-  // StContentGridBox,
   StCreatedTime,
   StDetailPageContainer,
   StDetailPageContent,
@@ -31,6 +23,8 @@ import {
   StDetailPageLayout,
   StDetailTitle,
   StEditButtonWrapper,
+  StEmptyContent,
+  StMapBox,
   StNavTitle,
   StTagWrapper,
 } from './DetailPage.styles';
@@ -38,7 +32,7 @@ import noUser from 'assets/images/NoUser.jpg';
 import timeAgo from 'utils/timeAgo';
 import { useSetRecoilState } from 'recoil';
 import { useUpdateUserInfo } from 'hooks';
-// import { DetailMap } from 'components/detailPage';
+import { DetailMap } from 'components/detailPage';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 import { MasonryGrid } from '@egjs/react-grid';
 import { MasonryGridOptions } from '@egjs/grid';
@@ -69,11 +63,6 @@ export const DetailPage = () => {
     queryKey: ['reviewDetail', reviewId],
     queryFn: () => getReviewDetail(reviewId),
     enabled: !!reviewId,
-    // refetchOnWindowFocus: true,
-    // refetchOnMount: true,
-    // refetchOnReconnect: true,
-    // staleTime: 1000 * 60 * 5, //5 분
-    // cacheTime: 1000 * 60 * 15, //15 분
     onSuccess: (data) => {
       setCommentCount(data.commentCnt); // Recoil 댓글 개수를 설정
     },
@@ -177,21 +166,33 @@ export const DetailPage = () => {
         <StDetailPageLayout>
           <NavBar
             btnLeft={'back'}
-            btnRight={'map'}
+            btnRight={'mypage'}
             onClickRight={() => setIsMapOpen(true)}
           >
             {data && <StNavTitle>{data.roadName}</StNavTitle>}
           </NavBar>
           <StDetailPageContainer>
-            {isError && <StNavTitle>게시글이 존재하지 않습니다!</StNavTitle>}
+            {isError && (
+              <StEmptyContent>
+                <DongDong className="dongdong" />
+                <p className="text">게시글이 존재하지 않습니다!</p>
+                <p className="text">동동이를 누르면 홈으로 돌아갑니다</p>
+              </StEmptyContent>
+            )}
             {data && (
               <>
                 <StDetailPageHeader>
                   <img
                     src={data.profileImgUrl || noUser}
                     alt={`${data.nickname}의 프로필사진`}
+                    onClick={() => navigate(`/userpage/${data.nickname}`)}
                   />
-                  <span className="nickname">{data.nickname}</span>
+                  <button
+                    className="nickname"
+                    onClick={() => navigate(`/userpage/${data.nickname}`)}
+                  >
+                    {data.nickname}
+                  </button>
                   <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
                   {userData?.nickname === data.nickname && (
                     <StEditButtonWrapper>
@@ -220,7 +221,9 @@ export const DetailPage = () => {
                       alt={`${data.address}의 메인 사진`}
                       onClick={() => onClickImage(mainImageUrl[0]!)}
                       className={
-                        !(data.subImgUrl[0] !== '') ? 'isSingle' : 'notSingle'
+                        data.subImgUrl[0] !== '' || data.videoUrl
+                          ? 'notSingle'
+                          : 'isSingle'
                       }
                     />
                     {subImgUrl &&
@@ -236,14 +239,12 @@ export const DetailPage = () => {
                         />
                       ))}
                     {data.videoUrl && (
-                      <>
-                        <video
-                          controls
-                          width={'100%'}
-                          src={data.videoUrl}
-                          aria-label={`${data.address}의 비디오`}
-                        />
-                      </>
+                      <video
+                        controls
+                        width={'100%'}
+                        src={data.videoUrl}
+                        aria-label={`${data.address}의 비디오`}
+                      />
                     )}
                   </MasonryGrid>
                   {/* </StContentGridBox> */}
@@ -261,6 +262,14 @@ export const DetailPage = () => {
                       />
                     ))}
                   </StTagWrapper>
+                  <StMapBox>
+                    <DetailMap
+                      height="100%"
+                      width="100%"
+                      initMap={initMapHandler}
+                    />
+                  </StMapBox>
+
                   <FooterSpacer />
                   <Suspense fallback={<div>loading...</div>}>
                     <Modal

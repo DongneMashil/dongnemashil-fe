@@ -66,6 +66,8 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
     onDeleteImage(file);
   }, []);
 
+  const disabled = files.length >= 5;
+
   return (
     <StSlideContainer ref={wrapperRef}>
       {files.map((file, index) => (
@@ -84,7 +86,14 @@ export const FileSlider: React.FC<ImageSliderProps> = ({
         </StImageContainer>
       ))}
       <StCenteredBox ref={divRef}>
-        <StPlusButton onClick={onAddImage}>
+        <StPlusButton
+          onClick={() => {
+            if (!disabled) {
+              onAddImage();
+            }
+          }}
+          disabled={files.length >= 5}
+        >
           <FileUpload />
           <p>{`${images.length} / 5`}</p>
         </StPlusButton>

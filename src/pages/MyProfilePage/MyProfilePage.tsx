@@ -21,8 +21,7 @@ import axios from 'axios';
 import { getExtensionName } from 'components/myProfilePage';
 import DefaultImage from 'assets/images/NoUser.jpg';
 import { base64ToBlob } from 'utils';
-import { croppedImageFileSelector } from 'recoil/cropProfileImage/cropProfileImageSelector';
-import imageCompression from 'browser-image-compression';
+import { cropProfileImageAtom } from 'recoil/cropProfileImage/cropProfileImageAtom';
 
 export const MyProfilePage = () => {
   const navigate = useNavigate();
@@ -43,9 +42,6 @@ export const MyProfilePage = () => {
   const setUserState = useSetRecoilState(userProfileSelector);
 
   // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
-
-  //---------------------------------------------
-
   const getProfileImg = async (data: MyProfile) => {
     //
     try {
@@ -65,7 +61,7 @@ export const MyProfilePage = () => {
     } catch (error) {
       setImgUrl(DefaultImage); //이미지 다운로드 실패시 기본 이미지 삽입
 
-      const defaultBlob = base64ToBlob(DefaultImage, 'image/jpg');
+      const defaultBlob = base64ToBlob(DefaultImage, 'image/jpg'); //기본이미지 base64 -> blob
       const defaultFile = new File([defaultBlob], 'default.jpg', {
         type: 'image/jpg',
       });
@@ -79,37 +75,22 @@ export const MyProfilePage = () => {
       setImgUrl(data.profileImgUrl);
       getProfileImg(data);
     }
-  }, [data]); //이걸 안하니깐 52번씩 랜더링되다가 멈춤
+  }, [data]); //없으면 연속 랜더링되다가 멈춤
 
   //프로필 사진 업로드
   const onClickChangeImageHandler = () => {
     setCropModal(true);
   };
 
-  //압축하기
-  const croppedFile = useRecoilValue(croppedImageFileSelector);
-
-  const options = {
-    maxSizeMB: 0.1,
-    maxWidthOrHeight: 100,
-    useWebWorker: true,
-  };
-
+  //파일 가져오기
+  const { file: croppedImgFile, imgUrl: croppedImgUrl } =
+    useRecoilValue(cropProfileImageAtom);
   useEffect(() => {
-    const onChangeImage = async () => {
-      if (!croppedFile) return;
-
-      try {
-        const compressedFile = await imageCompression(croppedFile, options);
-        const imgUrl = URL.createObjectURL(compressedFile);
-        setImgUrl(imgUrl);
-        setImgFile(compressedFile);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    onChangeImage();
-  }, [croppedFile]);
+    if (croppedImgFile) {
+      setImgFile(croppedImgFile);
+      setImgUrl(croppedImgUrl);
+    }
+  }, [croppedImgFile, croppedImgUrl]);
 
   //닉네임 입력
   const onChangeValueHandler = useCallback(

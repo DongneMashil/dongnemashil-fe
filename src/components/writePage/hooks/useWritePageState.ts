@@ -1,27 +1,19 @@
-import { useEffect, useState, ChangeEvent } from 'react';
+import { useEffect, ChangeEvent } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { addressSelector } from 'recoil/address/addressSelector';
 import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
 import { useQuery } from '@tanstack/react-query';
 import { getReview } from 'api/reviews';
 import { getStringByteSize } from '../getStirngByTeSize/getStringBySize';
-
-interface FormValues {
-  title: string;
-  content: string;
-}
+import { FormValues, formValuesAtom, selectedTagsAtom } from 'utils/formValues';
 
 export const useWritePageState = () => {
   const location = useLocation();
   const reviewId = location.state?.reviewId;
 
-  const [formValues, setFormValues] = useState<FormValues>({
-    title: '',
-    content: '',
-  });
-
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [formValues, setFormValues] = useRecoilState(formValuesAtom);
+  const [selectedTags, setSelectedTags] = useRecoilState(selectedTagsAtom);
   const addressData = useRecoilValue(addressSelector);
   const setAddress = useSetRecoilState(selectedAddressAtom);
   const selectedAddress = useRecoilValue(selectedAddressAtom);
