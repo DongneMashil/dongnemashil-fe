@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { getStringByteSize } from '../getStirngByTeSize/getStringBySize';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
+import { formValuesAtom, selectedTagsAtom } from 'utils/formValues';
 
 type UseSubmitHandlerProps = {
   reviewId: number;
@@ -32,6 +33,8 @@ export const useSubmitHandler = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const setStoredMediaFiles = useSetRecoilState(mediaFilesAtom);
+  const setFormValues = useSetRecoilState(formValuesAtom);
+  const setSelectedTags = useSetRecoilState(selectedTagsAtom);
 
   const updateMutation = useMutation((formData: FormData) =>
     updateReview(reviewId, formData)
@@ -171,6 +174,11 @@ export const useSubmitHandler = ({
           navigate(`/review/${response.id}`);
           setStoredMediaFiles([]);
           setIsLoading(false);
+          setFormValues({
+            title: '',
+            content: '',
+          });
+          setSelectedTags([]);
         },
         onError: (error: unknown) => {
           if (typeof error === 'string') {
@@ -190,6 +198,11 @@ export const useSubmitHandler = ({
           navigate(`/review/${response.id}`);
           setStoredMediaFiles([]);
           setIsLoading(false);
+          setFormValues({
+            title: '',
+            content: '',
+          });
+          setSelectedTags([]);
         },
         onError: (error: unknown) => {
           if (typeof error === 'string') {
