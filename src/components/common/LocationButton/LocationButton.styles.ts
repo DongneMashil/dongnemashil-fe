@@ -9,9 +9,6 @@ export const StLocationButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  bottom: -35px;
-  right: 0px;
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.2);
   font-weight: 600;
 `;
