@@ -48,7 +48,7 @@ export const StModalOverlay = styled.div`
 export const StModalWindow = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   width: 21.875rem;
   height: fit-content;
   flex-shrink: 0;
@@ -70,10 +70,19 @@ export const StModalWindow = styled.div`
     justify-content: center;
     align-items: center;
     margin: 3rem 0 2rem 0;
+    align-self: center;
   }
   img {
     object-fit: cover;
     width: 100%;
     height: 100%;
+  }
+
+  .close {
+    position: absolute;
+    z-index: 100;
+    margin: 10px;
+    opacity: 0.5;
+    background: none;
   }
 `;

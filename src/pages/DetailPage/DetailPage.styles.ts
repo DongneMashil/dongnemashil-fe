@@ -196,13 +196,13 @@ export const StEmptyContent = styled.div`
   margin: 3rem 0;
 
   .dongdong {
-    margin-top: 1rem;
+    margin: 1rem 0;
     height: 13rem;
     @media (max-height: 550px) {
       height: 8rem;
     }
     cursor: pointer;
-    opacity: 0.1;
+    opacity: 0.4;
   }
   .text {
     margin: 0.5rem 0;

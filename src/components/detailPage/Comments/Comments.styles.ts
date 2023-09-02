@@ -39,7 +39,7 @@ export const StEmptyComment = styled.div`
       height: 8rem;
     }
 
-    opacity: 0.1;
+    opacity: 0.4;
   }
   .text {
     margin-top: 1rem;
