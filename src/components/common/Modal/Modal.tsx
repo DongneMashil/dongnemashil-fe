@@ -27,6 +27,8 @@ export const Modal: FC<Props> = ({
   secondLine,
 }) => {
   const elRef = useRef<HTMLDivElement | null>(null);
+  const modalWindowRef = useRef<HTMLDivElement | null>(null);
+
   if (!elRef.current) {
     const div = document.createElement('div');
     elRef.current = div;
@@ -44,11 +46,30 @@ export const Modal: FC<Props> = ({
       };
     }
   }, []);
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      if (onSubmitHandler) {
+        onSubmitHandler();
+      } else if (onCloseHandler) {
+        onCloseHandler();
+      }
+    }
+  };
+  useEffect(() => {
+    if (isOpen && modalWindowRef.current) {
+      modalWindowRef.current.focus();
+    }
+  }, [isOpen]);
 
   return isOpen
     ? ReactDOM.createPortal(
         <StModalOverlay onClick={onCloseHandler}>
-          <StModalWindow onClick={(e) => e.stopPropagation()}>
+          <StModalWindow
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={handleKeyDown}
+            ref={modalWindowRef}
+            tabIndex={0}
+          >
             <StModalContentWrapper>
               <h1>{title && title}</h1>
               <h2>
