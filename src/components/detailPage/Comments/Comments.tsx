@@ -19,6 +19,8 @@ import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddList
 import { useIntersect } from 'hooks/useIntersect';
 import { Modal, StLoadingSpinner } from 'components/common';
 import { ReactComponent as DongDong } from 'assets/logo/DongDong.svg';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import { BODY_SCROLL_LOCK_IGNORE } from 'hooks/useAllowTouchMove';
 
 interface CommentsProps {
   reviewId: string;
@@ -139,7 +141,22 @@ export const Comments = ({
     setDeleteCommentId(commentId);
     setIsDeleteCommentModalOpen(true);
   };
-
+  useEffect(() => {
+    disableBodyScroll(document.body, {
+      allowTouchMove: (el) => {
+        while (el && el !== document.body) {
+          if (el.getAttribute(BODY_SCROLL_LOCK_IGNORE) !== null) {
+            return true;
+          }
+          if (el.parentElement) {
+            el = el.parentElement;
+          }
+        }
+        return false;
+      },
+    });
+    return () => clearAllBodyScrollLocks();
+  }, []);
   return (
     <StDetailPageComment $isCommentShow={$isCommentShow}>
       {data && (
