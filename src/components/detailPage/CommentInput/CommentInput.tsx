@@ -37,6 +37,8 @@ export const CommentInput = ({
       onError: (err) => {
         console.log(err);
         setComment('');
+        alert('댓글 등록에 실패했습니다.');
+        setErrorMsg('댓글이 너무 길거나, 잘못된 요청입니다.');
         setIsErrorModalOpen(true);
       },
     }
@@ -82,7 +84,6 @@ export const CommentInput = ({
           </>
         ) : (
           <>
-            {' '}
             <Input
               type=""
               placeholder="로그인 후 댓글 입력이 가능합니다."
@@ -92,17 +93,16 @@ export const CommentInput = ({
               로그인
             </Button>
             <Modal
-              isOpen={isErrorModalOpen}
+              isOpen={isErrorModalOpen || true}
               onCloseHandler={() => setIsErrorModalOpen(false)}
               title="댓글 등록 실패"
               firstLine="댓글이 너무 길거나, 잘못된 요청입니다."
               secondLine="짧았다면, 다시 로그인 해주세요."
               onSubmitHandler={() => navigate('/login')}
               onSubmitText="로그인"
-            />{' '}
+            />
             <Modal
-              isOpen={!!errorMsg}
-              title="알림"
+              isOpen={true}
               firstLine={errorMsg}
               onCloseHandler={onCloseErrorModalHandler}
             />
