@@ -202,7 +202,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
 
   return (
     <StMapContainer>
-      <div id="map" style={{ width, height }}></div>;
+      <div id="map" style={{ width, height }}></div>
       <StMyLocationButton>
         <LocationButton
           isDistanceVisible={showCurrentLocation}
