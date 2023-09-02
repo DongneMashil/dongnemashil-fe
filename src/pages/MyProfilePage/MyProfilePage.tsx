@@ -42,9 +42,6 @@ export const MyProfilePage = () => {
   const setUserState = useSetRecoilState(userProfileSelector);
 
   // 유저정보(닉네임, 사진주소) 조회 및 기존 사진 파일 다운로드
-
-  //---------------------------------------------
-
   const getProfileImg = async (data: MyProfile) => {
     //
     try {
@@ -78,7 +75,7 @@ export const MyProfilePage = () => {
       setImgUrl(data.profileImgUrl);
       getProfileImg(data);
     }
-  }, [data]); //이걸 안하니깐 52번씩 랜더링되다가 멈춤
+  }, [data]); //없으면 연속 랜더링되다가 멈춤
 
   //프로필 사진 업로드
   const onClickChangeImageHandler = () => {
