@@ -180,7 +180,21 @@ export const WritePage = () => {
   };
 
   const onDeleteImage = (targetFile: MediaFileType) => {
-    setMediaFiles((prev) => prev.filter((file) => file.file !== targetFile));
+    setMediaFiles((prev) => {
+      const isTargetFileCover = prev.find((file) => file.file === targetFile)
+        ?.isCover;
+
+      const updatedFiles = prev.filter((file) => file.file !== targetFile);
+
+      if (isTargetFileCover && updatedFiles.length > 0) {
+        return [
+          { ...updatedFiles[0], isCover: true },
+          ...updatedFiles.slice(1),
+        ];
+      }
+
+      return updatedFiles;
+    });
   };
 
   const handleTagChange = (tags: string[]) => {
