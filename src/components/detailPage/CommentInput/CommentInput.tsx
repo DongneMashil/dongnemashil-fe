@@ -7,7 +7,6 @@ import { StFooterContatiner, StFooterWrapper } from './CommentInput.styles';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userInfo';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
-import { useNavigate } from 'react-router-dom';
 
 interface FooterProps {
   reviewId: string;
@@ -20,11 +19,9 @@ export const CommentInput = ({
   const [comment, setComment] = useState('');
   const setCommentAddListener = useSetRecoilState(commentAddListenerAtom);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const userState = useRecoilValue(userProfileSelector);
   const [errorMsg, setErrorMsg] = useState(''); // 에러 메시지를 저장하는 상태
 
-  const navigate = useNavigate();
   // 댓글 등록 함수
   const commentMutation = useMutation(
     (newComment: string) => postComment(reviewId, newComment),
@@ -37,9 +34,7 @@ export const CommentInput = ({
       onError: (err) => {
         console.log(err);
         setComment('');
-        alert('댓글 등록에 실패했습니다.');
         setErrorMsg('댓글이 너무 길거나, 잘못된 요청입니다.');
-        setIsErrorModalOpen(true);
       },
     }
   );
@@ -92,22 +87,14 @@ export const CommentInput = ({
             <Button inputType="button" type={'commentInput'} url="/login">
               로그인
             </Button>
-            <Modal
-              isOpen={isErrorModalOpen || true}
-              onCloseHandler={() => setIsErrorModalOpen(false)}
-              title="댓글 등록 실패"
-              firstLine="댓글이 너무 길거나, 잘못된 요청입니다."
-              secondLine="짧았다면, 다시 로그인 해주세요."
-              onSubmitHandler={() => navigate('/login')}
-              onSubmitText="로그인"
-            />
-            <Modal
-              isOpen={true}
-              firstLine={errorMsg}
-              onCloseHandler={onCloseErrorModalHandler}
-            />
           </>
         )}
+
+        <Modal
+          isOpen={!!errorMsg}
+          firstLine={errorMsg}
+          onCloseHandler={onCloseErrorModalHandler}
+        />
       </StFooterWrapper>
     </StFooterContatiner>
   );
