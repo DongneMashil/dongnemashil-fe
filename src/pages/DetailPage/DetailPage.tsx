@@ -180,7 +180,7 @@ export const DetailPage = () => {
         <StDetailPageLayout>
           <NavBar
             btnLeft={'back'}
-            btnRight={'map'}
+            btnRight={'mypage'}
             onClickRight={() => setIsMapOpen(true)}
           >
             {data && <StNavTitle>{data.roadName}</StNavTitle>}
