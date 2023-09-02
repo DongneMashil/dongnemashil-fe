@@ -10,7 +10,6 @@ import {
 import { ReviewsList } from 'api/reviewsApi';
 import Tooltip from 'assets/images/Tooltip.svg';
 import Icon from 'assets/logo/DongDong.svg';
-
 export const SearchResultMapPage = ({
   reviewList,
   onToggle,
@@ -36,7 +35,7 @@ export const SearchResultMapPage = ({
       content: `
               <div style="
                 width:50px;
-                height:50px;
+                height:51.23px;
                 background-image: url(${Icon});
                 animation: blink 1.5s infinite;
               ">
