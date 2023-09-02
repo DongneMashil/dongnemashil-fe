@@ -8,6 +8,7 @@ export const StTagContainer = styled.div`
   background: #fff;
   box-sizing: border-box;
   padding: 0.1rem;
+  margin-top: 0.75rem;
   @media ${(props) => props.theme.device.desktop} {
     display: flex;
     justify-content: row;
