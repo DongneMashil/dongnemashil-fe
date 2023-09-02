@@ -110,6 +110,7 @@ export const SearchMapNearbyPage = () => {
       map: map,
       position: curCoord,
       content: content,
+      zIndex: 100,
     });
 
     curPosOverlay.setMap(map);
