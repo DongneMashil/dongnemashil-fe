@@ -15,9 +15,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
 import { BackButton, FooterSpacer, Tag } from 'components/common';
-const DetailMap = React.lazy(
-  () => import('components/detailPage/DetailMap/DetailMap')
-);
+// const DetailMap = React.lazy(
+//   () => import('components/detailPage/DetailMap/DetailMap')
+// );
 const Modal = React.lazy(() => import('components/common/Modal/Modal'));
 const ImageModal = React.lazy(
   () => import('components/common/ImageModal/ImageModal')
@@ -31,6 +31,7 @@ import {
   StDetailPageLayout,
   StDetailTitle,
   StEditButtonWrapper,
+  StMapBox,
   StNavTitle,
   StTagWrapper,
 } from './DetailPage.styles';
@@ -38,7 +39,7 @@ import noUser from 'assets/images/NoUser.jpg';
 import timeAgo from 'utils/timeAgo';
 import { useSetRecoilState } from 'recoil';
 import { useUpdateUserInfo } from 'hooks';
-// import { DetailMap } from 'components/detailPage';
+import { DetailMap } from 'components/detailPage';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 import { MasonryGrid } from '@egjs/react-grid';
 import { MasonryGridOptions } from '@egjs/grid';
@@ -220,7 +221,9 @@ export const DetailPage = () => {
                       alt={`${data.address}의 메인 사진`}
                       onClick={() => onClickImage(mainImageUrl[0]!)}
                       className={
-                        !(data.subImgUrl[0] !== '') ? 'isSingle' : 'notSingle'
+                        data.subImgUrl[0] !== '' || data.videoUrl
+                          ? 'notSingle'
+                          : 'isSingle'
                       }
                     />
                     {subImgUrl &&
@@ -236,14 +239,12 @@ export const DetailPage = () => {
                         />
                       ))}
                     {data.videoUrl && (
-                      <>
-                        <video
-                          controls
-                          width={'100%'}
-                          src={data.videoUrl}
-                          aria-label={`${data.address}의 비디오`}
-                        />
-                      </>
+                      <video
+                        controls
+                        width={'100%'}
+                        src={data.videoUrl}
+                        aria-label={`${data.address}의 비디오`}
+                      />
                     )}
                   </MasonryGrid>
                   {/* </StContentGridBox> */}
@@ -251,6 +252,13 @@ export const DetailPage = () => {
                   <p className="content" aria-label="본문">
                     {data.content}
                   </p>
+                  <StMapBox>
+                    <DetailMap
+                      height="100%"
+                      width="100%"
+                      initMap={initMapHandler}
+                    />
+                  </StMapBox>
                   <StTagWrapper>
                     {data.tag.map((tag) => (
                       <Tag

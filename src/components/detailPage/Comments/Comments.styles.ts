@@ -106,13 +106,13 @@ export const StDetailPageCommentItem = styled.div`
   .left {
     margin-left: auto;
   }
-  .center {
+
+  .done {
     color: var(--strokepurple, #9a7b9a);
-    text-align: center;
-    font-family: Pretendard;
-    font-size: 0.75rem;
-    font-style: normal;
+    font-weight: 800;
+  }
+  .done:disabled {
+    color: #8c8c8c;
     font-weight: 600;
-    line-height: normal;
   }
 `;
