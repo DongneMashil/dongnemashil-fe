@@ -14,7 +14,8 @@ export const MyPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  const { userNickname } = useParams<{ userNickname: string }>();
+  //파라미터에 닉네임이 들어오면 다른 유저의 마이페이지
+  const { userNickname: paramNickName } = useParams<{ userNickname: string }>();
 
   //유저정보 조회 및 업데이트
   const { data } = useUpdateUserInfo(true);
@@ -96,12 +97,9 @@ export const MyPage = () => {
               nickName={data?.nickname}
               email={data?.email}
               setIsModalOpen={setIsModalOpen}
-              isMyPage={!userNickname}
+              isMyPage={typeof paramNickName === 'undefined'}
             />
-            <TabMenu
-              nickName={data?.nickname}
-              selectedNickName={userNickname}
-            />
+            <TabMenu nickName={data?.nickname} paramNickName={paramNickName} />
           </>
         )}
       </StMyPageContainer>

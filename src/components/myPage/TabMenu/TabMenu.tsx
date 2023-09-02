@@ -20,17 +20,16 @@ import { Button } from 'components/common';
 import { ReactComponent as LogoHorizontal } from 'assets/logo/LogoHorizontal.svg';
 export const TabMenu = ({
   nickName,
-  selectedNickName,
+  paramNickName,
 }: {
   nickName: string | undefined;
-  selectedNickName: string | undefined;
+  paramNickName: string | undefined;
 }) => {
   const [selectedTab, setSelectedTab] = useState('reviews');
   const navigate = useNavigate();
-  console.log(selectedNickName); // 지울것.
   const useInfinityScroll = () => {
     const fetchItems = async ({ pageParam = 1 }) => {
-      if (nickName === undefined) {
+      if (paramNickName === undefined) {
         // 로그인한 유저의 마이페이지
         const response = await getMyReviews(selectedTab, pageParam);
         return {
@@ -84,7 +83,7 @@ export const TabMenu = ({
           게시물
         </StText>
         <StTabButtonBox>
-          {selectedNickName ? (
+          {paramNickName ? (
             <>
               {' '}
               <TabButton selected={true}>유저가 작성한 글</TabButton>
