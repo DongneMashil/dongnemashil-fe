@@ -5,6 +5,7 @@ import { StMapContainer, StMyLocationButton } from './DetailMap.styles';
 import { LocationButton, Map } from 'components/common';
 import { calculateDistance } from 'utils';
 import { useNavigate } from 'react-router-dom';
+import Icon from 'assets/logo/DongDong.svg';
 
 interface DetailMapProps {
   width: string;
@@ -129,11 +130,10 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
             position: locPosition,
             content: `
             <div style="
-              width:15px;
-              height:15px;
-              border-radius:50%;
-              background:#FF0000;
-              animation: blink 1s infinite;
+              width:50px;
+              height:50px;
+              background-image: url(${Icon});
+              animation: blink 1.5s infinite;
             ">
             </div>
             <style>
@@ -176,6 +176,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
     const options = {
       center: new kakao.maps.LatLng(37.545043, 127.039245),
       level: 3,
+      draggable: false,
     };
 
     const map = new kakao.maps.Map(container, options);

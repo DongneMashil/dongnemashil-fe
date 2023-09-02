@@ -82,6 +82,28 @@ export const getMyReviews = async (
   }
 };
 
+export const getUserReviews = async (
+  nickname?: string,
+  page?: number
+): Promise<GetMyReviewsResponse> => {
+  // 내 게시글과 내 좋아요 글 조회
+  try {
+    const response: AxiosResponse<GetMyReviewsResponse> =
+      await axiosInstance.get(`/reviews/user`, {
+        params: {
+          nickname,
+          page,
+        },
+      });
+    return response.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data?.errorMessage || e.message);
+    }
+    throw e;
+  }
+};
+
 export type Comment = {
   id: number;
   nickname: string;

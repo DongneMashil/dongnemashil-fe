@@ -21,8 +21,7 @@ import axios from 'axios';
 import { getExtensionName } from 'components/myProfilePage';
 import DefaultImage from 'assets/images/NoUser.jpg';
 import { base64ToBlob } from 'utils';
-import { croppedImageFileSelector } from 'recoil/cropProfileImage/cropProfileImageSelector';
-import imageCompression from 'browser-image-compression';
+import { cropProfileImageAtom } from 'recoil/cropProfileImage/cropProfileImageAtom';
 
 export const MyProfilePage = () => {
   const navigate = useNavigate();
@@ -65,7 +64,7 @@ export const MyProfilePage = () => {
     } catch (error) {
       setImgUrl(DefaultImage); //이미지 다운로드 실패시 기본 이미지 삽입
 
-      const defaultBlob = base64ToBlob(DefaultImage, 'image/jpg');
+      const defaultBlob = base64ToBlob(DefaultImage, 'image/jpg'); //기본이미지 base64 -> blob
       const defaultFile = new File([defaultBlob], 'default.jpg', {
         type: 'image/jpg',
       });
@@ -86,30 +85,15 @@ export const MyProfilePage = () => {
     setCropModal(true);
   };
 
-  //압축하기
-  const croppedFile = useRecoilValue(croppedImageFileSelector);
-
-  const options = {
-    maxSizeMB: 0.1,
-    maxWidthOrHeight: 100,
-    useWebWorker: true,
-  };
-
+  //파일 가져오기
+  const { file: croppedImgFile, imgUrl: croppedImgUrl } =
+    useRecoilValue(cropProfileImageAtom);
   useEffect(() => {
-    const onChangeImage = async () => {
-      if (!croppedFile) return;
-
-      try {
-        const compressedFile = await imageCompression(croppedFile, options);
-        const imgUrl = URL.createObjectURL(compressedFile);
-        setImgUrl(imgUrl);
-        setImgFile(compressedFile);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    onChangeImage();
-  }, [croppedFile]);
+    if (croppedImgFile) {
+      setImgFile(croppedImgFile);
+      setImgUrl(croppedImgUrl);
+    }
+  }, [croppedImgFile, croppedImgUrl]);
 
   //닉네임 입력
   const onChangeValueHandler = useCallback(

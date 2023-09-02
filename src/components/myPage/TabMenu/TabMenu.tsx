@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TabButton } from '../TabButton/TabButton';
-import { getMyReviews } from 'api/mypageApi';
+import { getMyReviews, getUserReviews } from 'api/mypageApi';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowDown } from 'assets/icons/ArrowDown.svg';
 import {
@@ -18,18 +18,35 @@ import { useIntersect } from 'hooks/useIntersect';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Button } from 'components/common';
 import { ReactComponent as LogoHorizontal } from 'assets/logo/LogoHorizontal.svg';
-export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
+export const TabMenu = ({
+  nickName,
+  selectedNickName,
+}: {
+  nickName: string | undefined;
+  selectedNickName: string | undefined;
+}) => {
   const [selectedTab, setSelectedTab] = useState('reviews');
   const navigate = useNavigate();
-
+  console.log(selectedNickName); // 지울것.
   const useInfinityScroll = () => {
     const fetchItems = async ({ pageParam = 1 }) => {
-      const response = await getMyReviews(selectedTab, pageParam);
-      return {
-        ...response,
-        isLast: response.last,
-        nextPage: pageParam + 1,
-      };
+      if (nickName === undefined) {
+        // 로그인한 유저의 마이페이지
+        const response = await getMyReviews(selectedTab, pageParam);
+        return {
+          ...response,
+          isLast: response.last,
+          nextPage: pageParam + 1,
+        };
+      } else {
+        // 다른 유저의 마이페이지
+        const response = await getUserReviews(nickName, pageParam);
+        return {
+          ...response,
+          isLast: response.last,
+          nextPage: pageParam + 1,
+        };
+      }
     };
 
     const query = useInfiniteQuery(
@@ -67,18 +84,27 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
           게시물
         </StText>
         <StTabButtonBox>
-          <TabButton
-            selected={selectedTab === 'reviews'}
-            onClick={() => setSelectedTab('reviews')}
-          >
-            내가 쓴
-          </TabButton>
-          <TabButton
-            selected={selectedTab === 'likes'}
-            onClick={() => setSelectedTab('likes')}
-          >
-            좋아요 한
-          </TabButton>
+          {selectedNickName ? (
+            <>
+              {' '}
+              <TabButton selected={true}>유저가 작성한 글</TabButton>
+            </>
+          ) : (
+            <>
+              <TabButton
+                selected={selectedTab === 'reviews'}
+                onClick={() => setSelectedTab('reviews')}
+              >
+                내가 쓴
+              </TabButton>
+              <TabButton
+                selected={selectedTab === 'likes'}
+                onClick={() => setSelectedTab('likes')}
+              >
+                좋아요 한
+              </TabButton>
+            </>
+          )}
         </StTabButtonBox>
       </StTabButtonWrapper>
       <StTabContentBox $empty={!(data && data.pages[0].content.length > 0)}>

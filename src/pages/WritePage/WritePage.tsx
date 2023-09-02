@@ -116,8 +116,6 @@ export const WritePage = () => {
           ? 'image'
           : 'video';
 
-          
-
         if (fileType === 'image') {
           const options = {
             maxSizeMB: 1,
@@ -138,10 +136,13 @@ export const WritePage = () => {
                 { type: fileType, file: compressedFile, isCover: false },
               ];
 
-              if (!prev.some((p) => p.isCover) || (prev[0].type === 'video' && prev.length === 1)) {
-              const index = updatedFiles.length - 1;
-              updatedFiles[index].isCover = true;
-            }
+              if (
+                !prev.some((p) => p.isCover) ||
+                (prev[0].type === 'video' && prev.length === 1)
+              ) {
+                const index = updatedFiles.length - 1;
+                updatedFiles[index].isCover = true;
+              }
 
               return updatedFiles;
             });
@@ -200,10 +201,13 @@ export const WritePage = () => {
     setModalMessage,
   });
 
-  const determineIsCoverImage = useCallback((targetFile: MediaFileType) => {
-    const file = mediaFiles.find((file) => file.file === targetFile);
-    return file ? file.isCover : false;
-  }, [mediaFiles]);
+  const determineIsCoverImage = useCallback(
+    (targetFile: MediaFileType) => {
+      const file = mediaFiles.find((file) => file.file === targetFile);
+      return file ? file.isCover : false;
+    },
+    [mediaFiles]
+  );
 
   const onGoToWriteMapPageHandler = () => {
     if (reviewId) {

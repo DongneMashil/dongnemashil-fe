@@ -7,6 +7,7 @@ interface UserInfoProps {
   nickName?: string;
   email?: string;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isMyPage?: boolean;
 }
 const UserInfo = React.memo(
   ({
@@ -14,6 +15,7 @@ const UserInfo = React.memo(
     nickName = '닉네임',
     email = 'userId',
     setIsModalOpen,
+    isMyPage = true,
   }: UserInfoProps) => {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     const [userID, setUserID] = useState<string>('');
@@ -24,11 +26,12 @@ const UserInfo = React.memo(
         setUserID('카카오 회원');
       }
     }, [email]);
-
+    // 유저정보 API 연결 필요함
     return (
       <StUserInfoContainer
         aria-label="프로필 메뉴 열기"
-        onClick={() => setIsModalOpen(true)}
+        onClick={isMyPage ? () => setIsModalOpen(true) : undefined}
+        $isMyPage={isMyPage}
       >
         <div className="profile">
           <img
@@ -37,10 +40,10 @@ const UserInfo = React.memo(
           />
           <div className="nameWrapper">
             <div className="nickname">{nickName}</div>
-            <div className="userId">{userID}</div>
+            {isMyPage && <div className="userId">{userID}</div>}
           </div>
         </div>
-        <ChevronRight aria-hidden="true" className="edit" />
+        {isMyPage && <ChevronRight aria-hidden="true" className="edit" />}
       </StUserInfoContainer>
     );
   }

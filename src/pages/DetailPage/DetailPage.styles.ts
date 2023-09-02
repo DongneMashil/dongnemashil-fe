@@ -173,3 +173,10 @@ export const StDetailPageLayout = styled.div`
   }
   min-height: 100vh;
 `;
+
+export const StMapBox = styled.div`
+  position: relative;
+  width: 100%;
+  height: 500px;
+  margin: 2rem auto;
+`;
