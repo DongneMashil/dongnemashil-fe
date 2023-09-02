@@ -1,23 +1,31 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { useQuery } from '@tanstack/react-query';
 import { Map } from 'components/common';
 import { BackButton } from 'components/common';
 import { LocationButton } from 'components/common';
 import {
   StNearbyLocationButtonBox,
-  StNearStNearbyMapContainer,
+  StNearbyMapContainer,
 } from './SearchMapNearbyPage.styles';
 import { NearbyReviewsList, fetchNearbyReviews } from 'api/reviewsApi';
 import Marker from 'assets/icons/Marker.png';
 import MarkerSelected from 'assets/icons/MarkerSelected.png';
-import Icon from 'assets/logo/DongDong.svg';
 import Tooltip from 'assets/images/Tooltip.svg';
 
 const RADIUS = 2;
 
 export const SearchMapNearbyPage = () => {
   const navigate = useNavigate();
+  const startPoint = useRef({ x: 0, y: 0 });
+  const overlayPoint = useRef({ x: 0, y: 0 });
+  const startX = useRef(0);
+  const startY = useRef(0);
+  const startOverlayPoint = useRef<kakao.maps.Point | null>(null);
+  const [reviewList, setReviewList] = useState<NearbyReviewsList[]>([]);
+  const markers = useRef<kakao.maps.Marker[]>([]);
+  const overlays = useRef<kakao.maps.CustomOverlay[]>([]);
+  const selectedMarker = useRef<kakao.maps.Marker | null>(null);
+  const selectedOverlay = useRef<kakao.maps.CustomOverlay | null>(null);
 
   const onBackHandler = () => {
     navigate(-1);
@@ -25,31 +33,7 @@ export const SearchMapNearbyPage = () => {
 
   const mapInstance = useRef<kakao.maps.Map | null>(null);
 
-  // 현위치 마커 (중복)
-  const showCurrentLocation = (map: kakao.maps.Map, loc: kakao.maps.LatLng) => {
-    const curPosMarker = new kakao.maps.CustomOverlay({
-      position: loc,
-      content: `
-            <div style="
-              width:50px;
-              height:51.23px;
-              background-image: url(${Icon});
-              animation: blink 1.5s infinite;
-            ">
-            </div>
-            <style>
-              @keyframes blink {
-                0% { opacity: 1; }
-                50% { opacity: 0; }
-                100% { opacity: 1; }
-              }
-            </style>
-          `,
-    });
-    curPosMarker.setMap(map);
-    setCenter(map, loc, true);
-  };
-
+  // 유저 현재 위치
   const getCurrentLocation = () => {
     return new Promise<kakao.maps.LatLng>((resolve) => {
       if (navigator.geolocation) {
@@ -62,23 +46,14 @@ export const SearchMapNearbyPage = () => {
             resolve(location);
           },
           (error) => {
-            // handle the error here if necessary
             console.error(error.message);
-            resolve(new kakao.maps.LatLng(37.545043, 127.039245)); // fallback to default location in case of error
+            resolve(new kakao.maps.LatLng(37.545043, 127.039245));
           }
         );
       } else {
-        resolve(new kakao.maps.LatLng(37.545043, 127.039245)); // fallback to default location if geolocation is not available
+        resolve(new kakao.maps.LatLng(37.545043, 127.039245));
       }
     });
-  };
-
-  // 중복
-  const setCurrentLocation = async (map: kakao.maps.Map) => {
-    console.log('moveToCurrentLocation 진입');
-    const location: kakao.maps.LatLng = await getCurrentLocation();
-    await showCurrentLocation(map, location);
-    setCenter(map, location, true);
   };
 
   // 지도 중심 이동 (중복)
@@ -90,22 +65,9 @@ export const SearchMapNearbyPage = () => {
     isPanTo ? map.panTo(location) : map.setCenter(location);
   };
 
-  // ! 이동한 마커 위도 경도 받아오기
-
   const initMap = async (map: kakao.maps.Map) => {
     const zoomLevel = map.getLevel();
-    let selectedMarker: kakao.maps.Marker | null = null;
-    let selectedOverlay: kakao.maps.CustomOverlay | null = null;
-
-    const markerImage = new kakao.maps.MarkerImage(
-      Marker,
-      new kakao.maps.Size(21, 28)
-    );
-    const markerSelectedImage = new kakao.maps.MarkerImage(
-      MarkerSelected,
-      new kakao.maps.Size(36, 48)
-    );
-
+    // let curPosMarker: kakao.maps.Marker | null = null;
     mapInstance.current = map;
 
     // 줌 레벨 낮추기
@@ -128,11 +90,94 @@ export const SearchMapNearbyPage = () => {
     circle.setMap(map);
 
     // 정보 받아오기
-    const reviewList: NearbyReviewsList[] = await fetchNearbyReviews(
+    const newList: NearbyReviewsList[] = await fetchNearbyReviews(
       curUserPos.getLat(),
       curUserPos.getLng(),
       RADIUS
     );
+    setReviewList(newList);
+
+    // 유저 현위치 마커
+    const curCoord = new kakao.maps.LatLng(
+      curUserPos.getLat(),
+      curUserPos.getLng()
+    );
+
+    const content = document.createElement('div');
+    content.className = 'overlay';
+
+    const curPosOverlay = new kakao.maps.CustomOverlay({
+      map: map,
+      position: curCoord,
+      content: content,
+    });
+
+    curPosOverlay.setMap(map);
+    setCenter(map, curCoord);
+
+    // 현위치 오버레이 이벤트 함수
+    const onMouseMove = (e: MouseEvent) => {
+      e.preventDefault();
+      console.log('onMouseMove');
+      const proj = map.getProjection();
+      const deltaX = startPoint.current.x - e.clientX;
+      const deltaY = startPoint.current.y - e.clientY;
+      const newPoint = new kakao.maps.Point(
+        overlayPoint.current.x - deltaX,
+        overlayPoint.current.y - deltaY
+      );
+      const newPos = proj.coordsFromContainerPoint(newPoint);
+
+      curPosOverlay.setPosition(newPos);
+      circle.setPosition(newPos);
+    };
+
+    const onMouseUp = async () => {
+      console.log('onMouseUp');
+      document.removeEventListener('mousemove', onMouseMove);
+      const newPos = curPosOverlay.getPosition();
+      const newList: NearbyReviewsList[] = await fetchNearbyReviews(
+        newPos.getLat(),
+        newPos.getLng(),
+        RADIUS
+      );
+      setReviewList(newList);
+    };
+
+    const onMouseDown = (e: MouseEvent) => {
+      e.preventDefault();
+
+      console.log('onMouseDown');
+      const proj = map.getProjection();
+      const overlayPos = curPosOverlay.getPosition();
+
+      kakao.maps.event.preventMap();
+
+      startX.current = e.clientX;
+      startY.current = e.clientY;
+      startOverlayPoint.current = proj.containerPointFromCoords(overlayPos);
+
+      document.addEventListener('mousemove', onMouseMove);
+    };
+
+    console.log(content);
+    content.addEventListener('mousedown', onMouseDown);
+    content.addEventListener('mouseup', onMouseUp);
+
+    setMarkers(map);
+  };
+
+  const setMarkers = (map: kakao.maps.Map) => {
+    const markerImage = new kakao.maps.MarkerImage(
+      Marker,
+      new kakao.maps.Size(21, 28)
+    );
+    const markerSelectedImage = new kakao.maps.MarkerImage(
+      MarkerSelected,
+      new kakao.maps.Size(36, 48)
+    );
+
+    emptyMarkers();
 
     // 마커 및 오버레이 세팅
     for (let i = 0; i < reviewList.length; ++i) {
@@ -147,6 +192,7 @@ export const SearchMapNearbyPage = () => {
             position: coord,
           });
           marker.setMap(map);
+          markers.current.push(marker);
 
           // 툴팁 생성
           const overlay = new kakao.maps.CustomOverlay({
@@ -160,23 +206,28 @@ export const SearchMapNearbyPage = () => {
             yAnchor: 1.22,
             clickable: true,
           });
+          overlays.current.push(overlay);
 
           kakao.maps.event.addListener(marker, 'click', () => {
-            if (!selectedMarker) {
+            if (!selectedMarker.current) {
               marker.setImage(markerSelectedImage);
-            }
-            if (selectedMarker !== marker) {
+            } else if (selectedMarker.current !== marker) {
               marker.setImage(markerSelectedImage);
-              selectedMarker?.setImage(markerImage);
-              selectedOverlay?.setMap(null);
+              selectedMarker.current.setImage(markerImage);
+              selectedOverlay.current?.setMap(null);
+              selectedMarker.current.setZIndex(0);
+              selectedOverlay.current?.setZIndex(0);
             }
             overlay.setMap(map); // 툴팁 열기 이벤트 리스너 추가
-            selectedMarker = marker;
-            selectedOverlay = overlay;
+            selectedMarker.current = marker;
+            selectedOverlay.current = overlay;
+
+            selectedMarker.current.setZIndex(10);
+            selectedOverlay.current.setZIndex(10);
           });
           kakao.maps.event.addListener(map, 'click', () => {
-            selectedMarker?.setImage(markerImage);
-            selectedMarker = null;
+            selectedMarker.current?.setImage(markerImage);
+            selectedMarker.current = null;
             overlay.setMap(null); // 툴팁 닫기 이벤트 리스너 추가
           });
         } catch (err) {
@@ -186,32 +237,34 @@ export const SearchMapNearbyPage = () => {
     }
   };
 
+  const emptyMarkers = () => {
+    for (let i = 0; i < markers.current.length; ++i) {
+      markers.current[i].setMap(null);
+      overlays.current[i].setMap(null);
+    }
+    selectedMarker.current = null;
+    selectedOverlay.current = null;
+  };
+
   useEffect(() => {
     if (mapInstance.current) {
-      setCurrentLocation(mapInstance.current);
+      setMarkers(mapInstance.current);
     }
-  }, []);
+    return () => {
+      emptyMarkers();
+    };
+  }, [reviewList]);
 
   return (
-    <StNearStNearbyMapContainer>
+    <StNearbyMapContainer>
       <Map width="100%" height="100%" initMap={initMap} />
       <BackButton onClick={onBackHandler} />
       <StNearbyLocationButtonBox>
         <LocationButton />
       </StNearbyLocationButtonBox>
-    </StNearStNearbyMapContainer>
+    </StNearbyMapContainer>
   );
 };
 
-// 동동이 붙이기
-// currentPosButton 태현님걸로
-
-// 1. 데이터를 받아온다. (어디서?)
-// 2. 맵을 유저 위치로 초기화한다.
-// 3. 데이터를 마커로 뿌려준다.
-// 4. initMap에서
-// 1) 마커 설정
-// 2) 마커에 이벤트 핸들러 추가
-// 5. 마커 이동 기능을 추가한다.
 // 6. 마커 이동시 새로 api 호출
 // 7. 리렌더링
