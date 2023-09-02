@@ -1,5 +1,9 @@
 import { styled } from 'styled-components';
 
+interface StPlusButtonProps {
+  disabled?: boolean;
+}
+
 export const StSlideContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -46,7 +50,7 @@ export const StCenteredBox = styled.div`
   }
 `;
 
-export const StPlusButton = styled.div`
+export const StPlusButton = styled.div<StPlusButtonProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -54,6 +58,14 @@ export const StPlusButton = styled.div`
   box-sizing: border-box;
 
   cursor: pointer;
+
+  ${({ disabled }) =>
+    disabled &&
+    `
+        opacity: 0.5;
+        pointer-events: none;
+        cursor: not-allowed;
+    `}
 
   & > p {
     color: #9a7b9a;
