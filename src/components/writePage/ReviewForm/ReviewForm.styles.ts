@@ -55,7 +55,7 @@ export const StContentWrapper = styled.div`
 export const StByteSizeTag = styled.p<{ color?: string }>`
   position: absolute;
   bottom: 1.4rem;
-  right: 0.8rem;
+  right: 0.9rem;
   color: ${(props) => props.color || '#a9a9a9'};
   text-align: center;
   font-family: Pretendard;
