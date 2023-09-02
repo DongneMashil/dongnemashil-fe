@@ -11,7 +11,12 @@ export const StDetailPageComment = styled.div<{ $isCommentShow: boolean }>`
   max-width: ${theme.size.tablet};
 `;
 export const StDetailPageCommentList = styled.div`
-  width: 100%;
+  // width: 100%;
+  width: 100vw;
+  max-width: calc(
+    ${theme.size.tablet} - 27px
+  ); //너비 조정됨. 스크롤막는거 추가후
+
   // height: 100%;  이거 넣으면 이상하게 레이아웃 깨짐(최하단 spacer가 높이가 0이됨)
   display: flex;
   flex-direction: column;

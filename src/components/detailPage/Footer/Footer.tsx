@@ -8,7 +8,7 @@ import { ReactComponent as Close } from 'assets/icons/Close.svg';
 // import { Comments } from '../Comments/Comments';
 const Comments = React.lazy(() => import('../Comments/Comments'));
 import { CommentInput } from '../CommentInput/CommentInput';
-import { useLike } from 'hooks';
+import { useLike, useLockScroll } from 'hooks';
 import { useRecoilValue } from 'recoil';
 import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 import {
@@ -49,6 +49,8 @@ export const Footer = ({
     initialIsLiked,
     initialLikeCnt,
   });
+
+  useLockScroll(isCommentOpen);
 
   return (
     <StFooterContatiner $isCommentOpen={isCommentOpen}>

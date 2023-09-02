@@ -19,8 +19,6 @@ import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddList
 import { useIntersect } from 'hooks/useIntersect';
 import { Modal, StLoadingSpinner } from 'components/common';
 import { ReactComponent as DongDong } from 'assets/logo/DongDong.svg';
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
-import { BODY_SCROLL_LOCK_IGNORE } from 'hooks/useAllowTouchMove';
 
 interface CommentsProps {
   reviewId: string;
@@ -108,9 +106,7 @@ export const Comments = ({
       queryClient.invalidateQueries(['comment', reviewId]);
     },
   });
-  // const onDeleteCommentHandler = (commentId: number) => {
-  //   deleteCommentMutation.mutate(String(commentId)); // API 요청을 발생시키기 위해 mutate를 호출합니다.
-  // };
+
   const [isEdit, setIsEdit] = useState({ state: false, id: 0, comment: '' });
   const onEditCommentHandler = (commentId: number, comment: string) => {
     setIsEdit({ state: true, id: commentId, comment });
@@ -141,133 +137,122 @@ export const Comments = ({
     setDeleteCommentId(commentId);
     setIsDeleteCommentModalOpen(true);
   };
-  useEffect(() => {
-    disableBodyScroll(document.body, {
-      allowTouchMove: (el) => {
-        while (el && el !== document.body) {
-          if (el.getAttribute(BODY_SCROLL_LOCK_IGNORE) !== null) {
-            return true;
-          }
-          if (el.parentElement) {
-            el = el.parentElement;
-          }
-        }
-        return false;
-      },
-    });
-    return () => clearAllBodyScrollLocks();
-  }, []);
-  return (
-    <StDetailPageComment $isCommentShow={$isCommentShow}>
-      {data && (
-        <StDetailPageCommentList>
-          {data.pages[0].empty && (
-            <StEmptyComment>
-              <DongDong className="dongdong" />
-              <p className="text">첫 댓글을 남겨주세요!</p>
-            </StEmptyComment>
-          )}
-          {data.pages
-            .flatMap((page) => page.result)
-            .map((comment, index, array) => {
-              if (!comment) return null;
-              const isLastComment = index === array.length - 1;
 
-              return (
-                <StDetailPageCommentItem
-                  key={comment.id}
-                  ref={isLastComment ? latestCommentRef : null}
-                >
-                  <StCommentHeader>
-                    <img
-                      src={comment.profileImgUrl || noUser}
-                      alt="프로필 이미지"
-                    />
-                    <div className="nickname">{comment.nickname}</div>
-                    <div className="date">{timeAgo(comment.createdAt)}</div>
-                    {userState.nickName === comment.nickname && (
-                      <>
-                        {isEdit.state && isEdit.id === comment.id ? (
-                          <>
-                            <StCommentButton
-                              className="left"
-                              onClick={onEditEndHandler}
-                            >
-                              취소
-                            </StCommentButton>
-                            <div className="divider">|</div>
-                            <StCommentButton
-                              className="done"
-                              onClick={onEditSubmitHandler}
-                              disabled={isEdit.comment === comment.comment}
-                            >
-                              완료
-                            </StCommentButton>
-                          </>
-                        ) : (
-                          <>
-                            <StCommentButton
-                              className="left"
-                              disabled={isEdit.state}
-                              onClick={() =>
-                                onEditCommentHandler(
-                                  comment.id,
-                                  comment.comment
-                                )
-                              }
-                            >
-                              수정
-                            </StCommentButton>
-                            <div className="divider">|</div>
-                            <StCommentButton
-                              className="right"
-                              disabled={isEdit.state}
-                              onClick={() => onDeleteCommentHandler(comment.id)}
-                            >
-                              삭제
-                            </StCommentButton>
-                          </>
-                        )}
-                      </>
+  return (
+    <div>
+      <StDetailPageComment $isCommentShow={$isCommentShow}>
+        {data && (
+          <StDetailPageCommentList className="scrollable">
+            {data.pages[0].empty && (
+              <StEmptyComment>
+                <DongDong className="dongdong" />
+                <p className="text">첫 댓글을 남겨주세요!</p>
+              </StEmptyComment>
+            )}
+            {data.pages
+              .flatMap((page) => page.result)
+              .map((comment, index, array) => {
+                if (!comment) return null;
+                const isLastComment = index === array.length - 1;
+
+                return (
+                  <StDetailPageCommentItem
+                    key={comment.id}
+                    ref={isLastComment ? latestCommentRef : null}
+                  >
+                    <StCommentHeader>
+                      <img
+                        src={comment.profileImgUrl || noUser}
+                        alt="프로필 이미지"
+                      />
+                      <div className="nickname">{comment.nickname}</div>
+                      <div className="date">{timeAgo(comment.createdAt)}</div>
+                      {userState.nickName === comment.nickname && (
+                        <>
+                          {isEdit.state && isEdit.id === comment.id ? (
+                            <>
+                              <StCommentButton
+                                className="left"
+                                onClick={onEditEndHandler}
+                              >
+                                취소
+                              </StCommentButton>
+                              <div className="divider">|</div>
+                              <StCommentButton
+                                className="done"
+                                onClick={onEditSubmitHandler}
+                                disabled={isEdit.comment === comment.comment}
+                              >
+                                완료
+                              </StCommentButton>
+                            </>
+                          ) : (
+                            <>
+                              <StCommentButton
+                                className="left"
+                                disabled={isEdit.state}
+                                onClick={() =>
+                                  onEditCommentHandler(
+                                    comment.id,
+                                    comment.comment
+                                  )
+                                }
+                              >
+                                수정
+                              </StCommentButton>
+                              <div className="divider">|</div>
+                              <StCommentButton
+                                className="right"
+                                disabled={isEdit.state}
+                                onClick={() =>
+                                  onDeleteCommentHandler(comment.id)
+                                }
+                              >
+                                삭제
+                              </StCommentButton>
+                            </>
+                          )}
+                        </>
+                      )}
+                    </StCommentHeader>
+                    {userState.nickName === comment.nickname &&
+                    isEdit.state &&
+                    isEdit.id === comment.id ? (
+                      <input
+                        type="text"
+                        value={isEdit.comment}
+                        onChange={onChangeCommentHandler}
+                      />
+                    ) : (
+                      <div className="content">{comment.comment}</div>
                     )}
-                  </StCommentHeader>
-                  {userState.nickName === comment.nickname &&
-                  isEdit.state &&
-                  isEdit.id === comment.id ? (
-                    <input
-                      type="text"
-                      value={isEdit.comment}
-                      onChange={onChangeCommentHandler}
-                    />
-                  ) : (
-                    <div className="content">{comment.comment}</div>
-                  )}
-                </StDetailPageCommentItem>
-              );
-            })}
-          <Modal
-            isOpen={isDeleteCommentModalOpen}
-            onSubmitText="삭제"
-            title="삭제"
-            firstLine="삭제된 댓글은 복구할 수 없습니다."
-            secondLine="삭제하시겠습니까?"
-            onSubmitHandler={() => {
-              deleteCommentMutation.mutate(String(deleteCommentId));
-              setIsDeleteCommentModalOpen(false);
-            }}
-            onCloseHandler={() => setIsDeleteCommentModalOpen(false)}
-          />{' '}
-          <Modal
-            isOpen={!!errorMsg}
-            title="알림"
-            firstLine={errorMsg}
-            onCloseHandler={onCloseErrorModalHandler}
-          />
-          {isLoading && <div>로딩중...</div>}
-          {hasNextPage && <StLoadingSpinner ref={loaderRef} />}
-        </StDetailPageCommentList>
-      )}
-    </StDetailPageComment>
+                  </StDetailPageCommentItem>
+                );
+              })}
+            <Modal
+              isOpen={isDeleteCommentModalOpen}
+              onSubmitText="삭제"
+              title="삭제"
+              firstLine="삭제된 댓글은 복구할 수 없습니다."
+              secondLine="삭제하시겠습니까?"
+              onSubmitHandler={() => {
+                deleteCommentMutation.mutate(String(deleteCommentId));
+                setIsDeleteCommentModalOpen(false);
+              }}
+              onCloseHandler={() => setIsDeleteCommentModalOpen(false)}
+            />{' '}
+            <Modal
+              isOpen={!!errorMsg}
+              title="알림"
+              firstLine={errorMsg}
+              onCloseHandler={onCloseErrorModalHandler}
+            />
+            {isLoading && <div>로딩중...</div>}
+            {hasNextPage && <StLoadingSpinner ref={loaderRef} />}
+          </StDetailPageCommentList>
+        )}
+      </StDetailPageComment>
+    </div>
   );
 };
 export default Comments;
