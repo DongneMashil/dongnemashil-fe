@@ -49,8 +49,17 @@ export const CommentInput = ({
   // 댓글 등록
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isSubmitting || !comment) {
+    if (isSubmitting) {
       setErrorMsg('댓글은 1초에 1개만 등록 가능합니다.');
+      return;
+    } else if (comment.length > 100) {
+      setErrorMsg('댓글은 100자 이내로 입력해주세요.');
+      return;
+    } else if (comment.length === 0) {
+      setErrorMsg('댓글을 입력해주세요.');
+      return;
+    } else if (comment.trim().length === 0) {
+      setErrorMsg('댓글을 입력해주세요.');
       return;
     }
 
@@ -67,7 +76,6 @@ export const CommentInput = ({
       <StFooterWrapper onSubmit={onSubmitHandler}>
         {userState?.isLoggedIn ? (
           <>
-            {' '}
             <Input
               placeholder="댓글을 입력해주세요"
               onChange={onChangeHandler}
