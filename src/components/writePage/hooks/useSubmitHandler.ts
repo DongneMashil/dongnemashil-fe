@@ -173,14 +173,13 @@ export const useSubmitHandler = ({
           setIsLoading(false);
         },
         onError: (error: unknown) => {
-          error;
-          // if (typeof error === 'string') {
-          //   console.log('수정 실패', error);
-          // } else if (error instanceof Error) {
-          //   console.log('수정 실패', error.message);
-          // } else {
-          //   console.log('수정 실패', error);
-          // }
+          if (typeof error === 'string') {
+            console.log('수정 실패', error);
+          } else if (error instanceof Error) {
+            console.log('수정 실패', error.message);
+          } else {
+            console.log('수정 실패', error);
+          }
           setIsLoading(false);
         },
       });
@@ -208,6 +207,7 @@ export const useSubmitHandler = ({
   useEffect(() => {
     return () => {
       setIsLoading(false);
+      setStoredMediaFiles([]);
     };
   }, []);
 
