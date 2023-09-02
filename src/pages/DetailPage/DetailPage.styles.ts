@@ -41,7 +41,7 @@ export const StDetailTitle = styled.h1`
   font-size: 2rem;
   border-bottom: 1px solid #e5e5e5;
   margin: 1rem 0;
-  padding-bottom: 0.5rem;
+  padding-bottom: 9px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -54,15 +54,18 @@ export const StDetailPageHeader = styled.div`
   margin-top: 0.5rem;
   gap: 0.5rem;
   .nickname {
+    background: none;
     color: var(--textcolor, #333);
     font-family: Pretendard;
     font-size: 0.875rem;
     font-weight: 400;
+    cursor: pointer;
   }
   img {
     width: 30px;
     height: 30px;
     border-radius: 50%;
+    cursor: pointer;
   }
 `;
 
@@ -86,7 +89,8 @@ export const StDetailPageContent = styled.main`
   gap: 0.3rem;
 
   .content {
-    margin: 1rem 0.5rem 1rem 0.5rem;
+    margin: 1rem 0rem;
+
     height: fit-content;
     font-size: 16px;
     line-height: 1.5;
@@ -179,4 +183,37 @@ export const StMapBox = styled.div`
   width: 100%;
   height: 500px;
   margin: 2rem auto;
+`;
+
+export const StEmptyContent = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin: 3rem 0;
+
+  .dongdong {
+    margin-top: 1rem;
+    height: 13rem;
+    @media (max-height: 550px) {
+      height: 8rem;
+    }
+    cursor: pointer;
+    opacity: 0.1;
+  }
+  .text {
+    margin: 0.5rem 0;
+    color: #8c8c8c;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    background: none;
+    opacity: 0.6;
+  }
 `;
