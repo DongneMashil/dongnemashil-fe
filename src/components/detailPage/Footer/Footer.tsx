@@ -1,5 +1,5 @@
 import { Button } from 'components/common';
-import React, { useCallback, useEffect, useState, Suspense } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { ReactComponent as Heart } from 'assets/icons/Heart.svg';
 import { ReactComponent as FilledHeart } from 'assets/icons/HeartFilled.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/CommentS.svg';
@@ -44,14 +44,6 @@ export const Footer = ({
     }
   }, [isCommentOpen]);
 
-  const onClickHandler = useCallback(() => {
-    if (isCommentOpen) {
-      setIsCommentOpen(false);
-    } else {
-      setIsCommentOpen(true);
-    }
-  }, []);
-
   const { isLiked, likeCnt, toggleLikeHandler } = useLike({
     reviewId,
     initialIsLiked,
@@ -72,23 +64,25 @@ export const Footer = ({
           <CommentIcon className="CommentIcon" />{' '}
           <p aria-label="댓글수">{commentCount}</p>
         </StComment>
-        {isCommentOpen ? (
-          <Button
-            type={'onlyText'}
-            onClick={() => setIsCommentOpen(false)}
-            aria-label="댓글닫기"
-          >
-            <Close />
-          </Button>
-        ) : (
-          <Button
-            type={'onlyText'}
-            onClick={onClickHandler}
-            aria-label="댓글보기"
-          >
-            <ChevronTop /> 댓글보기
-          </Button>
-        )}
+        <div className="openWrapper">
+          {isCommentOpen ? (
+            <Button
+              type={'onlyText'}
+              onClick={() => setIsCommentOpen(false)}
+              aria-label="댓글닫기"
+            >
+              <Close />
+            </Button>
+          ) : (
+            <Button
+              type={'onlyText'}
+              onClick={() => setIsCommentOpen(!isCommentOpen)}
+              aria-label="댓글보기"
+            >
+              <ChevronTop /> 댓글보기
+            </Button>
+          )}
+        </div>
       </StFooterButtonWrapper>
 
       {isCommentOpen && (

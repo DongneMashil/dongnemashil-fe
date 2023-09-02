@@ -4,9 +4,12 @@ import noUser from 'assets/images/NoUser.jpg';
 import React, { useEffect, useRef, useState } from 'react';
 import timeAgo from 'utils/timeAgo';
 import {
+  StCommentButton,
+  StCommentHeader,
   StDetailPageComment,
   StDetailPageCommentItem,
   StDetailPageCommentList,
+  StEmptyComment,
 } from './Comments.styles';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userInfo';
@@ -15,6 +18,7 @@ import { commentCountAtom } from 'recoil/commentCount/commentCountAtom';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
 import { useIntersect } from 'hooks/useIntersect';
 import { Modal, StLoadingSpinner } from 'components/common';
+import { ReactComponent as DongDong } from 'assets/logo/DongDong.svg';
 
 interface CommentsProps {
   reviewId: string;
@@ -47,6 +51,7 @@ export const Comments = ({
         result: response.content,
         nextPage: pageParam + 1,
         isLast: response.last,
+        empty: response.empty,
       };
     };
 
@@ -139,6 +144,12 @@ export const Comments = ({
     <StDetailPageComment $isCommentShow={$isCommentShow}>
       {data && (
         <StDetailPageCommentList>
+          {data.pages[0].empty && (
+            <StEmptyComment>
+              <DongDong className="dongdong" />
+              <p className="text">첫 댓글을 남겨주세요!</p>
+            </StEmptyComment>
+          )}
           {data.pages
             .flatMap((page) => page.result)
             .map((comment, index, array) => {
@@ -150,7 +161,7 @@ export const Comments = ({
                   key={comment.id}
                   ref={isLastComment ? latestCommentRef : null}
                 >
-                  <section>
+                  <StCommentHeader>
                     <img
                       src={comment.profileImgUrl || noUser}
                       alt="프로필 이미지"
@@ -161,22 +172,24 @@ export const Comments = ({
                       <>
                         {isEdit.state && isEdit.id === comment.id ? (
                           <>
-                            {' '}
-                            <button className="left" onClick={onEditEndHandler}>
+                            <StCommentButton
+                              className="left"
+                              onClick={onEditEndHandler}
+                            >
                               취소
-                            </button>{' '}
+                            </StCommentButton>
                             <div className="divider">|</div>
-                            <button
+                            <StCommentButton
                               className="done"
                               onClick={onEditSubmitHandler}
                               disabled={isEdit.comment === comment.comment}
                             >
                               완료
-                            </button>
+                            </StCommentButton>
                           </>
                         ) : (
                           <>
-                            <button
+                            <StCommentButton
                               className="left"
                               disabled={isEdit.state}
                               onClick={() =>
@@ -187,20 +200,20 @@ export const Comments = ({
                               }
                             >
                               수정
-                            </button>
+                            </StCommentButton>
                             <div className="divider">|</div>
-                            <button
+                            <StCommentButton
                               className="right"
                               disabled={isEdit.state}
                               onClick={() => onDeleteCommentHandler(comment.id)}
                             >
                               삭제
-                            </button>
+                            </StCommentButton>
                           </>
                         )}
                       </>
                     )}
-                  </section>
+                  </StCommentHeader>
                   {userState.nickName === comment.nickname &&
                   isEdit.state &&
                   isEdit.id === comment.id ? (

@@ -10,7 +10,7 @@ export const StFooterContatiner = styled.footer<{ $isCommentOpen: boolean }>`
 
   background-color: #fff;
   box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.1);
-  height: ${(props) => (props.$isCommentOpen ? '595px' : '50px')};
+  height: ${(props) => (props.$isCommentOpen ? '650px' : '50px')};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,6 +30,12 @@ export const StFooterButtonWrapper = styled.div`
   padding: 0 10px;
   width: 100%;
   max-width: 768px; //theme프로바이더로 빼기
+
+  .openWrapper {
+    height: 50px;
+    display: flex;
+    align-items: center;
+  }
 `;
 export const StLike = styled.div`
   gap: 0.5rem;
