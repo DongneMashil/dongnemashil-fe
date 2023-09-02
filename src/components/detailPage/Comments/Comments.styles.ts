@@ -2,22 +2,21 @@ import { theme } from 'style/theme';
 import { styled } from 'styled-components';
 
 export const StDetailPageComment = styled.div<{ $isCommentShow: boolean }>`
+  overflow-x: hidden;
+
   opacity: ${({ $isCommentShow }) => ($isCommentShow ? 1 : 0)};
   transition: all 0.1s ease-in-out;
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+
   max-width: ${theme.size.tablet};
 `;
 export const StDetailPageCommentList = styled.div`
-  // width: 100%;
+  padding-top: 16px;
   width: calc(100vw - 27px); //너비 조정됨. 스크롤막는거 추가후
   max-width: calc(
     ${theme.size.tablet} - 27px
   ); //너비 조정됨. 스크롤막는거 추가후
-
-  // height: 100%;  이거 넣으면 이상하게 레이아웃 깨짐(최하단 spacer가 높이가 0이됨)
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -67,12 +66,6 @@ export const StDetailPageCommentItem = styled.div`
   padding-bottom: 10px;
   border-bottom: 1px solid #f3f3f3;
 
-  // &:nth-child(n + 1)::after {
-  //   content: '';
-  //   width: 100%;
-  //   height: 1px;
-  //   background: #f3f3f3;
-  // }
   input {
     width: 100%;
     height: 1.875rem;
