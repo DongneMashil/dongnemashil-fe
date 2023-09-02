@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  Suspense,
-  useLayoutEffect,
-  // useCallback,
-} from 'react';
+import React, { useEffect, useState, Suspense, useLayoutEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   deleteReviewDetail,
@@ -14,17 +8,14 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { ReactComponent as DongDong } from 'assets/logo/DongDong.svg';
 import { NavBar } from 'components/layout';
-import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
+import { Footer } from 'components/detailPage';
 import { BackButton, FooterSpacer, Tag } from 'components/common';
-// const DetailMap = React.lazy(
-//   () => import('components/detailPage/DetailMap/DetailMap')
-// );
+
 const Modal = React.lazy(() => import('components/common/Modal/Modal'));
 const ImageModal = React.lazy(
   () => import('components/common/ImageModal/ImageModal')
 );
 import {
-  // StContentGridBox,
   StCreatedTime,
   StDetailPageContainer,
   StDetailPageContent,
@@ -72,11 +63,6 @@ export const DetailPage = () => {
     queryKey: ['reviewDetail', reviewId],
     queryFn: () => getReviewDetail(reviewId),
     enabled: !!reviewId,
-    // refetchOnWindowFocus: true,
-    // refetchOnMount: true,
-    // refetchOnReconnect: true,
-    // staleTime: 1000 * 60 * 5, //5 분
-    // cacheTime: 1000 * 60 * 15, //15 분
     onSuccess: (data) => {
       setCommentCount(data.commentCnt); // Recoil 댓글 개수를 설정
     },

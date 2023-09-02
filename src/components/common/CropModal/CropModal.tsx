@@ -14,8 +14,8 @@ import imageCompression from 'browser-image-compression';
 import { cropProfileImageAtom } from 'recoil/cropProfileImage/cropProfileImageAtom';
 import { ReactComponent as ArrowDown } from 'assets/icons/ArrowDown.svg';
 import { mediaFilesAtom } from 'recoil/mediaFile/mediaFileAtom';
+import { ReactComponent as Close } from 'assets/icons/close-x.svg';
 import Modal from '../Modal/Modal';
-// import { base64ToBolb } from 'utils';
 interface Props {
   isOpen: boolean;
   onCloseHandler?: () => void;
@@ -48,13 +48,11 @@ export const CropModal: FC<Props> = ({
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       if (file.type.includes('video') && isWriteReview) {
-        // console.log('비디오 파일이 들어왔습니다.');
         // Check if the video file exceeds 100MB
         if (file.size > 100 * 1024 * 1024) {
           setModalMessage(`100MB를 초과하므로 업로드할 수 없습니다.`);
           return;
         }
-        // If it's within the size limit, add it to the mediaFiles
         setMediaFiles([
           ...mediaFiles,
           {
@@ -77,16 +75,6 @@ export const CropModal: FC<Props> = ({
     }
   };
 
-  // const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   if (event.target.files && event.target.files[0]) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e) => {
-  //       const imageUrl = (e.target as FileReader).result as string;
-  //       setLocalSrc(imageUrl);
-  //     };
-  //     reader.readAsDataURL(event.target.files[0]);
-  //   }
-  // };
   const onFileButtonClick = () => {
     fileInputRef.current?.click();
   };
@@ -158,17 +146,7 @@ export const CropModal: FC<Props> = ({
                       isCover: true,
                     },
                   ]);
-                }
-                // else if (mediaFiles.length > 0) {
-                //   setMediaFiles([
-                //     {
-                //       type: 'image',
-                //       file: compressedFile,
-                //       isCover: false,
-                //     },
-                //   ]);
-                // }
-                else {
+                } else {
                   setMediaFiles([
                     ...mediaFiles,
                     {
@@ -268,10 +246,12 @@ export const CropModal: FC<Props> = ({
               background={false}
               responsive={true}
               autoCropArea={0.5}
-              checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
+              checkOrientation={false}
               guides={true}
             />
-
+            <button className="close" onClick={onCloseHandler}>
+              <Close width="30px" />
+            </button>
             <StModalButtonWrpper>
               <input
                 type="file"
@@ -306,7 +286,3 @@ export const CropModal: FC<Props> = ({
       )
     : null;
 };
-
-//이미지 사용 :  const croppedFile = useRecoilValue(croppedImageFileSelector);
-
-//글쓰기에서 사용시 : const mediaFiles = useRecoilValue(mediaFilesAtom);
