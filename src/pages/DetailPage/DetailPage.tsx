@@ -12,6 +12,7 @@ import {
   ReviewDetailResponse,
 } from 'api/detailApi';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ReactComponent as DongDong } from 'assets/logo/DongDong.svg';
 import { NavBar } from 'components/layout';
 import { Footer } from 'components/detailPage/Footer/Footer'; // index 오류
 import { BackButton, FooterSpacer, Tag } from 'components/common';
@@ -31,6 +32,7 @@ import {
   StDetailPageLayout,
   StDetailTitle,
   StEditButtonWrapper,
+  StEmptyContent,
   StMapBox,
   StNavTitle,
   StTagWrapper,
@@ -184,7 +186,14 @@ export const DetailPage = () => {
             {data && <StNavTitle>{data.roadName}</StNavTitle>}
           </NavBar>
           <StDetailPageContainer>
-            {isError && <StNavTitle>게시글이 존재하지 않습니다!</StNavTitle>}
+            {isError && (
+              <StEmptyContent>
+                <DongDong className="dongdong" />
+
+                <p className="text">동동이를 누르면 홈으로 돌아갑니다</p>
+                <p className="text">게시글이 존재하지 않습니다!</p>
+              </StEmptyContent>
+            )}
             {data && (
               <>
                 <StDetailPageHeader>
@@ -252,13 +261,6 @@ export const DetailPage = () => {
                   <p className="content" aria-label="본문">
                     {data.content}
                   </p>
-                  <StMapBox>
-                    <DetailMap
-                      height="100%"
-                      width="100%"
-                      initMap={initMapHandler}
-                    />
-                  </StMapBox>
                   <StTagWrapper>
                     {data.tag.map((tag) => (
                       <Tag
@@ -269,6 +271,14 @@ export const DetailPage = () => {
                       />
                     ))}
                   </StTagWrapper>
+                  <StMapBox>
+                    <DetailMap
+                      height="100%"
+                      width="100%"
+                      initMap={initMapHandler}
+                    />
+                  </StMapBox>
+
                   <FooterSpacer />
                   <Suspense fallback={<div>loading...</div>}>
                     <Modal
