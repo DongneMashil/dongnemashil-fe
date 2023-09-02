@@ -200,8 +200,14 @@ export const DetailPage = () => {
                   <img
                     src={data.profileImgUrl || noUser}
                     alt={`${data.nickname}의 프로필사진`}
+                    onClick={() => navigate(`/userpage/${data.nickname}`)}
                   />
-                  <span className="nickname">{data.nickname}</span>
+                  <button
+                    className="nickname"
+                    onClick={() => navigate(`/userpage/${data.nickname}`)}
+                  >
+                    {data.nickname}
+                  </button>
                   <StCreatedTime>{timeAgo(data.createdAt)}</StCreatedTime>
                   {userData?.nickname === data.nickname && (
                     <StEditButtonWrapper>

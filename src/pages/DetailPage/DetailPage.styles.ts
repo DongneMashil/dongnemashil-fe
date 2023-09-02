@@ -54,15 +54,18 @@ export const StDetailPageHeader = styled.div`
   margin-top: 0.5rem;
   gap: 0.5rem;
   .nickname {
+    background: none;
     color: var(--textcolor, #333);
     font-family: Pretendard;
     font-size: 0.875rem;
     font-weight: 400;
+    cursor: pointer;
   }
   img {
     width: 30px;
     height: 30px;
     border-radius: 50%;
+    cursor: pointer;
   }
 `;
 
