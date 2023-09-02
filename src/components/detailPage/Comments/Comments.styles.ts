@@ -12,7 +12,7 @@ export const StDetailPageComment = styled.div<{ $isCommentShow: boolean }>`
 `;
 export const StDetailPageCommentList = styled.div`
   // width: 100%;
-  width: 100vw;
+  width: calc(100vw - 27px); //너비 조정됨. 스크롤막는거 추가후
   max-width: calc(
     ${theme.size.tablet} - 27px
   ); //너비 조정됨. 스크롤막는거 추가후
