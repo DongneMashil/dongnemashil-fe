@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { StInput } from 'components/common/Input/Input.styles';
 import { StHeaderTextH1 } from 'components/common/HeaderText/HeaderText.styles';
 import { theme } from 'style/theme';
+import { StEmptyComment } from 'components/detailPage/Comments/Comments.styles';
 
 export const StSearchContainer = styled.div`
   ${theme.responsiveLayout};
@@ -37,15 +38,17 @@ export const StSearchBox = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
+  padding: 0 28px;
   position: relative;
   & > button {
     position: absolute;
-    top: 0;
+    top: 2px;
     left: 27px;
   }
 `;
 export const StSearchInputBox = styled.div`
-  width: 216px;
+  width: 100%;
+  max-width: 346px;
   height: 37px;
   margin: 12px 0;
   flex-grow: 0;
@@ -55,10 +58,6 @@ export const StSearchInputBox = styled.div`
     position: absolute;
     top: 12px;
     left: 16px;
-  }
-
-  @media screen and (min-width: 510px) {
-    width: 346px;
   }
 `;
 
@@ -101,7 +100,11 @@ export const StRecentKeywordsWrapper = styled.div`
   }
 `;
 
-export const StRecentKeywordsBox = styled.div`
+export const StRecentKeywordsHeader = styled.h3`
+  font-weight: 600;
+`;
+
+export const StRecentKeywordsBox = styled.ul`
   padding: 0 15px;
   margin-top: 28px;
 
@@ -120,5 +123,14 @@ export const StRecentKeywordsBox = styled.div`
       cursor: pointer;
       color: inherit;
     }
+  }
+`;
+
+export const StEmptyKeywords = styled(StEmptyComment)`
+  margin: 0;
+
+  .text {
+    font-size: 16px;
+    font-weight: 500;
   }
 `;
