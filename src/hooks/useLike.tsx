@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { UserState, userProfileSelector } from 'recoil/userInfo';
-import { queryClient } from 'queries/queryClient';
 
 interface UseLikeProps {
   initialIsLiked: boolean;
@@ -25,6 +24,7 @@ export const useLike = ({
   const userState = useRecoilValue(userProfileSelector);
   const navigate = useNavigate();
   const setUserState = useSetRecoilState(userProfileSelector);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setIsLiked(initialIsLiked);
@@ -32,6 +32,14 @@ export const useLike = ({
   }, [initialIsLiked, initialLikeCnt]); // 쓰로틀링이 걸려도 최신 데이터로 업데이트
 
   const toggleLikeHandler = async () => {
+    const forceEndLoadingTimeout = setTimeout(() => {
+      setLoading(false);
+      console.log('로딩타이머 false');
+    }, 1500);
+
+    if (loading) return;
+    console.log('로딩 true');
+    setLoading(true);
     if (Date.now() - (lastClickedTime || 0) < 500) return; // 마지막 클릭으로부터 0.5초 안에 재클릭을 방지
     setLastClickedTime(Date.now());
 
@@ -42,8 +50,7 @@ export const useLike = ({
     const optimisticLikeCnt = isLiked ? likeCnt - 1 : likeCnt + 1;
     setIsLiked(!isLiked);
     setLikeCnt(optimisticLikeCnt);
-    queryClient.invalidateQueries(['responseData']);
-    queryClient.invalidateQueries(['reviewDetail']);
+
     try {
       const result = await postLikeOptimistic(reviewId, previousIsLiked);
       if (result !== !previousIsLiked) {
@@ -78,6 +85,11 @@ export const useLike = ({
         },
         500 - (Date.now() - (lastClickedTime || Date.now()))
       );
+    } finally {
+      clearTimeout(forceEndLoadingTimeout); // 강제로 종료하는 timeout을 제거합니다.
+
+      setLoading(false);
+      console.log('로딩 false');
     }
   };
 

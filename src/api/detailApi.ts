@@ -157,11 +157,7 @@ export const postLikeOptimistic = async (
       (updatedState === false && response.data.message === '좋아요 완료')
     ) {
       console.log('좋아요 낙관적 업데이트 알림 : 예상과 반대의 값이 왔습니다.');
-      // 다시 요청을 보내 서버의 상태를 UI와 일치시킵니다.
-      const latestStateResponse: AxiosResponse<{ message: string }> =
-        await axiosInstance.post(`/reviews/${reviewId}/likes`);
-      console.log('두번째' + latestStateResponse.data.message);
-      return updatedState;
+      return currentState;
     }
 
     return updatedState;
