@@ -32,7 +32,6 @@ export const SearchPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [keywordList, setKeywordList] = useState<Ikeyword[]>([]);
 
-  console.log(window.localStorage.getItem(STORAGE_KEY));
   const userInfo = useRef<string>('');
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +60,6 @@ export const SearchPage = () => {
     search(keyword);
   };
   const onDeleteKeyword = (id: number) => {
-    console.log('id', id);
     const newList = [...keywordList].filter((data) => data.id !== id);
     updateKeywordStorage(newList);
   };
@@ -73,12 +71,10 @@ export const SearchPage = () => {
         user,
         keyword,
       });
-      console.log('onAddKeyword', newList);
     }
     updateKeywordStorage(newList);
   };
   const updateKeywordStorage = (newList: Ikeyword[]) => {
-    console.log('updateKeywordStorage', newList);
     setKeywordList(newList);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(newList));
   };
@@ -88,7 +84,6 @@ export const SearchPage = () => {
     const storage = window.localStorage.getItem(STORAGE_KEY);
     if (decodedName) {
       userInfo.current = decodedName;
-      console.log(userInfo.current);
     }
     if (storage) {
       setKeywordList(JSON.parse(storage));
