@@ -21,9 +21,3 @@ export const StNearbyMapContainer = styled.div`
     animation: ${blink} 1.5s infinite;
   }
 `;
-
-export const StNearbyLocationButtonBox = styled.div`
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
-`;
