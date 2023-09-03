@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { StInput } from 'components/common/Input/Input.styles';
 import { StHeaderTextH1 } from 'components/common/HeaderText/HeaderText.styles';
 import { theme } from 'style/theme';
+import { StEmptyComment } from 'components/detailPage/Comments/Comments.styles';
 
 export const StSearchContainer = styled.div`
   ${theme.responsiveLayout};
@@ -124,5 +125,14 @@ export const StRecentKeywordsBox = styled.ul`
       cursor: pointer;
       color: inherit;
     }
+  }
+`;
+
+export const StEmptyKeywords = styled(StEmptyComment)`
+  margin: 0;
+
+  .text {
+    font-size: 16px;
+    font-weight: 500;
   }
 `;

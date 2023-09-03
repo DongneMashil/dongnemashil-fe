@@ -5,6 +5,7 @@ import { AuthNavButton, Modal } from 'components/common';
 import { SearchHeader } from 'components/searchPage/SearchHeader/SearchHeader';
 import { ReactComponent as InputIcon } from 'assets/icons/SearchPageIcon.svg';
 import { ReactComponent as DeleteIcon } from 'assets/icons/DeleteXMark.svg';
+import { ReactComponent as DongDong } from 'assets/logo/DongDong.svg';
 import {
   StSearchWrapper,
   StSearchInput,
@@ -14,6 +15,7 @@ import {
   StRecentKeywordsWrapper,
   StRecentKeywordsBox,
   StRecentKeywordsHeader,
+  StEmptyKeywords,
 } from './SearchPage.styles';
 
 const STORAGE_KEY = 'searchedList';
@@ -36,18 +38,18 @@ export const SearchPage = () => {
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
-  const search = () => {
-    if (value === '') {
+  const search = (keyword: string) => {
+    if (keyword === '') {
       setIsModalOpen(true);
     } else {
-      onAddKeyword(value, userInfo.current);
-      navigate(`/search/result?q=${value}`);
+      onAddKeyword(keyword, userInfo.current);
+      navigate(`/search/result?q=${keyword}`);
     }
   };
   const onKeyPressHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      search();
+      search(value);
     }
   };
   const onCloseModalHandler = () => {
@@ -56,7 +58,7 @@ export const SearchPage = () => {
 
   const onKeywordSearch = (keyword: string) => {
     setValue(keyword);
-    search();
+    search(keyword);
   };
   const onDeleteKeyword = (id: number) => {
     console.log('id', id);
@@ -122,7 +124,14 @@ export const SearchPage = () => {
             );
 
             if (filteredKeywords.length === 0) {
-              return <li>최근 검색어가 없습니다.</li>;
+              return (
+                <li>
+                  <StEmptyKeywords>
+                    <DongDong className="dongdong" />
+                    <p className="text">최근 검색어가 없습니다.</p>
+                  </StEmptyKeywords>
+                </li>
+              );
             } else {
               return filteredKeywords.map((data) => (
                 <li key={data.id}>
