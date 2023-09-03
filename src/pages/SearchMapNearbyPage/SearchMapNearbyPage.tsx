@@ -119,7 +119,7 @@ export const SearchMapNearbyPage = () => {
     // 현위치 오버레이 이벤트 함수
     const onMove = (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
-      console.log('onMove');
+      // console.log('onMove');
       const { clientX, clientY } = getClientPosition(e);
       const proj = map.getProjection();
       const deltaX = startPoint.current.x - clientX;
@@ -135,7 +135,7 @@ export const SearchMapNearbyPage = () => {
     };
 
     const onEnd = async () => {
-      console.log('onEnd');
+      // console.log('onEnd');
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('touchmove', onMove);
       const newPos = curPosOverlay.getPosition();
@@ -150,7 +150,7 @@ export const SearchMapNearbyPage = () => {
     const onStart = (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
 
-      console.log('onStart');
+      // console.log('onStart');
       const { clientX, clientY } = getClientPosition(e);
       const proj = map.getProjection();
       const overlayPos = curPosOverlay.getPosition();
@@ -165,7 +165,7 @@ export const SearchMapNearbyPage = () => {
       document.addEventListener('touchmove', onMove);
     };
 
-    console.log(content);
+    // console.log(content);
     content.addEventListener('mousedown', onStart);
     content.addEventListener('touchstart', onStart);
     content.addEventListener('mouseup', onEnd);
