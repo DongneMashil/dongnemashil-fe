@@ -3,7 +3,6 @@ import { ReactComponent as PurpleMarker } from 'assets/icons/PurpleMarker.svg';
 
 export const StTagContainer = styled.div`
   width: 100%;
-  height: 9rem;
   border-radius: 0.875rem;
   background: #fff;
   box-sizing: border-box;
@@ -12,7 +11,8 @@ export const StTagContainer = styled.div`
   @media ${(props) => props.theme.device.desktop} {
     display: flex;
     justify-content: row;
-    padding: 1rem;
+    padding: 1rem 0 1rem;
+    height: 9rem;
   }
 `;
 
