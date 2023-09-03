@@ -101,7 +101,11 @@ export const StRecentKeywordsWrapper = styled.div`
   }
 `;
 
-export const StRecentKeywordsBox = styled.div`
+export const StRecentKeywordsHeader = styled.h3`
+  font-weight: 600;
+`;
+
+export const StRecentKeywordsBox = styled.ul`
   padding: 0 15px;
   margin-top: 28px;
 
