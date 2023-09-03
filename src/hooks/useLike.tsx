@@ -34,7 +34,7 @@ export const useLike = ({
   const toggleLikeHandler = async () => {
     const forceEndLoadingTimeout = setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 1000);
 
     if (loading) return;
     setLoading(true);
