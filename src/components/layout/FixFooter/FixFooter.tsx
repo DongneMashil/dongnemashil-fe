@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'components/common';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Pen } from 'assets/icons/Pen.svg';
 import { ReactComponent as PurpleMarker } from 'assets/icons/PurpleMarker.svg';
 import { ReactComponent as ChevronTop } from 'assets/icons/ChevronTop.svg';
@@ -22,6 +23,12 @@ export const FixFooter = ({
   onClickCenter,
   onClickRight,
 }: FixFooterProps) => {
+  const navigate = useNavigate();
+
+  const onNavigateNearby = () => {
+    navigate('/search/nearby');
+  };
+
   const centerWrapper = {
     map: (
       <Button
@@ -43,11 +50,16 @@ export const FixFooter = ({
   const rightWrapper = {
     write: (
       <>
-        {/* <Button type="circleFill" $width={'57px'} $height={'57px'}>
+        <Button
+          type="circleFill"
+          $width={'57px'}
+          $height={'57px'}
+          onClick={onNavigateNearby}
+        >
           우리
           <br />
           동네
-        </Button> */}
+        </Button>
         <Button
           ariaLabel="글쓰기"
           url="/writemap"
