@@ -64,7 +64,10 @@ export const SearchPage = () => {
     updateKeywordStorage(newList);
   };
   const onAddKeyword = (keyword: string, user: string) => {
-    const newList = [...keywordList];
+    const newList = [...keywordList].filter(
+      (data) => data.user !== user || data.keyword !== keyword
+    );
+
     if (user) {
       newList.unshift({
         id: Date.now(),
