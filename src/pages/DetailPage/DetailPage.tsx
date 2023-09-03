@@ -174,7 +174,9 @@ export const DetailPage = () => {
           <StDetailPageContainer>
             {isError && (
               <StEmptyContent>
-                <DongDong className="dongdong" />
+                <button onClick={() => navigate('/')}>
+                  <DongDong className="dongdong" />
+                </button>
                 <p className="text">게시글이 존재하지 않습니다!</p>
                 <p className="text">동동이를 누르면 홈으로 돌아갑니다</p>
               </StEmptyContent>
