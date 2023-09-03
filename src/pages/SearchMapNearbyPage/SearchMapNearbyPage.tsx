@@ -2,11 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Map } from 'components/common';
 import { BackButton } from 'components/common';
-import { LocationButton } from 'components/common';
-import {
-  StNearbyLocationButtonBox,
-  StNearbyMapContainer,
-} from './SearchMapNearbyPage.styles';
+import { StNearbyMapContainer } from './SearchMapNearbyPage.styles';
 import { NearbyReviewsList, fetchNearbyReviews } from 'api/reviewsApi';
 import Marker from 'assets/icons/Marker.png';
 import MarkerSelected from 'assets/icons/MarkerSelected.png';
@@ -281,9 +277,6 @@ export const SearchMapNearbyPage = () => {
     <StNearbyMapContainer>
       <Map width="100%" height="100%" initMap={initMap} />
       <BackButton onClick={onBackHandler} />
-      <StNearbyLocationButtonBox>
-        <LocationButton />
-      </StNearbyLocationButtonBox>
     </StNearbyMapContainer>
   );
 };
