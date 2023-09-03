@@ -28,7 +28,7 @@ export const StSearchWrapper = styled.div`
   text-align: center;
   padding-top: 0.87rem;
   background-color: #fff;
-  height: 100%;
+  height: 100vh;
 `;
 
 export const StMarker = styled(MarkerIcon)`

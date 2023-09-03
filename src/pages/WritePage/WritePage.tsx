@@ -12,6 +12,7 @@ import {
   ReviewForm,
   TagContainer,
   useMediaFiles,
+  useNavigateOnReload,
   useSubmitHandler,
   useWritePageState,
 } from 'components/writePage';
@@ -234,6 +235,8 @@ export const WritePage = () => {
   const onCloseHandler = () => {
     setIsModalOpen(false);
   };
+
+  useNavigateOnReload('/writemap');
 
   return (
     <StLayout>
