@@ -76,7 +76,7 @@ export const RegisterPage = React.memo(() => {
   ]);
 
   const emailRegex = new RegExp(`[a-z0-9]+@[a-z]+\\.[a-z]{2,3}`);
-  const nicknameRegex = new RegExp(`^(?=.*[A-Za-z0-9가-힣]).{4,}$`);
+  const nicknameRegex = new RegExp(`^[a-zA-Z0-9ㄱ-ㅎ가-힣]{2,10}$`);
   const pwRegex = new RegExp(
     `^(?=.*[a-zA-Z])(?=.*[!@#$%^*])(?=.*[0-9]).{8,15}$`
   );
@@ -128,7 +128,7 @@ export const RegisterPage = React.memo(() => {
       // console.log(`confirm nickname success`, newData);
     },
     onError: (err: Error) => {
-      // console.log('confirmNicknameMutate error', err);
+      console.log('confirmNicknameMutate error', err);
       const newData = {
         msg: err.message,
         isValid: false,
@@ -317,7 +317,7 @@ export const RegisterPage = React.memo(() => {
             id="nickname"
             value={nickname}
             onChange={onNicknameChangeHandler}
-            placeholder="한글 또는 영문 대소문자 4자리 이상"
+            placeholder="한글 또는 영문 대소문자 2자리 이상 10자리 이하"
             onClick={onConfirmNicknameHandler}
             btnText="중복 확인"
           />

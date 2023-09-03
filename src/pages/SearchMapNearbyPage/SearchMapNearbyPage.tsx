@@ -2,14 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Map } from 'components/common';
 import { BackButton } from 'components/common';
-import { LocationButton } from 'components/common';
-import {
-  StNearbyLocationButtonBox,
-  StNearbyMapContainer,
-} from './SearchMapNearbyPage.styles';
+import { StNearbyMapContainer } from './SearchMapNearbyPage.styles';
 import { NearbyReviewsList, fetchNearbyReviews } from 'api/reviewsApi';
-import Marker from 'assets/icons/Marker.png';
-import MarkerSelected from 'assets/icons/MarkerSelected.png';
+import Marker from 'assets/icons/Marker.svg';
+import MarkerSelected from 'assets/icons/MarkerSelected.svg';
 import Tooltip from 'assets/images/Tooltip.svg';
 
 const RADIUS = 2;
@@ -119,7 +115,7 @@ export const SearchMapNearbyPage = () => {
     // 현위치 오버레이 이벤트 함수
     const onMove = (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
-      console.log('onMove');
+      // console.log('onMove');
       const { clientX, clientY } = getClientPosition(e);
       const proj = map.getProjection();
       const deltaX = startPoint.current.x - clientX;
@@ -135,7 +131,7 @@ export const SearchMapNearbyPage = () => {
     };
 
     const onEnd = async () => {
-      console.log('onEnd');
+      // console.log('onEnd');
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('touchmove', onMove);
       const newPos = curPosOverlay.getPosition();
@@ -150,7 +146,7 @@ export const SearchMapNearbyPage = () => {
     const onStart = (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
 
-      console.log('onStart');
+      // console.log('onStart');
       const { clientX, clientY } = getClientPosition(e);
       const proj = map.getProjection();
       const overlayPos = curPosOverlay.getPosition();
@@ -165,7 +161,7 @@ export const SearchMapNearbyPage = () => {
       document.addEventListener('touchmove', onMove);
     };
 
-    console.log(content);
+    // console.log(content);
     content.addEventListener('mousedown', onStart);
     content.addEventListener('touchstart', onStart);
     content.addEventListener('mouseup', onEnd);
@@ -219,12 +215,12 @@ export const SearchMapNearbyPage = () => {
           // 툴팁 생성
           const overlay = new kakao.maps.CustomOverlay({
             position: coord,
-            content: `<div style="background-image: url(${Tooltip}); width: 192px; height: 208px; padding: 10px 14px 34px;">
+            content: `<div style="background-image: url(${Tooltip}); width: 184px; height: 208px; padding: 10px 10px 34px;">
             <a href="/review/${data.id}" style="display: block; position: relative; width:164px; height: 164px; border-radius: 12px; overflow: hidden;">
             <img src='${data.smallMainImgUrl}' style="position: absolute; top: 0; left: 0; transform: translate(50, 50); width: 100%; height: 100%; object-fit: cover; margin: auto;"/>
             </a>
             </div>`,
-            xAnchor: 0.495,
+            xAnchor: 0.5,
             yAnchor: 1.22,
             clickable: true,
           });
@@ -281,9 +277,6 @@ export const SearchMapNearbyPage = () => {
     <StNearbyMapContainer>
       <Map width="100%" height="100%" initMap={initMap} />
       <BackButton onClick={onBackHandler} />
-      <StNearbyLocationButtonBox>
-        <LocationButton />
-      </StNearbyLocationButtonBox>
     </StNearbyMapContainer>
   );
 };
