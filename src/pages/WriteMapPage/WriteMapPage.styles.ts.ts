@@ -29,6 +29,7 @@ export const StCurrentLocationContainer = styled.div`
   @media ${(props) => props.theme.device.desktop} {
     height: 12.1rem;
     padding-left: 6.5rem;
+    padding-top: 2.06rem;
   }
 `;
 
@@ -43,6 +44,9 @@ export const StCurrentLocationTitle = styled.span`
   line-height: normal;
   color: #333;
   margin-bottom: 1.4rem;
+  @media ${(props) => props.theme.device.desktop} {
+    margin-left: 1.3125rem;
+  }
 `;
 
 export const StTablet = styled.div`
@@ -74,6 +78,7 @@ export const StMarker = styled(MarkerIcon)`
   margin: 0 0.44rem;
   @media ${(props) => props.theme.device.desktop} {
     margin-left: 1.3rem;
+    margin-top: 0.125rem;
   }
 `;
 
@@ -91,6 +96,7 @@ export const StCurrentLocationText = styled.span`
   @media ${(props) => props.theme.device.desktop} {
     margin-bottom: 1.12rem;
     font-size: 1rem;
+    margin-top: 0.125rem;
   }
 `;
 
