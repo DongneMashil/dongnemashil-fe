@@ -41,6 +41,10 @@ export const StButton = styled.div`
   }
   .comment {
     margin: 0 16px 0 10px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 
