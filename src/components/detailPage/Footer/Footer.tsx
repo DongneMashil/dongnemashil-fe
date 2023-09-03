@@ -50,7 +50,8 @@ export const Footer = ({
     initialLikeCnt,
   });
 
-  useLockScroll(isCommentOpen);
+  // 댓글창 스크롤 막기 커스텀훅
+  useLockScroll(isCommentOpen, 'scrollable');
 
   return (
     <StFooterContatiner $isCommentOpen={isCommentOpen}>
