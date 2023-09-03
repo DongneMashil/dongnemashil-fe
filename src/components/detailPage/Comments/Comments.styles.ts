@@ -51,7 +51,7 @@ export const StEmptyComment = styled.div`
     font-weight: 600;
     line-height: normal;
     background: none;
-    opacity: 0.6;
+    opacity: 0.7;
   }
 `;
 

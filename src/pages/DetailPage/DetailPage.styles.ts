@@ -194,7 +194,9 @@ export const StEmptyContent = styled.div`
   align-items: center;
   justify-content: center;
   margin: 3rem 0;
-
+  button {
+    background: none;
+  }
   .dongdong {
     margin: 1rem 0;
     height: 13rem;
@@ -202,7 +204,6 @@ export const StEmptyContent = styled.div`
       height: 8rem;
     }
     cursor: pointer;
-    opacity: 0.4;
   }
   .text {
     margin: 0.5rem 0;
@@ -214,6 +215,5 @@ export const StEmptyContent = styled.div`
     font-weight: 600;
     line-height: normal;
     background: none;
-    opacity: 0.6;
   }
 `;
