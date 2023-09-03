@@ -12,11 +12,19 @@ export const StResultMapContainer = styled.div`
     z-index: 1000;
 
     // 뒤로가기 버튼
-    &:first-of-type {
+    & > button:first-of-type {
       width: 38px;
       height: 38px;
       top: 20px;
       left: 20px;
     }
   }
+`;
+
+export const StLocationButtonBox = styled.div`
+  width: 53px;
+  height: 53px;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
 `;

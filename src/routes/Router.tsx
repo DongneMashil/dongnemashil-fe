@@ -16,6 +16,7 @@ import {
   MyCommentsPage,
   NotFoundPage,
   StableNavigateContextProvider,
+  SearchMapNearbyPage,
 } from 'pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
@@ -80,6 +81,7 @@ const Router = () => {
         />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search/result" element={<SearchResultPage />} />
+        <Route path="/search/nearby" element={<SearchMapNearbyPage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

@@ -15,3 +15,4 @@ export * from './WriteMapSearchPage/WriteMapSearchPage';
 export * from './MyCommentsPage/MyCommentsPage';
 export * from './LoadingPage/LoadingPage';
 export * from './NotFoundPage/NotFoundPage';
+export * from './SearchMapNearbyPage/SearchMapNearbyPage';
