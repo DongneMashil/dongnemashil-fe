@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { jwtParser } from 'utils/jwtParser';
 import { AuthNavButton, Modal } from 'components/common';
 import { SearchHeader } from 'components/searchPage/SearchHeader/SearchHeader';
 import { ReactComponent as InputIcon } from 'assets/icons/SearchPageIcon.svg';
 import { ReactComponent as DeleteIcon } from 'assets/icons/DeleteXMark.svg';
+import { ReactComponent as DongDong } from 'assets/logo/DongDong.svg';
 import {
   StSearchWrapper,
   StSearchInput,
@@ -12,32 +14,41 @@ import {
   StSearchInputBox,
   StRecentKeywordsWrapper,
   StRecentKeywordsBox,
+  StRecentKeywordsHeader,
+  StEmptyKeywords,
 } from './SearchPage.styles';
 
 const STORAGE_KEY = 'searchedList';
+
+interface Ikeyword {
+  id: number;
+  user: string | null;
+  keyword: string;
+}
 
 export const SearchPage = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [keywordList, setKeywordList] = useState<string[]>(
-    JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]')
-  );
+  const [keywordList, setKeywordList] = useState<Ikeyword[]>([]);
+
+  const userInfo = useRef<string>('');
+
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
-  const search = () => {
-    if (value === '') {
+  const search = (keyword: string) => {
+    if (keyword === '') {
       setIsModalOpen(true);
     } else {
-      onAddKeyword(value);
-      navigate(`/search/result?q=${value}`);
+      onAddKeyword(keyword, userInfo.current);
+      navigate(`/search/result?q=${keyword}`);
     }
   };
   const onKeyPressHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      search();
+      search(value);
     }
   };
   const onCloseModalHandler = () => {
@@ -46,22 +57,41 @@ export const SearchPage = () => {
 
   const onKeywordSearch = (keyword: string) => {
     setValue(keyword);
-    search();
+    search(keyword);
   };
-  const onDeleteKeyword = (idx: number) => {
-    const newList = [...keywordList];
-    newList.splice(idx, 1);
+  const onDeleteKeyword = (id: number) => {
+    const newList = [...keywordList].filter((data) => data.id !== id);
     updateKeywordStorage(newList);
   };
-  const onAddKeyword = (keyword: string) => {
-    const newList = [...keywordList];
-    newList.unshift(keyword);
+  const onAddKeyword = (keyword: string, user: string) => {
+    const newList = [...keywordList].filter(
+      (data) => data.user !== user || data.keyword !== keyword
+    );
+
+    if (user) {
+      newList.unshift({
+        id: Date.now(),
+        user,
+        keyword,
+      });
+    }
     updateKeywordStorage(newList);
   };
-  const updateKeywordStorage = (newList: string[]) => {
+  const updateKeywordStorage = (newList: Ikeyword[]) => {
     setKeywordList(newList);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(newList));
   };
+
+  useEffect(() => {
+    const decodedName = jwtParser().sub;
+    const storage = window.localStorage.getItem(STORAGE_KEY);
+    if (decodedName) {
+      userInfo.current = decodedName;
+    }
+    if (storage) {
+      setKeywordList(JSON.parse(storage));
+    }
+  }, []);
 
   return (
     <StSearchContainer>
@@ -84,32 +114,35 @@ export const SearchPage = () => {
         </StSearchBox>
       </StSearchWrapper>
       <StRecentKeywordsWrapper>
-        <p>최근 검색어</p>
+        <StRecentKeywordsHeader>최근 검색어</StRecentKeywordsHeader>
         <StRecentKeywordsBox>
-          {keywordList.length === 0 ? (
-            <li>최근 검색어가 없습니다.</li>
-          ) : (
-            keywordList.map((data, idx) => {
+          {(() => {
+            const filteredKeywords = keywordList.filter(
+              (data) => data.user === userInfo.current
+            );
+
+            if (filteredKeywords.length === 0) {
               return (
-                <li key={idx}>
-                  <button
-                    onClick={() => {
-                      onKeywordSearch(data);
-                    }}
-                  >
-                    {data}
+                <li>
+                  <StEmptyKeywords>
+                    <DongDong className="dongdong" />
+                    <p className="text">최근 검색어가 없습니다.</p>
+                  </StEmptyKeywords>
+                </li>
+              );
+            } else {
+              return filteredKeywords.map((data) => (
+                <li key={data.id}>
+                  <button onClick={() => onKeywordSearch(data.keyword)}>
+                    {data.keyword}
                   </button>
-                  <button
-                    onClick={() => {
-                      onDeleteKeyword(idx);
-                    }}
-                  >
+                  <button onClick={() => onDeleteKeyword(data.id)}>
                     <DeleteIcon />
                   </button>
                 </li>
-              );
-            })
-          )}
+              ));
+            }
+          })()}
         </StRecentKeywordsBox>
       </StRecentKeywordsWrapper>
       <Modal

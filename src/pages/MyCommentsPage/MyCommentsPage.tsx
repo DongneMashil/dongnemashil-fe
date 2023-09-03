@@ -65,14 +65,13 @@ export const MyCommentsPage = () => {
       <NavBar btnLeft="back" />
 
       <StCounterWrapper>
-        {' '}
         {data ? (
           <StMyCommentCounter>
             {data.pages[0].totalElements}개의 댓글
           </StMyCommentCounter>
         ) : (
           <StMyCommentCounter>댓글이 없습니다🫥</StMyCommentCounter>
-        )}{' '}
+        )}
       </StCounterWrapper>
       <StMyCommentContainer>
         {data ? (
