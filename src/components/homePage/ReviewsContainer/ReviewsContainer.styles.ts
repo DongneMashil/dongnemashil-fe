@@ -25,6 +25,8 @@ export const StTopWrapper = styled.div`
   padding-left: 9px;
 
   & span {
+    display: flex;
+    align-items: center;
     font-size: 0.875rem;
     color: ${theme.lightGrayColor};
     flex: 1;
