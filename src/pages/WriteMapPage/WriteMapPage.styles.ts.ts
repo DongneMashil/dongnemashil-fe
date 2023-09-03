@@ -28,8 +28,7 @@ export const StCurrentLocationContainer = styled.div`
   padding-left: 1.5rem;
   @media ${(props) => props.theme.device.desktop} {
     height: 12.1rem;
-    padding-left: 6.5rem;
-    padding-top: 2.06rem;
+    padding: 2.06rem 6rem 0 6rem;
   }
 `;
 
