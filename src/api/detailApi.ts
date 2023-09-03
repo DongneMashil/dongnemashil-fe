@@ -156,7 +156,6 @@ export const postLikeOptimistic = async (
       (updatedState === true && response.data.message === '좋아요 취소 완료') ||
       (updatedState === false && response.data.message === '좋아요 완료')
     ) {
-      console.log('좋아요 낙관적 업데이트 알림 : 예상과 반대의 값이 왔습니다.');
       return currentState;
     }
 

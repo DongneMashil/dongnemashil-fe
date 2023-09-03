@@ -34,11 +34,9 @@ export const useLike = ({
   const toggleLikeHandler = async () => {
     const forceEndLoadingTimeout = setTimeout(() => {
       setLoading(false);
-      console.log('로딩타이머 false');
     }, 1500);
 
     if (loading) return;
-    console.log('로딩 true');
     setLoading(true);
     if (Date.now() - (lastClickedTime || 0) < 500) return; // 마지막 클릭으로부터 0.5초 안에 재클릭을 방지
     setLastClickedTime(Date.now());
@@ -89,7 +87,6 @@ export const useLike = ({
       clearTimeout(forceEndLoadingTimeout); // 강제로 종료하는 timeout을 제거합니다.
 
       setLoading(false);
-      console.log('로딩 false');
     }
   };
 
