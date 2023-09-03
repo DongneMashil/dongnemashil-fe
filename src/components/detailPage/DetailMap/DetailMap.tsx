@@ -1,19 +1,3 @@
-import { useEffect, useState } from 'react';
-import React from 'react';
-import Marker from 'assets/icons/Marker.svg';
-import { StMapContainer, StMyLocationButton } from './DetailMap.styles';
-import { LocationButton, Map } from 'components/common';
-import { calculateDistance } from 'utils';
-import { useNavigate } from 'react-router-dom';
-
-interface DetailMapProps {
-  width: string;
-  height: string;
-  initMap: (
-    map: kakao.maps.Map,
-    setMapCenterByAddress: (address: string, map: kakao.maps.Map) => void
-  ) => void;
-}
 interface Address {
   address_name: string;
   region_1depth_name: string;
@@ -54,6 +38,23 @@ interface KakaoSearchResult {
 
 type KakaoSearchStatus = 'OK' | 'ZERO_RESULT' | 'ERROR';
 
+import { useEffect, useState } from 'react';
+import React from 'react';
+import Marker from 'assets/icons/Marker.svg';
+import { StMapContainer, StMyLocationButton } from './DetailMap.styles';
+import { LocationButton, Map } from 'components/common';
+import { calculateDistance } from 'utils';
+import Icon from 'assets/logo/DongDong.svg';
+
+interface DetailMapProps {
+  width: string;
+  height: string;
+  initMap: (
+    map: kakao.maps.Map,
+    setMapCenterByAddress: (address: string, map: kakao.maps.Map) => void
+  ) => void;
+}
+
 export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
   const [showCurrentLocation, setShowCurrentLocation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,9 +63,8 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
   );
   const [currentLocation, setCurrentLocation] =
     useState<kakao.maps.LatLng | null>(null);
-  const [distance, setDistance] = useState<number | null>(null); // 상태 추가
-  const navigate = useNavigate();
-
+  const [distance, setDistance] = useState<number | null>(null);
+  const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const setMapCenterByAddress = async (
     address: string,
     map: kakao.maps.Map
@@ -87,14 +87,12 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
           );
           new kakao.maps.Marker({
             position: coords,
-            map: map, // 이렇게 지정하면 지도 위에 바로 마커가 나타납니다.
+            map: map, // 마커를 표시할 지도
             image: markerImage,
           });
           map.setCenter(coords);
         } else {
           console.error('Failed to get coordinates from the address.');
-          alert('주소로부터 좌표를 가져올 수 없습니다.');
-          navigate('/');
         }
       }
     );
@@ -125,27 +123,25 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
           setCurrentLocation(locPosition);
 
           // 빨간 점을 표시하는 CustomOverlay 생성
-          const customOverlay = new kakao.maps.CustomOverlay({
+          const currentLocationOverlay = new kakao.maps.CustomOverlay({
             position: locPosition,
-            content: `
-            <div style="
-              width:15px;
-              height:15px;
-              border-radius:50%;
-              background:#FF0000;
-              animation: blink 1s infinite;
-            ">
-            </div>
-            <style>
-              @keyframes blink {
-                0% { opacity: 1; }
-                50% { opacity: 0; }
-                100% { opacity: 1; }
-              }
-            </style>
+            content: `<div style="
+                width:50px;
+                height:51.23px;
+                background-image: url(${Icon});
+                animation: blink 1.5s infinite;
+              ">
+              </div>
+              <style>
+                @keyframes blink {
+                  0% { opacity: 1; }
+                  50% { opacity: 0; }
+                  100% { opacity: 1; }
+                }
+              </style>
           `,
           });
-          customOverlay.setMap(map);
+          currentLocationOverlay.setMap(map);
 
           fitBoundsToMarkers(map, [locPosition, reviewAddress!]);
           setIsLoading(false); // 로딩 완료
@@ -159,13 +155,12 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
       console.error('Geolocation is not supported by this browser.');
     }
   };
-  const initializeMap = (map: kakao.maps.Map) => {
-    if (initMap) {
-      initMap(map, setMapCenterByAddress);
-    }
 
+  const initializeMap = (map: kakao.maps.Map) => {
     if (showCurrentLocation) {
       displayCurrentLocation(map);
+    } else if (initMap) {
+      initMap(map, setMapCenterByAddress);
     }
   };
 
@@ -173,21 +168,27 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
     const container = document.getElementById('map');
     if (!container) return;
 
-    const options = {
-      center: new kakao.maps.LatLng(37.545043, 127.039245),
-      level: 3,
-    };
+    if (!map) {
+      const options = {
+        center: new kakao.maps.LatLng(37.545043, 127.039245),
+        level: 5,
+        scrollwheel: false,
+      };
 
-    const map = new kakao.maps.Map(container, options);
-    initializeMap(map);
-  }, [showCurrentLocation]);
+      const createdMap = new kakao.maps.Map(container, options);
+      const zoomControl = new kakao.maps.ZoomControl();
+      createdMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+      setMap(createdMap);
+    } else {
+      initializeMap(map);
+    }
+  }, [showCurrentLocation, map]);
 
   const onClickMyLocation = () => {
     setShowCurrentLocation(true);
   };
 
   useEffect(() => {
-    // currentLocation와 reviewAddress가 모두 설정되었을 때만 거리를 계산합니다.
     if (currentLocation && reviewAddress) {
       const calculatedDistance = calculateDistance(
         currentLocation.getLat(),
@@ -197,11 +198,11 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
       );
       setDistance(Number(calculatedDistance.toFixed(0)));
     }
-  }, [currentLocation, reviewAddress]);
+  }, [currentLocation]);
 
   return (
     <StMapContainer>
-      <Map width={width} height={height} initMap={initializeMap} />
+      <div id="map" style={{ width, height }}></div>
       <StMyLocationButton>
         <LocationButton
           isDistanceVisible={showCurrentLocation}

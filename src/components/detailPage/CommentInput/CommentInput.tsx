@@ -7,7 +7,6 @@ import { StFooterContatiner, StFooterWrapper } from './CommentInput.styles';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userProfileSelector } from 'recoil/userInfo';
 import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddListenerAtom';
-import { useNavigate } from 'react-router-dom';
 
 interface FooterProps {
   reviewId: string;
@@ -20,11 +19,9 @@ export const CommentInput = ({
   const [comment, setComment] = useState('');
   const setCommentAddListener = useSetRecoilState(commentAddListenerAtom);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const userState = useRecoilValue(userProfileSelector);
   const [errorMsg, setErrorMsg] = useState(''); // 에러 메시지를 저장하는 상태
 
-  const navigate = useNavigate();
   // 댓글 등록 함수
   const commentMutation = useMutation(
     (newComment: string) => postComment(reviewId, newComment),
@@ -37,7 +34,7 @@ export const CommentInput = ({
       onError: (err) => {
         console.log(err);
         setComment('');
-        setIsErrorModalOpen(true);
+        setErrorMsg('댓글이 너무 길거나, 잘못된 요청입니다.');
       },
     }
   );
@@ -52,8 +49,17 @@ export const CommentInput = ({
   // 댓글 등록
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isSubmitting || !comment) {
+    if (isSubmitting) {
       setErrorMsg('댓글은 1초에 1개만 등록 가능합니다.');
+      return;
+    } else if (comment.length > 100) {
+      setErrorMsg('댓글은 100자 이내로 입력해주세요.');
+      return;
+    } else if (comment.length === 0) {
+      setErrorMsg('댓글을 입력해주세요.');
+      return;
+    } else if (comment.trim().length === 0) {
+      setErrorMsg('댓글을 입력해주세요.');
       return;
     }
 
@@ -70,7 +76,6 @@ export const CommentInput = ({
       <StFooterWrapper onSubmit={onSubmitHandler}>
         {userState?.isLoggedIn ? (
           <>
-            {' '}
             <Input
               placeholder="댓글을 입력해주세요"
               onChange={onChangeHandler}
@@ -82,7 +87,6 @@ export const CommentInput = ({
           </>
         ) : (
           <>
-            {' '}
             <Input
               type=""
               placeholder="로그인 후 댓글 입력이 가능합니다."
@@ -91,23 +95,14 @@ export const CommentInput = ({
             <Button inputType="button" type={'commentInput'} url="/login">
               로그인
             </Button>
-            <Modal
-              isOpen={isErrorModalOpen}
-              onCloseHandler={() => setIsErrorModalOpen(false)}
-              title="댓글 등록 실패"
-              firstLine="댓글이 너무 길거나, 잘못된 요청입니다."
-              secondLine="짧았다면, 다시 로그인 해주세요."
-              onSubmitHandler={() => navigate('/login')}
-              onSubmitText="로그인"
-            />{' '}
-            <Modal
-              isOpen={!!errorMsg}
-              title="알림"
-              firstLine={errorMsg}
-              onCloseHandler={onCloseErrorModalHandler}
-            />
           </>
         )}
+
+        <Modal
+          isOpen={!!errorMsg}
+          firstLine={errorMsg}
+          onCloseHandler={onCloseErrorModalHandler}
+        />
       </StFooterWrapper>
     </StFooterContatiner>
   );

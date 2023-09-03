@@ -25,9 +25,9 @@ export const setClientHeader = (accessToken: string) => {
 
 export const resetHeader = () => {
   // console.log('resetHeader');
-  // window.localStorage.removeItem('access_token');
-  // window.localStorage.removeItem('refresh_token');
-  window.localStorage.clear();
+  window.localStorage.removeItem('access_token');
+  window.localStorage.removeItem('refresh_token');
+  //window.localStorage.clear();
   // console.log( 'reset Header access token', window.localStorage.getItem('access_token') );
   // console.log( 'reset Header refresh token', window.localStorage.getItem('refresh_token') );
   axiosInstance.defaults.headers.common = {};

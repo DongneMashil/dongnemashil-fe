@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useLogout, useUpdateUserInfo } from 'hooks';
 import { TabMenu, UserInfo } from 'components/myPage';
 import { FixFooter, NavBar } from 'components/layout';
@@ -13,6 +13,9 @@ export const MyPage = () => {
   const [shouldLogout, setShouldLogout] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  //파라미터에 닉네임이 들어오면 다른 유저의 마이페이지
+  const { userNickname: paramNickName } = useParams<{ userNickname: string }>();
 
   //유저정보 조회 및 업데이트
   const { data } = useUpdateUserInfo(true);
@@ -94,8 +97,10 @@ export const MyPage = () => {
               nickName={data?.nickname}
               email={data?.email}
               setIsModalOpen={setIsModalOpen}
+              isMyPage={typeof paramNickName === 'undefined'}
+              otherUserNickname={paramNickName}
             />
-            <TabMenu nickName={data?.nickname} />
+            <TabMenu nickName={data?.nickname} paramNickName={paramNickName} />
           </>
         )}
       </StMyPageContainer>
