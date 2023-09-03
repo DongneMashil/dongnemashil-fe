@@ -110,19 +110,20 @@ export const SearchMapNearbyPage = () => {
       map: map,
       position: curCoord,
       content: content,
-      zIndex: 100,
+      zIndex: 10,
     });
 
     curPosOverlay.setMap(map);
     setCenter(map, curCoord);
 
     // 현위치 오버레이 이벤트 함수
-    const onMouseMove = (e: MouseEvent) => {
+    const onMove = (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
-      console.log('onMouseMove');
+      console.log('onMove');
+      const { clientX, clientY } = getClientPosition(e);
       const proj = map.getProjection();
-      const deltaX = startPoint.current.x - e.clientX;
-      const deltaY = startPoint.current.y - e.clientY;
+      const deltaX = startPoint.current.x - clientX;
+      const deltaY = startPoint.current.y - clientY;
       const newPoint = new kakao.maps.Point(
         overlayPoint.current.x - deltaX,
         overlayPoint.current.y - deltaY
@@ -133,9 +134,10 @@ export const SearchMapNearbyPage = () => {
       circle.setPosition(newPos);
     };
 
-    const onMouseUp = async () => {
-      console.log('onMouseUp');
-      document.removeEventListener('mousemove', onMouseMove);
+    const onEnd = async () => {
+      console.log('onEnd');
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('touchmove', onMove);
       const newPos = curPosOverlay.getPosition();
       const newList: NearbyReviewsList[] = await fetchNearbyReviews(
         newPos.getLat(),
@@ -145,27 +147,46 @@ export const SearchMapNearbyPage = () => {
       setReviewList(newList);
     };
 
-    const onMouseDown = (e: MouseEvent) => {
+    const onStart = (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
 
-      console.log('onMouseDown');
+      console.log('onStart');
+      const { clientX, clientY } = getClientPosition(e);
       const proj = map.getProjection();
       const overlayPos = curPosOverlay.getPosition();
 
       kakao.maps.event.preventMap();
 
-      startX.current = e.clientX;
-      startY.current = e.clientY;
+      startX.current = clientX;
+      startY.current = clientY;
       startOverlayPoint.current = proj.containerPointFromCoords(overlayPos);
 
-      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('touchmove', onMove);
     };
 
     console.log(content);
-    content.addEventListener('mousedown', onMouseDown);
-    content.addEventListener('mouseup', onMouseUp);
+    content.addEventListener('mousedown', onStart);
+    content.addEventListener('touchstart', onStart);
+    content.addEventListener('mouseup', onEnd);
+    content.addEventListener('touchend', onEnd);
 
     setMarkers(map);
+  };
+
+  const getClientPosition = (e: MouseEvent | TouchEvent) => {
+    if (e instanceof TouchEvent && e.touches.length > 0) {
+      return {
+        clientX: e.touches[0].clientX,
+        clientY: e.touches[0].clientY,
+      };
+    } else if (e instanceof MouseEvent) {
+      return {
+        clientX: e.clientX,
+        clientY: e.clientY,
+      };
+    }
+    return { clientX: 0, clientY: 0 };
   };
 
   const setMarkers = (map: kakao.maps.Map) => {
@@ -223,8 +244,8 @@ export const SearchMapNearbyPage = () => {
             selectedMarker.current = marker;
             selectedOverlay.current = overlay;
 
-            selectedMarker.current.setZIndex(10);
-            selectedOverlay.current.setZIndex(10);
+            selectedMarker.current.setZIndex(100);
+            selectedOverlay.current.setZIndex(100);
           });
           kakao.maps.event.addListener(map, 'click', () => {
             selectedMarker.current?.setImage(markerImage);
