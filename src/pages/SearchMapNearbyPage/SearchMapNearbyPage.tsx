@@ -4,8 +4,8 @@ import { Map } from 'components/common';
 import { BackButton } from 'components/common';
 import { StNearbyMapContainer } from './SearchMapNearbyPage.styles';
 import { NearbyReviewsList, fetchNearbyReviews } from 'api/reviewsApi';
-import Marker from 'assets/icons/Marker.png';
-import MarkerSelected from 'assets/icons/MarkerSelected.png';
+import Marker from 'assets/icons/Marker.svg';
+import MarkerSelected from 'assets/icons/MarkerSelected.svg';
 import Tooltip from 'assets/images/Tooltip.svg';
 
 const RADIUS = 2;
@@ -215,12 +215,12 @@ export const SearchMapNearbyPage = () => {
           // 툴팁 생성
           const overlay = new kakao.maps.CustomOverlay({
             position: coord,
-            content: `<div style="background-image: url(${Tooltip}); width: 192px; height: 208px; padding: 10px 14px 34px;">
+            content: `<div style="background-image: url(${Tooltip}); width: 184px; height: 208px; padding: 10px 10px 34px;">
             <a href="/review/${data.id}" style="display: block; position: relative; width:164px; height: 164px; border-radius: 12px; overflow: hidden;">
             <img src='${data.smallMainImgUrl}' style="position: absolute; top: 0; left: 0; transform: translate(50, 50); width: 100%; height: 100%; object-fit: cover; margin: auto;"/>
             </a>
             </div>`,
-            xAnchor: 0.495,
+            xAnchor: 0.5,
             yAnchor: 1.22,
             clickable: true,
           });
