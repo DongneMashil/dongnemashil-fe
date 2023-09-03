@@ -94,7 +94,7 @@ export const fetchNearbyReviews = async (
     const response: AxiosResponse<NearbyReviewsList[]> =
       await axios.get(`${process.env.REACT_APP_SERVER_API_URL}/search/nearby?latitude=${lat}
     &longitude=${lng}&radius=${rad}`);
-    console.log('fetchNearbyReviews data', response);
+    //console.log('fetchNearbyReviews data', response);
     return response.data;
   } catch (e) {
     if (e instanceof AxiosError) {

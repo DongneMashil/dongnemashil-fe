@@ -28,13 +28,13 @@ export const StCurrentLocationContainer = styled.div`
   padding-left: 1.5rem;
   @media ${(props) => props.theme.device.desktop} {
     height: 12.1rem;
-    padding-left: 6.5rem;
-    padding-top: 2.06rem;
+    padding: 2.06rem 0 0 6rem;
   }
 `;
 
 export const StMaxSize = styled.div`
   ${theme.responsiveContainer}
+  margin: 0 auto
 `;
 
 export const StCurrentLocationTitle = styled.span`
@@ -69,6 +69,7 @@ export const StInputWrapper = styled.div`
     border-radius: 1.88rem;
     border: 1px solid #dbdbdb;
     padding-top: 1rem;
+    background-color: #F7F7F7;
   }
 `;
 
