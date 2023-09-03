@@ -194,7 +194,9 @@ export const StEmptyContent = styled.div`
   align-items: center;
   justify-content: center;
   margin: 3rem 0;
-
+  button {
+    background: none;
+  }
   .dongdong {
     margin: 1rem 0;
     height: 13rem;
@@ -202,7 +204,7 @@ export const StEmptyContent = styled.div`
       height: 8rem;
     }
     cursor: pointer;
-    opacity: 0.4;
+    opacity: 0.5;
   }
   .text {
     margin: 0.5rem 0;
