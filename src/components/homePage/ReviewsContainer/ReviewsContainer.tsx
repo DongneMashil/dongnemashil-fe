@@ -12,7 +12,6 @@ import {
 import { useIntersect } from 'hooks/useIntersect';
 import { Button } from 'components/common';
 import { ReviewsList } from 'api/reviewsApi';
-// import { StLoadingSpinner } from 'components/common/LoadingSpinner/LoadingSpinner.styles';
 import { MasonryGrid } from '@egjs/react-grid';
 import { MasonryGridOptions } from '@egjs/grid';
 import { useLocation } from 'react-router-dom';
