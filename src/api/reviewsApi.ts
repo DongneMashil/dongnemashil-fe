@@ -31,6 +31,7 @@ export interface ReviewsList {
   middleMainImgUrl: string;
   smallMainImgUrl?: string;
   profileImgUrl: string | null;
+  nickname: string;
   createdAt: string;
   likeCnt: number;
   likebool: boolean;

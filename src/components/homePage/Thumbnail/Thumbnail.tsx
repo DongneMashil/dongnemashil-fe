@@ -23,6 +23,7 @@ export const Thumbnail = ({
   middleMainImgUrl,
   smallMainImgUrl,
   profileImgUrl,
+  nickname,
   createdAt,
   likeCnt: initialLikeCnt,
   likebool: initialIsLiked,
@@ -35,6 +36,10 @@ export const Thumbnail = ({
 
   const onClickThumbnail = () => {
     navigate(`/review/${id}`);
+  };
+
+  const onClickWriter = () => {
+    navigate(`/userPage/${nickname}`);
   };
 
   const handleImageLoad = () => {
@@ -71,7 +76,11 @@ export const Thumbnail = ({
       </StThumnailMain>
       <StThumbnailTitle>
         <StThumbnailTitleLeft>
-          <img src={profileImgUrl || noUser} alt="프로필 이미지" />
+          <img
+            src={profileImgUrl || noUser}
+            alt="프로필 이미지"
+            onClick={onClickWriter}
+          />
           <StTitleText onClick={onClickThumbnail}>
             <Span size={'title'}>
               <strong>{roadName}</strong>

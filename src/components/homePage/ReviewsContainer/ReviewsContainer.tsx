@@ -126,6 +126,7 @@ export const ReviewsContainer = ({
               middleMainImgUrl={review.middleMainImgUrl}
               smallMainImgUrl={review.smallMainImgUrl}
               profileImgUrl={review.profileImgUrl}
+              nickname={review.nickname}
               createdAt={review.createdAt}
               likeCnt={review.likeCnt}
               likebool={review.likebool}
