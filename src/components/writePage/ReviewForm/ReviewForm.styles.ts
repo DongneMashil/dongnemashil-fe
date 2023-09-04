@@ -16,23 +16,35 @@ export const StContentBox = styled.textarea`
   font-size: 1rem;
   position: relative;
   outline: none;
+  border-radius: 0;
+  -webkit-appearance: none;
+  color: red(51, 51, 51);
+  & ::placeholder{
+    color: rgb(169, 169, 169)
+  }
 `;
 
 export const StTitle = styled.input`
-  width: 90%;
+  width: 100%;
   height: 3.7525rem;
   padding-left: 0.3rem;
+  padding-right: 5.8rem;
+  padding-top: 1.25rem;
   border: none;
   border-bottom: 1px solid #e2e2e2;
-  color: #333;
   font-size: 1.33rem;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   line-height: normal;
-  padding-top: 1.25rem;
-  margin-bottom: 0.9375rem;
+  margin: 0.9375rem auto;
   outline: none;
   font-family: Pretendard;
+  border-radius: 0;
+  -webkit-appearance: none;
+  color: red(51, 51, 51);
+  & ::placeholder{
+    color: rgb(169, 169, 169)
+  }
 `;
 
 export const StFormWrapper = styled.div`
@@ -51,11 +63,11 @@ export const StContentWrapper = styled.div`
   width: 90%;
 `;
 
-export const StByteSizeTag = styled.p`
+export const StByteSizeTag = styled.p<{ color?: string }>`
   position: absolute;
-  bottom: 3.69rem;
-  right: 1.44rem;
-  color: #a9a9a9;
+  bottom: 1.4rem;
+  right: 0.9rem;
+  color: ${(props) => props.color || '#a9a9a9'};
   text-align: center;
   font-family: Pretendard;
   font-size: 0.75rem;

@@ -50,6 +50,11 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
   fileInputRef,
 }) => {
   const [contentByteSize, setContentByteSize] = useState(0);
+  const [titleByteSize, setTitleByteSize] = useState(0);
+
+  useEffect(() => {
+    setTitleByteSize(getStringByteSize(formValues.title));
+  }, [formValues.title]);
 
   useEffect(() => {
     setContentByteSize(getStringByteSize(formValues.content));
@@ -60,15 +65,22 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
     [mediaFiles]
   );
 
+  const onExcessContentBytes = contentByteSize === 500 ? '#f59f94' : undefined;
+  const onExcessTitleBytes = titleByteSize === 500 ? '#f59f94' : undefined;
   return (
     <StFormWrapper>
-      <StTitle
-        type="text"
-        name="title"
-        value={formValues.title}
-        onChange={onInputChange}
-        placeholder="제목"
-      />
+      <StContentWrapper>
+        <StTitle
+          type="text"
+          name="title"
+          value={formValues.title}
+          onChange={onInputChange}
+          placeholder="제목"
+        />
+        <StByteSizeTag color={onExcessTitleBytes}>
+          {titleByteSize} / 500 Btye
+        </StByteSizeTag>
+      </StContentWrapper>
       <FileSlider
         files={mediaFiles}
         images={images}
@@ -94,7 +106,9 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
           onChange={onInputChange}
           placeholder="산책은 어땠나요?"
         />
-        <StByteSizeTag>( {contentByteSize} / 500 )</StByteSizeTag>
+        <StByteSizeTag color={onExcessContentBytes}>
+          ( {contentByteSize} / 500 Byte )
+        </StByteSizeTag>
       </StContentWrapper>
     </StFormWrapper>
   );

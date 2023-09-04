@@ -14,8 +14,8 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <RecoilRoot>
-            <div id="modal" />
             <GlobalStyle />
+            <div id="modal" />
             <Router />
             <ReactQueryDevtools initialIsOpen={false} />
           </RecoilRoot>

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { AuthNavButton } from 'components/common';
 import { AuthInputBox, AuthLogoBox } from 'components/common';
 import { login } from 'api/loginApi';
@@ -17,7 +17,7 @@ export const CommonLoginPage = () => {
   const [shouldVerify, setShouldVerify] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const { isSuccess } = useVerifyUser(shouldVerify);
-  const { mutate } = useMutation(login, {
+  const { mutate: loginMutate } = useMutation(login, {
     onSuccess: () => {
       // console.log('Common Login Success');
       setShouldVerify(true);
@@ -31,6 +31,10 @@ export const CommonLoginPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
+  const isButtonActive = useMemo(() => {
+    return email !== '' && password !== '';
+  }, [email, password]);
+
   const onEmailHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value),
     [email]
@@ -40,16 +44,24 @@ export const CommonLoginPage = () => {
     [password]
   );
 
-  const onSubmitHandler = useCallback(
-    (e: React.MouseEvent<HTMLElement>) => {
+  const onSubmitHandler = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    loginHandler();
+  };
+
+  const onKeyDownHandler = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && isButtonActive) {
       e.preventDefault();
-      mutate({
-        email,
-        password,
-      });
-    },
-    [email, password]
-  );
+      loginHandler();
+    }
+  };
+
+  const loginHandler = useCallback(() => {
+    loginMutate({
+      email,
+      password,
+    });
+  }, [email, password]);
 
   if (isSuccess) {
     // console.log('로그인 성공');
@@ -77,13 +89,14 @@ export const CommonLoginPage = () => {
           id="password"
           value={password}
           onChange={onPasswordHandler}
+          onKeyDown={onKeyDownHandler}
           placeholder="비밀번호"
         />
         <LoginErrorMsgBox errorMsg={errorMsg} />
         <LoginBtnWrapper
           type="authNormal"
           onClick={onSubmitHandler}
-          $active={email !== '' && password !== ''}
+          $active={isButtonActive}
           label="로그인"
         />
       </StCommonLoginContainer>

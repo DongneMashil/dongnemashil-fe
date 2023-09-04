@@ -1,4 +1,5 @@
 import { useInfiniteQuery, QueryFunctionContext } from '@tanstack/react-query';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { axiosInstance } from './api';
 import { useRecoilValue } from 'recoil';
 import {
@@ -34,6 +35,15 @@ export interface ReviewsList {
   likeCnt: number;
   likebool: boolean;
   address?: string;
+}
+
+export interface NearbyReviewsList {
+  id: number;
+  nickname: string;
+  roadName: string;
+  smallMainImgUrl: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface Pageable {
@@ -73,4 +83,24 @@ export const useFetchReviews = ({ q }: PaginationParams = {}) => {
       last ? undefined : number + 2,
     staleTime: 1000 * 20,
   });
+};
+
+// 반경 검색
+export const fetchNearbyReviews = async (
+  lat: number,
+  lng: number,
+  rad: number = 2
+): Promise<NearbyReviewsList[]> => {
+  try {
+    const response: AxiosResponse<NearbyReviewsList[]> =
+      await axios.get(`${process.env.REACT_APP_SERVER_API_URL}/search/nearby?latitude=${lat}
+    &longitude=${lng}&radius=${rad}`);
+    //console.log('fetchNearbyReviews data', response);
+    return response.data;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data || e.message);
+    }
+    throw e;
+  }
 };

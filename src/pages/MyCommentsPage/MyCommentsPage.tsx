@@ -17,6 +17,8 @@ import { useNavigate } from 'react-router-dom';
 import { useIntersect } from 'hooks/useIntersect';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import noUser from 'assets/images/NoUser.jpg';
+import { Button } from 'components/common';
+import { ReactComponent as LogoHorizontal } from 'assets/logo/LogoHorizontal.svg';
 
 export const MyCommentsPage = () => {
   const userState = useRecoilValue(userProfileSelector);
@@ -44,7 +46,7 @@ export const MyCommentsPage = () => {
     );
     return query;
   };
-  const { data, fetchNextPage, hasNextPage, isLoading } = useInfinityScroll();
+  const { data, fetchNextPage, isLoading, hasNextPage } = useInfinityScroll();
   // useIntersect 콜백함수
   const onIntersectCallback = () => {
     if (!isLoading) {
@@ -61,18 +63,18 @@ export const MyCommentsPage = () => {
   return (
     <StMyCommentsLayout>
       <NavBar btnLeft="back" />
-      {data ? (
-        <StCounterWrapper>
-          {' '}
+
+      <StCounterWrapper>
+        {data ? (
           <StMyCommentCounter>
             {data.pages[0].totalElements}개의 댓글
           </StMyCommentCounter>
-        </StCounterWrapper>
-      ) : (
-        <StMyCommentCounter>댓글이 없습니다🫥</StMyCommentCounter>
-      )}
+        ) : (
+          <StMyCommentCounter>댓글이 없습니다🫥</StMyCommentCounter>
+        )}
+      </StCounterWrapper>
       <StMyCommentContainer>
-        {data &&
+        {data ? (
           data.pages.map((page) =>
             page.content.map((item: Comment, index: number) => (
               <StButton
@@ -87,14 +89,20 @@ export const MyCommentsPage = () => {
                 <ChevronRight className="ChevronRight" />
               </StButton>
             ))
-          )}
+          )
+        ) : (
+          <StMyCommentCounter>
+            <Button type={'icon'} url={'/'} ariaLabel="홈으로">
+              <LogoHorizontal />
+            </Button>
+            &nbsp; 👈 새로운 댓글을 작성하러 가볼까요?
+          </StMyCommentCounter>
+        )}
         {isLoading && <div>로딩중...</div>}
-        {hasNextPage ? (
+        {hasNextPage && (
           <>
             <StTarget ref={loaderRef} />
           </>
-        ) : (
-          data && <StMyCommentCounter>마지막 댓글입니다.</StMyCommentCounter>
         )}
       </StMyCommentContainer>
     </StMyCommentsLayout>

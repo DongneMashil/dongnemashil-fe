@@ -1,6 +1,14 @@
 import { atom } from 'recoil';
 
-export const cropProfileImageAtom = atom<string | null>({
+type CropProfileImageType = {
+  file: File | null;
+  imgUrl: string | null;
+};
+
+export const cropProfileImageAtom = atom<CropProfileImageType>({
   key: 'cropProfileImage',
-  default: null,
+  default: {
+    file: null,
+    imgUrl: null,
+  },
 });

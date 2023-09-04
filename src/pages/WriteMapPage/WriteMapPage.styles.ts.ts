@@ -28,12 +28,13 @@ export const StCurrentLocationContainer = styled.div`
   padding-left: 1.5rem;
   @media ${(props) => props.theme.device.desktop} {
     height: 12.1rem;
-    padding-left: 6.5rem;
+    padding: 2.06rem 0 0 6rem;
   }
 `;
 
 export const StMaxSize = styled.div`
   ${theme.responsiveContainer}
+  margin: 0 auto
 `;
 
 export const StCurrentLocationTitle = styled.span`
@@ -43,6 +44,9 @@ export const StCurrentLocationTitle = styled.span`
   line-height: normal;
   color: #333;
   margin-bottom: 1.4rem;
+  @media ${(props) => props.theme.device.desktop} {
+    margin-left: 1.3125rem;
+  }
 `;
 
 export const StTablet = styled.div`
@@ -65,6 +69,7 @@ export const StInputWrapper = styled.div`
     border-radius: 1.88rem;
     border: 1px solid #dbdbdb;
     padding-top: 1rem;
+    background-color: #F7F7F7;
   }
 `;
 
@@ -74,6 +79,7 @@ export const StMarker = styled(MarkerIcon)`
   margin: 0 0.44rem;
   @media ${(props) => props.theme.device.desktop} {
     margin-left: 1.3rem;
+    margin-top: 0.125rem;
   }
 `;
 
@@ -91,6 +97,7 @@ export const StCurrentLocationText = styled.span`
   @media ${(props) => props.theme.device.desktop} {
     margin-bottom: 1.12rem;
     font-size: 1rem;
+    margin-top: 0.125rem;
   }
 `;
 

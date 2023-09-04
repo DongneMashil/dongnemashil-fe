@@ -12,6 +12,7 @@ import {
   ReviewForm,
   TagContainer,
   useMediaFiles,
+  useNavigateOnReload,
   useSubmitHandler,
   useWritePageState,
 } from 'components/writePage';
@@ -116,8 +117,6 @@ export const WritePage = () => {
           ? 'image'
           : 'video';
 
-          
-
         if (fileType === 'image') {
           const options = {
             maxSizeMB: 1,
@@ -138,10 +137,13 @@ export const WritePage = () => {
                 { type: fileType, file: compressedFile, isCover: false },
               ];
 
-              if (!prev.some((p) => p.isCover) || (prev[0].type === 'video' && prev.length === 1)) {
-              const index = updatedFiles.length - 1;
-              updatedFiles[index].isCover = true;
-            }
+              if (
+                !prev.some((p) => p.isCover) ||
+                (prev[0].type === 'video' && prev.length === 1)
+              ) {
+                const index = updatedFiles.length - 1;
+                updatedFiles[index].isCover = true;
+              }
 
               return updatedFiles;
             });
@@ -179,7 +181,21 @@ export const WritePage = () => {
   };
 
   const onDeleteImage = (targetFile: MediaFileType) => {
-    setMediaFiles((prev) => prev.filter((file) => file.file !== targetFile));
+    setMediaFiles((prev) => {
+      const isTargetFileCover = prev.find((file) => file.file === targetFile)
+        ?.isCover;
+
+      const updatedFiles = prev.filter((file) => file.file !== targetFile);
+
+      if (isTargetFileCover && updatedFiles.length > 0) {
+        return [
+          { ...updatedFiles[0], isCover: true },
+          ...updatedFiles.slice(1),
+        ];
+      }
+
+      return updatedFiles;
+    });
   };
 
   const handleTagChange = (tags: string[]) => {
@@ -200,10 +216,13 @@ export const WritePage = () => {
     setModalMessage,
   });
 
-  const determineIsCoverImage = useCallback((targetFile: MediaFileType) => {
-    const file = mediaFiles.find((file) => file.file === targetFile);
-    return file ? file.isCover : false;
-  }, [mediaFiles]);
+  const determineIsCoverImage = useCallback(
+    (targetFile: MediaFileType) => {
+      const file = mediaFiles.find((file) => file.file === targetFile);
+      return file ? file.isCover : false;
+    },
+    [mediaFiles]
+  );
 
   const onGoToWriteMapPageHandler = () => {
     if (reviewId) {
@@ -216,6 +235,8 @@ export const WritePage = () => {
   const onCloseHandler = () => {
     setIsModalOpen(false);
   };
+
+  useNavigateOnReload('/writemap');
 
   return (
     <StLayout>

@@ -1,13 +1,15 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Map } from 'components/common';
+import { LocationButton, Map } from 'components/common';
 import { BackButton } from 'components/common';
-import { CurrentPosButton } from './CurrentPosButton/CurrentPosButton';
-import Marker from 'assets/icons/Marker.png';
-import MarkerSelected from 'assets/icons/MarkerSelected.png';
-import { StResultMapContainer } from './SearchResultMapPage.styles';
+import Marker from 'assets/icons/Marker.svg';
+import MarkerSelected from 'assets/icons/MarkerSelected.svg';
+import {
+  StResultMapContainer,
+  StLocationButtonBox,
+} from './SearchResultMapPage.styles';
 import { ReviewsList } from 'api/reviewsApi';
 import Tooltip from 'assets/images/Tooltip.svg';
-
+import Icon from 'assets/logo/DongDong.svg';
 export const SearchResultMapPage = ({
   reviewList,
   onToggle,
@@ -18,6 +20,7 @@ export const SearchResultMapPage = ({
   const [initialMapPos, setInitialMapPos] = useState<kakao.maps.LatLng | null>(
     null
   );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const hasInitialMapPosSet = useRef<boolean>(false);
   const tooltipImgPreload = () => {
     const img = new Image();
@@ -25,19 +28,52 @@ export const SearchResultMapPage = ({
   };
   const mapInstance = useRef<kakao.maps.Map | null>(null);
 
+  // 현위치 마커
+  const showCurrentLocation = (map: kakao.maps.Map, loc: kakao.maps.LatLng) => {
+    const curPosMarker = new kakao.maps.CustomOverlay({
+      position: loc,
+      content: `
+              <div style="
+                width:50px;
+                height:51.23px;
+                background-image: url(${Icon});
+                animation: blink 1.5s infinite;
+              ">
+              </div>
+              <style>
+                @keyframes blink {
+                  0% { opacity: 1; }
+                  50% { opacity: 0; }
+                  100% { opacity: 1; }
+                }
+              </style>
+            `,
+    });
+    curPosMarker.setMap(map);
+    setCenter(map, loc, true);
+  };
+
   const moveToCurrentLocation = (map: kakao.maps.Map) => {
+    console.log('moveToCurrentLocation 진입');
+    setIsLoading(true);
     if (navigator.geolocation) {
+      console.log('moveToCurrentLocation 분기 진입');
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
+        async (pos) => {
           const location = new kakao.maps.LatLng(
             pos.coords.latitude,
             pos.coords.longitude
           );
-          setCenter(map, location, true);
+          // 동동이 띄우기
+          await showCurrentLocation(map, location);
+          setIsLoading(false);
         },
         () => {
+          console.log('moveToCurrentLocation 에러 진입');
           const location = new kakao.maps.LatLng(37.545043, 127.039245);
           setCenter(map, location, true);
+          onCurrentPosHandler();
+          setIsLoading(false);
         }
       );
     }
@@ -111,12 +147,12 @@ export const SearchResultMapPage = ({
           // 툴팁 생성
           const overlay = new kakao.maps.CustomOverlay({
             position: coord,
-            content: `<div style="background-image: url(${Tooltip}); width: 192px; height: 208px; padding: 10px 14px 34px;">
+            content: `<div style="background-image: url(${Tooltip}); width: 184px; height: 208px; padding: 10px 10px 34px;">
             <a href="/review/${data.id}" style="display: block; position: relative; width:164px; height: 164px; border-radius: 12px; overflow: hidden;">
             <img src='${data.smallMainImgUrl}' style="position: absolute; top: 0; left: 0; transform: translate(50, 50); width: 100%; height: 100%; object-fit: cover; margin: auto;"/>
             </a>
             </div>`,
-            xAnchor: 0.495,
+            xAnchor: 0.5,
             yAnchor: 1.22,
             clickable: true,
           });
@@ -154,6 +190,14 @@ export const SearchResultMapPage = ({
     onToggle();
   };
 
+  const onClickCurPos = () => {
+    console.log('onClickCurPos 진입');
+    if (mapInstance.current) {
+      console.log('onClickCurPos execute');
+      moveToCurrentLocation(mapInstance.current);
+    }
+  };
+
   const onCurrentPosHandler = () => {
     if (mapInstance.current) {
       moveToCurrentLocation(mapInstance.current);
@@ -176,7 +220,9 @@ export const SearchResultMapPage = ({
     <StResultMapContainer>
       <Map width="100%" height="100%" initMap={initMap} />
       <BackButton onClick={onBackHandler} />
-      <CurrentPosButton onClick={onCurrentPosHandler} />
+      <StLocationButtonBox>
+        <LocationButton onClick={onClickCurPos} isLoading={isLoading} />
+      </StLocationButtonBox>
     </StResultMapContainer>
   );
 };

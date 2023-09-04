@@ -5,6 +5,7 @@ export const StImage = styled.img`
   height: 100%;
   object-fit: cover;
   margin: 0.5rem 0;
+  aspect-ratio: 1/1;
   @media ${(props) => props.theme.device.desktop} {
     aspect-ratio: 1/1.3;
   }

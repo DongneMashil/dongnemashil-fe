@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TabButton } from '../TabButton/TabButton';
-import { getMyReviews } from 'api/mypageApi';
+import { getMyReviews, getOtherUserReviews } from 'api/mypageApi';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowDown } from 'assets/icons/ArrowDown.svg';
 import {
@@ -16,18 +16,47 @@ import {
 import { timeFormatWithoutTime } from 'utils';
 import { useIntersect } from 'hooks/useIntersect';
 import { useInfiniteQuery } from '@tanstack/react-query';
-export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
+import { Button } from 'components/common';
+import { ReactComponent as LogoHorizontal } from 'assets/logo/LogoHorizontal.svg';
+export const TabMenu = ({
+  nickName,
+  paramNickName,
+}: {
+  nickName: string | undefined;
+  paramNickName: string | undefined;
+}) => {
   const [selectedTab, setSelectedTab] = useState('reviews');
   const navigate = useNavigate();
+  // const [isMyPage, setIsMyPage] = useState(true); // 내페이지인지 다른 유저의 페이지인지
+  // useEffect(() => {
+  //   if (paramNickName === undefined) {
+  //     setIsMyPage(true);
+  //     console.log('내페이지');
+  //   } else {
+  //     setIsMyPage(false);
+  //     console.log('다른 유저의 페이지');
+  //   }
+  // }, [paramNickName]);
 
   const useInfinityScroll = () => {
     const fetchItems = async ({ pageParam = 1 }) => {
-      const response = await getMyReviews(selectedTab, pageParam);
-      return {
-        ...response,
-        isLast: response.last,
-        nextPage: pageParam + 1,
-      };
+      if (paramNickName === undefined) {
+        // 로그인한 유저의 마이페이지
+        const response = await getMyReviews(selectedTab, pageParam);
+        return {
+          ...response,
+          isLast: response.last,
+          nextPage: pageParam + 1,
+        };
+      } else {
+        // 다른 유저의 마이페이지
+        const response = await getOtherUserReviews(paramNickName, pageParam);
+        return {
+          ...response,
+          isLast: response.last,
+          nextPage: pageParam + 1,
+        };
+      }
     };
 
     const query = useInfiniteQuery(
@@ -60,23 +89,35 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
   return (
     <StTabContainer>
       <StTabButtonWrapper>
-        <StText>
-          <span>{data ? data.pages[0].totalElements : '0'}</span>&nbsp;개의
-          게시물
-        </StText>
+        {' '}
+        {!paramNickName && (
+          <StText>
+            <span>{data ? data.pages[0].totalElements : '0'}</span>&nbsp;개의
+            게시물
+          </StText>
+        )}
         <StTabButtonBox>
-          <TabButton
-            selected={selectedTab === 'reviews'}
-            onClick={() => setSelectedTab('reviews')}
-          >
-            내가 쓴
-          </TabButton>
-          <TabButton
-            selected={selectedTab === 'likes'}
-            onClick={() => setSelectedTab('likes')}
-          >
-            좋아요 한
-          </TabButton>
+          {paramNickName ? (
+            <>
+              {' '}
+              <TabButton selected={true}>작성한 게시글</TabButton>
+            </>
+          ) : (
+            <>
+              <TabButton
+                selected={selectedTab === 'reviews'}
+                onClick={() => setSelectedTab('reviews')}
+              >
+                내가 쓴
+              </TabButton>
+              <TabButton
+                selected={selectedTab === 'likes'}
+                onClick={() => setSelectedTab('likes')}
+              >
+                좋아요 한
+              </TabButton>
+            </>
+          )}
         </StTabButtonBox>
       </StTabButtonWrapper>
       <StTabContentBox $empty={!(data && data.pages[0].content.length > 0)}>
@@ -117,14 +158,19 @@ export const TabMenu = ({ nickName }: { nickName: string | undefined }) => {
             {selectedTab === 'reviews' ? (
               <>
                 <StText>
-                  하단 글쓰기 버튼을 눌러
+                  하단 글쓰기✏️ 버튼을 눌러
                   <br />
                   오늘의 산책을 기록할 수 있어요
                 </StText>
                 <ArrowDown />
               </>
             ) : (
-              <StText>아직 좋아요를 누른 게시물이 없으시네요!</StText>
+              <StText>
+                <Button type={'icon'} url={'/'} ariaLabel="홈으로">
+                  <LogoHorizontal />
+                </Button>
+                &nbsp; 👈 내가 좋아하는 사진을 찾으러 가볼까요?
+              </StText>
             )}
           </StEmptyBox>
         )}
