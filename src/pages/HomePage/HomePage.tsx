@@ -13,7 +13,7 @@ export const HomePage = () => {
   const [selectedTags, setSelectedTags] = useRecoilState(selectedTagsState);
   const [type, setType] = useRecoilState(sortTypeState);
 
-  const { data, hasNextPage, isFetching, fetchNextPage, refetch } =
+  const { data, hasNextPage, isLoading, isFetching, fetchNextPage, refetch } =
     useFetchReviews();
 
   const reviews = useMemo(
@@ -46,6 +46,7 @@ export const HomePage = () => {
         type={type}
         reviews={reviews}
         hasNextPage={hasNextPage}
+        isLoading={isLoading}
         isFetching={isFetching}
         fetchNextPage={fetchNextPage}
         onClickSort={onClickSort}
