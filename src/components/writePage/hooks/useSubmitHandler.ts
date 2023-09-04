@@ -111,9 +111,7 @@ export const useSubmitHandler = ({
     try {
       if (coverImage) {
         if (typeof coverImage.file === 'string') {
-          const response = await fetch(
-            `${coverImage.file}?timestamp=${Date.now()}`
-          );
+          const response = await fetch(`${coverImage.file}?cacheblock=true`);
           if (!response.ok) {
             throw new Error(
               `Failed to fetch cover image: ${response.statusText}`
@@ -135,7 +133,7 @@ export const useSubmitHandler = ({
       for (const file of mediaFiles) {
         i++;
         if (typeof file.file === 'string') {
-          const response = await fetch(`${file.file}?timestamp=${Date.now()}`);
+          const response = await fetch(`${file.file}?cacheblock=true`);
           if (!response.ok) {
             throw new Error(
               `Failed to fetch cover image: ${response.statusText}`
