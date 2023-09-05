@@ -25,8 +25,6 @@ export const StSkeletonThumbnailTitle = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 14px 0 12px;
-
-  background: #f2f2f2;
 `;
 
 export const StSkeletonThumbnailTitleLeft = styled.div`
@@ -35,16 +33,33 @@ export const StSkeletonThumbnailTitleLeft = styled.div`
 `;
 
 export const StSkeletonProfileImg = styled.div`
+  width: 30px;
+  height: 30px;
   background: #f2f2f2;
+  border-radius: 50%;
+  margin: 0 10px 3px 8px;
 `;
 
 export const StSkeletonTitleText = styled.div`
   display: flex;
   flex-direction: column;
-  background: #f2f2f2;
+
+  :nth-child(1) {
+    width: 100px;
+    height: 12px;
+    background: #f2f2f2;
+    margin-bottom: 8px;
+  }
+
+  :nth-child(2) {
+    width: 80px;
+    height: 8px;
+    background: #f2f2f2;
+  }
 `;
 
 export const StSkeletonSpan = styled.span`
+  border-radius: 10px;
   background: #f2f2f2;
 `;
 
@@ -63,7 +78,12 @@ export const StSkeletonThumbnailLike = styled.div`
   }
 `;
 
-export const StSkeletonLikeCnt = styled.div``;
+export const StSkeletonLikeCnt = styled.div`
+  width: 20px;
+  height: 10px;
+  background: #f2f2f2;
+  border-radius: 10px;
+`;
 
 const longerHight = css`
   position: relative;
@@ -88,7 +108,7 @@ export const StSkeletonThumnailMain = styled.div<{
       : null}
 
   width: 100%;
-  height: 100px;
+  height: 350px;
   border-radius: 10px;
   overflow: hidden;
 
