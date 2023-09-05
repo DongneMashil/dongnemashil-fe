@@ -12,6 +12,7 @@ export const StButton = styled.button<{
   $round?: string;
   $active?: boolean;
   $shadow?: boolean;
+  $opacity?: string;
 }>`
   ${(props) => (props.$shadow ? btnShadow : null)}
   background: none;
@@ -42,7 +43,8 @@ export const StButton = styled.button<{
     height: ${(props) => props.$height};
     border-radius: ${(props) => props.$round};
     border: ${(props) => props.$stroke} solid ${theme.mainColor};
-    background: rgba(247, 246, 246, 0.8);
+    background: rgba(247, 246, 246);
+    opacity: ${(props) => props.$opacity};
 
     & span {
       color: ${theme.pointColor};

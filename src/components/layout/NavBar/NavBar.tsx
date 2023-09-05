@@ -82,7 +82,7 @@ export const NavBar = ({
   }, [location.pathname]);
 
   const goBack = () => {
-    regex.test(historyStack[1]) ? navigate('/') : navigate(-1);
+    regex.test(historyStack[0]) ? navigate('/') : navigate(-1);
   };
 
   const leftButtons = {
