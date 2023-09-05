@@ -173,6 +173,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
         center: new kakao.maps.LatLng(37.545043, 127.039245),
         level: 5,
         scrollwheel: false,
+        draggable: false,
       };
 
       const createdMap = new kakao.maps.Map(container, options);
