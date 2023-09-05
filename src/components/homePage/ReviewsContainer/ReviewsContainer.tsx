@@ -137,7 +137,7 @@ export const ReviewsContainer = ({
       {!isFetching && reviews.length === 0 && (
         <StNoReviews>검색된 글이 없습니다.</StNoReviews>
       )}
-      <StTarget ref={ref} />
+      {!isLoading && <StTarget ref={ref} />}
     </StReviewsContainer>
   );
 };
