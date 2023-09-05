@@ -36,8 +36,6 @@ export const StButton = styled.button`
 `;
 
 export const StMyPageContainer = styled.div`
-  width: 100%;
-  height: 100%;
   padding: 1rem 0 0 0;
 
   display: flex;
@@ -53,4 +51,5 @@ export const StMyPageContainer = styled.div`
     font-weight: 500;
   }
   ${theme.responsiveContainer};
+  min-height: calc(100vh - 50px);
 `;

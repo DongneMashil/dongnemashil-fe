@@ -46,7 +46,7 @@ export const MyProfilePage = () => {
     //
     try {
       const response = await axios.get(
-        `${data.profileImgUrl!}?timestamp=${Date.now()}`,
+        `${data.profileImgUrl!}?cacheblock=true`,
         {
           responseType: 'blob',
         }
