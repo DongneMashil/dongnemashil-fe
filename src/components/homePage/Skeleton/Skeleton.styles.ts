@@ -1,5 +1,5 @@
 import { theme } from 'style/theme';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const StSkeletonThumbnail = styled.li`
   display: flex;
@@ -67,11 +67,7 @@ export const StSkeletonThumbnailLike = styled.div`
   display: flex;
   flex-direction: column;
   gap: 3px;
-  align-items: center;
   padding-left: 10px;
-
-  font-size: 0.75rem;
-  color: ${theme.lightGrayColor};
 
   svg {
     width: 26px;
@@ -85,33 +81,10 @@ export const StSkeletonLikeCnt = styled.div`
   border-radius: 10px;
 `;
 
-const longerHight = css`
-  position: relative;
-
-  &::after {
-    content: '';
-    display: block;
-    padding-bottom: 100%;
-  }
-`;
-
-const longerWidth = css``;
-
-export const StSkeletonThumnailMain = styled.div<{
-  $imgRatio?: 'longerHeight' | 'longerWidth' | null;
-}>`
-  ${(props) =>
-    props.$imgRatio === 'longerHeight'
-      ? longerHight
-      : props.$imgRatio === 'longerWidth'
-      ? longerWidth
-      : null}
-
+export const StSkeletonThumnailMain = styled.div`
   width: 100%;
   height: 350px;
   border-radius: 10px;
-  overflow: hidden;
-
   background: #f2f2f2;
 
   @media ${theme.device.desktop} {
