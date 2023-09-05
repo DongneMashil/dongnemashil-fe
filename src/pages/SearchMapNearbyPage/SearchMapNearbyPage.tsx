@@ -66,6 +66,10 @@ export const SearchMapNearbyPage = () => {
     // let curPosMarker: kakao.maps.Marker | null = null;
     mapInstance.current = map;
 
+    // 줌 컨트롤러 붙이기
+    const zoomControl = new kakao.maps.ZoomControl();
+    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
     // 줌 레벨 낮추기
     map.setLevel(zoomLevel + 4);
 
