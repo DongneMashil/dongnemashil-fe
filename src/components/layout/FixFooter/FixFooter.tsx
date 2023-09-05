@@ -54,6 +54,7 @@ export const FixFooter = ({
           type="circleFill"
           $width={'57px'}
           $height={'57px'}
+          $shadow={true}
           onClick={onNavigateNearby}
         >
           우리
@@ -64,8 +65,8 @@ export const FixFooter = ({
           ariaLabel="글쓰기"
           url="/writemap"
           type="borderRound"
-          $width={'70px'}
-          $height={'70px'}
+          $width={'58px'}
+          $height={'58px'}
           $round={'50%'}
           $stroke={'2px'}
           $shadow={true}
@@ -86,6 +87,7 @@ export const FixFooter = ({
             $round={'50%'}
             $stroke={'1px'}
             $shadow={true}
+            $opacity={'0.9'}
           >
             <PurpleMarker />
             <span>지도</span>
@@ -100,6 +102,7 @@ export const FixFooter = ({
           $round={'50%'}
           $stroke={'1px'}
           $shadow={true}
+          $opacity={'0.9'}
         >
           <ChevronTop />
         </Button>
