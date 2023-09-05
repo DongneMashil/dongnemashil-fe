@@ -11,8 +11,8 @@
 <a href="https://github.com/soolovepat">
 <img src="https://github.com/soolovepat.png" width="100" height="100"/>
 </a>
-<a href="https://github.com/Kang-Gyeongwon">
-<img src="https://github.com/Kang-Gyeongwon.png" width="100" height="100"/>
+<a href="https://github.com/Rose-Rosie-Rose">
+<img src="https://github.com/Rose-Rosie-Rose.png" width="100" height="100"/>
 </a>
 
 <br>
