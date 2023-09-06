@@ -12,7 +12,6 @@ export const StWirteMapContainer = styled.div`
 `;
 
 export const StCurrentLocationContainer = styled.div`
-  height: 12.9rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -24,8 +23,7 @@ export const StCurrentLocationContainer = styled.div`
   border-radius: 0.875rem 0.875rem 0 0;
   z-index: 999;
   background-color: #fff;
-  padding-top: 1.37rem;
-  padding-left: 1.5rem;
+  padding: 1.37rem 0.95rem 3.31rem 0.95rem;
   @media ${(props) => props.theme.device.desktop} {
     height: 12.1rem;
     padding: 2.06rem 0 0 6rem;
@@ -43,7 +41,8 @@ export const StCurrentLocationTitle = styled.span`
   font-weight: 700;
   line-height: normal;
   color: #333;
-  margin-bottom: 1.4rem;
+  margin-bottom: 1.94rem;
+  margin-left: 1.5rem;
   @media ${(props) => props.theme.device.desktop} {
     margin-left: 1.3125rem;
   }
@@ -59,24 +58,25 @@ export const StTablet = styled.div`
 `;
 
 export const StInputWrapper = styled.div`
-  width: 90%;
+  width: 100%;
   height: 2rem;
   border-bottom: 1px solid #dbdbdb;
   display: flex;
+
   @media ${(props) => props.theme.device.desktop} {
     width: 23.6rem;
     height: 3.625rem;
     border-radius: 1.88rem;
     border: 1px solid #dbdbdb;
     padding-top: 1rem;
-    background-color: #F7F7F7;
+    background-color: #f7f7f7;
   }
 `;
 
 export const StMarker = styled(MarkerIcon)`
   width: 0.8125rem;
   height: 1.08331rem;
-  margin: 0 0.44rem;
+  margin: 0 0.44rem 0 1.69rem;
   @media ${(props) => props.theme.device.desktop} {
     margin-left: 1.3rem;
     margin-top: 0.125rem;
@@ -108,7 +108,7 @@ export const StPostButton = styled.button`
   border: 1px solid #9a7b9a;
   background: #996899;
   color: #fff;
-  margin-top: 2.34rem;
+  margin: 2.44rem 2rem 2rem 2rem;
   color: #fff;
   text-align: center;
   font-size: 1.125rem;
