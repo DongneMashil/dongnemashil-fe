@@ -142,6 +142,7 @@ export const DetailPage = () => {
       }
     }
   }, [data]);
+  //이미지 모달
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
   const onClickImage = (imgSrc: string) => {
