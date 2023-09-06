@@ -142,6 +142,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
           `,
           });
           currentLocationOverlay.setMap(map);
+          map.setDraggable(false);
 
           fitBoundsToMarkers(map, [locPosition, reviewAddress!]);
           setIsLoading(false); // 로딩 완료
