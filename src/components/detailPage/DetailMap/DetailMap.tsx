@@ -63,7 +63,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
   );
   const [currentLocation, setCurrentLocation] =
     useState<kakao.maps.LatLng | null>(null);
-  const [distance, setDistance] = useState<number | null>(null);
+  const [distance, setDistance] = useState<string | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const setMapCenterByAddress = async (
     address: string,
@@ -175,7 +175,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
         scrollwheel: false,
         draggable: false,
       };
-
+      //zoomControl 추가해서 맵 생성
       const createdMap = new kakao.maps.Map(container, options);
       const zoomControl = new kakao.maps.ZoomControl();
       createdMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
@@ -197,7 +197,12 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
         reviewAddress.getLat(),
         reviewAddress.getLng()
       );
-      setDistance(Number(calculatedDistance.toFixed(0)));
+
+      setDistance(
+        calculatedDistance.toFixed(0) !== '0'
+          ? `${calculatedDistance.toFixed(0)}km`
+          : `${(calculatedDistance * 1000).toFixed(0)}m`
+      );
     }
   }, [currentLocation]);
 
