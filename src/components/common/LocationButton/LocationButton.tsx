@@ -5,7 +5,7 @@ import { StLoadingSpinner } from '../LoadingSpinner/LoadingSpinner.styles';
 
 interface BackButtonProps {
   onClick?: () => void;
-  distance?: number | null;
+  distance?: string | null;
   isDistanceVisible?: boolean;
   isLoading?: boolean;
 }
@@ -21,7 +21,7 @@ export const LocationButton: React.FC<BackButtonProps> = ({
       {isLoading ? (
         <StLoadingSpinner />
       ) : isDistanceVisible && distance ? (
-        `${distance}km`
+        `${distance}`
       ) : (
         <Location />
       )}
