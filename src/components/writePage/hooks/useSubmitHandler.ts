@@ -8,6 +8,7 @@ import { getStringByteSize } from '../getStirngByTeSize/getStringBySize';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { formValuesAtom, selectedTagsAtom } from 'utils/formValues';
+import { latitudeAtom, longitudeAtom } from 'recoil/address/selectedAddressAtom';
 
 type UseSubmitHandlerProps = {
   reviewId: number;
@@ -17,6 +18,7 @@ type UseSubmitHandlerProps = {
   addressData: { fullAddress: string; roadName: string };
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setModalMessage: React.Dispatch<React.SetStateAction<string>>;
+
 };
 
 export const useSubmitHandler = ({
@@ -35,6 +37,8 @@ export const useSubmitHandler = ({
   const setStoredMediaFiles = useSetRecoilState(mediaFilesAtom);
   const setFormValues = useSetRecoilState(formValuesAtom);
   const setSelectedTags = useSetRecoilState(selectedTagsAtom);
+  const setLatitude = useSetRecoilState(latitudeAtom);
+  const setLongitude = useSetRecoilState(longitudeAtom);
 
   const updateMutation = useMutation((formData: FormData) =>
     updateReview(reviewId, formData)
@@ -89,6 +93,8 @@ export const useSubmitHandler = ({
       address: addressData.fullAddress,
       roadName: addressData.roadName,
       tag: selectedTags,
+      latitude: setLatitude,
+      longitude:setLongitude
     };
 
     const blob = new Blob([JSON.stringify(jsonData)], {
