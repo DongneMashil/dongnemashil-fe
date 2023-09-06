@@ -108,7 +108,7 @@ export const StPostButton = styled.button`
   border: 1px solid #9a7b9a;
   background: #996899;
   color: #fff;
-  margin: 2.44rem 2srem 2rem 2rem;
+  margin: 2.44rem 2rem 2rem 2rem;
   color: #fff;
   text-align: center;
   font-size: 1.125rem;
