@@ -28,8 +28,8 @@ export const calculateDistance = (
 
   const distance = R * c;
 
-  // 소숫점 첫째 자리까지 반올림
-  return Math.round(distance * 10) / 10;
+  // 소숫점 셋째 자리까지 반올림
+  return Math.round(distance * 1000) / 1000;
 };
 
 /**

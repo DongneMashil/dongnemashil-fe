@@ -1,5 +1,9 @@
 # 🏃🏻‍♀️ 동네마실 🏃🏻‍♀️ 
 
+#### 기술적 의사결정, 서비스 아키텍처, 트러블슈팅, 유저 피드백 내용은 Organization 메인에서 확인하실 수 있습니다.
+
+바로가기 -> https://github.com/DongneMashil
+
 ## 😀 3조 FE 멤버들 😀
 
 <a href="https://github.com/makepin2r">
@@ -11,8 +15,8 @@
 <a href="https://github.com/soolovepat">
 <img src="https://github.com/soolovepat.png" width="100" height="100"/>
 </a>
-<a href="https://github.com/Kang-Gyeongwon">
-<img src="https://github.com/Kang-Gyeongwon.png" width="100" height="100"/>
+<a href="https://github.com/Rose-Rosie-Rose">
+<img src="https://github.com/Rose-Rosie-Rose.png" width="100" height="100"/>
 </a>
 
 <br>

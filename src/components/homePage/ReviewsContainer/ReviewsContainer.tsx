@@ -12,16 +12,17 @@ import {
 import { useIntersect } from 'hooks/useIntersect';
 import { Button } from 'components/common';
 import { ReviewsList } from 'api/reviewsApi';
-import { StLoadingSpinner } from 'components/common/LoadingSpinner/LoadingSpinner.styles';
 import { MasonryGrid } from '@egjs/react-grid';
 import { MasonryGridOptions } from '@egjs/grid';
 import { useLocation } from 'react-router-dom';
 import { throttle } from 'lodash';
+import Skeleton from '../Skeleton/Skeleton';
 
 export interface ReviewsProps {
   type: string;
   reviews: ReviewsList[];
   hasNextPage?: boolean;
+  isLoading?: boolean;
   isFetching: boolean;
   fetchNextPage: UseInfiniteQueryResult['fetchNextPage'];
   onClickSort: (type: string) => void;
@@ -32,6 +33,7 @@ export const ReviewsContainer = ({
   type,
   reviews,
   hasNextPage,
+  isLoading,
   isFetching,
   fetchNextPage,
   onClickSort,
@@ -108,8 +110,12 @@ export const ReviewsContainer = ({
           </Button>
         </StSort>
       </StTopWrapper>
-      {!isFetching && reviews.length === 0 ? (
-        <StNoReviews>검색된 글이 없습니다.</StNoReviews>
+      {isLoading ? (
+        <MasonryGrid {...masonryGridOptions}>
+          {new Array(6).fill('').map((_, i) => (
+            <Skeleton key={i} />
+          ))}
+        </MasonryGrid>
       ) : (
         <MasonryGrid {...masonryGridOptions}>
           {reviews?.map((review) => (
@@ -120,6 +126,7 @@ export const ReviewsContainer = ({
               middleMainImgUrl={review.middleMainImgUrl}
               smallMainImgUrl={review.smallMainImgUrl}
               profileImgUrl={review.profileImgUrl}
+              nickname={review.nickname}
               createdAt={review.createdAt}
               likeCnt={review.likeCnt}
               likebool={review.likebool}
@@ -127,12 +134,10 @@ export const ReviewsContainer = ({
           ))}
         </MasonryGrid>
       )}
-      {isFetching && (
-        <StNoReviews>
-          <StLoadingSpinner />
-        </StNoReviews>
+      {!isFetching && reviews.length === 0 && (
+        <StNoReviews>검색된 글이 없습니다.</StNoReviews>
       )}
-      <StTarget ref={ref} />
+      {!isLoading && <StTarget ref={ref} />}
     </StReviewsContainer>
   );
 };
