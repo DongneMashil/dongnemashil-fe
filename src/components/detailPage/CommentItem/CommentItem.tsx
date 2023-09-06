@@ -92,23 +92,23 @@ export const CommentItem = React.forwardRef<HTMLDivElement, CommentItemProps>(
                     </StCommentButton>
                   </>
                 ) : (
-                  <>
-                    <StCommentButton
-                      className="left"
-                      disabled={isEdit.state}
-                      onClick={() => onEditCommentHandler(comment.id)}
-                    >
-                      수정
-                    </StCommentButton>
-                    <div className="divider">|</div>
-                    <StCommentButton
-                      className="right"
-                      disabled={isEdit.state}
-                      onClick={() => onDeleteCommentHandler(comment.id)}
-                    >
-                      삭제
-                    </StCommentButton>
-                  </>
+                  !isEdit.state && (
+                    <>
+                      <StCommentButton
+                        className="left"
+                        onClick={() => onEditCommentHandler(comment.id)}
+                      >
+                        수정
+                      </StCommentButton>
+                      <div className="divider">|</div>
+                      <StCommentButton
+                        className="right"
+                        onClick={() => onDeleteCommentHandler(comment.id)}
+                      >
+                        삭제
+                      </StCommentButton>
+                    </>
+                  )
                 )}
               </>
             )}

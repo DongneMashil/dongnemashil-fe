@@ -1,6 +1,7 @@
 import { styled } from 'styled-components';
 
 export const StDetailPageCommentItem = styled.div`
+  min-height: 3.125rem;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -63,7 +64,7 @@ export const StCommentHeader = styled.section`
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    margin: 5px;
+    margin: 0 5px;
   }
 
   img {
