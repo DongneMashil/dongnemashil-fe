@@ -65,7 +65,6 @@ export const CommentItem = React.forwardRef<HTMLDivElement, CommentItemProps>(
       });
     };
 
-    console.log(ref ? 'ref' + comment.id : 'no ref' + comment.id);
     return (
       <>
         <StDetailPageCommentItem>
