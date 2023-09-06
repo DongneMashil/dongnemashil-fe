@@ -28,6 +28,8 @@ export const getVideoMimeType = (extension: string): string => {
       return 'video/mp4';
     case 'mov':
       return 'video/mov';
+    case 'quicktime':
+      return 'video/quicktime';
     default:
       return 'video/mp4';
   }
