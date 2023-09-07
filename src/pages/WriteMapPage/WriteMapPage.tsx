@@ -40,7 +40,7 @@ export const WriteMapPage = () => {
 
   const onGoWritePageHandler = () => {
     if (reviewId) {
-      navigate(`/write/${reviewId}`, { state: { reviewId: reviewId } });
+      navigate(`/write`, { state: { reviewId: reviewId } });
     } else {
       navigate('/write');
     }
