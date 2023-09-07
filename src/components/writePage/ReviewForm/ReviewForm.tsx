@@ -78,7 +78,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
           placeholder="제목"
         />
         <StByteSizeTag color={onExcessTitleBytes}>
-          {titleByteSize} / 500 Btye
+          {titleByteSize} / 500 Bytes
         </StByteSizeTag>
       </StContentWrapper>
       <FileSlider
@@ -107,7 +107,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
           placeholder="산책은 어땠나요?"
         />
         <StByteSizeTag color={onExcessContentBytes}>
-          ( {contentByteSize} / 500 Byte )
+          {contentByteSize} / 500 Byte 
         </StByteSizeTag>
       </StContentWrapper>
     </StFormWrapper>

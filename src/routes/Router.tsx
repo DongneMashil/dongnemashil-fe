@@ -40,7 +40,7 @@ const Router = () => {
           element={<ProtectedRoute element={<WriteMapSearchPage />} />}
         />
         <Route
-          path="/write/:id"
+          path="/write"
           element={
             <ProtectedRoute
               element={

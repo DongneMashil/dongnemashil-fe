@@ -5,6 +5,7 @@ import Marker from 'assets/icons/Marker.svg';
 interface IProps {
   selectedAddress?: string;
   onAddressUpdate?: (address: string) => void;
+  onLocationUpdate?: (lat: number, lon: number) => void;
   disableCurrentLocation?: boolean;
 }
 
@@ -18,6 +19,7 @@ interface IMarkerOptions {
 export const Geolocation: React.FC<IProps> = ({
   selectedAddress,
   onAddressUpdate,
+  onLocationUpdate,
   disableCurrentLocation = false,
 }) => {
   let mapInstance: kakao.maps.Map | null = null;
@@ -137,6 +139,9 @@ export const Geolocation: React.FC<IProps> = ({
               '';
             if (onAddressUpdate) {
               onAddressUpdate(detailAddr);
+            }
+            if (onLocationUpdate) {
+              onLocationUpdate(position.getLat(), position.getLng());
             }
           }
         }

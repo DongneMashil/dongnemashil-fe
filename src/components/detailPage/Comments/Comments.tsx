@@ -1,13 +1,8 @@
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
-import { deleteComment, editComment, getComment } from 'api/detailApi';
-import noUser from 'assets/images/NoUser.jpg';
+import { deleteComment, getComment } from 'api/detailApi';
 import React, { useEffect, useRef, useState } from 'react';
-import timeAgo from 'utils/timeAgo';
 import {
-  StCommentButton,
-  StCommentHeader,
   StDetailPageComment,
-  StDetailPageCommentItem,
   StDetailPageCommentList,
   StEmptyComment,
 } from './Comments.styles';
@@ -19,6 +14,7 @@ import { commentAddListenerAtom } from 'recoil/commentAddListener/commentAddList
 import { useIntersect } from 'hooks/useIntersect';
 import { Modal, StLoadingSpinner } from 'components/common';
 import { ReactComponent as DongDong } from 'assets/logo/DongDong.svg';
+import { CommentItem } from '../CommentItem/CommentItem';
 
 interface CommentsProps {
   reviewId: string;
@@ -107,29 +103,16 @@ export const Comments = ({
     },
   });
 
-  const [isEdit, setIsEdit] = useState({ state: false, id: 0, comment: '' });
-  const onEditCommentHandler = (commentId: number, comment: string) => {
-    setIsEdit({ state: true, id: commentId, comment });
-    console.log('commentId', commentId);
-    console.log('comment', comment);
-  };
-  const onChangeCommentHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsEdit({ ...isEdit, comment: e.target.value });
-  };
+  const [isEdit, setIsEdit] = useState({ state: false, id: 0 });
+
   const onEditEndHandler = () => {
-    setIsEdit({ state: false, id: 0, comment: '' });
+    setIsEdit({ state: false, id: 0 });
   };
 
-  const onEditSubmitHandler = () => {
-    if (!isEdit.comment) {
-      setErrorMsg('댓글 내용을 입력해주세요.');
-      return;
-    }
-    editComment(isEdit.id.toString(), isEdit.comment).then(() => {
-      onEditEndHandler();
-      queryClient.invalidateQueries(['comment', reviewId]);
-    });
+  const onEditStartHandler = (commentId: number) => {
+    setIsEdit({ state: true, id: commentId });
   };
+
   const onCloseErrorModalHandler = () => {
     setErrorMsg('');
   };
@@ -153,80 +136,21 @@ export const Comments = ({
               .flatMap((page) => page.result)
               .map((comment, index, array) => {
                 if (!comment) return null;
-                const isLastComment = index === array.length - 1;
+                const isLastComment = index === array.length - 1; // 마지막 댓글인지 확인
 
                 return (
-                  <StDetailPageCommentItem
+                  <CommentItem
                     key={comment.id}
                     ref={isLastComment ? latestCommentRef : null}
-                  >
-                    <StCommentHeader>
-                      <img
-                        src={comment.profileImgUrl || noUser}
-                        alt="프로필 이미지"
-                      />
-                      <div className="nickname">{comment.nickname}</div>
-                      <div className="date">{timeAgo(comment.createdAt)}</div>
-                      {userState.nickName === comment.nickname && (
-                        <>
-                          {isEdit.state && isEdit.id === comment.id ? (
-                            <>
-                              <StCommentButton
-                                className="left"
-                                onClick={onEditEndHandler}
-                              >
-                                취소
-                              </StCommentButton>
-                              <div className="divider">|</div>
-                              <StCommentButton
-                                className="done"
-                                onClick={onEditSubmitHandler}
-                                disabled={isEdit.comment === comment.comment}
-                              >
-                                완료
-                              </StCommentButton>
-                            </>
-                          ) : (
-                            <>
-                              <StCommentButton
-                                className="left"
-                                disabled={isEdit.state}
-                                onClick={() =>
-                                  onEditCommentHandler(
-                                    comment.id,
-                                    comment.comment
-                                  )
-                                }
-                              >
-                                수정
-                              </StCommentButton>
-                              <div className="divider">|</div>
-                              <StCommentButton
-                                className="right"
-                                disabled={isEdit.state}
-                                onClick={() =>
-                                  onDeleteCommentHandler(comment.id)
-                                }
-                              >
-                                삭제
-                              </StCommentButton>
-                            </>
-                          )}
-                        </>
-                      )}
-                    </StCommentHeader>
-                    {userState.nickName === comment.nickname &&
-                    isEdit.state &&
-                    isEdit.id === comment.id ? (
-                      <input
-                        type="text"
-                        value={isEdit.comment}
-                        onChange={onChangeCommentHandler}
-                      />
-                    ) : (
-                      <div className="content">{comment.comment}</div>
-                    )}
-                  </StDetailPageCommentItem>
+                    isEdit={isEdit}
+                    comment={comment}
+                    userState={userState}
+                    onEditStartHandler={onEditStartHandler}
+                    onEditEndHandler={onEditEndHandler}
+                    reviewId={reviewId}
+                    setErrorMsg={setErrorMsg}
+                    onDeleteCommentHandler={onDeleteCommentHandler}
+                  ></CommentItem>
                 );
               })}
             <Modal

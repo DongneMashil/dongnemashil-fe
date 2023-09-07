@@ -8,6 +8,7 @@ import { getStringByteSize } from '../getStirngByTeSize/getStringBySize';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { formValuesAtom, selectedTagsAtom } from 'utils/formValues';
+import { latitudeAtom, longitudeAtom } from 'recoil/address/selectedAddressAtom';
 
 type UseSubmitHandlerProps = {
   reviewId: number;
@@ -17,6 +18,7 @@ type UseSubmitHandlerProps = {
   addressData: { fullAddress: string; roadName: string };
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setModalMessage: React.Dispatch<React.SetStateAction<string>>;
+
 };
 
 export const useSubmitHandler = ({
@@ -35,6 +37,8 @@ export const useSubmitHandler = ({
   const setStoredMediaFiles = useSetRecoilState(mediaFilesAtom);
   const setFormValues = useSetRecoilState(formValuesAtom);
   const setSelectedTags = useSetRecoilState(selectedTagsAtom);
+  const setLatitude = useSetRecoilState(latitudeAtom);
+  const setLongitude = useSetRecoilState(longitudeAtom);
 
   const updateMutation = useMutation((formData: FormData) =>
     updateReview(reviewId, formData)
@@ -54,7 +58,7 @@ export const useSubmitHandler = ({
     }
 
     if (selectedTags.length === 0) {
-      setModalMessage('태그를 최소 하나 선택해주세요.');
+      setModalMessage('태그는 최소 하나 선택해주세요.');
       setIsModalOpen(true);
       return;
     }
@@ -89,6 +93,8 @@ export const useSubmitHandler = ({
       address: addressData.fullAddress,
       roadName: addressData.roadName,
       tag: selectedTags,
+      latitude: setLatitude,
+      longitude:setLongitude
     };
 
     const blob = new Blob([JSON.stringify(jsonData)], {
@@ -101,7 +107,7 @@ export const useSubmitHandler = ({
     );
 
     if (!coverImage) {
-      setModalMessage('메인 이미지를 선택해주세요.');
+      setModalMessage('대표 이미지를 선택해주세요.');
       setIsModalOpen(true);
       return;
     }
@@ -111,9 +117,7 @@ export const useSubmitHandler = ({
     try {
       if (coverImage) {
         if (typeof coverImage.file === 'string') {
-          const response = await fetch(
-            `${coverImage.file}?timestamp=${Date.now()}`
-          );
+          const response = await fetch(`${coverImage.file}?cacheblock=true`);
           if (!response.ok) {
             throw new Error(
               `Failed to fetch cover image: ${response.statusText}`
@@ -134,8 +138,8 @@ export const useSubmitHandler = ({
       let i = 0;
       for (const file of mediaFiles) {
         i++;
-        if (typeof file.file === 'string') {
-          const response = await fetch(`${file.file}?timestamp=${Date.now()}`);
+        if (typeof file.file === 'string' && !file.isCover) {
+          const response = await fetch(`${file.file}?cacheblock=true`);
           if (!response.ok) {
             throw new Error(
               `Failed to fetch cover image: ${response.statusText}`
