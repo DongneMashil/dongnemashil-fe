@@ -127,3 +127,5 @@ export const WriteMapSearchPage = () => {
     </StLayout>
   );
 };
+
+export default WriteMapSearchPage;

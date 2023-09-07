@@ -1,3 +1,4 @@
+// import React, { Suspense } from 'react';
 import React from 'react';
 import {
   HomePage,
@@ -18,12 +19,54 @@ import {
   StableNavigateContextProvider,
   SearchMapNearbyPage,
 } from 'pages';
+
+// import { StableNavigateContextProvider } from 'pages/WritePage/WritePage';
+
+// const HomePage = React.lazy(() => import('pages/HomePage/HomePage'));
+// const LoginPage = React.lazy(() => import('pages/LoginPage/LoginPage'));
+// const RegisterPage = React.lazy(
+//   () => import('pages/RegisterPage/RegisterPage')
+// );
+// const DetailPage = React.lazy(() => import('pages/DetailPage/DetailPage'));
+// const KakaoCallbackPage = React.lazy(
+//   () => import('pages/KakaoCallbackPage/KakaoCallbackPage')
+// );
+// const WriteMapPage = React.lazy(
+//   () => import('pages/WriteMapPage/WriteMapPage')
+// );
+// const CommonLoginPage = React.lazy(
+//   () => import('pages/CommonLoginPage/CommonLoginPage')
+// );
+// const MyPage = React.lazy(() => import('pages/MyPage/MyPage'));
+// const MyProfilePage = React.lazy(
+//   () => import('pages/MyProfilePage/MyProfilePage')
+// );
+// const SearchPage = React.lazy(() => import('pages/SearchPage/SearchPage'));
+// const WritePage = React.lazy(() => import('pages/WritePage/WritePage'));
+// const WriteMapSearchPage = React.lazy(
+//   () => import('pages/WriteMapSearchPage/WriteMapSearchPage')
+// );
+// const SearchResultPage = React.lazy(
+//   () => import('pages/SearchResultPage/SearchResultPage')
+// );
+// const MyCommentsPage = React.lazy(
+//   () => import('pages/MyCommentsPage/MyCommentsPage')
+// );
+// const NotFoundPage = React.lazy(
+//   () => import('pages/NotFoundPage/NotFoundPage')
+// );
+// const SearchMapNearbyPage = React.lazy(
+//   () => import('pages/SearchMapNearbyPage/SearchMapNearbyPage')
+// );
+// import { LoadingPage } from 'pages';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 
 const Router = () => {
   return (
     <BrowserRouter>
+      {/* <Suspense fallback={<LoadingPage />}> */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -84,6 +127,7 @@ const Router = () => {
         <Route path="/search/nearby" element={<SearchMapNearbyPage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
+      {/* </Suspense> */}
     </BrowserRouter>
   );
 };

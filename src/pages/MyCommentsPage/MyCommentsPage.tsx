@@ -108,3 +108,5 @@ export const MyCommentsPage = () => {
     </StMyCommentsLayout>
   );
 };
+
+export default MyCommentsPage;

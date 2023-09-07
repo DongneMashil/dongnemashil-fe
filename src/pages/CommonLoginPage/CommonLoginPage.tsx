@@ -103,3 +103,5 @@ export const CommonLoginPage = () => {
     </StCommonLoginLayout>
   );
 };
+
+export default CommonLoginPage;

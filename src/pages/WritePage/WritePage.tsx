@@ -279,3 +279,5 @@ export const WritePage = () => {
     </StLayout>
   );
 };
+
+export default WritePage;

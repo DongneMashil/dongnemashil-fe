@@ -194,3 +194,5 @@ export const MyProfilePage = () => {
     </StMyProfileLayout>
   );
 };
+
+export default MyProfilePage;

@@ -226,3 +226,5 @@ export const SearchResultMapPage = ({
     </StResultMapContainer>
   );
 };
+
+export default SearchResultMapPage;

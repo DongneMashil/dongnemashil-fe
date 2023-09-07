@@ -14,3 +14,5 @@ export const NotFoundPage = () => {
     </StNotFoundContainer>
   );
 };
+
+export default NotFoundPage;

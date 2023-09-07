@@ -35,3 +35,5 @@ export const KakaoCallbackPage = () => {
     </StLoginContainer>
   );
 };
+
+export default KakaoCallbackPage;

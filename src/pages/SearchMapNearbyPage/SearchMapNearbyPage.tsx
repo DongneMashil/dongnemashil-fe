@@ -287,3 +287,5 @@ export const SearchMapNearbyPage = () => {
 
 // 6. 마커 이동시 새로 api 호출
 // 7. 리렌더링
+
+export default SearchMapNearbyPage;

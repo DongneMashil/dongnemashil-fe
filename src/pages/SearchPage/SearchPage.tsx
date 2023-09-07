@@ -153,3 +153,5 @@ export const SearchPage = () => {
     </StSearchContainer>
   );
 };
+
+export default SearchPage;

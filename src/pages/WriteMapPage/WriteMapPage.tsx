@@ -86,3 +86,5 @@ export const WriteMapPage = () => {
     </StWirteMapContainer>
   );
 };
+
+export default WriteMapPage;

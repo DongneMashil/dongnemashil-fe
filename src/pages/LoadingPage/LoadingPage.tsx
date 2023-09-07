@@ -9,3 +9,5 @@ export const LoadingPage = () => {
     </StLoadingContainer>
   );
 };
+
+export default LoadingPage;

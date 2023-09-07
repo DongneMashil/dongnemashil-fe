@@ -383,3 +383,5 @@ export const RegisterPage = React.memo(() => {
 });
 
 RegisterPage.displayName = 'RegisterPage';
+
+export default RegisterPage;
