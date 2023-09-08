@@ -14,22 +14,33 @@ import { Geolocation } from 'components/mapWritePage';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { addressSelector } from 'recoil/address/addressSelector';
-import { selectedAddressAtom } from 'recoil/address/selectedAddressAtom';
+import {
+  latitudeAtom,
+  longitudeAtom,
+  selectedAddressAtom,
+} from 'recoil/address/selectedAddressAtom';
 import { BackButton } from 'components/common';
 
 export const WriteMapPage = () => {
   const addressData = useRecoilValue(addressSelector);
   const selectedAddress = useRecoilValue(selectedAddressAtom);
   const setCurrentAddress = useSetRecoilState(selectedAddressAtom);
+  const setLatitude = useSetRecoilState(latitudeAtom);
+  const setLongitude = useSetRecoilState(longitudeAtom);
   const navigate = useNavigate();
   const location = useLocation();
   const reviewId = location.state?.reviewId;
 
   const disableCurrentLocation = location.state?.fromSearch || false;
 
+  const updateLocation = (lat: number, lon: number) => {
+    setLatitude(lat);
+    setLongitude(lon);
+  };
+
   const onGoWritePageHandler = () => {
     if (reviewId) {
-      navigate(`/write/${reviewId}`, { state: { reviewId: reviewId } });
+      navigate(`/write`, { state: { reviewId: reviewId } });
     } else {
       navigate('/write');
     }
@@ -69,6 +80,7 @@ export const WriteMapPage = () => {
       <Geolocation
         selectedAddress={selectedAddress}
         onAddressUpdate={setCurrentAddress}
+        onLocationUpdate={updateLocation}
         disableCurrentLocation={disableCurrentLocation}
       />
     </StWirteMapContainer>

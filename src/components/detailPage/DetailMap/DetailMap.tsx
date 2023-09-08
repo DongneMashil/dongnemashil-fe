@@ -42,7 +42,7 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import Marker from 'assets/icons/Marker.svg';
 import { StMapContainer, StMyLocationButton } from './DetailMap.styles';
-import { LocationButton, Map } from 'components/common';
+import { LocationButton, Map, Modal } from 'components/common';
 import { calculateDistance } from 'utils';
 import Icon from 'assets/logo/DongDong.svg';
 
@@ -65,6 +65,8 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
     useState<kakao.maps.LatLng | null>(null);
   const [distance, setDistance] = useState<string | null>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [errorMsg2, setErrorMsg2] = useState<string | null>(null);
   const setMapCenterByAddress = async (
     address: string,
     map: kakao.maps.Map
@@ -92,7 +94,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
           });
           map.setCenter(coords);
         } else {
-          console.error('Failed to get coordinates from the address.');
+          setErrorMsg('주소를 찾을 수 없습니다.');
         }
       }
     );
@@ -142,17 +144,22 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
           `,
           });
           currentLocationOverlay.setMap(map);
+          // map.setDraggable(false);
 
           fitBoundsToMarkers(map, [locPosition, reviewAddress!]);
           setIsLoading(false); // 로딩 완료
         },
         (error) => {
-          console.error('Geolocation failed: ', error);
-          setIsLoading(false); // 로딩 실패
+          console.error('위치정보 불러오기 실패: ', error); // 여기 아이폰 크롬에서 오류남.
+          setTimeout(() => {
+            setIsLoading(false); // 로딩 실패
+          }, 1000);
+          setErrorMsg('위치 권한을 허용해주세요.');
+          setErrorMsg2('설정>개인정보보호>위치서비스>브라우저>위치권한 허용');
         }
       );
     } else {
-      console.error('Geolocation is not supported by this browser.');
+      setErrorMsg('위치 정보를 사용할 수 없는 브라우저 입니다.');
     }
   };
 
@@ -173,7 +180,7 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
         center: new kakao.maps.LatLng(37.545043, 127.039245),
         level: 5,
         scrollwheel: false,
-        draggable: false,
+        // draggable: false,
       };
       //zoomControl 추가해서 맵 생성
       const createdMap = new kakao.maps.Map(container, options);
@@ -189,8 +196,14 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
     setShowCurrentLocation(true);
   };
 
+  const onClickCloseHandler = () => {
+    setShowCurrentLocation(false);
+    setErrorMsg(null);
+    setErrorMsg2(null);
+  };
   useEffect(() => {
     if (currentLocation && reviewAddress) {
+      console.log('currentLocation', currentLocation);
       const calculatedDistance = calculateDistance(
         currentLocation.getLat(),
         currentLocation.getLng(),
@@ -217,6 +230,12 @@ export const DetailMap = ({ width, height, initMap }: DetailMapProps) => {
           isLoading={isLoading}
         ></LocationButton>
       </StMyLocationButton>
+      <Modal
+        isOpen={!!errorMsg}
+        onCloseHandler={onClickCloseHandler}
+        firstLine={errorMsg}
+        secondLine={errorMsg2}
+      />
     </StMapContainer>
   );
 };

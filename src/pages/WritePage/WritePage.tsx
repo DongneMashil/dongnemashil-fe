@@ -41,7 +41,7 @@ export const StableNavigateContextProvider: React.FC<
 };
 
 const ALLOWED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
-const ALLOWED_VIDEO_TYPES = ['video/mov', 'video/mp4'];
+const ALLOWED_VIDEO_TYPES = ['video/mov', 'video/mp4', 'video/quicktime'];
 
 const useStableNavigate = () => {
   const navigateRef = useContext(StableNavigateContext);

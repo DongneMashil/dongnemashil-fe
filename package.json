@@ -62,7 +62,6 @@
     "eslint-config-prettier": "^8.9.0",
     "eslint-plugin-react": "^7.33.1",
     "install": "^0.13.0",
-    "msw": "^1.2.5",
     "prettier": "^3.0.0"
   },
   "msw": {
